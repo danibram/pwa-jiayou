@@ -43,7 +43,7 @@ const Index = () => {
         <>
             <Head>
                 <title>加油 - Bienvenid@</title>
-                <meta name="description" content="Bienvenido a Jiayou" />
+                <meta name="description" content="Bienvenido a Jiāyóu" />
             </Head>
             <Layout>
                 <MdxTagParse>

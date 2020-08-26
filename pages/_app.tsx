@@ -42,7 +42,7 @@ export default function MyApp(props: AppProps) {
             const showSkipWaitingPrompt = function (event) {
                 if (
                     confirm(
-                        "Nueva version de la pagina en marcha. No esperes mas a actualizarla!"
+                        "Nueva versión de la página en marcha. No esperes más a actualizarla!"
                     )
                 ) {
                     window.workbox.addEventListener("controlling", (event) => {
@@ -124,7 +124,7 @@ export default function MyApp(props: AppProps) {
     return (
         <>
             <Head>
-                <title>Jiayou</title>
+                <title>Jiāyóu</title>
                 <meta charSet="utf-8"></meta>
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
                 <meta
@@ -133,7 +133,7 @@ export default function MyApp(props: AppProps) {
                 />
                 <meta
                     name="description"
-                    content="Aprende Chino en español con tarjetas"
+                    content="Jiāyóu! Aprende Chino en español con tarjetas"
                 />
                 <meta name="keywords" content="chino, aprender, tarjetas" />
                 <meta

@@ -116,7 +116,7 @@ const Index = ({ cards: cardsSrv }) => {
             <Layout>
                 <Head>
                     <title>HSK1</title>
-                    <meta name="description" content="Bienvenido a Jiayou" />
+                    <meta name="description" content="Bienvenido a Jiāyóu" />
                 </Head>
                 <Box>
                     <Grid
