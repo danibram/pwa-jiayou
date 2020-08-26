@@ -48,23 +48,23 @@ export default function Card({ item }) {
             <CardContent>
                 {visualization === visualizations.hanzifirst ? (
                     !back ? (
-                        [
+                        <>
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[0]}
-                            </Typography>,
-                            <br />,
+                            </Typography>
+                            <br />
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[1]}
-                            </Typography>,
-                        ]
+                            </Typography>
+                        </>
                     ) : (
                         <Typography
                             variant="body1"
@@ -76,79 +76,75 @@ export default function Card({ item }) {
                     )
                 ) : visualization === visualizations.pinyinfirst ? (
                     !back ? (
-                        [
-                            <Typography
-                                variant="h6"
-                                component="h3"
-                                className={classes.text}
-                            >
-                                {item[1].content.$t}
-                            </Typography>,
-                        ]
+                        <Typography
+                            variant="h6"
+                            component="h3"
+                            className={classes.text}
+                        >
+                            {item[1].content.$t}
+                        </Typography>
                     ) : (
-                        [
+                        <>
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[0]}
-                            </Typography>,
-                            <br />,
+                            </Typography>
+                            <br />
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[1]}
-                            </Typography>,
-                            <br />,
+                            </Typography>
+                            <br />
                             <Typography
                                 variant="body1"
                                 component="h3"
                                 className={classes.textSolution}
                             >
                                 {item[2].content && item[2].content.$t}
-                            </Typography>,
-                        ]
+                            </Typography>
+                        </>
                     )
                 ) : visualization === visualizations.hanzipinyinfirst ? (
                     !back ? (
-                        [
+                        <>
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[0]}
-                            </Typography>,
-                            <br />,
+                            </Typography>
+                            <br />
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.textSolution1}
                             >
                                 {item[1].content && item[1].content.$t}
-                            </Typography>,
-                            <br />,
+                            </Typography>
+                            <br />
                             <Typography
                                 variant="h6"
                                 component="h3"
                                 className={classes.text}
                             >
                                 {item[0].content.$t.split(" | ")[1]}
-                            </Typography>,
-                        ]
+                            </Typography>
+                        </>
                     ) : (
-                        [
-                            <Typography
-                                variant="body1"
-                                component="h3"
-                                className={classes.textSolution}
-                            >
-                                {item[2].content && item[2].content.$t}
-                            </Typography>,
-                        ]
+                        <Typography
+                            variant="body1"
+                            component="h3"
+                            className={classes.textSolution}
+                        >
+                            {item[2].content && item[2].content.$t}
+                        </Typography>
                     )
                 ) : !back ? (
                     <Typography
@@ -159,31 +155,31 @@ export default function Card({ item }) {
                         {item[2].content && item[2].content.$t}
                     </Typography>
                 ) : (
-                    [
+                    <>
                         <Typography
                             variant="h6"
                             component="h3"
                             className={classes.text}
                         >
                             {item[0].content.$t.split(" | ")[0]}
-                        </Typography>,
-                        <br />,
+                        </Typography>
+                        <br />
                         <Typography
                             variant="h6"
                             component="h3"
                             className={classes.textSolution1}
                         >
                             {item[1].content && item[1].content.$t}
-                        </Typography>,
-                        <br />,
+                        </Typography>
+                        <br />
                         <Typography
                             variant="h6"
                             component="h3"
                             className={classes.text}
                         >
                             {item[0].content.$t.split(" | ")[1]}
-                        </Typography>,
-                    ]
+                        </Typography>
+                    </>
                 )}
             </CardContent>
             {/* </CardActionArea> */}

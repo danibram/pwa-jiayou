@@ -7,7 +7,6 @@ import {
     Typography,
 } from "@material-ui/core";
 import clsx from "clsx";
-import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -17,9 +16,6 @@ import Card2 from "../src/components/Card";
 import CardButtons from "../src/components/CardButtons";
 import Layout from "../src/components/Layout2";
 import Loader from "../src/components/Loader";
-
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
 
 const useStyles = makeStyles((theme) => ({
     centerContent: {
@@ -113,14 +109,22 @@ const Index = ({ cards: cardsSrv }) => {
     );
 
     return (
-        <Layout>
+        <>
             <Head>
-                <title>HSK1</title>
-                <meta name="description" content="Bienvenido a Jiayou" />
+                <title>加油 - Tarjetas</title>
             </Head>
-            <Box>
-                <Grid container spacing={3} className={classes.centerContent}>
-                    {/* <Grid
+            <Layout>
+                <Head>
+                    <title>HSK1</title>
+                    <meta name="description" content="Bienvenido a Jiayou" />
+                </Head>
+                <Box>
+                    <Grid
+                        container
+                        spacing={3}
+                        className={classes.centerContent}
+                    >
+                        {/* <Grid
                         item
                         xs={12}
                         className={clsx(
@@ -131,7 +135,7 @@ const Index = ({ cards: cardsSrv }) => {
                         <Typography variant="h5">HSK 1 Vocabulary</Typography>
                     </Grid> */}
 
-                    {/* {cards.length > 0 && (
+                        {/* {cards.length > 0 && (
                     <Grid
                         item
                         xs={12}
@@ -153,54 +157,59 @@ const Index = ({ cards: cardsSrv }) => {
                     </Grid>
                 )} */}
 
-                    <Grid
-                        item
-                        xs={12}
-                        className={clsx(
-                            classes.marginTop1,
-                            classes.centerContent
-                        )}
-                    >
-                        <Swipeable onSwipe={handleOnSwipe}>
-                            <Card2 item={cards[index]} />
-                        </Swipeable>
-                    </Grid>
-
-                    <Grid
-                        item
-                        xs={12}
-                        className={clsx(classes.marginTop1, classes.flex)}
-                    >
-                        <ButtonGroup
-                            color="primary"
-                            aria-label="outlined primary button group"
+                        <Grid
+                            item
+                            xs={12}
+                            className={clsx(
+                                classes.marginTop1,
+                                classes.centerContent
+                            )}
                         >
-                            <Button
-                                onClick={() => handleOnSwipe(direction.RIGHT)}
-                            >
-                                {"<"}
-                            </Button>
-                            <Button
-                                onClick={() => handleOnSwipe(direction.LEFT)}
-                            >
-                                {">"}
-                            </Button>
-                        </ButtonGroup>
-                        <Typography variant="body1">
-                            {`${index + 1} / ${cards.length}`}
-                        </Typography>
+                            <Swipeable onSwipe={handleOnSwipe}>
+                                <Card2 item={cards[index]} />
+                            </Swipeable>
+                        </Grid>
 
-                        <a
-                            href={`plecoapi://x-callback-url/s?q=${
-                                cards[index][0].content.$t.split(" | ")[0]
-                            }`}
+                        <Grid
+                            item
+                            xs={12}
+                            className={clsx(classes.marginTop1, classes.flex)}
                         >
-                            Open in pleco
-                        </a>
+                            <ButtonGroup
+                                color="primary"
+                                aria-label="outlined primary button group"
+                            >
+                                <Button
+                                    onClick={() =>
+                                        handleOnSwipe(direction.RIGHT)
+                                    }
+                                >
+                                    {"<"}
+                                </Button>
+                                <Button
+                                    onClick={() =>
+                                        handleOnSwipe(direction.LEFT)
+                                    }
+                                >
+                                    {">"}
+                                </Button>
+                            </ButtonGroup>
+                            <Typography variant="body1">
+                                {`${index + 1} / ${cards.length}`}
+                            </Typography>
+
+                            <a
+                                href={`plecoapi://x-callback-url/s?q=${
+                                    cards[index][0].content.$t.split(" | ")[0]
+                                }`}
+                            >
+                                Open in pleco
+                            </a>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Box>
-        </Layout>
+                </Box>
+            </Layout>
+        </>
     );
 };
 
