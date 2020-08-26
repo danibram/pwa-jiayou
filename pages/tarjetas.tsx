@@ -201,7 +201,7 @@ const Index = ({ cards: cardsSrv }) => {
                             <a
                                 href={`plecoapi://x-callback-url/s?q=${
                                     cards[index][0].content.$t.split(" | ")[0]
-                                }`}
+                                }&x-source=Jiāyóu!`}
                             >
                                 Open in pleco
                             </a>
