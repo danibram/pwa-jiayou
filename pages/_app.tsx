@@ -42,7 +42,7 @@ export default function MyApp(props: AppProps) {
             const showSkipWaitingPrompt = function (event) {
                 if (
                     confirm(
-                        "Nueva versión de la página en marcha. No esperes más a actualizarla!"
+                        "Nueva versión de la página en marcha. ¡No esperes más a actualizarla!"
                     )
                 ) {
                     window.workbox.addEventListener("controlling", (event) => {
