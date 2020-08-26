@@ -1,11 +1,15 @@
 import {
+    BottomNavigation,
+    BottomNavigationAction,
     Box,
-    Button,
-    ButtonGroup,
+    Fab,
     Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import SearchIcon from "@material-ui/icons/Search";
 import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -38,6 +42,22 @@ const useStyles = makeStyles((theme) => ({
         width: "90%",
         alignItems: "center",
         justifyContent: "space-evenly",
+    },
+    bottom: {
+        position: "absolute",
+        bottom: "0",
+        width: "100%",
+        boxShadow:
+            "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    },
+    centerText: {
+        paddingTop: "16px",
+    },
+    fab: {
+        position: "fixed",
+        bottom: theme.spacing(10),
+        right: theme.spacing(4),
+        zIndex: 999,
     },
 }));
 
@@ -114,14 +134,10 @@ const Index = ({ cards: cardsSrv }) => {
                 <title>加油 - Tarjetas</title>
             </Head>
             <Layout>
-                <Head>
-                    <title>HSK1</title>
-                    <meta name="description" content="Bienvenido a Jiāyóu" />
-                </Head>
                 <Box>
                     <Grid
                         container
-                        spacing={3}
+                        spacing={2}
                         className={classes.centerContent}
                     >
                         {/* <Grid
@@ -161,51 +177,63 @@ const Index = ({ cards: cardsSrv }) => {
                             item
                             xs={12}
                             className={clsx(
-                                classes.marginTop1,
+                                classes.marginTop2,
                                 classes.centerContent
                             )}
                         >
-                            <Swipeable onSwipe={handleOnSwipe}>
+                            <Swipeable
+                                onSwipe={handleOnSwipe}
+                                fadeThreshold={120}
+                            >
                                 <Card2 item={cards[index]} />
                             </Swipeable>
                         </Grid>
 
-                        <Grid
-                            item
-                            xs={12}
-                            className={clsx(classes.marginTop1, classes.flex)}
+                        <Fab
+                            color="secondary"
+                            aria-label="add"
+                            className={classes.fab}
+                            onClick={() => {
+                                window.open(
+                                    `plecoapi://x-callback-url/s?q=${
+                                        cards[index][0].content.$t.split(
+                                            " | "
+                                        )[0]
+                                    }`,
+                                    "_blank"
+                                );
+                            }}
                         >
-                            <ButtonGroup
-                                color="primary"
-                                aria-label="outlined primary button group"
+                            <SearchIcon />
+                        </Fab>
+
+                        <BottomNavigation className={clsx(classes.bottom)}>
+                            <BottomNavigationAction
+                                label="Inicio"
+                                value="/"
+                                icon={<ArrowBackIosIcon />}
+                                onClick={() => handleOnSwipe(direction.RIGHT)}
+                            />
+                            <Typography
+                                variant="body1"
+                                className={clsx(classes.centerText)}
                             >
-                                <Button
-                                    onClick={() =>
-                                        handleOnSwipe(direction.RIGHT)
-                                    }
-                                >
-                                    {"<"}
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        handleOnSwipe(direction.LEFT)
-                                    }
-                                >
-                                    {">"}
-                                </Button>
-                            </ButtonGroup>
-                            <Typography variant="body1">
                                 {`${index + 1} / ${cards.length}`}
                             </Typography>
-
-                            <a
+                            {/* <a
                                 href={`plecoapi://x-callback-url/s?q=${
                                     cards[index][0].content.$t.split(" | ")[0]
                                 }&x-source=Jiāyóu!`}
                             >
                                 Open in pleco
-                            </a>
-                        </Grid>
+                            </a> */}
+                            <BottomNavigationAction
+                                label="Settings"
+                                value="/settings"
+                                icon={<ArrowForwardIosIcon />}
+                                onClick={() => handleOnSwipe(direction.LEFT)}
+                            />
+                        </BottomNavigation>
                     </Grid>
                 </Box>
             </Layout>
