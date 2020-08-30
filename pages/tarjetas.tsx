@@ -78,12 +78,12 @@ const getCards = async (key) => {
     }
 
     let data = result.feed.entry;
-    data.splice(0, 4);
+    let size = 5;
+    data.splice(0, size);
 
     console.log(data[0]);
 
     let arrays = [];
-    let size = 4;
 
     while (data.length > 0) arrays.push(data.splice(0, size));
 
