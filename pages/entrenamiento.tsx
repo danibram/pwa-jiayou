@@ -7,17 +7,15 @@ import {
     makeStyles,
     Typography,
 } from "@material-ui/core";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import SearchIcon from "@material-ui/icons/Search";
+import SyncIcon from "@material-ui/icons/Sync";
 import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import { direction, Swipeable } from "react-deck-swiper";
+import { Swipeable } from "react-deck-swiper";
 import useSWR from "swr";
 import Card2 from "../src/components/Card";
-import CardButtons from "../src/components/CardButtons";
 import Layout from "../src/components/Layout2";
 import Loader from "../src/components/Loader";
 
@@ -87,8 +85,6 @@ const getCards = async (key) => {
 
     while (data.length > 0) arrays.push(data.splice(0, size));
 
-    console.log(arrays[0]);
-
     return arrays;
 };
 
@@ -108,25 +104,19 @@ const Index = ({ cards: cardsSrv }) => {
     const classes = useStyles();
     const router = useRouter();
 
-    const [lastSwipeDirection, setLastSwipeDirection] = React.useState(null);
     const [cards, setCards] = React.useState(cardsSrv);
     const [index, setIndex] = React.useState(0);
+    const [count, setCount] = React.useState(1);
 
-    const handleOnSwipe = (swipeDirection) => {
-        if (swipeDirection === direction.RIGHT) {
-            setLastSwipeDirection("your right");
-            setIndex(index - 1 < 0 ? cards.length - 1 : index - 1);
-        }
-
-        if (swipeDirection === direction.LEFT) {
-            setLastSwipeDirection("your left");
-            setIndex(index + 1 > cards.length - 1 ? 0 : index + 1);
-        }
+    const handleNext = () => {
+        let newCards = cards;
+        newCards.splice(index, 1);
+        setCards(newCards);
+        setCount(count + 1);
+        let newLength = newCards.length;
+        let newIndex = Math.floor(Math.random() * newLength);
+        setIndex(newIndex);
     };
-
-    const renderButtons = ({ right, left }) => (
-        <CardButtons right={right} left={left} />
-    );
 
     return (
         <>
@@ -140,39 +130,6 @@ const Index = ({ cards: cardsSrv }) => {
                         spacing={2}
                         className={classes.centerContent}
                     >
-                        {/* <Grid
-                        item
-                        xs={12}
-                        className={clsx(
-                            classes.marginTop2,
-                            classes.centerContent
-                        )}
-                    >
-                        <Typography variant="h5">HSK 1 Vocabulary</Typography>
-                    </Grid> */}
-
-                        {/* {cards.length > 0 && (
-                    <Grid
-                        item
-                        xs={12}
-                        className={clsx(
-                            classes.marginTop2,
-                            classes.centerContent
-                        )}
-                    >
-                        {lastSwipeDirection ? (
-                            <Typography variant="body1">
-                                {"Looks like you have just swiped to "}
-                                {lastSwipeDirection}? 🔮
-                            </Typography>
-                        ) : (
-                            <Typography variant="body1">
-                                Try swiping the card below!
-                            </Typography>
-                        )}
-                    </Grid>
-                )} */}
-
                         <Grid
                             item
                             xs={12}
@@ -181,10 +138,7 @@ const Index = ({ cards: cardsSrv }) => {
                                 classes.centerContent
                             )}
                         >
-                            <Swipeable
-                                onSwipe={handleOnSwipe}
-                                fadeThreshold={120}
-                            >
+                            <Swipeable onSwipe={handleNext} fadeThreshold={120}>
                                 <Card2 item={cards[index]} />
                             </Swipeable>
                         </Grid>
@@ -208,16 +162,11 @@ const Index = ({ cards: cardsSrv }) => {
                         </Fab>
 
                         <BottomNavigation className={clsx(classes.bottom)}>
-                            <BottomNavigationAction
-                                label="Right"
-                                icon={<ArrowBackIosIcon />}
-                                onClick={() => handleOnSwipe(direction.RIGHT)}
-                            />
                             <Typography
                                 variant="body1"
                                 className={clsx(classes.centerText)}
                             >
-                                {`${index + 1} / ${cards.length}`}
+                                {`${count} / ${cards.length}`}
                             </Typography>
                             {/* <a
                                 href={`plecoapi://x-callback-url/s?q=${
@@ -227,9 +176,9 @@ const Index = ({ cards: cardsSrv }) => {
                                 Open in pleco
                             </a> */}
                             <BottomNavigationAction
-                                label="Left"
-                                icon={<ArrowForwardIosIcon />}
-                                onClick={() => handleOnSwipe(direction.LEFT)}
+                                label="next"
+                                icon={<SyncIcon />}
+                                onClick={() => handleNext()}
                             />
                         </BottomNavigation>
                     </Grid>

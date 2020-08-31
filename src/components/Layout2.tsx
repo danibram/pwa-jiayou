@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import BookmarksIcon from "@material-ui/icons/Bookmarks";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import RestoreIcon from "@material-ui/icons/Home";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -20,7 +21,6 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import React from "react";
 import { withA2HS } from "../Providers/a2hs";
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -185,6 +185,16 @@ const Layout = ({
                             <BookmarksIcon />
                         </ListItemIcon>
                         <ListItemText primary={"Cards"} />
+                    </ListItem>
+                    <ListItem
+                        button
+                        key={"cards"}
+                        onClick={(event) => router.push("/entrenamiento")}
+                    >
+                        <ListItemIcon>
+                            <DirectionsRunIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={"Entrenamiento"} />
                     </ListItem>
                     <ListItem
                         button
