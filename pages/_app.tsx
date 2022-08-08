@@ -35,54 +35,48 @@ export default function MyApp(props: AppProps) {
   let { Component, pageProps } = props;
 
   useEffect(() => {
-    const registerWB = async () => {
-      if (
-        typeof window !== "undefined" &&
-        "serviceWorker" in navigator &&
-        window.workbox !== undefined
-      ) {
-        const wb = window.workbox as any;
+    const registerWB = async (w) => {
+      const wb = w.workbox as any;
 
-        const showSkipWaitingPrompt = function (event) {
-          if (
-            confirm(
-              "Nueva versión de la página en marcha. ¡No esperes más a actualizarla!"
-            )
-          ) {
-            wb.addEventListener("controlling", (event) => {
-              window.location.reload();
-            });
-            wb.messageSW({ type: "SKIP_WAITING" });
-          }
-        };
+      const showSkipWaitingPrompt = function (event) {
+        if (
+          confirm(
+            "Nueva versión de la página en marcha. ¡No esperes más a actualizarla!"
+          )
+        ) {
+          wb.addEventListener("controlling", (event) => {
+            window.location.reload();
+          });
+          wb.messageSW({ type: "SKIP_WAITING" });
+        }
+      };
 
-        wb.addEventListener("waiting", showSkipWaitingPrompt);
-        wb.addEventListener("externalwaiting", showSkipWaitingPrompt);
+      wb.addEventListener("waiting", showSkipWaitingPrompt);
+      wb.addEventListener("externalwaiting", showSkipWaitingPrompt);
 
-        wb.addEventListener("message", (event) => {
-          console.log(`Event ${event.type} is triggered.`);
-          console.log(event);
-          if (event.data && event.data.type === "SKIP_WAITING") {
-            wb.messageSkipWaiting();
-          }
-        });
-        wb.addEventListener("installed", (event) => {
-          console.log(`Event ${event.type} is triggered.`);
-          console.log(event);
-        });
+      wb.addEventListener("message", (event) => {
+        console.log(`Event ${event.type} is triggered.`);
+        console.log(event);
+        if (event.data && event.data.type === "SKIP_WAITING") {
+          wb.messageSkipWaiting();
+        }
+      });
+      wb.addEventListener("installed", (event) => {
+        console.log(`Event ${event.type} is triggered.`);
+        console.log(event);
+      });
 
-        wb.addEventListener("controlling", (event) => {
-          console.log(`Event ${event.type} is triggered.`);
-          console.log(event);
-        });
+      wb.addEventListener("controlling", (event) => {
+        console.log(`Event ${event.type} is triggered.`);
+        console.log(event);
+      });
 
-        wb.addEventListener("activated", (event) => {
-          console.log(`Event ${event.type} is triggered.`);
-          console.log(event);
-        });
+      wb.addEventListener("activated", (event) => {
+        console.log(`Event ${event.type} is triggered.`);
+        console.log(event);
+      });
 
-        await wb.register();
-      }
+      await wb.register();
     };
 
     // // Detects if device is on iOS
@@ -110,7 +104,7 @@ export default function MyApp(props: AppProps) {
       "serviceWorker" in navigator &&
       window.workbox !== undefined
     ) {
-      registerWB();
+      registerWB(window);
     }
 
     const handleRouteChange = (url) => {
