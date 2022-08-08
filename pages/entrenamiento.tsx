@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Swipeable } from "react-deck-swiper";
 import Card2 from "../src/components/Card";
-import Layout from "../src/components/Layout2";
+import Layout from "../src/components/Layout";
 import withCards from "../src/hocs/withCards";
 
 const useStyles = makeStyles((theme) => ({

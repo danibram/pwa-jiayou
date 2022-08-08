@@ -17,7 +17,7 @@ import React from "react";
 import { direction, Swipeable } from "react-deck-swiper";
 import Card2 from "../src/components/Card";
 import CardButtons from "../src/components/CardButtons";
-import Layout from "../src/components/Layout2";
+import Layout from "../src/components/Layout";
 import withCards from "../src/hocs/withCards";
 
 const useStyles = makeStyles((theme) => ({

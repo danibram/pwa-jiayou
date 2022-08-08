@@ -3,80 +3,76 @@ import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import Layout from "../src/components/Layout2";
-import { MdxTagParse } from "../src/helpers/mdParse";
+import Layout from "../src/components/Layout";
+import { MdxTagParse } from "../src/lib/md/mdParse";
 import General from "../src/mdx/General.mdx";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        position: "fixed",
-        bottom: 0,
-        width: "100%",
-    },
-    centerContent: {
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-        display: "flex",
-    },
-    marginTop5: {
-        marginTop: theme.spacing(5),
-    },
-    marginTop2: {
-        marginTop: theme.spacing(2),
-    },
-    marginTop1: {
-        marginTop: theme.spacing(1),
-    },
+  root: {
+    position: "fixed",
+    bottom: 0,
+    width: "100%",
+  },
+  centerContent: {
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    display: "flex",
+  },
+  marginTop5: {
+    marginTop: theme.spacing(5),
+  },
+  marginTop2: {
+    marginTop: theme.spacing(2),
+  },
+  marginTop1: {
+    marginTop: theme.spacing(1),
+  },
 }));
 
 const Index = () => {
-    const classes = useStyles();
-    const router = useRouter();
-    const [value, setValue] = React.useState("/");
+  const classes = useStyles();
+  const router = useRouter();
+  const [value, setValue] = React.useState("/");
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-    return (
-        <>
-            <Head>
-                <title>加油 - Bienvenid@</title>
-                <meta name="description" content="Bienvenido a Jiāyóu" />
-            </Head>
-            <Layout>
-                <MdxTagParse>
-                    <General />
-                </MdxTagParse>
+  return (
+    <>
+      <Head>
+        <title>加油 - Bienvenid@</title>
+        <meta name="description" content="Bienvenido a Jiāyóu" />
+      </Head>
+      <Layout>
+        <MdxTagParse>
+          <General />
+        </MdxTagParse>
 
-                <Grid
-                    item
-                    xs={12}
-                    className={clsx(classes.marginTop2, classes.centerContent)}
-                >
-                    <Typography variant="body1">
-                        {"Made with "}
-                        <span role="img" aria-label="github">
-                            ❤️
-                        </span>
-                        {" by "}
-                        <a href="" rel="noopener noreferrer" target="_blank">
-                            Laura
-                        </a>
-                        {" & "}
-                        <a
-                            href="https://dbr.io/"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            Dani
-                        </a>
-                    </Typography>
-                </Grid>
-            </Layout>
-        </>
-    );
+        <Grid
+          item
+          xs={12}
+          className={clsx(classes.marginTop2, classes.centerContent)}
+        >
+          <Typography variant="body1">
+            {"Made with "}
+            <span role="img" aria-label="github">
+              ❤️
+            </span>
+            {" by "}
+            <a href="" rel="noopener noreferrer" target="_blank">
+              Laura
+            </a>
+            {" & "}
+            <a href="https://dbr.io/" rel="noopener noreferrer" target="_blank">
+              Dani
+            </a>
+          </Typography>
+        </Grid>
+      </Layout>
+    </>
+  );
 };
 
 export default Index;
