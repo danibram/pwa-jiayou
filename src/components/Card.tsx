@@ -35,7 +35,6 @@ export default function Card({ item }) {
     localStorage.getItem("Settings_visualization") ||
     visualizations.hanzipinyinfirst;
 
-  console.log(item);
   return (
     <MaterialCard className={classes.root} onClick={() => setBack(!back)}>
       {/* <CardActionArea> */}

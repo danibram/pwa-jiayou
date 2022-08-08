@@ -44,16 +44,12 @@ const getCards = async (key) => {
     return null;
   }
 
-  console.log(text);
-
   let [_, data] = text
     .split("\n")
     .map(processLine)
     .filter(Boolean)
     .reduce(
       ([head, data], a, index) => {
-        console.log(a, index);
-
         if (index === 0) {
           return [a, []];
         } else {
@@ -67,8 +63,6 @@ const getCards = async (key) => {
       },
       [[], []]
     );
-
-  console.log(data);
 
   return data;
 };
