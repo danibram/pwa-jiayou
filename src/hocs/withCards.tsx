@@ -11,6 +11,8 @@ const processLine = (line: string): string[] => {
     cell = "",
     quote = false;
 
+  line = line.replace("\r", "");
+
   for (let i = 0; i < line.length; i++) {
     char = line[i];
     if (char == '"' && line[i + 1] == '"') {
