@@ -11,6 +11,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "posthog-js": "^1.280.1",
     "solid-js": "^1.8.7"
   },
   "devDependencies": {
@@ -29,4 +30,3 @@
     "workbox-window": "^7.0.0"
   }
 }
-
