@@ -49,7 +49,7 @@ const Home: Component<HomeProps> = (props) => {
                             onClick={() => handleModeSelect('tarjetas')}
                             class="glass-button p-8 flex flex-col items-center gap-4 group hover:scale-105 active:scale-95 transition-all"
                         >
-                            <div class="text-3xl group-hover:animate-bounce-subtle">📚</div>
+                            <div class="text-6xl group-hover:animate-bounce-subtle">📚</div>
                             <div class="text-2xl font-bold text-white">Tarjetas</div>
                             <div class="text-sm text-white/70 text-center">
                                 Navega libremente por los caracteres
@@ -60,7 +60,7 @@ const Home: Component<HomeProps> = (props) => {
                             onClick={() => handleModeSelect('entrenamiento')}
                             class="glass-button p-8 flex flex-col items-center gap-4 group hover:scale-105 active:scale-95 transition-all"
                         >
-                            <div class="text-3xl group-hover:animate-bounce-subtle">🎯</div>
+                            <div class="text-6xl group-hover:animate-bounce-subtle">🎯</div>
                             <div class="text-2xl font-bold text-white">Entrenamiento</div>
                             <div class="text-sm text-white/70 text-center">
                                 Pon a prueba tus conocimientos
