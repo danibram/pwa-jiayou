@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js';
+import { Component, For, createSignal } from 'solid-js';
 import { characterStore } from '../stores/characterStore';
 
 interface LevelSelectorProps {
@@ -7,9 +7,12 @@ interface LevelSelectorProps {
 
 const LevelSelector: Component<LevelSelectorProps> = (props) => {
   const levels = [1, 2, 3, 4, 5, 6];
+  const [loadingLevel, setLoadingLevel] = createSignal<number | null>(null);
 
-  const handleSelect = (level: number) => {
-    characterStore.selectLevel(level);
+  const handleSelect = async (level: number) => {
+    setLoadingLevel(level);
+    await characterStore.selectLevel(level);
+    setLoadingLevel(null);
     props.onSelectLevel?.(level);
   };
 
@@ -20,12 +23,17 @@ const LevelSelector: Component<LevelSelectorProps> = (props) => {
           const count = characterStore.getCharacterCountByLevel(level);
           const isSelected = characterStore.state.selectedLevel === level;
 
+          const isLoading = loadingLevel() === level;
+          const isDisabled = count === 0;
+
           return (
             <button
               onClick={() => handleSelect(level)}
+              disabled={isDisabled || isLoading}
               class="glass-button p-8 flex flex-col items-center justify-center gap-3 relative overflow-hidden group"
               classList={{
                 'ring-4 ring-blue-400': isSelected,
+                'opacity-50 cursor-not-allowed': isDisabled,
               }}
             >
               {/* Level badge */}
@@ -33,9 +41,15 @@ const LevelSelector: Component<LevelSelectorProps> = (props) => {
                 HSK {level}
               </div>
 
-              {/* Character counter */}
+              {/* Character counter or loading */}
               <div class="text-sm text-white/70">
-                {count} {count === 1 ? 'character' : 'characters'}
+                {isLoading ? (
+                  <span class="animate-pulse">Cargando...</span>
+                ) : isDisabled ? (
+                  <span>Próximamente</span>
+                ) : (
+                  `${count} ${count === 1 ? 'carácter' : 'caracteres'}`
+                )}
               </div>
 
               {/* Selection indicator */}

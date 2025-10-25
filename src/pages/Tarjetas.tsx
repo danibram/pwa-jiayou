@@ -37,7 +37,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
                         class="glass-button px-4 py-2 text-white hover:scale-105 active:scale-95 transition-transform flex items-center gap-2"
                     >
                         <span>←</span>
-                        <span class="text-sm">Home</span>
+                        <span class="text-sm">Inicio</span>
                     </button>
                     <div class="text-base md:text-lg font-bold text-white">
                         HSK {characterStore.state.selectedLevel}
@@ -50,12 +50,12 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
             <div class="flex-1 flex flex-col items-center justify-center p-2 min-h-0">
                 <Show when={currentChar()} fallback={
                     <div class="text-center text-white/70">
-                        <p class="text-2xl mb-4">No characters available</p>
+                        <p class="text-2xl mb-4">No hay caracteres disponibles</p>
                         <button
                             onClick={props.onGoHome}
                             class="glass-button px-6 py-3 text-white"
                         >
-                            Go back to home
+                            Volver al inicio
                         </button>
                     </div>
                 }>
@@ -81,7 +81,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
                         onClick={handleSwipeRight}
                         disabled={total() === 0}
                         class="glass-button px-6 py-3 text-white disabled:opacity-50 hover:scale-105 active:scale-95 transition-transform text-xl"
-                        title="Previous"
+                        title="Anterior"
                     >
                         ←
                     </button>
@@ -90,7 +90,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
                         onClick={handleOpenPleco}
                         disabled={!currentChar()}
                         class="glass-button px-6 py-3 text-white disabled:opacity-50 hover:scale-105 active:scale-95 transition-transform text-xl"
-                        title="Open in Pleco"
+                        title="Abrir en Pleco"
                     >
                         🔍
                     </button>
@@ -99,7 +99,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
                         onClick={handleSwipeLeft}
                         disabled={total() === 0}
                         class="glass-button px-6 py-3 text-white disabled:opacity-50 hover:scale-105 active:scale-95 transition-transform text-xl"
-                        title="Next"
+                        title="Siguiente"
                     >
                         →
                     </button>

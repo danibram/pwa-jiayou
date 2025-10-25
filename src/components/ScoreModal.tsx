@@ -19,10 +19,10 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
 
   const getMessage = () => {
     const percentage = props.result.percentage;
-    if (percentage >= 90) return 'Excellent work!';
-    if (percentage >= 70) return 'Good job!';
-    if (percentage >= 50) return 'Not bad';
-    return 'Keep practicing!';
+    if (percentage >= 90) return '¡Excelente trabajo!';
+    if (percentage >= 70) return '¡Buen trabajo!';
+    if (percentage >= 50) return 'No está mal';
+    return '¡Sigue practicando!';
   };
 
   return (
@@ -42,7 +42,7 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
               <div class="text-6xl font-bold text-blue-300 mb-2">
                 {props.result.percentage}%
               </div>
-              <div class="text-white/70">correct answers</div>
+              <div class="text-white/70">respuestas correctas</div>
             </div>
 
             {/* Details */}
@@ -51,14 +51,14 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
                 <div class="text-3xl font-bold text-green-400">
                   {props.result.correct}
                 </div>
-                <div class="text-xs text-white/60 mt-1">Correct</div>
+                <div class="text-xs text-white/60 mt-1">Correctas</div>
               </div>
 
               <div class="glass-button p-4">
                 <div class="text-3xl font-bold text-red-400">
                   {props.result.incorrect}
                 </div>
-                <div class="text-xs text-white/60 mt-1">Incorrect</div>
+                <div class="text-xs text-white/60 mt-1">Incorrectas</div>
               </div>
 
               <div class="glass-button p-4">
@@ -76,13 +76,13 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
               onClick={props.onRepeat}
               class="flex-1 glass-button p-4 text-white font-semibold hover:scale-105 active:scale-95 transition-transform"
             >
-              🔄 Repeat
+              🔄 Repetir
             </button>
             <button
               onClick={props.onGoHome}
               class="flex-1 glass-button p-4 text-white font-semibold hover:scale-105 active:scale-95 transition-transform"
             >
-              🏠 Home
+              🏠 Inicio
             </button>
           </div>
         </div>

@@ -15,9 +15,12 @@ const Home: Component<HomeProps> = (props) => {
         setShowLevelSelector(true);
     };
 
-    const handleLevelSelect = (level: number) => {
+    const handleLevelSelect = async (level: number) => {
         const mode = selectedMode();
         if (mode) {
+            // Load level data asynchronously
+            await characterStore.selectLevel(level);
+
             if (mode === 'entrenamiento') {
                 characterStore.startTraining();
             }
@@ -36,10 +39,10 @@ const Home: Component<HomeProps> = (props) => {
                             加油
                         </h1>
                         <p class="text-2xl md:text-3xl text-white/80 font-light">
-                            HSK Flashcards
+                            Tarjetas HSK
                         </p>
                         <p class="text-lg text-white/60">
-                            Learn Chinese characters interactively
+                            Aprende caracteres chinos de forma interactiva
                         </p>
                     </div>
 
@@ -50,9 +53,9 @@ const Home: Component<HomeProps> = (props) => {
                             class="glass-button p-8 flex flex-col items-center gap-4 group hover:scale-105 active:scale-95 transition-all"
                         >
                             <div class="text-6xl group-hover:animate-bounce-subtle">📚</div>
-                            <div class="text-2xl font-bold text-white">Flashcards</div>
+                            <div class="text-2xl font-bold text-white">Tarjetas</div>
                             <div class="text-sm text-white/70 text-center">
-                                Browse freely through characters
+                                Navega libremente por los caracteres
                             </div>
                         </button>
 
@@ -61,17 +64,17 @@ const Home: Component<HomeProps> = (props) => {
                             class="glass-button p-8 flex flex-col items-center gap-4 group hover:scale-105 active:scale-95 transition-all"
                         >
                             <div class="text-6xl group-hover:animate-bounce-subtle">🎯</div>
-                            <div class="text-2xl font-bold text-white">Training</div>
+                            <div class="text-2xl font-bold text-white">Entrenamiento</div>
                             <div class="text-sm text-white/70 text-center">
-                                Test your knowledge
+                                Pon a prueba tus conocimientos
                             </div>
                         </button>
                     </div>
 
                     {/* Additional info */}
                     <div class="text-sm text-white/50 space-y-2">
-                        <p>💡 Swipe cards to navigate</p>
-                        <p>👆 Tap to see translation</p>
+                        <p>💡 Desliza las tarjetas para navegar</p>
+                        <p>👆 Toca para ver la traducción</p>
                     </div>
                 </div>
             </Show>
@@ -88,19 +91,19 @@ const Home: Component<HomeProps> = (props) => {
                             }}
                             class="glass-button px-6 py-2 text-white hover:scale-105 active:scale-95 transition-transform"
                         >
-                            ← Back
+                            ← Atrás
                         </button>
                     </div>
 
                     {/* Title */}
                     <div class="text-center mb-8">
                         <h2 class="text-4xl font-bold text-white mb-4">
-                            Select HSK Level
+                            Selecciona el nivel HSK
                         </h2>
                         <p class="text-white/70">
                             {selectedMode() === 'tarjetas'
-                                ? 'Choose the character level you want to practice'
-                                : 'Choose the level for your training'}
+                                ? 'Elige el nivel de caracteres que quieres practicar'
+                                : 'Elige el nivel para tu entrenamiento'}
                         </p>
                     </div>
 

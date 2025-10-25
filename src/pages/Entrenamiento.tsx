@@ -114,7 +114,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                         class="glass-button px-4 py-2 text-white hover:scale-105 active:scale-95 transition-transform flex items-center gap-2"
                     >
                         <span>←</span>
-                        <span class="text-sm">Home</span>
+                        <span class="text-sm">Inicio</span>
                     </button>
                     <div class="text-base md:text-lg font-bold text-white">
                         🎯 HSK {characterStore.state.selectedLevel}
@@ -128,12 +128,12 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                 <Show when={currentChar() && !showScore()} fallback={
                     <div class="text-center text-white/70">
                         <Show when={!showScore()}>
-                            <p class="text-2xl mb-4">No characters available</p>
+                            <p class="text-2xl mb-4">No hay caracteres disponibles</p>
                             <button
                                 onClick={handleGoHome}
                                 class="glass-button px-6 py-3 text-white"
                             >
-                                Go back to home
+                                Volver al inicio
                             </button>
                         </Show>
                     </div>
@@ -150,7 +150,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                     {/* Indicator that translation was viewed */}
                     <Show when={hasFlipped() && !showFeedback()}>
                         <div class="absolute top-4 right-4 z-50 glass-card px-3 py-1 text-sm text-red-400 font-semibold">
-                            ✗ Viewed
+                            ✗ Visto
                         </div>
                     </Show>
 

@@ -15,7 +15,7 @@ const ProgressBar: Component<ProgressBarProps> = (props) => {
       {/* Progress bar */}
       <div class="glass-card p-4">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-sm text-white/70">Progress</span>
+          <span class="text-sm text-white/70">Progreso</span>
           <span class="text-sm font-semibold text-white">
             {props.current} / {props.total}
           </span>
