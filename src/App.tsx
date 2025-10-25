@@ -1,4 +1,4 @@
-import { Component, createSignal, Show } from 'solid-js';
+import FeedbackButton from './components/FeedbackButton';
 import Entrenamiento from './pages/Entrenamiento';
 import Home from './pages/Home';
 import Tarjetas from './pages/Tarjetas';
@@ -29,6 +29,9 @@ const App: Component = () => {
             <Show when={currentPage() === 'entrenamiento'}>
                 <Entrenamiento onGoHome={handleGoHome} />
             </Show>
+
+            {/* Floating feedback button - visible on all pages */}
+            <FeedbackButton />
         </div>
     );
 };
