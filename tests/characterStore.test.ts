@@ -30,17 +30,17 @@ describe('Character Store', () => {
     });
 
     describe('Level Selection', () => {
-        it('selects a level correctly', () => {
-            characterStore.selectLevel(1);
+        it('selects a level correctly', async () => {
+            await characterStore.selectLevel(1);
             expect(characterStore.state.selectedLevel).toBe(1);
             expect(characterStore.state.currentIndex).toBe(0);
         });
 
-        it('gets characters by selected level', () => {
-            characterStore.selectLevel(1);
+        it('gets characters by selected level', async () => {
+            await characterStore.selectLevel(1);
             const chars = characterStore.getCharactersByLevel();
             expect(chars.length).toBeGreaterThan(0);
-            expect(chars.every(char => char.level === 1)).toBe(true);
+            expect(chars.every(char => char.hsk_level === 1)).toBe(true);
         });
 
         it('returns empty array when no level selected', () => {
@@ -55,8 +55,8 @@ describe('Character Store', () => {
     });
 
     describe('Navigation', () => {
-        beforeEach(() => {
-            characterStore.selectLevel(1);
+        beforeEach(async () => {
+            await characterStore.selectLevel(1);
         });
 
         it('navigates to next character', () => {
@@ -87,8 +87,8 @@ describe('Character Store', () => {
     });
 
     describe('Training Mode', () => {
-        beforeEach(() => {
-            characterStore.selectLevel(1);
+        beforeEach(async () => {
+            await characterStore.selectLevel(1);
         });
 
         it('starts training mode', () => {
@@ -152,8 +152,8 @@ describe('Character Store', () => {
     });
 
     describe('Persistence', () => {
-        it('saves progress to localStorage', () => {
-            characterStore.selectLevel(2);
+        it('saves progress to localStorage', async () => {
+            await characterStore.selectLevel(2);
             characterStore.setCurrentIndex(5);
 
             const saved = localStorage.getItem('hsk-flashcards-progress');

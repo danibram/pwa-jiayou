@@ -35,19 +35,34 @@ const CHARACTER_COUNTS: Record<number, number> = {
     6: 0, // Not yet available
 };
 
+// Mapper para convertir datos JSON al tipo HSKCharacter
+const mapToHSKCharacter = (data: any[]): HSKCharacter[] => {
+    return data.map((item: any) => ({
+        character: item.character,
+        traditional: item.traditional,
+        pinyin: item.pinyin,
+        definition: item.definition,
+        radical: item.radical,
+        stroke_count: item.strokes || item.stroke_count || 0,
+        hsk_level: item.hsk_level,
+        general_standard: item.general_standard || 0,
+        frequency_rank: item.frequency_rank || 0,
+    }));
+};
+
 // Dynamic import function for HSK level data
 const loadLevelData = async (level: number): Promise<HSKCharacter[]> => {
     try {
         switch (level) {
             case 1:
                 const hsk1 = await import('../data/hsk1.json');
-                return hsk1.default as HSKCharacter[];
+                return mapToHSKCharacter(hsk1.default as any[]);
             case 2:
                 const hsk2 = await import('../data/hsk2.json');
-                return hsk2.default as HSKCharacter[];
+                return mapToHSKCharacter(hsk2.default as any[]);
             case 3:
                 const hsk3 = await import('../data/hsk3.json');
-                return hsk3.default as HSKCharacter[];
+                return mapToHSKCharacter(hsk3.default as any[]);
             // Add more levels as they become available
             default:
                 console.warn(`HSK level ${level} not available yet`);

@@ -6,10 +6,14 @@ import { HSKCharacter } from '../src/types';
 describe('Card Component', () => {
     const mockCharacter: HSKCharacter = {
         character: '你',
+        traditional: '你',
         pinyin: 'nǐ',
         definition: 'tú, usted',
-        level: 1,
-        strokeCount: 7,
+        radical: '亻',
+        stroke_count: 7,
+        hsk_level: 1,
+        general_standard: 1,
+        frequency_rank: 5,
     };
 
     it('renders character on front face', () => {
@@ -44,9 +48,14 @@ describe('Card Component', () => {
     it('renders without stroke count when not provided', () => {
         const charWithoutStrokes: HSKCharacter = {
             character: '的',
+            traditional: '的',
             pinyin: 'de',
             definition: 'partícula posesiva',
-            level: 1,
+            radical: '白',
+            stroke_count: 0,
+            hsk_level: 1,
+            general_standard: 1,
+            frequency_rank: 1,
         };
 
         render(() => <Card character={charWithoutStrokes} flipped={true} />);
@@ -56,16 +65,26 @@ describe('Card Component', () => {
     it('resets to front face when character changes', async () => {
         const firstChar: HSKCharacter = {
             character: '你',
+            traditional: '你',
             pinyin: 'nǐ',
             definition: 'tú, usted',
-            level: 1,
+            radical: '亻',
+            stroke_count: 7,
+            hsk_level: 1,
+            general_standard: 1,
+            frequency_rank: 5,
         };
 
         const secondChar: HSKCharacter = {
             character: '的',
+            traditional: '的',
             pinyin: 'de',
             definition: 'partícula posesiva',
-            level: 1,
+            radical: '白',
+            stroke_count: 8,
+            hsk_level: 1,
+            general_standard: 1,
+            frequency_rank: 1,
         };
 
         let currentChar = firstChar;

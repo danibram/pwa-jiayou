@@ -1,3 +1,4 @@
+import { Component, createSignal, Show } from 'solid-js';
 import FeedbackButton from './components/FeedbackButton';
 import Entrenamiento from './pages/Entrenamiento';
 import Home from './pages/Home';
