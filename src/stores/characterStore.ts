@@ -1,7 +1,4 @@
 import { createStore } from 'solid-js/store';
-import hsk1Data from '../data/hsk1.json';
-import hsk2Data from '../data/hsk2.json';
-import hsk3Data from '../data/hsk3.json';
 import { HSKCharacter, TrainingResult } from '../types';
 
 interface CharacterStore {
@@ -13,6 +10,7 @@ interface CharacterStore {
         correct: number;
         incorrect: number;
     };
+    loading: boolean;
 }
 
 const STORAGE_KEY = 'hsk-flashcards-progress';
@@ -27,16 +25,43 @@ const loadProgress = (): Partial<CharacterStore> => {
     }
 };
 
-// Combine all characters from different HSK levels
-const allCharacters: HSKCharacter[] = [
-    ...(hsk1Data as HSKCharacter[]),
-    ...(hsk2Data as HSKCharacter[]),
-    ...(hsk3Data as HSKCharacter[]),
-];
+// Character count by level (cached for quick access without loading files)
+const CHARACTER_COUNTS: Record<number, number> = {
+    1: 174,
+    2: 173,
+    3: 270,
+    4: 0, // Not yet available
+    5: 0, // Not yet available
+    6: 0, // Not yet available
+};
 
-// Initialize store
+// Dynamic import function for HSK level data
+const loadLevelData = async (level: number): Promise<HSKCharacter[]> => {
+    try {
+        switch (level) {
+            case 1:
+                const hsk1 = await import('../data/hsk1.json');
+                return hsk1.default as HSKCharacter[];
+            case 2:
+                const hsk2 = await import('../data/hsk2.json');
+                return hsk2.default as HSKCharacter[];
+            case 3:
+                const hsk3 = await import('../data/hsk3.json');
+                return hsk3.default as HSKCharacter[];
+            // Add more levels as they become available
+            default:
+                console.warn(`HSK level ${level} not available yet`);
+                return [];
+        }
+    } catch (error) {
+        console.error(`Error loading HSK level ${level}:`, error);
+        return [];
+    }
+};
+
+// Initialize store with empty characters (will be loaded dynamically)
 const initialState: CharacterStore = {
-    characters: allCharacters,
+    characters: [],
     selectedLevel: null,
     currentIndex: 0,
     trainingMode: false,
@@ -44,6 +69,7 @@ const initialState: CharacterStore = {
         correct: 0,
         incorrect: 0,
     },
+    loading: false,
     ...loadProgress(),
 };
 
@@ -67,32 +93,43 @@ export const characterStore = {
         return store;
     },
 
-    // Select HSK level
-    selectLevel(level: number) {
-        setStore({
-            selectedLevel: level,
-            currentIndex: 0,
-            trainingMode: false,
-            trainingResults: { correct: 0, incorrect: 0 },
-        });
-        saveProgress();
+    // Select HSK level (async - loads data dynamically)
+    async selectLevel(level: number) {
+        setStore({ loading: true });
+
+        try {
+            // Load characters for selected level
+            const characters = await loadLevelData(level);
+
+            setStore({
+                characters,
+                selectedLevel: level,
+                currentIndex: 0,
+                trainingMode: false,
+                trainingResults: { correct: 0, incorrect: 0 },
+                loading: false,
+            });
+
+            saveProgress();
+        } catch (error) {
+            console.error('Error selecting level:', error);
+            setStore({ loading: false });
+        }
     },
 
-    // Get characters from selected level
+    // Get characters from selected level (already loaded)
     getCharactersByLevel(): HSKCharacter[] {
-        if (!store.selectedLevel) return [];
-        return store.characters.filter(char => char.hsk_level === store.selectedLevel);
+        return store.characters;
     },
 
     // Get shuffled characters for training
     getShuffledCharacters(): HSKCharacter[] {
-        const chars = this.getCharactersByLevel();
-        return [...chars].sort(() => Math.random() - 0.5);
+        return [...store.characters].sort(() => Math.random() - 0.5);
     },
 
-    // Count characters by level
+    // Count characters by level (uses cached counts - no need to load)
     getCharacterCountByLevel(level: number): number {
-        return store.characters.filter(char => char.hsk_level === level).length;
+        return CHARACTER_COUNTS[level] || 0;
     },
 
     // Navigation
