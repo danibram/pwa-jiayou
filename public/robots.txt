@@ -1,5 +1,0 @@
-
-User-Agent: *
-Allow: *
-
-Sitemap: https://jiayou.dbr.io/sitemap.xml
