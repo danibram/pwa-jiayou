@@ -68,12 +68,25 @@ def tokens(pinyin: str) -> list[str]:
     return [part for part in re.split(r"[\s,;/]+", pinyin) if part]
 
 
-def needed_keys() -> set[str]:
-    chars: dict[str, str] = {}
-    examples: list[tuple[str, str]] = []
+def load_character_rows() -> list[dict]:
+    rows: list[dict] = []
     for path in sorted(DATA.glob("hsk*.json")):
-        for row in json.loads(path.read_text()):
-            chars[row["character"]] = row["pinyin"]
+        rows.extend(json.loads(path.read_text()))
+    pack_dir = ROOT / "public" / "packs"
+    if pack_dir.exists():
+        for path in sorted(pack_dir.glob("hsk*.json")):
+            rows.extend(json.loads(path.read_text()))
+    return rows
+
+
+def needed_keys() -> set[str]:
+    rows = load_character_rows()
+    chars: dict[str, str] = {row["character"]: row["pinyin"] for row in rows}
+    examples: list[tuple[str, str]] = []
+    for row in rows:
+        example = row.get("example") or {}
+        if example.get("pinyin") and example.get("word"):
+            examples.append((example["word"], example["pinyin"]))
     for path in sorted((DATA / "glosses").glob("*.json")):
         for value in json.loads(path.read_text()).values():
             example = value.get("example") or {}

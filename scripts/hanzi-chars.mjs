@@ -4,7 +4,7 @@
 //   node scripts/hanzi-chars.mjs > chars.txt
 //   pyftsubset LXGWWenKai-Medium.ttf --text-file=chars.txt --flavor=woff2 \
 //     --output-file=public/fonts/wenkai-hsk.woff2 --layout-features='*'
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,11 +14,24 @@ const add = text => {
     for (const ch of text ?? '') if (/\p{Script=Han}/u.test(ch)) chars.add(ch);
 };
 
-for (const level of [1, 2, 3]) {
+for (const level of [1]) {
     for (const entry of JSON.parse(readFileSync(join(root, `src/data/hsk${level}.json`), 'utf8'))) {
         add(entry.character);
         add(entry.traditional);
         add(entry.radical);
+    }
+}
+
+const packDir = join(root, 'public/packs');
+if (existsSync(packDir)) {
+    for (const name of readdirSync(packDir)) {
+        if (!name.endsWith('.json')) continue;
+        for (const entry of JSON.parse(readFileSync(join(packDir, name), 'utf8'))) {
+            add(entry.character);
+            add(entry.traditional);
+            add(entry.radical);
+            add(entry.example?.word);
+        }
     }
 }
 
