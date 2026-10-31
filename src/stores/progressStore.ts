@@ -1,6 +1,9 @@
-import { createStore } from 'solid-js/store';
+import { createSignal } from 'solid-js';
+import { createStore, reconcile } from 'solid-js/store';
+import { isNonNegativeInteger, isRecord } from '../utils/parse';
 
 export type Grade = 'again' | 'hard' | 'good';
+export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
 
 /** Per-character learning history, kept across sessions. */
 export interface CharProgress {
@@ -58,30 +61,102 @@ const empty = (): CharProgress => ({
   lastSeen: 0,
 });
 
+const invalidCharacter = () => new Error('Hay datos de caracteres no válidos.');
+
+const countField = (value: Record<string, unknown>, key: string): number => {
+  if (!(key in value) || value[key] === undefined) return 0;
+  const field = value[key];
+  if (!isNonNegativeInteger(field)) throw invalidCharacter();
+  return field;
+};
+
+const easeField = (value: Record<string, unknown>): number => {
+  if (!('ease' in value) || value.ease === undefined) return 2.5;
+  const field = value.ease;
+  if (typeof field !== 'number' || !Number.isFinite(field) || field < 1.3) throw invalidCharacter();
+  return field;
+};
+
+const strokeBestField = (value: Record<string, unknown>): number | null => {
+  if (!('strokeBest' in value) || value.strokeBest === undefined || value.strokeBest === null) return null;
+  const field = value.strokeBest;
+  if (!isNonNegativeInteger(field)) throw invalidCharacter();
+  return field;
+};
+
+const parseCharacterProgress = (value: Record<string, unknown>): CharProgress => ({
+  right: countField(value, 'right'),
+  wrong: countField(value, 'wrong'),
+  reps: countField(value, 'reps'),
+  lapses: countField(value, 'lapses'),
+  interval: countField(value, 'interval'),
+  ease: easeField(value),
+  due: countField(value, 'due'),
+  strokeRuns: countField(value, 'strokeRuns'),
+  strokeBest: strokeBestField(value),
+  lastSeen: countField(value, 'lastSeen'),
+});
+
+const parseDaily = (value: unknown): DailyLog => {
+  if (!isRecord(value) || typeof value.day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value.day)) {
+    throw new Error('El registro diario no es válido.');
+  }
+  const date = new Date(`${value.day}T00:00:00Z`);
+  const reviewed = value.reviewed;
+  const introduced = value.introduced;
+  const streak = value.streak;
+  if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value.day ||
+    !isNonNegativeInteger(reviewed) || !isNonNegativeInteger(introduced) || !isNonNegativeInteger(streak)) {
+    throw new Error('El registro diario no es válido.');
+  }
+  return { day: value.day, reviewed, introduced, streak };
+};
+
+/** Accepts legacy character maps and the current versioned backup format. */
+export const parseProgress = (raw: string): ProgressState => {
+  const saved: unknown = JSON.parse(raw);
+  if (!isRecord(saved)) throw new Error('El archivo no contiene datos de progreso válidos.');
+  if ('version' in saved && saved.version !== 2) throw new Error('Esta versión de la copia no es compatible.');
+  const chars = 'chars' in saved ? saved.chars : saved;
+  if (!isRecord(chars)) throw new Error('La lista de caracteres no es válida.');
+  const migrated: Record<string, CharProgress> = {};
+  for (const [char, value] of Object.entries(chars)) {
+    if (!('chars' in saved) && char === 'daily') continue;
+    if (!char || !isRecord(value) || [...char].length !== 1 || ['__proto__', 'constructor', 'prototype'].includes(char)) {
+      throw invalidCharacter();
+    }
+    migrated[char] = parseCharacterProgress(value);
+  }
+  const daily = 'daily' in saved ? parseDaily(saved.daily) : emptyDaily();
+  if (saved.version === 2 && (!('chars' in saved) || !('daily' in saved))) throw new Error('La copia está incompleta.');
+  return { chars: migrated, daily };
+};
+
+let loadBlocked = false;
+const [storageError, setStorageError] = createSignal<string | null>(null);
 const load = (): ProgressState => {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
-    if (!saved) return { chars: {}, daily: emptyDaily() };
-    // Version 1 stored the character map at the top level.
-    const chars: Record<string, Partial<CharProgress>> = saved.chars ?? saved;
-    const migrated: Record<string, CharProgress> = {};
-    for (const [char, p] of Object.entries(chars)) {
-      if (char === 'daily') continue;
-      migrated[char] = { ...empty(), ...p };
-    }
-    return { chars: migrated, daily: saved.daily ?? emptyDaily() };
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw === null ? { chars: {}, daily: emptyDaily() } : parseProgress(raw);
   } catch {
+    loadBlocked = true;
+    setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
     return { chars: {}, daily: emptyDaily() };
   }
 };
 
 const [state, setState] = createStore<ProgressState>(load());
+const serialize = (data: ProgressState) => JSON.stringify({ version: 2, chars: data.chars, daily: data.daily });
 
-const save = () => {
+const save = (): boolean => {
+  if (loadBlocked) return false;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, serialize(state));
+    setStorageError(null);
+    return true;
   } catch {
-    // Storage can be full or blocked; progress is a convenience, not critical.
+    setStorageError('No se pudo guardar el progreso. Exporta una copia y vuelve a intentarlo.');
+    return false;
   }
 };
 
@@ -132,6 +207,60 @@ const schedule = (p: CharProgress, grade: Grade, now: number): CharProgress => {
 };
 
 export const progressStore = {
+  storageError,
+
+  exportBackup(): string {
+    return serialize(state);
+  },
+
+  importBackup(raw: string): void {
+    const imported = parseProgress(raw);
+    // Write first so a failed import leaves both the current state and stored data intact.
+    localStorage.setItem(STORAGE_KEY, serialize(imported));
+    setState(reconcile(imported));
+    loadBlocked = false;
+    setStorageError(null);
+  },
+
+  retrySave(): boolean {
+    if (loadBlocked) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw !== null) {
+          const recovered = parseProgress(raw);
+          // Do not discard progress made in memory while storage was unavailable.
+          if (Object.keys(state.chars).length > 0) {
+            setStorageError('El progreso actual y el guardado difieren. Exporta el actual antes de restaurar el guardado.');
+            return false;
+          }
+          setState(reconcile(recovered));
+        }
+        loadBlocked = false;
+      } catch {
+        setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
+        return false;
+      }
+    }
+    return save();
+  },
+
+  recoverStoredProgress(): boolean {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw === null) {
+        setStorageError('No se encontró progreso guardado para recuperar.');
+        return false;
+      }
+      const recovered = parseProgress(raw);
+      setState(reconcile(recovered));
+      loadBlocked = false;
+      setStorageError(null);
+      return true;
+    } catch {
+      setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
+      return false;
+    }
+  },
   get(char: string): CharProgress | undefined {
     return state.chars[char];
   },
@@ -246,10 +375,6 @@ export const progressStore = {
 
   clear() {
     setState({ chars: {}, daily: emptyDaily() });
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignore
-    }
+    save();
   },
 };

@@ -111,20 +111,19 @@ const SwipeableCard: Component<SwipeableCardProps> = (props) => {
     return Math.max(0, Math.min(1, (signed - 20) / 80));
   };
 
-  const Stamp = (p: { direction: 'left' | 'right' }) => {
-    const stamp = () => props.stamps![p.direction];
+  const Stamp = (p: { direction: 'left' | 'right'; stamp: SwipeStamp }) => {
     return (
       <div
         class="absolute top-8 z-10 px-3 py-1 rounded-lg border-2 font-display text-xl font-semibold uppercase tracking-wider pointer-events-none"
         classList={{
           'left-6 -rotate-12': p.direction === 'right',
           'right-6 rotate-12': p.direction === 'left',
-          'text-jade border-jade bg-jade-soft/80': stamp().tone === 'jade',
-          'text-seal border-seal bg-seal-soft/80': stamp().tone === 'seal',
+          'text-jade border-jade bg-jade-soft/80': p.stamp.tone === 'jade',
+          'text-seal border-seal bg-seal-soft/80': p.stamp.tone === 'seal',
         }}
         style={{ opacity: stampProgress(p.direction) }}
       >
-        {stamp().text}
+        {p.stamp.text}
       </div>
     );
   };
@@ -149,8 +148,12 @@ const SwipeableCard: Component<SwipeableCardProps> = (props) => {
       }
     >
       <Show when={props.stamps}>
-        <Stamp direction="right" />
-        <Stamp direction="left" />
+        {(stamps) => (
+          <>
+            <Stamp direction="right" stamp={stamps().right} />
+            <Stamp direction="left" stamp={stamps().left} />
+          </>
+        )}
       </Show>
       <Card
         character={props.character}
