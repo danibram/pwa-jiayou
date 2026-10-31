@@ -13,6 +13,7 @@ interface CardProps {
   flipped?: boolean;
   /** Small label in the top corner. */
   label?: string;
+  reserveLabelSpace?: boolean;
   /** Shown under the character until the card is revealed. */
   prompt?: string;
   /** Teach a new character: the grid stays, the glyph waits. */
@@ -46,7 +47,7 @@ const Card: Component<CardProps> = (props) => {
       }}
       data-revealed={props.flipped ? 'true' : 'false'}
     >
-      <Show when={props.label}>
+      <Show when={props.label || props.reserveLabelSpace}>
         <div class="flex h-6 items-center justify-center">
           <span class="truncate text-sm text-ink-soft">{props.label}</span>
         </div>
@@ -97,7 +98,7 @@ const Card: Component<CardProps> = (props) => {
       </div>
 
       {/* Reading and meaning. They sit together under the grid, not stretched to the button. */}
-      <div class="flex min-h-[8rem] shrink-0 flex-col">
+      <div class="flex min-h-[11rem] shrink-0 flex-col">
         <Show when={!props.flipped}>
           <div class="flex items-center justify-center px-3 py-4">
             <span class="text-center text-lg text-ink text-balance">{props.prompt ?? 'Toca para ver'}</span>
@@ -113,11 +114,11 @@ const Card: Component<CardProps> = (props) => {
               {meaning()}
             </p>
           </Show>
-          <div class="mt-2 flex flex-col items-center">
           <Show when={!props.concealCharacter && props.character.example}>
             {(ex) => (
-              <>
-                <p class="flex items-baseline justify-center gap-2 text-[1.35rem] leading-snug text-ink">
+              <div class="mt-3 w-full max-w-[19rem] border-t border-line/70 pt-2">
+                <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Ejemplo</p>
+                <p class="mt-1 flex flex-wrap items-baseline justify-center gap-x-2 text-[1.35rem] leading-snug text-ink">
                   <span class="font-hanzi text-[1.65rem] leading-none" lang="zh-CN">
                     {ex().word}
                   </span>
@@ -126,10 +127,9 @@ const Card: Component<CardProps> = (props) => {
                 <Show when={ex().es}>
                   <p class="mt-1 text-[0.9375rem] text-ink-soft">{ex().es}</p>
                 </Show>
-              </>
+              </div>
             )}
           </Show>
-          </div>
           <Show when={props.hear && canSpeak() && !props.recall}>
             <button
               type="button"

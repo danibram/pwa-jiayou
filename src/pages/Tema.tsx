@@ -103,7 +103,7 @@ const Tema: Component<TemaProps> = (props) => {
                       aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
                     >
                       <Icon name="sound" size={18} />
-                      <span class="whitespace-nowrap">{currentVoiceLabel()}</span>
+                      <span class="whitespace-nowrap">Escuchar · {currentVoiceLabel()}</span>
                     </button>
                   </Show>
                 </div>

@@ -328,7 +328,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                           aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
                         >
                           <Icon name="sound" size={16} />
-                          {currentVoiceLabel()}
+                          Escuchar · {currentVoiceLabel()}
                         </button>
                       </Show>
                     </div>
@@ -406,7 +406,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                   <div class="relative flex-1 min-h-0 flex flex-col animate-pop">
                     <Show when={progressStore.isNew(card.char.character)}>
                       <div
-                        class="pointer-events-none absolute left-1/2 top-7 z-10 flex -translate-x-1/2 items-center gap-1.5"
+                        class="pointer-events-none absolute left-1/2 top-5 z-10 flex -translate-x-1/2 items-center gap-1.5"
                         aria-label={`Paso ${{ learn: 1, seen: 1, ask: 2, check: 3 }[step()]} de 3`}
                       >
                         <For each={[1, 2, 3]}>
@@ -437,6 +437,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                       onSwipeRight={() => grade('good')}
                       swipeEnabled={revealed() && !progressStore.isNew(card.char.character)}
                       label={progressStore.isNew(card.char.character) ? '' : cardLabel(card)}
+                      reserveLabelSpace={progressStore.isNew(card.char.character)}
                       prompt="¿Qué significa y cómo se lee?"
                       stamps={{
                         right: { text: 'Bien', tone: 'jade' },
@@ -467,7 +468,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                           aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
                         >
                           <Icon name="sound" size={16} />
-                          {currentVoiceLabel()}
+                          Escuchar · {currentVoiceLabel()}
                         </button>
                       </Show>
                     </div>

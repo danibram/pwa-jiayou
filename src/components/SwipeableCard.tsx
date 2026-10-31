@@ -20,6 +20,7 @@ interface SwipeableCardProps {
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   label?: string;
+  reserveLabelSpace?: boolean;
   prompt?: string;
   concealCharacter?: boolean;
   fill?: boolean;
@@ -155,6 +156,7 @@ const SwipeableCard: Component<SwipeableCardProps> = (props) => {
         character={props.character}
         flipped={props.flipped}
         label={props.label}
+        reserveLabelSpace={props.reserveLabelSpace}
         prompt={props.prompt}
         concealCharacter={props.concealCharacter}
         fill={props.fill}

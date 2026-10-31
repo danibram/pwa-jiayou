@@ -122,7 +122,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
           <Show when={currentChar()}>
             <button
               type="button"
-              class="absolute bottom-3 left-1/2 z-10 h-11 -translate-x-1/2 px-3 text-sm text-ink-soft"
+              class="absolute bottom-3 left-1/2 z-10 h-11 -translate-x-1/2 whitespace-nowrap px-3 text-sm text-ink-soft underline decoration-line underline-offset-4"
               onClick={() => openInPleco(currentChar()!.character)}
             >
               Diccionario Pleco
@@ -152,7 +152,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
                 aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
               >
                 <Icon name="sound" size={18} />
-                <span class="whitespace-nowrap">{currentVoiceLabel()}</span>
+                <span class="whitespace-nowrap">Escuchar · {currentVoiceLabel()}</span>
               </button>
             </Show>
           </div>
