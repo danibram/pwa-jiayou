@@ -14,26 +14,39 @@ interface CreditLink {
   label: string;
 }
 
-interface Credit {
-  title?: string;
-  body?: string;
-  href?: string;
-  links?: CreditLink[];
-  source?: string;
-  sample?: string;
+interface SourceCredit {
+  kind: 'source';
+  title: string;
+  body: string;
+  href: string;
+  source: string;
 }
+
+interface SampleCredit extends Omit<SourceCredit, 'kind'> {
+  kind: 'sample';
+  sample: string;
+}
+
+interface LinksCredit {
+  kind: 'links';
+  links: CreditLink[];
+}
+
+type Credit = SourceCredit | SampleCredit | LinksCredit;
 
 const GROUPS: { title: string; credits: Credit[] }[] = [
   {
     title: 'Voces',
     credits: [
       {
+        kind: 'source',
         title: 'Mujer y hombre',
         body: 'Las grabó el Ministerio de Asuntos Digitales de Taiwán, en CNS11643. Son las dos primeras voces del botón de escuchar.',
         href: 'https://www.cns11643.gov.tw',
         source: 'CNS11643',
       },
       {
+        kind: 'source',
         title: 'Chen Wang',
         body: 'Sílabas de audio-cmn, grabadas en 2013. Es la tercera voz del botón de escuchar.',
         href: 'https://github.com/hugolpz/audio-cmn',
@@ -45,18 +58,21 @@ const GROUPS: { title: string; credits: Credit[] }[] = [
     title: 'Caracteres',
     credits: [
       {
+        kind: 'source',
         title: 'Lista HSK',
         body: 'Los caracteres salen de HanziDB. El español lo escribió este proyecto a partir de esas glosas.',
         href: 'http://hanzidb.org',
         source: 'HanziDB',
       },
       {
+        kind: 'source',
         title: 'Trazos',
         body: 'El orden de cada trazo sale de Make Me a Hanzi.',
         href: 'https://github.com/skishore/makemeahanzi',
         source: 'Make Me a Hanzi',
       },
       {
+        kind: 'sample',
         title: 'Tipo de letra',
         body: 'Las tarjetas usan la letra LXGW WenKai. El modelo de trazos es otro dibujo.',
         href: 'https://github.com/lxgw/LxgwWenKai',
@@ -69,6 +85,7 @@ const GROUPS: { title: string; credits: Credit[] }[] = [
     title: 'Creador',
     credits: [
       {
+        kind: 'links',
         links: [
           { href: 'https://dbr.io', label: 'dbr.io' },
           { href: 'https://github.com/danibram/pwa-jiayou', label: 'Proyecto en GitHub' },
@@ -83,9 +100,11 @@ const StrokeModel: Component<{ char: string }> = (props) => {
   return (
     <svg viewBox="0 0 1024 1024" class="absolute inset-3 h-auto w-auto" aria-hidden="true">
       <Show when={data()}>
+        {(stroke) => (
         <g transform="translate(0, 900) scale(1, -1)">
-          <For each={data()!.strokes}>{(path) => <path d={path} fill="currentColor" />}</For>
+          <For each={stroke().strokes}>{(path) => <path d={path} fill="currentColor" />}</For>
         </g>
+        )}
       </Show>
     </svg>
   );
@@ -120,21 +139,24 @@ const Acerca: Component<AcercaProps> = (props) => {
                 <For each={group.credits}>
                   {(credit) => (
                     <div class="px-4 pt-2.5 pb-4">
-                      <Show when={credit.title}>
-                        <div class="font-display text-[1.0625rem] font-semibold leading-tight">
-                          {credit.title}
-                        </div>
+                      <Show when={credit.kind === 'links' ? undefined : credit}>
+                        {(source) => (
+                          <>
+                            <div class="font-display text-[1.0625rem] font-semibold leading-tight">
+                              {source().title}
+                            </div>
+                            <p class="mt-1 text-sm leading-relaxed text-ink-soft">{source().body}</p>
+                          </>
+                        )}
                       </Show>
-                      <Show when={credit.body}>
-                        <p class="mt-1 text-sm leading-relaxed text-ink-soft">{credit.body}</p>
-                      </Show>
-                      <Show when={credit.sample}>
+                      <Show when={credit.kind === 'sample' ? credit : undefined}>
+                        {(sample) => (
                         <div class="mt-4 mb-3 flex justify-center gap-6">
                           <div class="text-center">
                             <div class="relative h-32 w-32">
                               <RiceGrid class="absolute inset-0 h-full w-full" />
                               <div class="absolute inset-0 flex items-center justify-center font-hanzi text-[7rem] leading-none text-ink">
-                                {credit.sample}
+                                {sample().sample}
                               </div>
                             </div>
                             <p class="mt-1.5 text-xs text-ink-soft">Letra</p>
@@ -142,17 +164,18 @@ const Acerca: Component<AcercaProps> = (props) => {
                           <div class="text-center">
                             <div class="relative h-32 w-32 text-ink">
                               <RiceGrid class="absolute inset-0 h-full w-full" />
-                              <StrokeModel char={credit.sample!} />
+                              <StrokeModel char={sample().sample} />
                             </div>
                             <p class="mt-1.5 text-xs text-ink-soft">Trazos</p>
                           </div>
                         </div>
+                        )}
                       </Show>
                       <div
                         class="flex flex-wrap gap-x-4 gap-y-1"
-                        classList={{ 'mt-2': Boolean(credit.title || credit.body || credit.sample) }}
+                        classList={{ 'mt-2': credit.kind !== 'links' }}
                       >
-                        <For each={credit.links ?? [{ href: credit.href ?? '', label: credit.source ?? '' }]}>
+                        <For each={credit.kind === 'links' ? credit.links : [{ href: credit.href, label: credit.source }]}>
                           {(link) => (
                             <a
                               href={link.href}

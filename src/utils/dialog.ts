@@ -49,13 +49,14 @@ export function createDialogFocus(
           const first = items[0];
           const last = items[items.length - 1];
           const active = document.activeElement;
+          const activeIsItem = active instanceof HTMLElement && items.includes(active);
           if (!first) {
             event.preventDefault();
             dialog.focus();
-          } else if (event.shiftKey && (active === first || !items.includes(active as HTMLElement))) {
+          } else if (event.shiftKey && (active === first || !activeIsItem)) {
             event.preventDefault();
             last.focus();
-          } else if (!event.shiftKey && (active === last || !items.includes(active as HTMLElement))) {
+          } else if (!event.shiftKey && (active === last || !activeIsItem)) {
             event.preventDefault();
             first.focus();
           }

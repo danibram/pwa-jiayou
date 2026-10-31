@@ -16,6 +16,7 @@ import { Grade, progressStore } from '../stores/progressStore';
 import { spokenMeaning } from '../utils/meaning';
 import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
 import { shouldHandleShortcut } from '../utils/keyboard';
+import type { StrokeFocus } from '../screen';
 
 /** watch the order, trace over the guide, then write from memory. */
 export type StrokeStage = 'watch' | 'trace' | 'memory';
@@ -23,9 +24,7 @@ export type StrokeStage = 'watch' | 'trace' | 'memory';
 interface TrazosProps {
   onBack: (char?: string) => void;
   backLabel?: string;
-  initialChar?: string;
-  /** Prev and next stay inside this topic. */
-  topicId?: string;
+  focus: StrokeFocus;
 }
 
 const STAGES: { value: StrokeStage; label: string }[] = [
@@ -38,12 +37,24 @@ const memoryGrade = (mistakes: number): Grade =>
   mistakes === 0 ? 'good' : mistakes <= 2 ? 'hard' : 'again';
 
 const Trazos: Component<TrazosProps> = (props) => {
-  const characters = () =>
-    props.topicId
-      ? charactersInTopic(props.topicId, characterStore.state.characters)
-      : characterStore.getCharactersByLevel();
+  const characters = () => {
+    const focus = props.focus;
+    switch (focus.kind) {
+      case 'topic':
+        return charactersInTopic(focus.topicId, characterStore.state.characters);
+      case 'character':
+      case 'level':
+        return characterStore.getCharactersByLevel();
+      default: {
+        const _exhaustive: never = focus;
+        return _exhaustive;
+      }
+    }
+  };
   const startIndex = () => {
-    const i = characters().findIndex((c) => c.character === props.initialChar);
+    const focus = props.focus;
+    const initial = focus.kind === 'level' ? undefined : focus.char;
+    const i = characters().findIndex((c) => c.character === initial);
     return i >= 0
       ? i
       : Math.min(characterStore.state.currentIndex, Math.max(0, characters().length - 1));
@@ -167,10 +178,13 @@ const Trazos: Component<TrazosProps> = (props) => {
     if (stage() === 'trace' && mistakes() > 0) {
       return `${mistakes()} ${mistakes() === 1 ? 'error' : 'errores'}`;
     }
-    if (stage() === 'watch' && step() !== null) return `Trazo ${step()! + 1} de ${n}`;
+    const currentStep = step();
+    if (stage() === 'watch' && currentStep !== null) return `Trazo ${currentStep + 1} de ${n}`;
     if (stage() === 'trace' && done() > 0) return `Trazo ${Math.min(done() + 1, n)} de ${n}`;
     return `${n} ${n === 1 ? 'trazo' : 'trazos'}`;
   };
+
+  const beatBest = (mistakes: number, best: number | null) => best !== null && mistakes < best;
 
   const resultTitle = (r: { mistakes: number; stage: StrokeStage }) => {
     if (r.mistakes === 0) return r.stage === 'memory' ? 'De memoria, perfecto' : 'Perfecto';
@@ -252,12 +266,11 @@ const Trazos: Component<TrazosProps> = (props) => {
               </div>
             </div>
             <div class="mt-auto flex min-h-0 flex-col">
-            <div class="mt-4 grid grid-cols-3 gap-1 shrink-0" role="tablist">
+            <div class="mt-4 grid grid-cols-3 gap-1 shrink-0" role="group" aria-label="Modo de práctica">
               <For each={STAGES}>
                 {(s) => (
                   <button
-                    role="tab"
-                    aria-selected={stage() === s.value}
+                    aria-pressed={stage() === s.value}
                     onClick={() => {
                       if (s.value === 'watch' && stage() === 'watch') setStep(null);
                       else switchStage(s.value);
@@ -394,9 +407,7 @@ const Trazos: Component<TrazosProps> = (props) => {
                                   .sort((a, b) => a - b)
                                   .map((n) => n + 1)
                                   .join(', ')}`}
-                            {r().best !== null && r().mistakes < r().best!
-                              ? ' · ¡nuevo récord!'
-                              : ''}
+                            {beatBest(r().mistakes, r().best) ? ' · ¡nuevo récord!' : ''}
                           </div>
                         </div>
                       </div>
@@ -434,7 +445,7 @@ const Trazos: Component<TrazosProps> = (props) => {
             </div>
 
             {/* Character navigation; no preview, so the next one stays a surprise in De memoria */}
-            <Show when={!!props.topicId || !props.initialChar}>
+            <Show when={props.focus.kind !== 'character'}>
             <nav
               class="mt-4 flex h-11 items-center justify-between"
               classList={{ 'invisible pointer-events-none': step() !== null }}

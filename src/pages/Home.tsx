@@ -1,19 +1,14 @@
-import { Component, createMemo, For, Show } from 'solid-js';
+import { Component, createMemo, createSignal, For, Show } from 'solid-js';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
 import { characterStore } from '../stores/characterStore';
 import { progressStore } from '../stores/progressStore';
 import Pinyin from '../components/Pinyin';
 import { spokenMeaning } from '../utils/meaning';
-import type { ReviewPool } from './Entrenamiento';
-import { loadSession } from '../utils/sessionStore';
-
-export type HomeTarget =
-  | { page: 'tarjetas' }
-  | { page: 'temas' }
-  | { page: 'acerca' }
-  | { page: 'entrenamiento'; pool: ReviewPool; resume?: boolean }
-  | { page: 'trazos'; char?: string };
+import type { ReviewPool } from '../types';
+import { discardSession, hasStoredSession, loadSession } from '../utils/sessionStore';
+import { createDialogFocus } from '../utils/dialog';
+import type { HomeTarget } from '../screen';
 
 interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
@@ -33,6 +28,15 @@ const Home: Component<HomeProps> = (props) => {
   const queue = createMemo(() => progressStore.buildQueue(chars()));
   const log = () => progressStore.daily;
   const savedSession = loadSession(characterStore.state.characters);
+  const storedSession = hasStoredSession();
+  const [newPool, setNewPool] = createSignal<ReviewPool | null>(null);
+  const [discardError, setDiscardError] = createSignal(false);
+  let poolDialog: HTMLDivElement | undefined;
+  createDialogFocus(() => newPool() !== null, () => poolDialog, () => setNewPool(null));
+  const openPool = (pool: ReviewPool) => {
+    if (storedSession) setNewPool(pool);
+    else props.onNavigate({ page: 'entrenamiento', pool, resume: false });
+  };
   const pending = () => queue().due.length + queue().fresh.length;
 
   const todayLine = () => {
@@ -59,7 +63,7 @@ const Home: Component<HomeProps> = (props) => {
       (c) => c.hsk_level === lvl && progressStore.isMastered(c.character)
     ).length;
 
-  const pickLevel = (lvl: number) => characterStore.toggleLevel(lvl);
+  const pickLevel = (lvl: typeof levels[number]) => characterStore.toggleLevel(lvl);
 
   const modes = [
     {
@@ -79,14 +83,14 @@ const Home: Component<HomeProps> = (props) => {
           const i = chars().findIndex((c) => c.character === first.character);
           if (i >= 0) characterStore.setCurrentIndex(i);
         }
-        props.onNavigate({ page: 'trazos' });
+        props.onNavigate({ page: 'trazos', focus: { kind: 'level' } });
       },
     },
     {
       glyph: '练',
       title: 'Todo lo marcado',
       body: 'Práctica libre',
-      go: () => props.onNavigate({ page: 'entrenamiento', pool: 'all' }),
+      go: () => openPool('all'),
     },
     {
       glyph: '类',
@@ -188,7 +192,7 @@ const Home: Component<HomeProps> = (props) => {
 
       {/* Character of the day */}
       <button
-        onClick={() => props.onNavigate({ page: 'trazos', char: daily().character })}
+        onClick={() => props.onNavigate({ page: 'trazos', focus: { kind: 'character', char: daily().character } })}
         class="home-daily tile mt-4 p-3 flex items-center gap-3 text-left animate-rise [animation-delay:240ms] active:scale-[0.99] transition-transform"
         aria-label={`Carácter del día: ${daily().character}. Ver sus trazos`}
       >
@@ -246,7 +250,7 @@ const Home: Component<HomeProps> = (props) => {
           fallback={
             <Show when={chars().some((c) => progressStore.isNew(c.character))}>
               <button
-                onClick={() => props.onNavigate({ page: 'entrenamiento', pool: 'more' })}
+            onClick={() => openPool('more')}
                 class="btn-ink h-14 w-full text-base"
               >
                 Aprender 5 más
@@ -256,7 +260,7 @@ const Home: Component<HomeProps> = (props) => {
           }
         >
           <button
-            onClick={() => props.onNavigate({ page: 'entrenamiento', pool: 'today' })}
+            onClick={() => openPool('today')}
             class="btn-ink h-14 w-full text-base"
           >
             {todayAction()}
@@ -265,6 +269,31 @@ const Home: Component<HomeProps> = (props) => {
         </Show>
       </div>
     </div>
+    <Show when={newPool()}>
+      {(pool) => (
+        <div class="fixed inset-0 z-40 flex items-end justify-center bg-black/55">
+          <div class="sheet w-full max-w-[40rem] px-4 pt-5 pb-6" ref={poolDialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="session-choice-title">
+            <h2 id="session-choice-title" class="text-center font-display text-xl font-semibold">
+              {savedSession ? 'Tienes una sesión pausada' : 'Hay datos de sesión que no se pueden abrir'}
+            </h2>
+            <p class="mt-1 text-center text-sm text-ink-soft">
+              {savedSession ? 'Continúa la sesión o descártala para empezar otra.' : 'Descarta esos datos para empezar una sesión nueva.'}
+            </p>
+            <Show when={savedSession}>
+              {(session) => <button class="btn-ink mt-4 h-14 w-full" onClick={() => props.onNavigate({ page: 'entrenamiento', pool: session().pool, resume: true })}>Continuar sesión</button>}
+            </Show>
+            <button class="btn-quiet mt-2 h-12 w-full" onClick={() => {
+              if (!discardSession()) { setDiscardError(true); return; }
+              props.onNavigate({ page: 'entrenamiento', pool: pool(), resume: false });
+            }}>Descartar y empezar</button>
+            <Show when={discardError()}>
+              <p role="alert" class="mt-2 text-center text-sm text-seal">No se pudieron borrar los datos de la sesión.</p>
+            </Show>
+            <button class="mt-1 h-11 w-full text-sm text-ink-soft" onClick={() => setNewPool(null)}>Seguir en inicio</button>
+          </div>
+        </div>
+      )}
+    </Show>
     </div>
   );
 };

@@ -1,34 +1,36 @@
 import { Component, createSignal, Match, Switch } from 'solid-js';
 import { charactersInTopic } from './data/topics';
 import Acerca from './pages/Acerca';
-import Entrenamiento, { ReviewPool } from './pages/Entrenamiento';
-import Home, { HomeTarget } from './pages/Home';
+import Entrenamiento from './pages/Entrenamiento';
+import Home from './pages/Home';
 import Tarjetas from './pages/Tarjetas';
 import Tema from './pages/Tema';
 import Temas from './pages/Temas';
 import Trazos from './pages/Trazos';
+import {
+  entrenamientoScreen,
+  homeScreen,
+  temaScreen,
+  trazosScreen,
+  type HomeTarget,
+  type Screen,
+} from './screen';
+import { createScreenHistory } from './createScreenHistory';
 import { characterStore } from './stores/characterStore';
 
-type Screen =
-  | { page: 'home' }
-  | { page: 'acerca' }
-  | { page: 'temas' }
-  | { page: 'tema'; topicId: string; index: number }
-  | { page: 'tarjetas' }
-  | { page: 'entrenamiento'; pool: ReviewPool; resume?: boolean }
-  | { page: 'trazos'; char?: string; topicId?: string; from: Screen };
-
-const asPage = <P extends Screen['page']>(screen: Screen, page: P) =>
-  screen.page === page ? (screen as Extract<Screen, { page: P }>) : undefined;
-
 const App: Component = () => {
-  const [screen, setScreen] = createSignal<Screen>({ page: 'home' });
+  const [screen, setScreen] = createSignal<Screen>(homeScreen);
+  const { goHome, leaveFinishedSession } = createScreenHistory(screen, setScreen);
+  const openStrokes = (char: string) =>
+    setScreen((current) => ({ page: 'trazos', focus: { kind: 'character', char }, from: current }));
 
-  const goHome = () => setScreen({ page: 'home' });
-  const openStrokes = (char: string) => setScreen((s) => ({ page: 'trazos', char, from: s }));
-
-  const navigate = (target: HomeTarget) =>
-    setScreen(target.page === 'trazos' ? { ...target, from: { page: 'home' } } : target);
+  const navigate = (target: HomeTarget) => {
+    if (target.page === 'trazos') {
+      setScreen({ page: 'trazos', focus: target.focus, from: homeScreen });
+      return;
+    }
+    setScreen(target);
+  };
 
   return (
     <div class="app w-full">
@@ -45,7 +47,7 @@ const App: Component = () => {
             onReview={(topicId) => setScreen({ page: 'tema', topicId, index: 0 })}
           />
         </Match>
-        <Match when={asPage(screen(), 'tema')} keyed>
+        <Match when={temaScreen(screen())} keyed>
           {(s) => (
             <Tema
               topicId={s.topicId}
@@ -54,8 +56,7 @@ const App: Component = () => {
               onOpenStrokes={(char, index) =>
                 setScreen({
                   page: 'trazos',
-                  char,
-                  topicId: s.topicId,
+                  focus: { kind: 'topic', char, topicId: s.topicId },
                   from: { page: 'tema', topicId: s.topicId, index },
                 })
               }
@@ -65,24 +66,23 @@ const App: Component = () => {
         <Match when={screen().page === 'tarjetas'}>
           <Tarjetas onGoHome={goHome} onOpenStrokes={openStrokes} />
         </Match>
-        <Match when={asPage(screen(), 'entrenamiento')} keyed>
+        <Match when={entrenamientoScreen(screen())} keyed>
           {(s) => (
             <Entrenamiento
               pool={s.pool}
               resume={s.resume}
               onGoHome={goHome}
+              onLeaveFinished={leaveFinishedSession}
               backLabel="Volver"
               onOpenStrokes={openStrokes}
             />
           )}
         </Match>
-        <Match when={asPage(screen(), 'trazos')} keyed>
+        <Match when={trazosScreen(screen())} keyed>
           {(s) => (
             <Trazos
-              initialChar={s.char}
-              topicId={s.topicId}
-              // A review session can't be resumed, so leaving strokes from its summary
-              // returns home. A topic returns to the character you were writing.
+              focus={s.focus}
+              // A topic returns to the character you were writing. A review returns home.
               onBack={(char) => {
                 const from = s.from;
                 if (from.page === 'tema') {

@@ -122,13 +122,15 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
             fill
           />
           <Show when={currentChar()}>
+            {(char) => (
             <button
               type="button"
               class="absolute bottom-3 left-1/2 z-10 h-11 -translate-x-1/2 whitespace-nowrap px-3 text-sm text-ink-soft underline decoration-line underline-offset-4"
-              onClick={() => openInPleco(currentChar()!.character)}
+              onClick={() => openInPleco(char().character)}
             >
               Diccionario Pleco
             </button>
+            )}
           </Show>
           </div>
         </Show>

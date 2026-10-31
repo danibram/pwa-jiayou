@@ -2,12 +2,13 @@ import { createStore } from 'solid-js/store';
 import hsk1Data from '../data/hsk1.json';
 import hsk2Data from '../data/hsk2.json';
 import hsk3Data from '../data/hsk3.json';
-import { ExampleWord, HSKCharacter, TrainingResult } from '../types';
+import { ExampleWord, HSKCharacter, HskLevel, TrainingResult } from '../types';
+import { isHskLevel, isNonEmpty, isRecord, isString } from '../utils/parse';
 import { shuffle } from '../utils/shuffle';
 
 interface CharacterStore {
   characters: HSKCharacter[];
-  selectedLevels: number[];
+  selectedLevels: HskLevel[];
   currentIndex: number;
   trainingMode: boolean;
   trainingResults: {
@@ -19,17 +20,17 @@ interface CharacterStore {
 const STORAGE_KEY = 'hsk-flashcards-progress';
 
 /** Older saves stored one level as `selectedLevel`. */
-export const selectionFromSaved = (raw: unknown): number[] => {
-  if (!raw || typeof raw !== 'object') return [];
-  const parsed = raw as { selectedLevels?: unknown; selectedLevel?: unknown };
-  const list = Array.isArray(parsed.selectedLevels)
-    ? parsed.selectedLevels.filter((n): n is number => typeof n === 'number')
-    : [];
-  const legacy = typeof parsed.selectedLevel === 'number' ? [parsed.selectedLevel] : [];
+export const selectionFromSaved = (raw: unknown): HskLevel[] => {
+  if (!isRecord(raw)) return [];
+  const list = Array.isArray(raw.selectedLevels) ? raw.selectedLevels.filter(isHskLevel) : [];
+  const legacy = isHskLevel(raw.selectedLevel) ? [raw.selectedLevel] : [];
   const levels = list.length > 0 ? list : legacy;
-  const available = new Set<number>(allCharacters.map((character) => character.hsk_level));
+  const available = new Set<HskLevel>(allCharacters.map((character) => character.hsk_level));
   return [...new Set(levels.filter((level) => available.has(level)))].sort((a, b) => a - b);
 };
+
+const keptIndex = (index: unknown, count: number) =>
+  typeof index === 'number' && Number.isInteger(index) && index >= 0 && index < count ? index : 0;
 
 const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'> => {
   const empty = { selectedLevels: [], currentIndex: 0 };
@@ -37,13 +38,11 @@ const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'>
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return empty;
     const parsed: unknown = JSON.parse(saved);
-    if (!parsed || typeof parsed !== 'object') return empty;
+    if (!isRecord(parsed)) return empty;
     const selectedLevels = selectionFromSaved(parsed);
-    const index = (parsed as { currentIndex?: unknown }).currentIndex;
+    const index = parsed.currentIndex;
     const count = allCharacters.filter((character) => selectedLevels.includes(character.hsk_level)).length;
-    const currentIndex = typeof index === 'number' && Number.isInteger(index) && index >= 0 && index < count
-      ? index
-      : 0;
+    const currentIndex = keptIndex(index, count);
     return { selectedLevels, currentIndex };
   } catch {
     return empty;
@@ -51,7 +50,7 @@ const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'>
 };
 
 /** "HSK 1", "HSK 1 y 2", "HSK 1, 2 y 3". */
-export const formatHskLevels = (levels: number[]): string => {
+export const formatHskLevels = (levels: readonly HskLevel[]): string => {
   const sorted = [...new Set(levels)].sort((a, b) => a - b);
   if (sorted.length === 0) return 'HSK';
   if (sorted.length === 1) return `HSK ${sorted[0]}`;
@@ -60,34 +59,56 @@ export const formatHskLevels = (levels: number[]): string => {
   return `HSK ${head} y ${last}`;
 };
 
-// The level files disagree on field names (stroke_count vs strokes) and some
-// leave traditional null, so normalise them into one shape.
-type RawCharacter = Partial<HSKCharacter> & { strokes?: number; traditional?: string | null };
+const text = (value: unknown): string => (typeof value === 'string' ? value : '');
 
-// Curated glosses and example words, keyed by character, one file per level.
-const glossFiles = import.meta.glob<Record<string, { gloss: string; example: ExampleWord }>>(
-  '../data/glosses/*.json',
-  { eager: true, import: 'default' }
-);
-const glosses = Object.assign({}, ...Object.values(glossFiles));
+const count = (value: unknown): number =>
+  typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0;
 
-const normalize = (raw: RawCharacter): HSKCharacter => ({
-  character: raw.character!,
-  traditional: raw.traditional || raw.character!,
-  pinyin: raw.pinyin ?? '',
-  definition: raw.definition ?? '',
-  radical: raw.radical ?? '',
-  stroke_count: raw.stroke_count ?? raw.strokes ?? 0,
-  hsk_level: raw.hsk_level!,
-  general_standard: Number(raw.general_standard ?? 0),
-  frequency_rank: raw.frequency_rank ?? 0,
-  gloss: glosses[raw.character!]?.gloss,
-  example: glosses[raw.character!]?.example,
-});
+const parseExample = (value: unknown): ExampleWord | undefined => {
+  if (!isRecord(value) || !isString(value.word) || !isString(value.pinyin) || !isString(value.es)) return undefined;
+  return { word: value.word, pinyin: value.pinyin, es: value.es };
+};
 
-const allCharacters: HSKCharacter[] = (
-  [...hsk1Data, ...hsk2Data, ...hsk3Data] as RawCharacter[]
-).map(normalize);
+const parseGlossFile = (value: unknown): Record<string, { gloss: string; example: ExampleWord }> => {
+  if (!isRecord(value)) return {};
+  const glosses: Record<string, { gloss: string; example: ExampleWord }> = {};
+  for (const [char, entry] of Object.entries(value)) {
+    if (!isRecord(entry) || !isString(entry.gloss)) continue;
+    const example = parseExample(entry.example);
+    if (!example) continue;
+    glosses[char] = { gloss: entry.gloss, example };
+  }
+  return glosses;
+};
+
+const glossFiles = import.meta.glob<unknown>('../data/glosses/*.json', { eager: true, import: 'default' });
+const glosses: Record<string, { gloss: string; example: ExampleWord }> = {};
+for (const file of Object.values(glossFiles)) Object.assign(glosses, parseGlossFile(file));
+
+const parseCharacter = (raw: unknown): HSKCharacter => {
+  if (!isRecord(raw) || !isString(raw.character) || raw.character.length === 0 || !isHskLevel(raw.hsk_level)) {
+    throw new Error('Hay un carácter del catálogo que no se puede leer.');
+  }
+  const gloss = glosses[raw.character];
+  const strokes = raw.stroke_count ?? raw.strokes;
+  return {
+    character: raw.character,
+    traditional: isString(raw.traditional) && raw.traditional ? raw.traditional : raw.character,
+    pinyin: text(raw.pinyin),
+    definition: text(raw.definition),
+    radical: text(raw.radical),
+    stroke_count: count(strokes),
+    hsk_level: raw.hsk_level,
+    general_standard: count(raw.general_standard),
+    frequency_rank: count(raw.frequency_rank),
+    gloss: gloss?.gloss,
+    example: gloss?.example,
+  };
+};
+
+const parsedCharacters = [...hsk1Data, ...hsk2Data, ...hsk3Data].map(parseCharacter);
+if (!isNonEmpty(parsedCharacters)) throw new Error('El catálogo de caracteres está vacío.');
+const allCharacters = parsedCharacters;
 
 // Initialize store
 const initialState: CharacterStore = {
@@ -110,8 +131,8 @@ const saveProgress = () => {
       currentIndex: store.currentIndex,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  } catch (error) {
-    console.error('Error saving progress:', error);
+  } catch {
+    // Storage can be full or blocked. The in-memory deck still works.
   }
 };
 
@@ -124,7 +145,7 @@ export const characterStore = {
     return formatHskLevels(store.selectedLevels);
   },
 
-  selectLevels(levels: number[]) {
+  selectLevels(levels: HskLevel[]) {
     setStore({
       selectedLevels: [...new Set(levels)].sort((a, b) => a - b),
       currentIndex: 0,
@@ -134,12 +155,23 @@ export const characterStore = {
     saveProgress();
   },
 
-  selectLevel(level: number) {
+  selectLevel(level: HskLevel) {
     this.selectLevels([level]);
   },
 
+  /** Restores a session's levels and keeps the card place when it still falls in the deck. */
+  restoreSelectedLevels(levels: HskLevel[]) {
+    const selectedLevels = [...new Set(levels)].sort((a, b) => a - b);
+    const count = store.characters.filter((character) => selectedLevels.includes(character.hsk_level)).length;
+    setStore({
+      selectedLevels,
+      currentIndex: keptIndex(store.currentIndex, count),
+    });
+    saveProgress();
+  },
+
   /** Add or remove a level. The last one stays on, so the deck is never empty. */
-  toggleLevel(level: number) {
+  toggleLevel(level: HskLevel) {
     const current = store.selectedLevels;
     const has = current.includes(level);
     if (has && current.length === 1) return;
@@ -158,19 +190,19 @@ export const characterStore = {
   },
 
   // Levels that actually ship character data
-  getAvailableLevels(): number[] {
+  getAvailableLevels(): HskLevel[] {
     return [...new Set(store.characters.map((char) => char.hsk_level))].sort();
   },
 
   // Same character all day, different each day
   getDailyCharacter(): HSKCharacter {
-    const pool = store.selectedLevels.length > 0 ? this.getCharactersByLevel() : store.characters;
-    const day = Math.floor(Date.now() / 86_400_000);
-    return pool[day % pool.length];
+    const selected = store.selectedLevels.length > 0 ? this.getCharactersByLevel() : store.characters;
+    const pool = selected.length > 0 ? selected : allCharacters;
+    return pool[Math.floor(Date.now() / 86_400_000) % pool.length];
   },
 
   // Count characters by level
-  getCharacterCountByLevel(level: number): number {
+  getCharacterCountByLevel(level: HskLevel): number {
     return store.characters.filter((char) => char.hsk_level === level).length;
   },
 
@@ -201,7 +233,6 @@ export const characterStore = {
   startTraining() {
     setStore({
       trainingMode: true,
-      currentIndex: 0,
       trainingResults: { correct: 0, incorrect: 0 },
     });
   },
@@ -230,7 +261,6 @@ export const characterStore = {
   resetTraining() {
     setStore({
       trainingMode: false,
-      currentIndex: 0,
       trainingResults: { correct: 0, incorrect: 0 },
     });
   },

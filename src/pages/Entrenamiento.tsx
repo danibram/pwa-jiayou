@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, For, Match, onCleanup, onMount, Show, Switch } from 'solid-js';
+import { Component, createEffect, createSignal, For, Match, on, onCleanup, onMount, Show, Switch } from 'solid-js';
 import Icon from '../components/Icon';
 import Pinyin from '../components/Pinyin';
 import ScoreModal, { SessionSummary } from '../components/ScoreModal';
@@ -8,21 +8,21 @@ import TopBar from '../components/TopBar';
 import { spokenMeaning } from '../utils/meaning';
 import { characterStore } from '../stores/characterStore';
 import { Grade, progressStore } from '../stores/progressStore';
-import { HSKCharacter } from '../types';
+import { HSKCharacter, ReviewPool } from '../types';
 import { takeHint } from '../utils/hints';
 import { shuffle } from '../utils/shuffle';
 import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
 import { CardKind, NewStep, discardSession, loadSession, saveSession } from '../utils/sessionStore';
+import { progressReset } from '../utils/progressReset';
 import { createDialogFocus } from '../utils/dialog';
 import { shouldHandleShortcut } from '../utils/keyboard';
 
 /** today: due cards plus new ones; more: five extra new ones; all: free practice over the marked levels. */
-export type ReviewPool = 'today' | 'more' | 'all';
-
 interface EntrenamientoProps {
   pool: ReviewPool;
-  resume?: boolean;
+  resume: boolean;
   onGoHome: () => void;
+  onLeaveFinished: () => void;
   backLabel?: string;
   onOpenStrokes: (char: string) => void;
 }
@@ -76,6 +76,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
   const [taught, setTaught] = createSignal<HSKCharacter[]>([]);
   const [writeState, setWriteState] = createSignal({ done: 0, total: 0, mistakes: 0, hint: false });
   const [heading, setHeading] = createSignal('Repaso de hoy');
+  const [saveWarning, setSaveWarning] = createSignal(false);
   const showHint = takeHint('review');
   let writeApi: StrokeCanvasApi | undefined;
 
@@ -121,22 +122,28 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
 
   const [ready, setReady] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
+  const onProgressReplaced = () => {
+    setReady(false);
+    if (timer) clearTimeout(timer);
+    characterStore.resetTraining();
+    props.onLeaveFinished();
+  };
+  createEffect(on(progressReset, onProgressReplaced, { defer: true }));
   onMount(() => {
     const saved = props.resume ? loadSession(characterStore.state.characters) : null;
     if (!saved || saved.pool !== props.pool) start(buildDeck());
     else {
-      const byId = new Map(characterStore.state.characters.map((c) => [c.character, c]));
-      const chars = (ids: string[]) => ids.map((id) => byId.get(id)!);
+      if (saved.selectedLevels) characterStore.restoreSelectedLevels(saved.selectedLevels);
       characterStore.startTraining();
-      setDeck(saved.deck.map((c) => ({ char: byId.get(c.character)!, kind: c.kind })));
+      setDeck(saved.deck);
       setPosition(saved.position);
       setRevealed(saved.revealed);
       setStep(saved.step);
       setFeedback(saved.feedback);
       setCounts(saved.counts);
-      setMissed(chars(saved.missed));
-      setSeen(chars(saved.seen));
-      setTaught(chars(saved.taught));
+      setMissed(saved.missed);
+      setSeen(saved.seen);
+      setTaught(saved.taught);
       setHeading(saved.heading);
       setWriteState({ ...saved.writeState, done: 0, total: 0 });
       if (saved.feedback) next();
@@ -147,16 +154,17 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
 
   const persist = () => {
     if (!ready()) return;
-    if (summary() || !deck().length) { discardSession(); return; }
-    saveSession({ version: 1, pool: props.pool,
-      deck: deck().map(({ char, kind }) => ({ character: char.character, kind })),
-      position: position(), revealed: revealed(), step: step(), feedback: feedback(),
-      counts: counts(), missed: missed().map((c) => c.character),
-      seen: seen().map((c) => c.character), taught: taught().map((c) => c.character),
+    if (summary() || !deck().length) { setSaveWarning(!discardSession()); return; }
+    const ok = saveSession({ version: 1, pool: props.pool, selectedLevels: characterStore.state.selectedLevels,
+      deck: deck(), position: position(), revealed: revealed(), step: step(), feedback: feedback(),
+      counts: counts(), missed: missed(), seen: seen(), taught: taught(),
       heading: heading(), writeState: writeState() });
+    setSaveWarning(!ok);
   };
   createEffect(persist);
-  onCleanup(() => { if (timer) clearTimeout(timer); });
+  onCleanup(() => {
+    if (timer) clearTimeout(timer);
+  });
 
   const finish = () => {
     const c = counts();
@@ -293,9 +301,19 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
   createDialogFocus(leaving, () => leaveDialog, () => setLeaving(false));
 
   const leave = () => {
+    const finished = summary() !== null || deck().length === 0;
     persist();
     characterStore.resetTraining();
-    props.onGoHome();
+    if (finished) props.onLeaveFinished();
+    else props.onGoHome();
+  };
+
+  const retrySave = () => persist();
+
+  const discardAndLeave = () => {
+    if (!discardSession()) { setSaveWarning(true); return; }
+    characterStore.resetTraining();
+    props.onLeaveFinished();
   };
 
   const handleGoHome = () => {
@@ -332,6 +350,12 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
         onBack={handleGoHome}
         backLabel={props.backLabel ?? 'Volver'}
       />
+      <Show when={saveWarning()}>
+        <div role="alert" class="mx-4 rounded-lg border border-seal/40 bg-seal/10 p-3 text-sm text-ink">
+          No se pudo guardar la sesión. Comprueba el espacio del dispositivo y vuelve a intentarlo.
+          <button class="ml-2 underline" onClick={retrySave}>Reintentar</button>
+        </div>
+      </Show>
 
       <Show
         when={!isEmpty()}
@@ -627,11 +651,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                         >
                           Pausar y salir
                         </button>
-                        <button type="button" class="h-11 w-full text-sm text-ink-soft" onClick={() => {
-                          discardSession();
-                          characterStore.resetTraining();
-                          props.onGoHome();
-                        }}>
+                        <button type="button" class="h-11 w-full text-sm text-ink-soft" onClick={discardAndLeave}>
                           Salir y descartar sesión
                         </button>
                       </div>
