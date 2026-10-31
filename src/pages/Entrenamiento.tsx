@@ -1,4 +1,4 @@
-import { Component, createSignal, For, Match, onCleanup, onMount, Show, Switch } from 'solid-js';
+import { Component, createEffect, createSignal, For, Match, on, onCleanup, onMount, Show, Switch } from 'solid-js';
 import Icon from '../components/Icon';
 import Pinyin from '../components/Pinyin';
 import ScoreModal, { SessionSummary } from '../components/ScoreModal';
@@ -8,29 +8,24 @@ import TopBar from '../components/TopBar';
 import { spokenMeaning } from '../utils/meaning';
 import { characterStore } from '../stores/characterStore';
 import { Grade, progressStore } from '../stores/progressStore';
-import { HSKCharacter } from '../types';
+import { HSKCharacter, ReviewPool } from '../types';
 import { takeHint } from '../utils/hints';
 import { shuffle } from '../utils/shuffle';
 import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
+import { CardKind, NewStep, discardSession, loadSession, saveSession } from '../utils/sessionStore';
+import { progressReset } from '../utils/progressReset';
+import { createDialogFocus } from '../utils/dialog';
+import { shouldHandleShortcut } from '../utils/keyboard';
 
 /** today: due cards plus new ones; more: five extra new ones; all: free practice over the marked levels. */
-export type ReviewPool = 'today' | 'more' | 'all';
-
 interface EntrenamientoProps {
   pool: ReviewPool;
+  resume: boolean;
   onGoHome: () => void;
+  onLeaveFinished: () => void;
   backLabel?: string;
   onOpenStrokes: (char: string) => void;
 }
-
-/**
- * learn: kept so an old deck can still name a first look. New sessions use quiz.
- * quiz: recognise the character. write: produce it from pinyin and meaning.
- * retry: a card missed earlier in the session, shown again at the end.
- */
-type CardKind = 'learn' | 'quiz' | 'write' | 'retry';
-/** A new character is shown, then covered, then checked. It is not graded today. */
-type NewStep = 'learn' | 'seen' | 'ask' | 'check';
 
 interface DeckCard {
   char: HSKCharacter;
@@ -81,6 +76,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
   const [taught, setTaught] = createSignal<HSKCharacter[]>([]);
   const [writeState, setWriteState] = createSignal({ done: 0, total: 0, mistakes: 0, hint: false });
   const [heading, setHeading] = createSignal('Repaso de hoy');
+  const [saveWarning, setSaveWarning] = createSignal(false);
   const showHint = takeHint('review');
   let writeApi: StrokeCanvasApi | undefined;
 
@@ -124,7 +120,51 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
     enterCard();
   };
 
-  onMount(() => start(buildDeck()));
+  const [ready, setReady] = createSignal(false);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const onProgressReplaced = () => {
+    setReady(false);
+    if (timer) clearTimeout(timer);
+    characterStore.resetTraining();
+    props.onLeaveFinished();
+  };
+  createEffect(on(progressReset, onProgressReplaced, { defer: true }));
+  onMount(() => {
+    const saved = props.resume ? loadSession(characterStore.state.characters) : null;
+    if (!saved || saved.pool !== props.pool) start(buildDeck());
+    else {
+      if (saved.selectedLevels) characterStore.restoreSelectedLevels(saved.selectedLevels);
+      characterStore.startTraining();
+      setDeck(saved.deck);
+      setPosition(saved.position);
+      setRevealed(saved.revealed);
+      setStep(saved.step);
+      setFeedback(saved.feedback);
+      setCounts(saved.counts);
+      setMissed(saved.missed);
+      setSeen(saved.seen);
+      setTaught(saved.taught);
+      setHeading(saved.heading);
+      setWriteState({ ...saved.writeState, done: 0, total: 0 });
+      if (saved.feedback) next();
+    }
+    setReady(true);
+    persist();
+  });
+
+  const persist = () => {
+    if (!ready()) return;
+    if (summary() || !deck().length) { setSaveWarning(!discardSession()); return; }
+    const ok = saveSession({ version: 1, pool: props.pool, selectedLevels: characterStore.state.selectedLevels,
+      deck: deck(), position: position(), revealed: revealed(), step: step(), feedback: feedback(),
+      counts: counts(), missed: missed(), seen: seen(), taught: taught(),
+      heading: heading(), writeState: writeState() });
+    setSaveWarning(!ok);
+  };
+  createEffect(persist);
+  onCleanup(() => {
+    if (timer) clearTimeout(timer);
+  });
 
   const finish = () => {
     const c = counts();
@@ -200,18 +240,20 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
       return;
     record(card, g);
     setFeedback(g);
-    setTimeout(next, 380);
+    persist();
+    timer = setTimeout(next, 380);
   };
 
   const handleWritten = (mistakes: number) => {
     const card = current();
-    if (!card || card.kind !== 'write') return;
+    if (!card || card.kind !== 'write' || feedback() || summary()) return;
     const g = writeGrade(mistakes, writeState().hint);
     record(card, g);
     setWriteState((s) => ({ ...s, mistakes }));
     setFeedback(g);
     speak(card.char.pinyin, card.char.character, false);
-    setTimeout(next, 1300);
+    persist();
+    timer = setTimeout(next, 1300);
   };
 
   const giveUp = () => {
@@ -221,12 +263,13 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
     setFeedback('again');
     speak(card.char.pinyin, card.char.character, false);
     // Let the learner watch the full character before moving on.
-    writeApi?.showAnswer(() => setTimeout(next, 700));
+    persist();
+    writeApi?.showAnswer(() => { timer = setTimeout(next, 700); });
   };
 
   const onKey = (e: KeyboardEvent) => {
     const card = current();
-    if (summary() || !card || card.kind === 'write') return;
+    if (summary() || leaving() || !card || card.kind === 'write' || !shouldHandleShortcut(e)) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
         if (progressStore.isNew(card.char.character)) {
@@ -254,15 +297,27 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
   onCleanup(() => window.removeEventListener('keydown', onKey));
 
   const [leaving, setLeaving] = createSignal(false);
+  let leaveDialog: HTMLDivElement | undefined;
+  createDialogFocus(leaving, () => leaveDialog, () => setLeaving(false));
 
   const leave = () => {
+    const finished = summary() !== null || deck().length === 0;
+    persist();
     characterStore.resetTraining();
-    props.onGoHome();
+    if (finished) props.onLeaveFinished();
+    else props.onGoHome();
+  };
+
+  const retrySave = () => persist();
+
+  const discardAndLeave = () => {
+    if (!discardSession()) { setSaveWarning(true); return; }
+    characterStore.resetTraining();
+    props.onLeaveFinished();
   };
 
   const handleGoHome = () => {
-    const started = position() > 0 || step() !== 'learn' || revealed();
-    if (!isEmpty() && started && !leaving()) {
+    if (!isEmpty() && !summary() && !leaving()) {
       setLeaving(true);
       return;
     }
@@ -295,6 +350,12 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
         onBack={handleGoHome}
         backLabel={props.backLabel ?? 'Volver'}
       />
+      <Show when={saveWarning()}>
+        <div role="alert" class="mx-4 rounded-lg border border-seal/40 bg-seal/10 p-3 text-sm text-ink">
+          No se pudo guardar la sesión. Comprueba el espacio del dispositivo y vuelve a intentarlo.
+          <button class="ml-2 underline" onClick={retrySave}>Reintentar</button>
+        </div>
+      </Show>
 
       <Show
         when={!isEmpty()}
@@ -474,10 +535,10 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                     </div>
                     <p
                       class="mb-6 flex h-6 items-center justify-center text-center text-[0.9375rem] font-medium text-ink"
-                      classList={{ invisible: leaving() || step() !== 'check' }}
-                      aria-hidden={leaving() || step() !== 'check' ? 'true' : undefined}
+                      classList={{ invisible: leaving() || (step() !== 'check' && step() !== 'ask') }}
+                      aria-hidden={leaving() || (step() !== 'check' && step() !== 'ask') ? 'true' : undefined}
                     >
-                      ¿Lo tenías?
+                      {step() === 'ask' ? 'Recuerda el carácter antes de comprobar' : '¿Lo tenías?'}
                     </p>
                   </Show>
                   <div classList={{ 'pointer-events-none invisible': leaving() }}>
@@ -510,7 +571,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                           Otra vez hoy
                         </button>
                         <button onClick={meet} class="btn-ink h-14 text-[0.9375rem]">
-                          Lo sabía
+                          Lo recordé
                         </button>
                       </div>
                     </Match>
@@ -542,39 +603,6 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
                     </Match>
                   </Switch>
                   </div>
-                  <Show when={leaving()}>
-                    <div class="fixed inset-0 z-40 flex items-end justify-center bg-black/55">
-                      <div
-                        class="sheet w-full max-w-[40rem] border-x-0 px-4 pt-5 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="leave-title"
-                      >
-                        <p id="leave-title" class="text-center font-display text-xl font-semibold text-ink">
-                          {heading() === 'Aprender' ? '¿Sales de la sesión?' : '¿Sales del repaso?'}
-                        </p>
-                        <p class="mt-1 text-center text-sm text-ink-soft">
-                          {position() > 0
-                            ? 'Lo que ya marcaste queda guardado.'
-                            : 'Aún no has marcado nada.'}
-                        </p>
-                        <button
-                          type="button"
-                          class="btn-ink mt-4 h-14 w-full text-[0.9375rem]"
-                          onClick={() => setLeaving(false)}
-                        >
-                          Seguir
-                        </button>
-                        <button
-                          type="button"
-                          class="mt-1 h-11 w-full text-sm text-ink-soft"
-                          onClick={leave}
-                        >
-                          Salir
-                        </button>
-                      </div>
-                    </div>
-                  </Show>
                   <p class="mt-2 h-5 text-center text-[0.8125rem] text-ink-soft">
                     {leaving()
                       ? ''
@@ -592,6 +620,43 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
           )}
         </Show>
       </Show>
+
+      <Show when={leaving()}>
+                    <div class="fixed inset-0 z-40 flex items-end justify-center bg-black/55">
+                      <div
+                        class="sheet w-full max-w-[40rem] border-x-0 px-4 pt-5 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
+                        ref={leaveDialog}
+                        tabIndex={-1}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="leave-title"
+                      >
+                        <p id="leave-title" class="text-center font-display text-xl font-semibold text-ink">
+                          {heading() === 'Aprender' ? '¿Sales de la sesión?' : '¿Sales del repaso?'}
+                        </p>
+                        <p class="mt-1 text-center text-sm text-ink-soft">
+                          Puedes continuar la sesión después. Lo que ya marcaste queda guardado.
+                        </p>
+                        <button
+                          type="button"
+                          class="btn-ink mt-4 h-14 w-full text-[0.9375rem]"
+                          onClick={() => setLeaving(false)}
+                        >
+                          Seguir
+                        </button>
+                        <button
+                          type="button"
+                          class="mt-1 h-11 w-full text-sm text-ink-soft"
+                          onClick={leave}
+                        >
+                          Pausar y salir
+                        </button>
+                        <button type="button" class="h-11 w-full text-sm text-ink-soft" onClick={discardAndLeave}>
+                          Salir y descartar sesión
+                        </button>
+                      </div>
+                    </div>
+                  </Show>
 
       <ScoreModal
         summary={summary()}

@@ -2,6 +2,7 @@ import { Component, For, Show } from 'solid-js';
 import { HSKCharacter } from '../types';
 import Icon from './Icon';
 import Pinyin from './Pinyin';
+import { createDialogFocus } from '../utils/dialog';
 
 export interface SessionSummary {
   again: number;
@@ -29,8 +30,12 @@ const RADIUS = 52;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 const ScoreModal: Component<ScoreModalProps> = (props) => {
-  const result = () => props.summary!;
-  const lesson = () => result().total === 0;
+  let dialog: HTMLDivElement | undefined;
+  createDialogFocus(() => props.summary !== null, () => dialog, () => props.onGoHome());
+  return (
+    <Show when={props.summary}>
+      {(summary) => {
+  const lesson = () => summary().total === 0;
   const verdict = () => {
     if (lesson()) {
       const n = props.practised.length;
@@ -40,7 +45,7 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
         subtitle: `Has visto ${n} ${n === 1 ? 'carácter' : 'caracteres'}. Mañana te los pregunto.`,
       };
     }
-    const p = result().percentage;
+    const p = summary().percentage;
     if (props.missed.length === 0)
       return {
         title: '太棒了',
@@ -63,12 +68,13 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
   };
 
   return (
-    <Show when={props.summary}>
       <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/30 backdrop-blur-[2px] animate-fade">
         <div
           class="w-full max-w-md bg-surface rounded-t-card sm:rounded-card border border-line shadow-card px-6 pt-7 animate-rise max-h-[92dvh] overflow-y-auto"
           style={{ 'padding-bottom': 'max(env(safe-area-inset-bottom), 1.5rem)' }}
           role="dialog"
+          ref={dialog}
+          tabIndex={-1}
           aria-modal="true"
           aria-labelledby="score-title"
         >
@@ -92,7 +98,7 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
                   stroke-width="9"
                   stroke-linecap="round"
                   stroke-dasharray={`${CIRCUMFERENCE}`}
-                  stroke-dashoffset={CIRCUMFERENCE * (1 - result().percentage / 100)}
+                  stroke-dashoffset={CIRCUMFERENCE * (1 - summary().percentage / 100)}
                   style={{ transition: 'stroke-dashoffset 900ms cubic-bezier(0.22, 1, 0.36, 1)' }}
                 />
               </svg>
@@ -102,7 +108,7 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
                     when={!lesson()}
                     fallback={<span class="font-hanzi text-4xl">{props.practised.length}</span>}
                   >
-                    {result().percentage}
+                    {summary().percentage}
                     <span class="text-lg text-ink-faint">%</span>
                   </Show>
                 </span>
@@ -119,29 +125,29 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
                 classList={{ hidden: lesson() }}
               >
                 <span
-                  classList={{ 'text-jade': result().good > 0, 'text-ink-faint': !result().good }}
+                  classList={{ 'text-jade': summary().good > 0, 'text-ink-faint': !summary().good }}
                 >
-                  {result().good} bien
+                  {summary().good} bien
                 </span>
                 <span
                   classList={{
-                    'text-ink-soft': result().hard > 0,
-                    'text-ink-faint': !result().hard,
+                    'text-ink-soft': summary().hard > 0,
+                    'text-ink-faint': !summary().hard,
                   }}
                 >
-                  {result().hard} difícil
+                  {summary().hard} difícil
                 </span>
                 <span
-                  classList={{ 'text-seal': result().again > 0, 'text-ink-faint': !result().again }}
+                  classList={{ 'text-seal': summary().again > 0, 'text-ink-faint': !summary().again }}
                 >
-                  {result().again} otra vez
+                  {summary().again} otra vez
                 </span>
               </div>
-              <Show when={result().streak > 0}>
+              <Show when={summary().streak > 0}>
                 <div class="mt-2 text-xs text-ink-faint">
                   Racha:{' '}
                   <span class="font-semibold text-gold">
-                    {result().streak} {result().streak === 1 ? 'día' : 'días'}
+                    {summary().streak} {summary().streak === 1 ? 'día' : 'días'}
                   </span>
                 </div>
               </Show>
@@ -198,6 +204,8 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
           </div>
         </div>
       </div>
+  );
+      }}
     </Show>
   );
 };

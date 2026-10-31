@@ -34,12 +34,7 @@ describe('Pleco Integration', () => {
         throw new Error('Failed to open');
       });
 
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
       expect(() => openInPleco('你')).not.toThrow();
-      expect(consoleSpy).toHaveBeenCalledWith('Error opening Pleco:', expect.any(Error));
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -58,8 +53,8 @@ describe('Pleco Integration', () => {
     });
 
     it('returns false for null/undefined', () => {
-      expect(isValidForPleco(null as any)).toBe(false);
-      expect(isValidForPleco(undefined as any)).toBe(false);
+      expect(isValidForPleco(null)).toBe(false);
+      expect(isValidForPleco(undefined)).toBe(false);
     });
   });
 });

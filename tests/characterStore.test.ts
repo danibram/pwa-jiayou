@@ -1,27 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore, formatHskLevels, selectionFromSaved } from '../src/stores/characterStore';
-
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value.toString();
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    clear: () => {
-      store = {};
-    },
-  };
-})();
-
-Object.defineProperty(global, 'localStorage', {
-  value: localStorageMock,
-});
 
 describe('Character Store', () => {
   beforeEach(() => {
@@ -160,7 +138,8 @@ describe('Character Store', () => {
       expect(shuffled1.length).toBeGreaterThan(0);
     });
 
-    it('resets training', () => {
+    it('resets training without moving the card deck', () => {
+      characterStore.setCurrentIndex(4);
       characterStore.startTraining();
       characterStore.recordAnswer(true);
       characterStore.recordAnswer(false);
@@ -168,7 +147,7 @@ describe('Character Store', () => {
       characterStore.resetTraining();
 
       expect(characterStore.state.trainingMode).toBe(false);
-      expect(characterStore.state.currentIndex).toBe(0);
+      expect(characterStore.state.currentIndex).toBe(4);
       expect(characterStore.state.trainingResults.correct).toBe(0);
       expect(characterStore.state.trainingResults.incorrect).toBe(0);
     });
@@ -201,7 +180,7 @@ describe('Character Store', () => {
 
 describe('Character data', () => {
   it('normalises stroke counts across level files', () => {
-    for (const level of [1, 2, 3]) {
+    for (const level of [1, 2, 3] as const) {
       characterStore.selectLevel(level);
       const chars = characterStore.getCharactersByLevel();
       expect(chars.every((c) => c.stroke_count > 0)).toBe(true);
@@ -233,9 +212,29 @@ describe('Character data', () => {
 describe('Glosses', () => {
   it('gives every character a short gloss and an example word that contains it', () => {
     for (const c of characterStore.state.characters) {
-      expect(c.gloss, c.character).toBeTruthy();
-      expect(c.gloss!.length, c.character).toBeLessThanOrEqual(30);
+      const gloss = c.gloss;
+      expect(gloss, c.character).toBeTruthy();
+      if (!gloss) return;
+      expect(gloss.length, c.character).toBeLessThanOrEqual(30);
       expect(c.example?.word, c.character).toContain(c.character);
     }
+  });
+});
+
+
+describe('Saved character progress', () => {
+  it.each([
+    [{ selectedLevels: [99, 1, -1, 1], currentIndex: 3 }, [1], 3],
+    [{ selectedLevel: 2, currentIndex: -1 }, [2], 0],
+    [{ selectedLevels: [1], currentIndex: 99999 }, [1], 0],
+    [{ selectedLevels: [1], currentIndex: 1.5 }, [1], 0],
+    [{ selectedLevels: [99], currentIndex: 2 }, [], 0],
+    [null, [], 0],
+  ])('validates saved progress %j', async (saved, levels, index) => {
+    localStorage.setItem('hsk-flashcards-progress', JSON.stringify(saved));
+    vi.resetModules();
+    const { characterStore: restored } = await import('../src/stores/characterStore');
+    expect(restored.state.selectedLevels).toEqual(levels);
+    expect(restored.state.currentIndex).toBe(index);
   });
 });

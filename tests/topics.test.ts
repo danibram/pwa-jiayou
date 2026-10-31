@@ -1,13 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import hsk1 from '../src/data/hsk1.json';
-import hsk2 from '../src/data/hsk2.json';
-import hsk3 from '../src/data/hsk3.json';
 import { topics } from '../src/data/topics';
-import type { HSKCharacter } from '../src/types';
+import { characterStore } from '../src/stores/characterStore';
 
-const known = new Set(
-  ([...hsk1, ...hsk2, ...hsk3] as HSKCharacter[]).map((row) => row.character)
-);
+const known = new Set(characterStore.state.characters.map((row) => row.character));
 
 describe('topics', () => {
   it('only names characters that exist, once per topic', () => {
