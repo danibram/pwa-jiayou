@@ -8,8 +8,8 @@ export const openInPleco = (character: string): void => {
 
   try {
     window.open(url, '_blank');
-  } catch (error) {
-    console.error('Error opening Pleco:', error);
+  } catch {
+    // The browser blocked the custom protocol. The link is best-effort.
   }
 };
 
@@ -18,6 +18,5 @@ export const openInPleco = (character: string): void => {
  * @param character - Carácter a verificar
  * @returns true si el carácter no está vacío
  */
-export const isValidForPleco = (character: string): boolean => {
-  return !!(character && character.trim().length > 0);
-};
+export const isValidForPleco = (character: unknown): boolean =>
+  typeof character === 'string' && character.trim().length > 0;

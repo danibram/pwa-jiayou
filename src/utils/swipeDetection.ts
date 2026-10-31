@@ -42,6 +42,7 @@ export class SwipeDetector {
 
   private handleTouchStart = (e: TouchEvent): void => {
     const touch = e.touches[0];
+    if (!touch) return;
     this.startTouch = {
       x: touch.clientX,
       y: touch.clientY,
@@ -53,6 +54,7 @@ export class SwipeDetector {
     if (!this.startTouch) return;
 
     const touch = e.touches[0];
+    if (!touch) return;
     const deltaX = touch.clientX - this.startTouch.x;
     const deltaY = touch.clientY - this.startTouch.y;
     const absDeltaX = Math.abs(deltaX);
@@ -71,6 +73,7 @@ export class SwipeDetector {
     if (!this.startTouch) return;
 
     const touch = e.changedTouches[0];
+    if (!touch) return;
     this.processSwipe(touch.clientX, touch.clientY);
 
     // Notify drag end

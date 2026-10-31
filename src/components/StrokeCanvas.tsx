@@ -402,6 +402,18 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     };
   };
 
+  const outlinePath = () => {
+    if (props.mode !== 'write' || !props.showOutline || !quizActive()) return undefined;
+    return data()?.strokes[currentStroke()];
+  };
+  const ghostStrokes = () => (props.ghost && quizActive() ? data()?.strokes : undefined);
+  const watchFrame = () => {
+    const strokes = data();
+    const step = props.step;
+    if (props.mode !== 'watch' || step === null || !strokes) return undefined;
+    return { strokes: strokes.strokes, medians: strokes.medians, step };
+  };
+
   return (
     <div
       ref={frame}
@@ -430,59 +442,57 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
       />
 
       {/* The stroke you are tracing. The others stay a faint outline under this. */}
-      <Show
-        when={
-          props.mode === 'write' &&
-          props.showOutline &&
-          quizActive() &&
-          data()?.strokes[currentStroke()]
-        }
-      >
+      <Show when={outlinePath()}>
+        {(path) => (
         <svg
           viewBox="0 0 1024 1024"
           class="absolute inset-2 pointer-events-none"
           aria-hidden="true"
         >
           <g transform="translate(0, 900) scale(1, -1)">
-            <path d={data()!.strokes[currentStroke()]} fill="rgb(var(--stroke))" />
+            <path d={path()} fill="rgb(var(--stroke))" />
           </g>
         </svg>
+        )}
       </Show>
 
       {/* Guía off still shows a ghost, so Calcar is not an empty board. */}
-      <Show when={!!props.ghost && quizActive() && data()}>
+      <Show when={ghostStrokes()}>
+        {(strokes) => (
         <svg viewBox="0 0 1024 1024" class="absolute inset-2 pointer-events-none" aria-hidden="true">
           <g transform="translate(0, 900) scale(1, -1)">
-            <For each={data()!.strokes}>
+            <For each={strokes()}>
               {(path) => <path d={path} fill={themeMix('ink', 'surface', 0.14)} />}
             </For>
           </g>
         </svg>
+        )}
       </Show>
 
       {/* Step view: earlier strokes in ink, the current one in gold with its direction. */}
-      <Show when={props.mode === 'watch' && props.step !== null && data()}>
+      <Show when={watchFrame()}>
+        {(frame) => (
         <svg
           viewBox="0 0 1024 1024"
           class="absolute inset-2 animate-fade"
           aria-hidden="true"
         >
           <g transform="translate(0, 900) scale(1, -1)">
-            <For each={data()!.strokes}>
+            <For each={frame().strokes}>
               {(path, i) => (
                 <path
                   d={path}
                   fill={
-                    i() === props.step
+                    i() === frame().step
                       ? 'rgb(var(--stroke))'
                       : themeMix(
                           'ink',
                           'surface',
                           window.matchMedia('(prefers-color-scheme: dark)').matches
-                          ? i() < props.step!
+                          ? i() < frame().step
                             ? 0.29
                             : 0.13
-                          : i() < props.step!
+                          : i() < frame().step
                             ? 0.36
                             : 0.2,
                         )
@@ -490,9 +500,9 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
                 />
               )}
             </For>
-            <Show when={data()!.medians[props.step!]} keyed>
+            <Show when={frame().medians[frame().step]} keyed>
               {(points) => {
-                const mark = cue(points, props.step!);
+                const mark = cue(points, frame().step);
                 return (
                   <>
                     <path d={mark.shaft} fill="none" stroke="rgb(var(--surface))" stroke-width={mark.halo} stroke-linecap="round" />
@@ -511,6 +521,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
             </Show>
           </g>
         </svg>
+        )}
       </Show>
 
       {/* Where the next stroke begins, only while tracing with the guide on. */}

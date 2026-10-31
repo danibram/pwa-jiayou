@@ -8,7 +8,7 @@ const freshStore = async () => {
 
 describe('progress backup', () => {
   beforeEach(() => localStorage.clear());
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => { vi.restoreAllMocks(); });
 
   it('migrates legacy data and exports a versioned round trip', async () => {
     localStorage.setItem(key, JSON.stringify({ 好: { right: 2, wrong: 1 } }));
@@ -32,9 +32,18 @@ describe('progress backup', () => {
     },
   );
 
+  it.each([
+    JSON.stringify({ version: 2, chars: { 好: { right: 1.5 } }, daily: { day: '2026-02-30', reviewed: 1, introduced: 0, streak: 1 } }),
+    '{"version":2,"chars":{"__proto__":{"right":1}},"daily":{"day":"2026-10-31","reviewed":1,"introduced":0,"streak":1}}',
+  ])('rejects malformed fields and unsafe character IDs', async (raw) => {
+    const store = await freshStore();
+    expect(() => store.importBackup(raw)).toThrow();
+    expect(store.get('好')).toBeUndefined();
+  });
+
   it('keeps in-memory progress when storage is full and saves it on retry', async () => {
     const store = await freshStore();
-    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('full'); });
+    const write = vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new Error('full'); });
     store.grade('好', 'good');
     expect(store.storageError()).toBeTruthy();
     expect(JSON.parse(store.exportBackup()).chars.好.right).toBe(1);
@@ -44,13 +53,28 @@ describe('progress backup', () => {
     expect(store.storageError()).toBeNull();
   });
 
+  it('can restore a valid stored copy after a temporary read failure and new in-memory reviews', async () => {
+    const stored = JSON.stringify({ version: 2, chars: { 好: { right: 2 } }, daily: { day: '2026-10-31', reviewed: 2, introduced: 1, streak: 1 } });
+    localStorage.setItem(key, stored);
+    const getItem = vi.spyOn(localStorage, 'getItem');
+    getItem.mockImplementationOnce(() => { throw new Error('blocked temporarily'); });
+
+    const store = await freshStore();
+    store.grade('人', 'good');
+    expect(store.storageError()).toBeTruthy();
+    expect(store.recoverStoredProgress()).toBe(true);
+    expect(store.get('好')?.right).toBe(2);
+    expect(store.get('人')).toBeUndefined();
+    expect(store.storageError()).toBeNull();
+  });
+
   it('leaves current progress intact when import is invalid or storage is blocked', async () => {
     const store = await freshStore();
     store.grade('好', 'good');
     const before = localStorage.getItem(key);
     expect(() => store.importBackup('{')).toThrow();
     const backup = store.exportBackup();
-    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
+    const write = vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
     expect(() => store.importBackup(backup)).toThrow();
     write.mockRestore();
     expect(localStorage.getItem(key)).toBe(before);

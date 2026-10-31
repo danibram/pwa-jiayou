@@ -1,15 +1,40 @@
 import type { CharacterJson } from 'hanzi-writer';
+import { isFiniteNumber, isNonEmpty, isRecord, isString } from './parse';
 
 const cache = new Map<string, Promise<CharacterJson>>();
+
+const isPoint = (value: unknown): value is number[] =>
+  Array.isArray(value) && value.length >= 2 && value.every(isFiniteNumber);
+
+const isMedian = (value: unknown): value is number[][] =>
+  Array.isArray(value) && isNonEmpty(value) && value.every(isPoint);
+
+const parseCharacterJson = (value: unknown): CharacterJson => {
+  if (!isRecord(value) || !Array.isArray(value.strokes) || !isNonEmpty(value.strokes) || !value.strokes.every(isString)) {
+    throw new Error('Los trazos no tienen un formato válido.');
+  }
+  if (!Array.isArray(value.medians) || !value.medians.every(isMedian)) {
+    throw new Error('Los trazos no tienen un formato válido.');
+  }
+  const data: CharacterJson = { strokes: value.strokes, medians: value.medians };
+  if (value.radStrokes !== undefined) {
+    if (!Array.isArray(value.radStrokes) || !value.radStrokes.every(isFiniteNumber)) {
+      throw new Error('Los trazos no tienen un formato válido.');
+    }
+    data.radStrokes = value.radStrokes;
+  }
+  return data;
+};
 
 /** Stroke data ships in public/strokes so the mode works offline. */
 export const loadStrokeData = (char: string): Promise<CharacterJson> => {
   let pending = cache.get(char);
   if (!pending) {
     pending = fetch(`${import.meta.env.BASE_URL}strokes/${encodeURIComponent(char)}.json`).then(
-      (res) => {
+      async (res) => {
         if (!res.ok) throw new Error(`No stroke data for ${char}`);
-        return res.json();
+        const body: unknown = await res.json();
+        return parseCharacterJson(body);
       }
     );
     pending.catch(() => cache.delete(char));

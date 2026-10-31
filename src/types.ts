@@ -1,3 +1,7 @@
+export type HskLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+export type ReviewPool = 'today' | 'more' | 'all';
+
 export interface HSKCharacter {
   character: string;
   traditional: string;
@@ -5,7 +9,7 @@ export interface HSKCharacter {
   definition: string;
   radical: string;
   stroke_count: number;
-  hsk_level: 1 | 2 | 3 | 4 | 5 | 6;
+  hsk_level: HskLevel;
   general_standard: number;
   frequency_rank: number;
   /** Short learner gloss in the sense HSK uses; falls back to the first definition clause. */

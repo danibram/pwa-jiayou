@@ -138,7 +138,8 @@ describe('Character Store', () => {
       expect(shuffled1.length).toBeGreaterThan(0);
     });
 
-    it('resets training', () => {
+    it('resets training without moving the card deck', () => {
+      characterStore.setCurrentIndex(4);
       characterStore.startTraining();
       characterStore.recordAnswer(true);
       characterStore.recordAnswer(false);
@@ -146,7 +147,7 @@ describe('Character Store', () => {
       characterStore.resetTraining();
 
       expect(characterStore.state.trainingMode).toBe(false);
-      expect(characterStore.state.currentIndex).toBe(0);
+      expect(characterStore.state.currentIndex).toBe(4);
       expect(characterStore.state.trainingResults.correct).toBe(0);
       expect(characterStore.state.trainingResults.incorrect).toBe(0);
     });
@@ -179,7 +180,7 @@ describe('Character Store', () => {
 
 describe('Character data', () => {
   it('normalises stroke counts across level files', () => {
-    for (const level of [1, 2, 3]) {
+    for (const level of [1, 2, 3] as const) {
       characterStore.selectLevel(level);
       const chars = characterStore.getCharactersByLevel();
       expect(chars.every((c) => c.stroke_count > 0)).toBe(true);
@@ -211,8 +212,10 @@ describe('Character data', () => {
 describe('Glosses', () => {
   it('gives every character a short gloss and an example word that contains it', () => {
     for (const c of characterStore.state.characters) {
-      expect(c.gloss, c.character).toBeTruthy();
-      expect(c.gloss!.length, c.character).toBeLessThanOrEqual(30);
+      const gloss = c.gloss;
+      expect(gloss, c.character).toBeTruthy();
+      if (!gloss) return;
+      expect(gloss.length, c.character).toBeLessThanOrEqual(30);
       expect(c.example?.word, c.character).toContain(c.character);
     }
   });
