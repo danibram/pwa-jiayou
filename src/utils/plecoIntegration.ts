@@ -3,14 +3,14 @@
  * @param character - Carácter chino a buscar en Pleco
  */
 export const openInPleco = (character: string): void => {
-    const cleanChar = character.trim();
-    const url = `plecoapi://x-callback-url/s?q=${encodeURIComponent(cleanChar)}`;
+  const cleanChar = character.trim();
+  const url = `plecoapi://x-callback-url/s?q=${encodeURIComponent(cleanChar)}`;
 
-    try {
-        window.open(url, '_blank');
-    } catch (error) {
-        console.error('Error opening Pleco:', error);
-    }
+  try {
+    window.open(url, '_blank');
+  } catch (error) {
+    console.error('Error opening Pleco:', error);
+  }
 };
 
 /**
@@ -19,6 +19,5 @@ export const openInPleco = (character: string): void => {
  * @returns true si el carácter no está vacío
  */
 export const isValidForPleco = (character: string): boolean => {
-    return !!(character && character.trim().length > 0);
+  return !!(character && character.trim().length > 0);
 };
-

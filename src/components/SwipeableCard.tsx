@@ -1,159 +1,169 @@
-import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
+import { Component, createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { HSKCharacter } from '../types';
 import { SwipeHandlers, useSwipeDetector } from '../utils/swipeDetection';
 import Card from './Card';
 
+export interface SwipeStamp {
+  text: string;
+  tone: 'jade' | 'seal';
+}
+
+export interface SwipeableCardApi {
+  /** Plays the same exit as a finger swipe, then runs that swipe's callback. */
+  swipe: (direction: 'left' | 'right') => void;
+}
+
 interface SwipeableCardProps {
-    character: HSKCharacter;
-    onSwipeLeft?: () => void;
-    onSwipeRight?: () => void;
-    showSwipeIndicators?: boolean;
-    onFlip?: () => void;
+  character: HSKCharacter;
+  flipped: boolean;
+  onFlip: () => void;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
+  label?: string;
+  prompt?: string;
+  concealCharacter?: boolean;
+  fill?: boolean;
+  hear?: boolean;
+  recall?: boolean;
+  coda?: string;
+  /** Recall step: the card is not a button, so a tap does not reveal the answer. */
+  still?: boolean;
+  ariaLabel?: string;
+  /** When false, horizontal drags are ignored (e.g. before the answer is revealed). */
+  swipeEnabled?: boolean;
+  /** Stamps shown on the card while dragging, keyed by drag direction. */
+  stamps?: { left: SwipeStamp; right: SwipeStamp };
+  api?: (api: SwipeableCardApi) => void;
 }
 
 const SwipeableCard: Component<SwipeableCardProps> = (props) => {
-    const [swipeDirection, setSwipeDirection] = createSignal<'left' | 'right' | null>(null);
-    const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
-    const [isDragging, setIsDragging] = createSignal(false);
-    const [hadMovement, setHadMovement] = createSignal(false);
-    const [isFlipped, setIsFlipped] = createSignal(false);
-    let cardRef: HTMLDivElement | undefined;
-    let rootRef: HTMLDivElement | undefined;
+  const [exitDirection, setExitDirection] = createSignal<'left' | 'right' | null>(null);
+  const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = createSignal(false);
+  const [hadMovement, setHadMovement] = createSignal(false);
+  let cardRef: HTMLDivElement | undefined;
+  let exiting = false;
+  let exitTimer: number | undefined;
 
-    // Reset flip when character changes
-    createEffect(() => {
-        props.character.character;
-        setIsFlipped(false);
+  const handleClick = () => {
+    // A drag that ends over the card still fires click; ignore it.
+    if (!hadMovement()) props.onFlip();
+  };
+
+  const exit = (direction: 'left' | 'right', callback?: () => void) => {
+    if (exiting) return;
+    exiting = true;
+    setExitDirection(direction);
+    exitTimer = window.setTimeout(() => {
+      callback?.();
+      setExitDirection(null);
+      exiting = false;
+    }, 180);
+  };
+
+  const canSwipe = () => props.swipeEnabled !== false;
+
+  const handlers: SwipeHandlers = {
+    onSwipeLeft: () => canSwipe() && exit('left', props.onSwipeLeft),
+    onSwipeRight: () => canSwipe() && exit('right', props.onSwipeRight),
+    onDrag: (deltaX: number, deltaY: number) => {
+      if (!canSwipe()) return;
+      setIsDragging(true);
+      setDragOffset({ x: deltaX, y: deltaY });
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) setHadMovement(true);
+    },
+    onDragEnd: () => {
+      setIsDragging(false);
+      setDragOffset({ x: 0, y: 0 });
+      setTimeout(() => setHadMovement(false), 300);
+    },
+  };
+
+  const swipeDetector = useSwipeDetector(handlers);
+
+  onMount(() => {
+    props.api?.({
+      swipe: (direction) =>
+        exit(direction, direction === 'left' ? props.onSwipeLeft : props.onSwipeRight),
     });
+    if (cardRef) swipeDetector(cardRef);
+  });
 
-    const handleRootClick = () => {
-        // Only flip if there was NO recent movement
-        if (!hadMovement()) {
-            setIsFlipped(!isFlipped());
-            props.onFlip?.();
-        }
-    };
+  onCleanup(() => {
+    if (exitTimer) window.clearTimeout(exitTimer);
+    swipeDetector(null);
+  });
 
-    const handlers: SwipeHandlers = {
-        onSwipeLeft: () => {
-            setSwipeDirection('left');
-            setTimeout(() => {
-                props.onSwipeLeft?.();
-                setSwipeDirection(null);
-            }, 200);
-        },
-        onSwipeRight: () => {
-            setSwipeDirection('right');
-            setTimeout(() => {
-                props.onSwipeRight?.();
-                setSwipeDirection(null);
-            }, 200);
-        },
-        onDrag: (deltaX: number, deltaY: number) => {
-            setIsDragging(true);
-            setDragOffset({ x: deltaX, y: deltaY });
-            // Mark that there was movement
-            if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-                setHadMovement(true);
-            }
-        },
-        onDragEnd: () => {
-            setIsDragging(false);
-            setDragOffset({ x: 0, y: 0 });
-            // Reset after a brief delay
-            setTimeout(() => setHadMovement(false), 500);
-        },
-    };
+  const transform = () => {
+    const exitDir = exitDirection();
+    if (exitDir)
+      return `translateX(${exitDir === 'left' ? -36 : 36}px) rotate(${exitDir === 'left' ? -4 : 4}deg)`;
+    const { x, y } = dragOffset();
+    if (!isDragging() || (x === 0 && y === 0)) return 'none';
+    const rotation = Math.max(-12, Math.min(12, x / 16));
+    return `translate(${x}px, ${y * 0.2}px) rotate(${rotation}deg)`;
+  };
 
-    const swipeDetector = useSwipeDetector(handlers);
+  const stampProgress = (direction: 'left' | 'right') => {
+    const x = dragOffset().x;
+    const signed = direction === 'right' ? x : -x;
+    return Math.max(0, Math.min(1, (signed - 20) / 80));
+  };
 
-    onMount(() => {
-        if (cardRef) {
-            swipeDetector(cardRef);
-        }
-    });
-
-    onCleanup(() => {
-        swipeDetector(null);
-    });
-
-    const getCardTransform = () => {
-        const offset = dragOffset();
-        if (!isDragging() || (offset.x === 0 && offset.y === 0)) {
-            return 'translate(0px, 0px) rotate(0deg)';
-        }
-
-        // Calculate rotation based on horizontal displacement
-        const rotation = (offset.x / 20) * 1.5; // Maximum ~15 degrees
-        const clampedRotation = Math.max(-15, Math.min(15, rotation));
-
-        return `translate(${offset.x}px, ${offset.y * 0.3}px) rotate(${clampedRotation}deg)`;
-    };
-
-    const getCardOpacity = () => {
-        const offset = dragOffset();
-        const distance = Math.abs(offset.x);
-        if (distance === 0) return 1;
-
-        // Gradually reduce opacity when dragging
-        return Math.max(0.7, 1 - distance / 400);
-    };
-
+  const Stamp = (p: { direction: 'left' | 'right' }) => {
+    const stamp = () => props.stamps![p.direction];
     return (
-        <div
-            ref={rootRef}
-            class="relative cursor-pointer"
-            style={{ 'touch-action': 'pan-y' }}
-            onClick={handleRootClick}
-        >
-            {/* Swipe indicators */}
-            {props.showSwipeIndicators && (
-                <>
-                    {/* Left arrow */}
-                    <div
-                        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-20 text-4xl transition-all duration-200"
-                        classList={{
-                            'opacity-0': swipeDirection() !== 'right' && dragOffset().x <= 0,
-                            'opacity-100 animate-slide-in-right': swipeDirection() === 'right',
-                        }}
-                        style={{ opacity: dragOffset().x > 30 ? Math.min(1, dragOffset().x / 100) : undefined }}
-                    >
-                        ⬅️
-                    </div>
-
-                    {/* Right arrow */}
-                    <div
-                        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-20 text-4xl transition-all duration-200"
-                        classList={{
-                            'opacity-0': swipeDirection() !== 'left' && dragOffset().x >= 0,
-                            'opacity-100 animate-slide-in-left': swipeDirection() === 'left',
-                        }}
-                        style={{ opacity: dragOffset().x < -30 ? Math.min(1, Math.abs(dragOffset().x) / 100) : undefined }}
-                    >
-                        ➡️
-                    </div>
-                </>
-            )}
-
-            {/* Card */}
-            <div
-                ref={cardRef}
-                class="transition-all"
-                classList={{
-                    'duration-200': !isDragging(),
-                    'duration-0': isDragging(),
-                    'scale-95': swipeDirection() !== null && !isDragging(),
-                }}
-                style={{
-                    transform: getCardTransform(),
-                    opacity: getCardOpacity(),
-                }}
-            >
-                <Card character={props.character} flipped={isFlipped()} />
-            </div>
-        </div>
+      <div
+        class="absolute top-8 z-10 px-3 py-1 rounded-lg border-2 font-display text-xl font-semibold uppercase tracking-wider pointer-events-none"
+        classList={{
+          'left-6 -rotate-12': p.direction === 'right',
+          'right-6 rotate-12': p.direction === 'left',
+          'text-jade border-jade bg-jade-soft/80': stamp().tone === 'jade',
+          'text-seal border-seal bg-seal-soft/80': stamp().tone === 'seal',
+        }}
+        style={{ opacity: stampProgress(p.direction) }}
+      >
+        {stamp().text}
+      </div>
     );
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      class="relative select-none will-change-transform"
+      classList={{
+        'flex h-full min-h-0 w-full flex-1 flex-col': props.fill,
+        'cursor-pointer': !props.still,
+        'transition-[transform,opacity] duration-200 ease-out': !isDragging(),
+        'opacity-0': exitDirection() !== null,
+      }}
+      style={{ transform: transform(), 'touch-action': 'pan-y' }}
+      onClick={props.still ? undefined : handleClick}
+      role={props.still ? undefined : 'button'}
+      aria-label={
+        props.still
+          ? undefined
+          : (props.ariaLabel ?? (props.flipped ? 'Ocultar el significado' : 'Mostrar el significado'))
+      }
+    >
+      <Show when={props.stamps}>
+        <Stamp direction="right" />
+        <Stamp direction="left" />
+      </Show>
+      <Card
+        character={props.character}
+        flipped={props.flipped}
+        label={props.label}
+        prompt={props.prompt}
+        concealCharacter={props.concealCharacter}
+        fill={props.fill}
+        hear={props.hear}
+        recall={props.recall}
+        coda={props.coda}
+      />
+    </div>
+  );
 };
 
 export default SwipeableCard;
-

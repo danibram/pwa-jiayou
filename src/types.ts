@@ -8,6 +8,15 @@ export interface HSKCharacter {
   hsk_level: 1 | 2 | 3 | 4 | 5 | 6;
   general_standard: number;
   frequency_rank: number;
+  /** Short learner gloss in the sense HSK uses; falls back to the first definition clause. */
+  gloss?: string;
+  example?: ExampleWord;
+}
+
+export interface ExampleWord {
+  word: string;
+  pinyin: string;
+  es: string;
 }
 
 export interface TrainingResult {
@@ -18,4 +27,3 @@ export interface TrainingResult {
 }
 
 export type SwipeDirection = 'left' | 'right' | null;
-
