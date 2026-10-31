@@ -95,11 +95,11 @@ const Home: Component<HomeProps> = (props) => {
   ];
 
   return (
+    <div class="h-[100dvh] w-full overflow-y-auto overscroll-contain">
     <div
-      class="mx-auto h-[100dvh] w-full max-w-[40rem] overflow-y-auto overscroll-contain px-4 pb-8"
+      class="mx-auto flex min-h-full w-full max-w-[40rem] min-w-0 flex-col px-4 pb-8"
       style={{ 'padding-top': 'max(env(safe-area-inset-top), 1.25rem)' }}
     >
-    <div class="flex min-h-full min-w-0 flex-col">
       {/* Wordmark and streak */}
       <header class="flex items-center gap-3 animate-rise">
         <img src="/icon.svg" alt="" class="h-10 w-10 rounded-[0.7rem] shadow-lift rotate-[-3deg]" />
