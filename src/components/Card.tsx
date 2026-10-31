@@ -1,4 +1,4 @@
-import { Component, Show } from 'solid-js';
+import { Component, createEffect, createSignal, onCleanup, Show } from 'solid-js';
 import { HSKCharacter } from '../types';
 import { spokenMeaning } from '../utils/meaning';
 import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
@@ -28,11 +28,15 @@ interface CardProps {
   coda?: string;
 }
 
-/**
- * The character never moves: revealing slides the reading in underneath, so the
- * eye stays on the shape being learned.
- */
 const Card: Component<CardProps> = (props) => {
+  const [answerMounted, setAnswerMounted] = createSignal(!!props.flipped);
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
+  createEffect(() => {
+    if (hideTimer) clearTimeout(hideTimer);
+    if (props.flipped) setAnswerMounted(true);
+    else if (answerMounted()) hideTimer = setTimeout(() => setAnswerMounted(false), 450);
+  });
+  onCleanup(() => clearTimeout(hideTimer));
   const hasTraditional = () =>
     !!props.character.traditional && props.character.traditional !== props.character.character;
 
@@ -60,7 +64,7 @@ const Card: Component<CardProps> = (props) => {
       </Show>
 
       {/* Largest square that fits the card, inside the padding. */}
-      <div class="flex min-h-0 w-full flex-1 items-center justify-center [container-type:size]">
+      <div class="card-glyph flex min-h-0 w-full flex-1 items-center justify-center [container-type:size]" classList={{ 'card-glyph-prompt': !props.flipped }}>
         <div class="relative aspect-square max-w-full" style={{ width: "min(100cqw, 100cqh)" }}>
           <RiceGrid class="absolute inset-0 w-full h-full" frame={false} />
           <div
@@ -97,15 +101,15 @@ const Card: Component<CardProps> = (props) => {
         </div>
       </div>
 
-      {/* Reading and meaning. They sit together under the grid, not stretched to the button. */}
-      <div class="flex min-h-[11rem] shrink-0 flex-col">
-        <Show when={!props.flipped}>
-          <div class="flex items-center justify-center px-3 py-4">
-            <span class="text-center text-lg text-ink text-balance">{props.prompt ?? 'Toca para ver'}</span>
-          </div>
-        </Show>
-        <Show when={props.flipped}>
-        <div class="animate-reveal mt-2 flex flex-col items-center text-center">
+      <Show when={!props.flipped}>
+        <div class="pointer-events-none absolute inset-x-5 bottom-5 text-center text-lg text-ink text-balance">
+          {props.prompt ?? 'Toca para ver'}
+        </div>
+      </Show>
+      <div class="card-answer shrink-0" classList={{ 'card-answer-open': !!props.flipped }} aria-hidden={!props.flipped}>
+        <div class="min-h-0 overflow-hidden">
+        <Show when={answerMounted()}>
+        <div class="card-answer-content mt-2 flex flex-col items-center text-center">
           <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
             <p class="flex h-8 items-center leading-none">
               <Pinyin text={props.character.pinyin} class="text-[1.75rem] font-medium" />
@@ -147,6 +151,7 @@ const Card: Component<CardProps> = (props) => {
                 speak(props.character.pinyin, props.character.character);
               }}
               aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
+              tabIndex={props.flipped ? undefined : -1}
             >
               <Icon name="sound" size={16} />
               {currentVoiceLabel()}
@@ -157,6 +162,7 @@ const Card: Component<CardProps> = (props) => {
           </Show>
         </div>
         </Show>
+        </div>
       </div>
     </div>
   );
