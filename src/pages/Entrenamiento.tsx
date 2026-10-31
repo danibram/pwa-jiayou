@@ -289,7 +289,7 @@ const Entrenamiento: Component<EntrenamientoProps> = (props) => {
   };
 
   return (
-    <div class="screen">
+    <div class="screen screen-card">
       <TopBar
         title={isEmpty() ? heading() : `${charIndex()} de ${charTotal()}`}
         onBack={handleGoHome}

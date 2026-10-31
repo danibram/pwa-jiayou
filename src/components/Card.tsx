@@ -106,9 +106,17 @@ const Card: Component<CardProps> = (props) => {
         </Show>
         <Show when={props.flipped}>
         <div class="animate-reveal mt-2 flex flex-col items-center text-center">
-          <p class="flex h-8 items-center leading-none">
-            <Pinyin text={props.character.pinyin} class="text-[1.75rem] font-medium" />
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <p class="flex h-8 items-center leading-none">
+              <Pinyin text={props.character.pinyin} class="text-[1.75rem] font-medium" />
+            </p>
+            <Show when={!props.concealCharacter && hasTraditional()}>
+              <p class="flex items-center gap-1.5 border-l border-line pl-4 text-xs text-ink-soft">
+                <span>Tradicional</span>
+                <span class="font-hanzi text-xl leading-none text-ink" lang="zh-CN">{props.character.traditional}</span>
+              </p>
+            </Show>
+          </div>
           <Show when={!props.concealCharacter}>
             <p class="mt-1 max-w-full text-[1.35rem] font-medium leading-snug text-ink first-letter:uppercase">
               {meaning()}
@@ -116,9 +124,9 @@ const Card: Component<CardProps> = (props) => {
           </Show>
           <Show when={!props.concealCharacter && props.character.example}>
             {(ex) => (
-              <div class="mt-3 w-full max-w-[19rem] border-t border-line/70 pt-2">
-                <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Ejemplo</p>
-                <p class="mt-1 flex flex-wrap items-baseline justify-center gap-x-2 text-[1.35rem] leading-snug text-ink">
+              <div class="mt-3 w-full max-w-[19rem] rounded-xl bg-paper/60 px-4 py-2 text-left">
+                <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Ejemplo de uso</p>
+                <p class="mt-1 flex flex-wrap items-baseline gap-x-2 text-[1.35rem] leading-snug text-ink">
                   <span class="font-hanzi text-[1.65rem] leading-none" lang="zh-CN">
                     {ex().word}
                   </span>
@@ -143,12 +151,6 @@ const Card: Component<CardProps> = (props) => {
               <Icon name="sound" size={16} />
               {currentVoiceLabel()}
             </button>
-          </Show>
-          <Show when={!props.concealCharacter && hasTraditional()}>
-            <p class="mt-1 text-sm text-ink-soft">
-              tradicional{' '}
-              <span class="font-hanzi text-lg text-ink">{props.character.traditional}</span>
-            </p>
           </Show>
           <Show when={props.coda}>
             <p class="mt-3 text-sm font-medium text-ink">{props.coda}</p>

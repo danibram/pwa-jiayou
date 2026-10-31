@@ -51,7 +51,7 @@ const Tema: Component<TemaProps> = (props) => {
   onCleanup(() => window.removeEventListener('keydown', onKey));
 
   return (
-    <div class="screen">
+    <div class="screen screen-card">
       <TopBar
         title={topic()?.title ?? 'Tema'}
         subtitle={total() > 0 ? `${index() + 1} de ${total()}` : undefined}
@@ -99,7 +99,7 @@ const Tema: Component<TemaProps> = (props) => {
                   <Show when={canSpeak()}>
                     <button
                       onClick={() => speak(char().pinyin, char().character)}
-                      class="btn-quiet h-11 px-4 text-sm"
+                      class="btn-quiet h-11 px-4 text-sm max-[379px]:px-2 max-[379px]:text-xs"
                       aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
                     >
                       <Icon name="sound" size={18} />

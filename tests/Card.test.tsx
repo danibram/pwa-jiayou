@@ -49,7 +49,7 @@ describe('Card Component', () => {
 
   it('names the traditional form once the meaning is open', () => {
     render(() => <Card character={make({ character: '们', traditional: '們' })} flipped={true} />);
-    expect(screen.getByText(/tradicional/)).toBeInTheDocument();
+    expect(screen.getByText(/tradicional/i)).toBeInTheDocument();
     expect(screen.getAllByText('們').length).toBeGreaterThan(0);
   });
 });

@@ -80,7 +80,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
   };
 
   return (
-    <div class="screen">
+    <div class="screen screen-card">
       <TopBar
         title="Explorar"
         subtitle={`${characterStore.levelLabel()} · ${currentIndex() + 1} de ${total()}`}
@@ -148,7 +148,7 @@ const Tarjetas: Component<TarjetasProps> = (props) => {
             <Show when={canSpeak()}>
               <button
                 onClick={() => currentChar() && speak(currentChar().pinyin, currentChar().character)}
-                class="btn-quiet h-11 px-4 text-sm"
+                class="btn-quiet h-11 px-4 text-sm max-[379px]:px-2 max-[379px]:text-xs"
                 aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
               >
                 <Icon name="sound" size={18} />
