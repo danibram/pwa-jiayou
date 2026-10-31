@@ -85,7 +85,7 @@ src/
 │   ├── characterStore.ts     # Character data (normalised across level files)
 │   └── progressStore.ts      # Spaced repetition, daily goal, streak
 ├── utils/                    # swipe, pinyin tones, speech, stroke data, shuffle, Pleco
-├── data/                     # hsk1-3.json
+├── data/                     # hsk1.json, glosas y catálogo; HSK 2 y 3 están en public/packs
 └── index.css                 # Design tokens (light and dark)
 ```
 
@@ -101,11 +101,7 @@ src/
 
 ## Data
 
-The app includes:
-- **HSK 1**: 174 characters
-- **HSK 2**: 173 characters
-- **HSK 3**: 270 characters
-- **Total**: 617 characters
+The app includes HSK 1 (174 characters) from the start. HSK 2 (173) and HSK 3 (270) are lists the user saves on the device. HSK 4, 5 and 6 are named in the catalog and have no pack yet.
 
 Each character includes:
 - Simplified Chinese character

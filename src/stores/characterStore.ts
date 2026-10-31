@@ -1,9 +1,8 @@
 import { createStore } from 'solid-js/store';
+import { BUNDLED_LEVEL, catalogLevels } from '../data/catalog';
 import hsk1Data from '../data/hsk1.json';
-import hsk2Data from '../data/hsk2.json';
-import hsk3Data from '../data/hsk3.json';
 import { ExampleWord, HSKCharacter, HskLevel, TrainingResult } from '../types';
-import { isHskLevel, isNonEmpty, isRecord, isString } from '../utils/parse';
+import { isHskLevel, isRecord, isString } from '../utils/parse';
 import { shuffle } from '../utils/shuffle';
 
 interface CharacterStore {
@@ -25,7 +24,7 @@ export const selectionFromSaved = (raw: unknown): HskLevel[] => {
   const list = Array.isArray(raw.selectedLevels) ? raw.selectedLevels.filter(isHskLevel) : [];
   const legacy = isHskLevel(raw.selectedLevel) ? [raw.selectedLevel] : [];
   const levels = list.length > 0 ? list : legacy;
-  const available = new Set<HskLevel>(allCharacters.map((character) => character.hsk_level));
+  const available = new Set(catalogLevels.filter((row) => row.available).map((row) => row.level));
   return [...new Set(levels.filter((level) => available.has(level)))].sort((a, b) => a - b);
 };
 
@@ -41,8 +40,13 @@ const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'>
     if (!isRecord(parsed)) return empty;
     const selectedLevels = selectionFromSaved(parsed);
     const index = parsed.currentIndex;
-    const count = allCharacters.filter((character) => selectedLevels.includes(character.hsk_level)).length;
-    const currentIndex = keptIndex(index, count);
+    const loaded = new Set(bundled.map((character) => character.hsk_level));
+    const pending = selectedLevels.some((level) => !loaded.has(level));
+    const count = bundled.filter((character) => selectedLevels.includes(character.hsk_level)).length;
+    const currentIndex =
+      pending && typeof index === 'number' && Number.isInteger(index) && index >= 0
+        ? index
+        : keptIndex(index, count);
     return { selectedLevels, currentIndex };
   } catch {
     return empty;
@@ -90,6 +94,7 @@ const parseCharacter = (raw: unknown): HSKCharacter => {
     throw new Error('Hay un carácter del catálogo que no se puede leer.');
   }
   const gloss = glosses[raw.character];
+  const inlineGloss = isString(raw.gloss) ? raw.gloss : undefined;
   const strokes = raw.stroke_count ?? raw.strokes;
   return {
     character: raw.character,
@@ -101,18 +106,26 @@ const parseCharacter = (raw: unknown): HSKCharacter => {
     hsk_level: raw.hsk_level,
     general_standard: count(raw.general_standard),
     frequency_rank: count(raw.frequency_rank),
-    gloss: gloss?.gloss,
-    example: gloss?.example,
+    gloss: inlineGloss ?? gloss?.gloss,
+    example: parseExample(raw.example) ?? gloss?.example,
   };
 };
 
-const parsedCharacters = [...hsk1Data, ...hsk2Data, ...hsk3Data].map(parseCharacter);
-if (!isNonEmpty(parsedCharacters)) throw new Error('El catálogo de caracteres está vacío.');
-const allCharacters = parsedCharacters;
+export const parseCharacterList = (value: unknown, level?: HskLevel): HSKCharacter[] => {
+  if (!Array.isArray(value) || value.length === 0) throw new Error('La lista de caracteres está vacía.');
+  const parsed = value.map(parseCharacter);
+  if (level !== undefined && parsed.some((character) => character.hsk_level !== level)) {
+    throw new Error(`La lista de HSK ${level} trae otro nivel.`);
+  }
+  return parsed;
+};
+
+const bundled = parseCharacterList(hsk1Data, BUNDLED_LEVEL);
+let listRevision = 0;
 
 // Initialize store
 const initialState: CharacterStore = {
-  characters: allCharacters,
+  characters: bundled,
   ...loadProgress(),
   trainingMode: false,
   trainingResults: {
@@ -141,8 +154,37 @@ export const characterStore = {
     return store;
   },
 
+  get listRevision() {
+    return listRevision;
+  },
+
   levelLabel(): string {
     return formatHskLevels(store.selectedLevels);
+  },
+
+  hasLevel(level: HskLevel) {
+    return store.characters.some((character) => character.hsk_level === level);
+  },
+
+  /** Replace any characters already stored for the levels inside `incoming`. */
+  installCharacters(incoming: HSKCharacter[]) {
+    const levels = new Set(incoming.map((character) => character.hsk_level));
+    if (incoming.length === 0 || levels.has(BUNDLED_LEVEL)) {
+      throw new Error('Esa lista no se puede instalar.');
+    }
+    const kept = store.characters.filter((character) => !levels.has(character.hsk_level));
+    setStore('characters', [...kept, ...incoming]);
+    listRevision += 1;
+  },
+
+  removeLevel(level: HskLevel) {
+    if (level === BUNDLED_LEVEL) return;
+    if (!store.characters.some((character) => character.hsk_level === level)) return;
+    setStore('characters', store.characters.filter((character) => character.hsk_level !== level));
+    listRevision += 1;
+    if (!store.selectedLevels.includes(level)) return;
+    const selected = store.selectedLevels.filter((item) => item !== level);
+    this.selectLevels(selected.length > 0 ? selected : [BUNDLED_LEVEL]);
   },
 
   selectLevels(levels: HskLevel[]) {
@@ -189,7 +231,7 @@ export const characterStore = {
     return shuffle(this.getCharactersByLevel());
   },
 
-  // Levels that actually ship character data
+  // Levels whose characters are on this device
   getAvailableLevels(): HskLevel[] {
     return [...new Set(store.characters.map((char) => char.hsk_level))].sort();
   },
@@ -197,7 +239,7 @@ export const characterStore = {
   // Same character all day, different each day
   getDailyCharacter(): HSKCharacter {
     const selected = store.selectedLevels.length > 0 ? this.getCharactersByLevel() : store.characters;
-    const pool = selected.length > 0 ? selected : allCharacters;
+    const pool = selected.length > 0 ? selected : store.characters;
     return pool[Math.floor(Date.now() / 86_400_000) % pool.length];
   },
 

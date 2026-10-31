@@ -1,17 +1,25 @@
 import { fireEvent, render, screen, waitFor, within } from '@solidjs/testing-library';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Entrenamiento from '../src/pages/Entrenamiento';
 import Home from '../src/pages/Home';
-import { characterStore } from '../src/stores/characterStore';
+import { characterStore, parseCharacterList } from '../src/stores/characterStore';
 import { progressStore } from '../src/stores/progressStore';
 import { notifyProgressReset } from '../src/utils/progressReset';
 import { discardSession, loadSession, saveSession, SessionSnapshot } from '../src/utils/sessionStore';
 
-const chars = characterStore.state.characters;
+const chars = () => characterStore.state.characters;
+beforeEach(() => {
+  for (const level of [2, 3] as const) {
+    if (characterStore.hasLevel(level)) continue;
+    const raw = JSON.parse(readFileSync(`public/packs/hsk${level}.json`, 'utf8'));
+    characterStore.installCharacters(parseCharacterList(raw, level));
+  }
+});
 const snapshot = (): SessionSnapshot => ({
   version: 1, pool: 'today',
-  selectedLevels: characterStore.state.selectedLevels.length ? [...characterStore.state.selectedLevels] : [chars[0].hsk_level],
-  deck: [{ char: chars[0], kind: 'quiz' }, { char: chars[1], kind: 'quiz' }],
+  selectedLevels: characterStore.state.selectedLevels.length ? [...characterStore.state.selectedLevels] : [chars()[0].hsk_level],
+  deck: [{ char: chars()[0], kind: 'quiz' }, { char: chars()[1], kind: 'quiz' }],
   position: 0, revealed: false, step: 'ask', feedback: null,
   counts: { again: 0, hard: 0, good: 0 }, missed: [], seen: [], taught: [],
   heading: 'Aprender', writeState: { done: 0, total: 0, mistakes: 0, hint: false },
@@ -24,22 +32,22 @@ afterEach(() => { vi.restoreAllMocks(); });
 describe('session recovery', () => {
   it('rejects malformed or unknown saved characters', () => {
     localStorage.setItem('jiayou-session-v1', '{');
-    expect(loadSession(chars)).toBeNull();
+    expect(loadSession(chars())).toBeNull();
     expect(localStorage.getItem('jiayou-session-v1')).toBeNull();
     localStorage.setItem('jiayou-session-v1', JSON.stringify({
-      version: 1, pool: 'today', selectedLevels: [chars[0].hsk_level],
+      version: 1, pool: 'today', selectedLevels: [chars()[0].hsk_level],
       deck: [{ character: 'unknown', kind: 'quiz' }],
       position: 0, revealed: false, step: 'ask', feedback: null,
       counts: { again: 0, hard: 0, good: 0 }, missed: [], seen: [], taught: [],
       heading: 'Aprender', writeState: { done: 0, total: 0, mistakes: 0, hint: false },
     }));
-    expect(loadSession(chars)).toBeNull();
+    expect(loadSession(chars())).toBeNull();
   });
 
   it('preserves sessions from a newer version', () => {
     const newer = JSON.stringify({ version: 2, futureField: true });
     localStorage.setItem('jiayou-session-v1', newer);
-    expect(loadSession(chars)).toBeNull();
+    expect(loadSession(chars())).toBeNull();
     expect(localStorage.getItem('jiayou-session-v1')).toBe(newer);
     expect(saveSession(snapshot())).toBe(false);
     expect(localStorage.getItem('jiayou-session-v1')).toBe(newer);
@@ -47,7 +55,7 @@ describe('session recovery', () => {
 
   it('focuses and closes the paused session choice dialog with Escape', async () => {
     expect(saveSession(snapshot())).toBe(true);
-    expect(loadSession(chars)).not.toBeNull();
+    expect(loadSession(chars())).not.toBeNull();
     render(() => <Home onNavigate={() => {}} />);
     fireEvent.click(screen.getByRole('button', { name: /Empezar|Aprender|Empezar repaso/ }));
     const dialog = await screen.findByRole('dialog', { name: 'Tienes una sesión pausada' });
@@ -92,7 +100,7 @@ describe('session recovery', () => {
     expect(characterStore.state.selectedLevels).toEqual(originalLevels);
     expect(await screen.findByText('Recuerda el carácter antes de comprobar')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Comprobar' }));
-    await waitFor(() => expect(loadSession(chars)?.step).toBe('check'));
+    await waitFor(() => expect(loadSession(chars())?.step).toBe('check'));
     first.unmount();
     const second = mount();
     expect(await screen.findByRole('button', { name: 'Lo recordé' })).toBeInTheDocument();
@@ -100,16 +108,16 @@ describe('session recovery', () => {
   });
 
   it('records a grade once when reloaded during feedback', async () => {
-    progressStore.introduce(chars[0].character);
+    progressStore.introduce(chars()[0].character);
     const grade = vi.spyOn(progressStore, 'grade');
     saveSession({ ...snapshot(), revealed: true, step: 'learn' });
     const first = mount();
     fireEvent.click(await screen.findByRole('button', { name: 'Bien' }));
     expect(grade).toHaveBeenCalledTimes(1);
-    expect(loadSession(chars)?.feedback).toBe('good');
+    expect(loadSession(chars())?.feedback).toBe('good');
     first.unmount();
     const second = mount();
-    await waitFor(() => expect(loadSession(chars)?.position).toBe(1));
+    await waitFor(() => expect(loadSession(chars())?.position).toBe(1));
     expect(grade).toHaveBeenCalledTimes(1);
     second.unmount();
   });
@@ -118,13 +126,13 @@ describe('session recovery', () => {
     const grade = vi.spyOn(progressStore, 'grade');
     saveSession({ ...snapshot(), revealed: true, feedback: 'good', counts: { again: 0, hard: 0, good: 1 } });
     const view = mount();
-    await waitFor(() => expect(loadSession(chars)?.position).toBe(1));
+    await waitFor(() => expect(loadSession(chars())?.position).toBe(1));
     expect(grade).not.toHaveBeenCalled();
     view.unmount();
   });
 
   it('resumes a new character at the ask step and introduces it once', async () => {
-    const char = chars.find((item) => progressStore.isNew(item.character));
+    const char = chars().find((item) => progressStore.isNew(item.character));
     if (!char) throw new Error('No hay un carácter nuevo.');
     saveSession({ ...snapshot(), deck: [{ char, kind: 'quiz' }], step: 'ask' });
     const introduce = vi.spyOn(progressStore, 'introduce');
@@ -141,18 +149,18 @@ describe('session recovery', () => {
     const view = mount();
     fireEvent.click(await screen.findByRole('button', { name: 'Volver' }));
     fireEvent.click(screen.getByRole('button', { name: 'Pausar y salir' }));
-    expect(loadSession(chars)).not.toBeNull();
+    expect(loadSession(chars())).not.toBeNull();
     view.unmount();
 
     const second = mount();
     fireEvent.click(await screen.findByRole('button', { name: 'Volver' }));
     fireEvent.click(screen.getByRole('button', { name: 'Salir y descartar sesión' }));
-    expect(loadSession(chars)).toBeNull();
+    expect(loadSession(chars())).toBeNull();
     second.unmount();
   });
 
   it('ignores keyboard grading while an input has focus', async () => {
-    progressStore.introduce(chars[0].character);
+    progressStore.introduce(chars()[0].character);
     const grade = vi.spyOn(progressStore, 'grade');
     saveSession({ ...snapshot(), revealed: true });
     const view = mount();
@@ -167,8 +175,8 @@ describe('session recovery', () => {
   });
 
   it('leaves the completed summary without opening the pause prompt', async () => {
-    progressStore.introduce(chars[0].character);
-    saveSession({ ...snapshot(), deck: [{ char: chars[0], kind: 'quiz' }] });
+    progressStore.introduce(chars()[0].character);
+    saveSession({ ...snapshot(), deck: [{ char: chars()[0], kind: 'quiz' }] });
     const onLeaveFinished = vi.fn();
     const view = render(() => <Entrenamiento pool="today" resume onGoHome={() => {}} onLeaveFinished={onLeaveFinished} onOpenStrokes={() => {}} />);
     fireEvent.click(await screen.findByRole('button', { name: 'Mostrar respuesta' }));
@@ -181,19 +189,19 @@ describe('session recovery', () => {
   });
 
   it('does not recreate a session after progress replacement during feedback', async () => {
-    progressStore.introduce(chars[0].character);
+    progressStore.introduce(chars()[0].character);
     saveSession({ ...snapshot(), revealed: true });
     const onLeaveFinished = vi.fn();
     const view = render(() => <Entrenamiento pool="today" resume onGoHome={() => {}} onLeaveFinished={onLeaveFinished} onOpenStrokes={() => {}} />);
     await screen.findByRole('button', { name: 'Bien' });
     vi.useFakeTimers();
     fireEvent.click(screen.getByRole('button', { name: 'Bien' }));
-    expect(loadSession(chars)?.feedback).toBe('good');
+    expect(loadSession(chars())?.feedback).toBe('good');
     expect(discardSession()).toBe(true);
     notifyProgressReset();
     expect(onLeaveFinished).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1000);
-    expect(loadSession(chars)).toBeNull();
+    expect(loadSession(chars())).toBeNull();
     view.unmount();
     vi.useRealTimers();
   });

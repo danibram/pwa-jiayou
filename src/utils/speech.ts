@@ -48,10 +48,12 @@ const fileVoice = (voice: Speaker, key: string): Speaker =>
 
 let playId = 0;
 let current: HTMLAudioElement | null = null;
-let citations: Map<string, string> | null = null;
+let citations = new Map<string, string>();
+let citedRevision = -1;
 
 const citationKey = (hanzi: string): string | null => {
-  if (!citations) {
+  if (citedRevision !== characterStore.listRevision) {
+    citedRevision = characterStore.listRevision;
     citations = new Map();
     for (const row of characterStore.state.characters) {
       const first = row.pinyin.split(/[\s,;/]+/).find(Boolean);

@@ -8,7 +8,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0366",
-        "frequency_rank": 21
+        "frequency_rank": 21,
+        "gloss": "(partícula adverbial)",
+        "example": {
+            "word": "慢慢地",
+            "pinyin": "màn màn de",
+            "es": "despacio"
+        }
     },
     {
         "character": "而",
@@ -19,7 +25,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0392",
-        "frequency_rank": 36
+        "frequency_rank": 36,
+        "gloss": "y; pero",
+        "example": {
+            "word": "而且",
+            "pinyin": "ér qiě",
+            "es": "además"
+        }
     },
     {
         "character": "于",
@@ -30,7 +42,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0024",
-        "frequency_rank": 40
+        "frequency_rank": 40,
+        "gloss": "en; a; sobre",
+        "example": {
+            "word": "关于",
+            "pinyin": "guān yú",
+            "es": "acerca de"
+        }
     },
     {
         "character": "自",
@@ -41,7 +59,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0477",
-        "frequency_rank": 43
+        "frequency_rank": 43,
+        "gloss": "uno mismo; desde",
+        "example": {
+            "word": "自行车",
+            "pinyin": "zì xíng chē",
+            "es": "bicicleta"
+        }
     },
     {
         "character": "发",
@@ -52,7 +76,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0339",
-        "frequency_rank": 47
+        "frequency_rank": 47,
+        "gloss": "enviar; emitir",
+        "example": {
+            "word": "发现",
+            "pinyin": "fā xiàn",
+            "es": "descubrir"
+        }
     },
     {
         "character": "用",
@@ -63,7 +93,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0283",
-        "frequency_rank": 51
+        "frequency_rank": 51,
+        "gloss": "usar",
+        "example": {
+            "word": "有用",
+            "pinyin": "yǒu yòng",
+            "es": "útil"
+        }
     },
     {
         "character": "行",
@@ -74,7 +110,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0483",
-        "frequency_rank": 53
+        "frequency_rank": 53,
+        "gloss": "ir; vale, bien",
+        "example": {
+            "word": "不行",
+            "pinyin": "bù xíng",
+            "es": "no vale; no puede ser"
+        }
     },
     {
         "character": "种",
@@ -85,7 +127,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1549",
-        "frequency_rank": 57
+        "frequency_rank": 57,
+        "gloss": "tipo, clase; plantar",
+        "example": {
+            "word": "各种",
+            "pinyin": "gè zhǒng",
+            "es": "todo tipo de"
+        }
     },
     {
         "character": "成",
@@ -96,7 +144,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0401",
-        "frequency_rank": 59
+        "frequency_rank": 59,
+        "gloss": "convertirse; lograr",
+        "example": {
+            "word": "成为",
+            "pinyin": "chéng wéi",
+            "es": "llegar a ser"
+        }
     },
     {
         "character": "方",
@@ -107,7 +161,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0163",
-        "frequency_rank": 60
+        "frequency_rank": 60,
+        "gloss": "lado; lugar; cuadrado",
+        "example": {
+            "word": "方便",
+            "pinyin": "fāng biàn",
+            "es": "cómodo, práctico"
+        }
     },
     {
         "character": "法",
@@ -118,7 +178,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1241",
-        "frequency_rank": 65
+        "frequency_rank": 65,
+        "gloss": "método; ley",
+        "example": {
+            "word": "方法",
+            "pinyin": "fāng fǎ",
+            "es": "método"
+        }
     },
     {
         "character": "如",
@@ -129,7 +195,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0578",
-        "frequency_rank": 67
+        "frequency_rank": 67,
+        "gloss": "si; como",
+        "example": {
+            "word": "如果",
+            "pinyin": "rú guǒ",
+            "es": "si (condicional)"
+        }
     },
     {
         "character": "当",
@@ -140,7 +212,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0418",
-        "frequency_rank": 71
+        "frequency_rank": 71,
+        "gloss": "ser; cuando; ejercer",
+        "example": {
+            "word": "当然",
+            "pinyin": "dāng rán",
+            "es": "por supuesto"
+        }
     },
     {
         "character": "定",
@@ -151,7 +229,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1276",
-        "frequency_rank": 77
+        "frequency_rank": 77,
+        "gloss": "fijar; decidir",
+        "example": {
+            "word": "一定",
+            "pinyin": "yí dìng",
+            "es": "seguro; sin falta"
+        }
     },
     {
         "character": "其",
@@ -162,7 +246,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "0996",
-        "frequency_rank": 85
+        "frequency_rank": 85,
+        "gloss": "su; ese",
+        "example": {
+            "word": "其他",
+            "pinyin": "qí tā",
+            "es": "otro, los demás"
+        }
     },
     {
         "character": "主",
@@ -173,7 +263,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0300",
-        "frequency_rank": 87
+        "frequency_rank": 87,
+        "gloss": "principal; dueño",
+        "example": {
+            "word": "主要",
+            "pinyin": "zhǔ yào",
+            "es": "principal"
+        }
     },
     {
         "character": "理",
@@ -184,7 +280,13 @@
         "strokes": 11,
         "hsk_level": 3,
         "general_standard": "2157",
-        "frequency_rank": 89
+        "frequency_rank": 89,
+        "gloss": "razón; ordenar",
+        "example": {
+            "word": "经理",
+            "pinyin": "jīng lǐ",
+            "es": "gerente"
+        }
     },
     {
         "character": "心",
@@ -195,7 +297,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0174",
-        "frequency_rank": 90
+        "frequency_rank": 90,
+        "gloss": "corazón; mente",
+        "example": {
+            "word": "小心",
+            "pinyin": "xiǎo xīn",
+            "es": "¡cuidado!"
+        }
     },
     {
         "character": "只",
@@ -206,7 +314,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0246",
-        "frequency_rank": 97
+        "frequency_rank": 97,
+        "gloss": "solo",
+        "example": {
+            "word": "只有",
+            "pinyin": "zhǐ yǒu",
+            "es": "solo; únicamente"
+        }
     },
     {
         "character": "实",
@@ -217,7 +331,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1285",
-        "frequency_rank": 100
+        "frequency_rank": 100,
+        "gloss": "real; verdadero",
+        "example": {
+            "word": "其实",
+            "pinyin": "qí shí",
+            "es": "en realidad"
+        }
     },
     {
         "character": "者",
@@ -228,7 +348,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "0969",
-        "frequency_rank": 103
+        "frequency_rank": 103,
+        "gloss": "(sufijo: el que hace)",
+        "example": {
+            "word": "记者",
+            "pinyin": "jì zhě",
+            "es": "periodista"
+        }
     },
     {
         "character": "力",
@@ -239,7 +365,13 @@
         "strokes": 2,
         "hsk_level": 3,
         "general_standard": "0019",
-        "frequency_rank": 106
+        "frequency_rank": 106,
+        "gloss": "fuerza; poder",
+        "example": {
+            "word": "力气",
+            "pinyin": "lì qi",
+            "es": "fuerza física"
+        }
     },
     {
         "character": "把",
@@ -250,7 +382,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0655",
-        "frequency_rank": 110
+        "frequency_rank": 110,
+        "gloss": "(marca de objeto); asir",
+        "example": {
+            "word": "一把伞",
+            "pinyin": "yì bǎ sǎn",
+            "es": "un paraguas"
+        }
     },
     {
         "character": "又",
@@ -261,7 +399,13 @@
         "strokes": 2,
         "hsk_level": 3,
         "general_standard": "0021",
-        "frequency_rank": 126
+        "frequency_rank": 126,
+        "gloss": "otra vez; y además",
+        "example": {
+            "word": "又快又好",
+            "pinyin": "yòu kuài yòu hǎo",
+            "es": "rápido y bien"
+        }
     },
     {
         "character": "业",
@@ -272,7 +416,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0231",
-        "frequency_rank": 130
+        "frequency_rank": 130,
+        "gloss": "trabajo; estudios",
+        "example": {
+            "word": "作业",
+            "pinyin": "zuò yè",
+            "es": "deberes"
+        }
     },
     {
         "character": "重",
@@ -283,7 +433,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1552",
-        "frequency_rank": 140
+        "frequency_rank": 140,
+        "gloss": "pesado; importante",
+        "example": {
+            "word": "重要",
+            "pinyin": "zhòng yào",
+            "es": "importante"
+        }
     },
     {
         "character": "物",
@@ -294,7 +450,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1127",
-        "frequency_rank": 142
+        "frequency_rank": 142,
+        "gloss": "cosa; ser",
+        "example": {
+            "word": "动物",
+            "pinyin": "dòng wù",
+            "es": "animal"
+        }
     },
     {
         "character": "应",
@@ -305,7 +467,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0836",
-        "frequency_rank": 144
+        "frequency_rank": 144,
+        "gloss": "deber",
+        "example": {
+            "word": "应该",
+            "pinyin": "yīng gāi",
+            "es": "deber, tener que"
+        }
     },
     {
         "character": "向",
@@ -316,7 +484,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0480",
-        "frequency_rank": 146
+        "frequency_rank": 146,
+        "gloss": "hacia; dirección",
+        "example": {
+            "word": "方向",
+            "pinyin": "fāng xiàng",
+            "es": "dirección"
+        }
     },
     {
         "character": "头",
@@ -327,7 +501,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0310",
-        "frequency_rank": 147
+        "frequency_rank": 147,
+        "gloss": "cabeza; extremo",
+        "example": {
+            "word": "头发",
+            "pinyin": "tóu fa",
+            "es": "pelo, cabello"
+        }
     },
     {
         "character": "文",
@@ -338,7 +518,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0161",
-        "frequency_rank": 148
+        "frequency_rank": 148,
+        "gloss": "escritura; cultura",
+        "example": {
+            "word": "中文",
+            "pinyin": "zhōng wén",
+            "es": "chino (idioma)"
+        }
     },
     {
         "character": "相",
@@ -349,7 +535,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1430",
-        "frequency_rank": 152
+        "frequency_rank": 152,
+        "gloss": "mutuamente",
+        "example": {
+            "word": "相信",
+            "pinyin": "xiāng xìn",
+            "es": "creer, confiar"
+        }
     },
     {
         "character": "被",
@@ -360,7 +552,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "2118",
-        "frequency_rank": 154
+        "frequency_rank": 154,
+        "gloss": "(voz pasiva); manta",
+        "example": {
+            "word": "被子",
+            "pinyin": "bèi zi",
+            "es": "edredón"
+        }
     },
     {
         "character": "或",
@@ -371,7 +569,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1035",
-        "frequency_rank": 160
+        "frequency_rank": 160,
+        "gloss": "o",
+        "example": {
+            "word": "或者",
+            "pinyin": "huò zhě",
+            "es": "o, o bien"
+        }
     },
     {
         "character": "己",
@@ -382,7 +586,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0060",
-        "frequency_rank": 162
+        "frequency_rank": 162,
+        "gloss": "uno mismo",
+        "example": {
+            "word": "自己",
+            "pinyin": "zì jǐ",
+            "es": "uno mismo"
+        }
     },
     {
         "character": "加",
@@ -393,7 +603,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0335",
-        "frequency_rank": 166
+        "frequency_rank": 166,
+        "gloss": "añadir; sumar",
+        "example": {
+            "word": "参加",
+            "pinyin": "cān jiā",
+            "es": "participar"
+        }
     },
     {
         "character": "特",
@@ -404,7 +620,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "1938",
-        "frequency_rank": 173
+        "frequency_rank": 173,
+        "gloss": "especial",
+        "example": {
+            "word": "特别",
+            "pinyin": "tè bié",
+            "es": "especial; especialmente"
+        }
     },
     {
         "character": "信",
@@ -415,7 +637,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1570",
-        "frequency_rank": 176
+        "frequency_rank": 176,
+        "gloss": "carta; creer",
+        "example": {
+            "word": "写信",
+            "pinyin": "xiě xìn",
+            "es": "escribir una carta"
+        }
     },
     {
         "character": "化",
@@ -426,7 +654,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0132",
-        "frequency_rank": 178
+        "frequency_rank": 178,
+        "gloss": "cambiar; -izar",
+        "example": {
+            "word": "文化",
+            "pinyin": "wén huà",
+            "es": "cultura"
+        }
     },
     {
         "character": "世",
@@ -437,7 +671,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0206",
-        "frequency_rank": 181
+        "frequency_rank": 181,
+        "gloss": "mundo; generación",
+        "example": {
+            "word": "世界",
+            "pinyin": "shì jiè",
+            "es": "mundo"
+        }
     },
     {
         "character": "位",
@@ -448,7 +688,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0784",
-        "frequency_rank": 182
+        "frequency_rank": 182,
+        "gloss": "(clasif. cortés); puesto",
+        "example": {
+            "word": "座位",
+            "pinyin": "zuò wèi",
+            "es": "asiento"
+        }
     },
     {
         "character": "声",
@@ -459,7 +705,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0654",
-        "frequency_rank": 195
+        "frequency_rank": 195,
+        "gloss": "sonido; voz",
+        "example": {
+            "word": "声音",
+            "pinyin": "shēng yīn",
+            "es": "sonido; voz"
+        }
     },
     {
         "character": "提",
@@ -470,7 +722,13 @@
         "strokes": 12,
         "hsk_level": 3,
         "general_standard": "2520",
-        "frequency_rank": 196
+        "frequency_rank": 196,
+        "gloss": "levantar; mencionar",
+        "example": {
+            "word": "提高",
+            "pinyin": "tí gāo",
+            "es": "mejorar, elevar"
+        }
     },
     {
         "character": "解",
@@ -481,7 +739,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "2981",
-        "frequency_rank": 201
+        "frequency_rank": 201,
+        "gloss": "explicar; soltar",
+        "example": {
+            "word": "了解",
+            "pinyin": "liǎo jiě",
+            "es": "conocer, entender"
+        }
     },
     {
         "character": "口",
@@ -492,7 +756,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0038",
-        "frequency_rank": 212
+        "frequency_rank": 212,
+        "gloss": "boca; entrada",
+        "example": {
+            "word": "门口",
+            "pinyin": "mén kǒu",
+            "es": "entrada, puerta"
+        }
     },
     {
         "character": "平",
@@ -503,7 +773,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0222",
-        "frequency_rank": 215
+        "frequency_rank": 215,
+        "gloss": "plano; tranquilo",
+        "example": {
+            "word": "水平",
+            "pinyin": "shuǐ píng",
+            "es": "nivel"
+        }
     },
     {
         "character": "更",
@@ -514,7 +790,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0693",
-        "frequency_rank": 221
+        "frequency_rank": 221,
+        "gloss": "más; aún más",
+        "example": {
+            "word": "更好",
+            "pinyin": "gèng hǎo",
+            "es": "mejor"
+        }
     },
     {
         "character": "变",
@@ -525,7 +807,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1204",
-        "frequency_rank": 225
+        "frequency_rank": 225,
+        "gloss": "cambiar",
+        "example": {
+            "word": "变化",
+            "pinyin": "biàn huà",
+            "es": "cambio"
+        }
     },
     {
         "character": "总",
@@ -536,7 +824,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1654",
-        "frequency_rank": 228
+        "frequency_rank": 228,
+        "gloss": "siempre; total",
+        "example": {
+            "word": "总是",
+            "pinyin": "zǒng shì",
+            "es": "siempre"
+        }
     },
     {
         "character": "数",
@@ -547,7 +841,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "2999",
-        "frequency_rank": 231
+        "frequency_rank": 231,
+        "gloss": "número; cifra",
+        "example": {
+            "word": "数学",
+            "pinyin": "shù xué",
+            "es": "matemáticas"
+        }
     },
     {
         "character": "安",
@@ -558,7 +858,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0549",
-        "frequency_rank": 232
+        "frequency_rank": 232,
+        "gloss": "seguro; tranquilo",
+        "example": {
+            "word": "安全",
+            "pinyin": "ān quán",
+            "es": "seguridad; seguro"
+        }
     },
     {
         "character": "才",
@@ -569,7 +875,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0029",
-        "frequency_rank": 235
+        "frequency_rank": 235,
+        "gloss": "solo entonces; talento",
+        "example": {
+            "word": "刚才",
+            "pinyin": "gāng cái",
+            "es": "hace un momento"
+        }
     },
     {
         "character": "结",
@@ -580,7 +892,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1754",
-        "frequency_rank": 236
+        "frequency_rank": 236,
+        "gloss": "atar; terminar",
+        "example": {
+            "word": "结婚",
+            "pinyin": "jié hūn",
+            "es": "casarse"
+        }
     },
     {
         "character": "目",
@@ -591,7 +909,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0236",
-        "frequency_rank": 239
+        "frequency_rank": 239,
+        "gloss": "ojo; objetivo",
+        "example": {
+            "word": "节目",
+            "pinyin": "jié mù",
+            "es": "programa (tv)"
+        }
     },
     {
         "character": "感",
@@ -602,7 +926,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "2875",
-        "frequency_rank": 243
+        "frequency_rank": 243,
+        "gloss": "sentir",
+        "example": {
+            "word": "感谢",
+            "pinyin": "gǎn xiè",
+            "es": "agradecer"
+        }
     },
     {
         "character": "接",
@@ -613,7 +943,13 @@
         "strokes": 11,
         "hsk_level": 3,
         "general_standard": "2185",
-        "frequency_rank": 247
+        "frequency_rank": 247,
+        "gloss": "recibir; recoger",
+        "example": {
+            "word": "接电话",
+            "pinyin": "jiē diàn huà",
+            "es": "contestar el teléfono"
+        }
     },
     {
         "character": "必",
@@ -624,7 +960,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0321",
-        "frequency_rank": 248
+        "frequency_rank": 248,
+        "gloss": "necesariamente",
+        "example": {
+            "word": "必须",
+            "pinyin": "bì xū",
+            "es": "tener que"
+        }
     },
     {
         "character": "市",
@@ -635,7 +977,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0301",
-        "frequency_rank": 254
+        "frequency_rank": 254,
+        "gloss": "ciudad; mercado",
+        "example": {
+            "word": "超市",
+            "pinyin": "chāo shì",
+            "es": "supermercado"
+        }
     },
     {
         "character": "直",
@@ -646,7 +994,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1011",
-        "frequency_rank": 255
+        "frequency_rank": 255,
+        "gloss": "recto; directo",
+        "example": {
+            "word": "一直",
+            "pinyin": "yì zhí",
+            "es": "todo recto; siempre"
+        }
     },
     {
         "character": "山",
@@ -657,7 +1011,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0039",
-        "frequency_rank": 259
+        "frequency_rank": 259,
+        "gloss": "montaña",
+        "example": {
+            "word": "上山",
+            "pinyin": "shàng shān",
+            "es": "subir la montaña"
+        }
     },
     {
         "character": "空",
@@ -668,7 +1028,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1282",
-        "frequency_rank": 272
+        "frequency_rank": 272,
+        "gloss": "vacío; aire; cielo",
+        "example": {
+            "word": "空气",
+            "pinyin": "kōng qì",
+            "es": "aire"
+        }
     },
     {
         "character": "决",
@@ -679,7 +1045,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0523",
-        "frequency_rank": 273
+        "frequency_rank": 273,
+        "gloss": "decidir",
+        "example": {
+            "word": "决定",
+            "pinyin": "jué dìng",
+            "es": "decidir; decisión"
+        }
     },
     {
         "character": "马",
@@ -690,7 +1062,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0072",
-        "frequency_rank": 276
+        "frequency_rank": 276,
+        "gloss": "caballo",
+        "example": {
+            "word": "马上",
+            "pinyin": "mǎ shàng",
+            "es": "enseguida"
+        }
     },
     {
         "character": "界",
@@ -701,7 +1079,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1496",
-        "frequency_rank": 288
+        "frequency_rank": 288,
+        "gloss": "límite; mundo",
+        "example": {
+            "word": "世界",
+            "pinyin": "shì jiè",
+            "es": "mundo"
+        }
     },
     {
         "character": "放",
@@ -712,7 +1096,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1223",
-        "frequency_rank": 291
+        "frequency_rank": 291,
+        "gloss": "poner; soltar",
+        "example": {
+            "word": "放心",
+            "pinyin": "fàng xīn",
+            "es": "estar tranquilo"
+        }
     },
     {
         "character": "像",
@@ -723,7 +1113,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "2961",
-        "frequency_rank": 294
+        "frequency_rank": 294,
+        "gloss": "parecerse; como",
+        "example": {
+            "word": "好像",
+            "pinyin": "hǎo xiàng",
+            "es": "parece que"
+        }
     },
     {
         "character": "且",
@@ -734,7 +1130,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0237",
-        "frequency_rank": 296
+        "frequency_rank": 296,
+        "gloss": "además",
+        "example": {
+            "word": "并且",
+            "pinyin": "bìng qiě",
+            "es": "y además"
+        }
     },
     {
         "character": "难",
@@ -745,7 +1147,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "2147",
-        "frequency_rank": 295
+        "frequency_rank": 295,
+        "gloss": "difícil",
+        "example": {
+            "word": "难过",
+            "pinyin": "nán guò",
+            "es": "triste"
+        }
     },
     {
         "character": "记",
@@ -756,7 +1164,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0323",
-        "frequency_rank": 306
+        "frequency_rank": 306,
+        "gloss": "recordar; anotar",
+        "example": {
+            "word": "记住",
+            "pinyin": "jì zhù",
+            "es": "memorizar"
+        }
     },
     {
         "character": "南",
@@ -767,7 +1181,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1422",
-        "frequency_rank": 307
+        "frequency_rank": 307,
+        "gloss": "sur",
+        "example": {
+            "word": "南方",
+            "pinyin": "nán fāng",
+            "es": "el sur"
+        }
     },
     {
         "character": "求",
@@ -778,7 +1198,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0690",
-        "frequency_rank": 312
+        "frequency_rank": 312,
+        "gloss": "pedir; buscar",
+        "example": {
+            "word": "要求",
+            "pinyin": "yāo qiú",
+            "es": "exigir; requisito"
+        }
     },
     {
         "character": "据",
@@ -789,7 +1215,13 @@
         "strokes": 11,
         "hsk_level": 3,
         "general_standard": "2189",
-        "frequency_rank": 313
+        "frequency_rank": 313,
+        "gloss": "según; basarse en",
+        "example": {
+            "word": "根据",
+            "pinyin": "gēn jù",
+            "es": "según"
+        }
     },
     {
         "character": "张",
@@ -800,7 +1232,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0909",
-        "frequency_rank": 318
+        "frequency_rank": 318,
+        "gloss": "(clasif. objetos planos)",
+        "example": {
+            "word": "紧张",
+            "pinyin": "jǐn zhāng",
+            "es": "nervioso"
+        }
     },
     {
         "character": "该",
@@ -811,7 +1249,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1300",
-        "frequency_rank": 319
+        "frequency_rank": 319,
+        "gloss": "deber; tocar a alguien",
+        "example": {
+            "word": "应该",
+            "pinyin": "yīng gāi",
+            "es": "deber, tener que"
+        }
     },
     {
         "character": "万",
@@ -822,7 +1266,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0035",
-        "frequency_rank": 322
+        "frequency_rank": 322,
+        "gloss": "diez mil",
+        "example": {
+            "word": "千万",
+            "pinyin": "qiān wàn",
+            "es": "sin falta; diez millones"
+        }
     },
     {
         "character": "清",
@@ -833,7 +1283,13 @@
         "strokes": 11,
         "hsk_level": 3,
         "general_standard": "2410",
-        "frequency_rank": 335
+        "frequency_rank": 335,
+        "gloss": "claro; limpio",
+        "example": {
+            "word": "清楚",
+            "pinyin": "qīng chu",
+            "es": "claro"
+        }
     },
     {
         "character": "带",
@@ -844,7 +1300,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1407",
-        "frequency_rank": 342
+        "frequency_rank": 342,
+        "gloss": "llevar; traer; cinta",
+        "example": {
+            "word": "带来",
+            "pinyin": "dài lái",
+            "es": "traer"
+        }
     },
     {
         "character": "风",
@@ -855,7 +1317,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0154",
-        "frequency_rank": 348
+        "frequency_rank": 348,
+        "gloss": "viento",
+        "example": {
+            "word": "风景",
+            "pinyin": "fēng jǐng",
+            "es": "paisaje"
+        }
     },
     {
         "character": "根",
@@ -866,7 +1334,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "1850",
-        "frequency_rank": 352
+        "frequency_rank": 352,
+        "gloss": "raíz; (clasif. alargados)",
+        "example": {
+            "word": "根据",
+            "pinyin": "gēn jù",
+            "es": "según"
+        }
     },
     {
         "character": "干",
@@ -877,7 +1351,13 @@
         "strokes": 3,
         "hsk_level": 3,
         "general_standard": "0023",
-        "frequency_rank": 353
+        "frequency_rank": 353,
+        "gloss": "hacer; trabajar",
+        "example": {
+            "word": "干活",
+            "pinyin": "gàn huó",
+            "es": "trabajar"
+        }
     },
     {
         "character": "极",
@@ -888,7 +1368,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0687",
-        "frequency_rank": 363
+        "frequency_rank": 363,
+        "gloss": "extremo; sumamente",
+        "example": {
+            "word": "积极",
+            "pinyin": "jī jí",
+            "es": "activo, positivo"
+        }
     },
     {
         "character": "办",
@@ -899,7 +1385,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0181",
-        "frequency_rank": 367
+        "frequency_rank": 367,
+        "gloss": "hacer; gestionar",
+        "example": {
+            "word": "办法",
+            "pinyin": "bàn fǎ",
+            "es": "manera, solución"
+        }
     },
     {
         "character": "议",
@@ -910,7 +1402,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0320",
-        "frequency_rank": 368
+        "frequency_rank": 368,
+        "gloss": "discutir; opinión",
+        "example": {
+            "word": "会议",
+            "pinyin": "huì yì",
+            "es": "reunión"
+        }
     },
     {
         "character": "元",
@@ -921,7 +1419,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0080",
-        "frequency_rank": 370
+        "frequency_rank": 370,
+        "gloss": "yuan; primero",
+        "example": {
+            "word": "美元",
+            "pinyin": "měi yuán",
+            "es": "dólar"
+        }
     },
     {
         "character": "单",
@@ -932,7 +1436,13 @@
         "strokes": 8,
         "hsk_level": 3,
         "general_standard": "1232",
-        "frequency_rank": 389
+        "frequency_rank": 389,
+        "gloss": "solo; lista",
+        "example": {
+            "word": "菜单",
+            "pinyin": "cài dān",
+            "es": "menú, carta"
+        }
     },
     {
         "character": "调",
@@ -943,7 +1453,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "2123",
-        "frequency_rank": 400
+        "frequency_rank": 400,
+        "gloss": "tono; trasladar",
+        "example": {
+            "word": "声调",
+            "pinyin": "shēng diào",
+            "es": "tono (fonético)"
+        }
     },
     {
         "character": "算",
@@ -954,7 +1470,13 @@
         "strokes": 14,
         "hsk_level": 3,
         "general_standard": "3121",
-        "frequency_rank": 403
+        "frequency_rank": 403,
+        "gloss": "calcular; considerar",
+        "example": {
+            "word": "打算",
+            "pinyin": "dǎ suàn",
+            "es": "planear"
+        }
     },
     {
         "character": "需",
@@ -965,7 +1487,13 @@
         "strokes": 14,
         "hsk_level": 3,
         "general_standard": "3095",
-        "frequency_rank": 408
+        "frequency_rank": 408,
+        "gloss": "necesitar",
+        "example": {
+            "word": "需要",
+            "pinyin": "xū yào",
+            "es": "necesitar"
+        }
     },
     {
         "character": "花",
@@ -976,7 +1504,13 @@
         "strokes": 7,
         "hsk_level": 3,
         "general_standard": "0665",
-        "frequency_rank": 410
+        "frequency_rank": 410,
+        "gloss": "flor; gastar",
+        "example": {
+            "word": "花园",
+            "pinyin": "huā yuán",
+            "es": "jardín"
+        }
     },
     {
         "character": "城",
@@ -987,7 +1521,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1373",
-        "frequency_rank": 413
+        "frequency_rank": 413,
+        "gloss": "ciudad; muralla",
+        "example": {
+            "word": "城市",
+            "pinyin": "chéng shì",
+            "es": "ciudad"
+        }
     },
     {
         "character": "级",
@@ -998,7 +1538,13 @@
         "strokes": 6,
         "hsk_level": 3,
         "general_standard": "0594",
-        "frequency_rank": 415
+        "frequency_rank": 415,
+        "gloss": "nivel; curso",
+        "example": {
+            "word": "年级",
+            "pinyin": "nián jí",
+            "es": "curso, grado escolar"
+        }
     },
     {
         "character": "复",
@@ -1009,7 +1555,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1553",
-        "frequency_rank": 426
+        "frequency_rank": 426,
+        "gloss": "repetir; volver",
+        "example": {
+            "word": "复习",
+            "pinyin": "fù xí",
+            "es": "repasar"
+        }
     },
     {
         "character": "满",
@@ -1020,7 +1572,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "3005",
-        "frequency_rank": 436
+        "frequency_rank": 436,
+        "gloss": "lleno; satisfecho",
+        "example": {
+            "word": "满意",
+            "pinyin": "mǎn yì",
+            "es": "satisfecho"
+        }
     },
     {
         "character": "越",
@@ -1031,7 +1589,13 @@
         "strokes": 12,
         "hsk_level": 3,
         "general_standard": "2514",
-        "frequency_rank": 440
+        "frequency_rank": 440,
+        "gloss": "cuanto más; superar",
+        "example": {
+            "word": "越来越",
+            "pinyin": "yuè lái yuè",
+            "es": "cada vez más"
+        }
     },
     {
         "character": "容",
@@ -1042,7 +1606,13 @@
         "strokes": 10,
         "hsk_level": 3,
         "general_standard": "2105",
-        "frequency_rank": 442
+        "frequency_rank": 442,
+        "gloss": "contener; aspecto",
+        "example": {
+            "word": "内容",
+            "pinyin": "nèi róng",
+            "es": "contenido"
+        }
     },
     {
         "character": "照",
@@ -1053,7 +1623,13 @@
         "strokes": 13,
         "hsk_level": 3,
         "general_standard": "2911",
-        "frequency_rank": 443
+        "frequency_rank": 443,
+        "gloss": "foto; alumbrar",
+        "example": {
+            "word": "照相机",
+            "pinyin": "zhào xiàng jī",
+            "es": "cámara de fotos"
+        }
     },
     {
         "character": "须",
@@ -1064,7 +1640,13 @@
         "strokes": 9,
         "hsk_level": 3,
         "general_standard": "1585",
-        "frequency_rank": 444
+        "frequency_rank": 444,
+        "gloss": "deber; barba",
+        "example": {
+            "word": "必须",
+            "pinyin": "bì xū",
+            "es": "tener que"
+        }
     },
     {
         "character": "包",
@@ -1075,7 +1657,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0298",
-        "frequency_rank": 454
+        "frequency_rank": 454,
+        "gloss": "bolsa; envolver",
+        "example": {
+            "word": "面包",
+            "pinyin": "miàn bāo",
+            "es": "pan"
+        }
     },
     {
         "character": "片",
@@ -1086,7 +1674,13 @@
         "strokes": 4,
         "hsk_level": 3,
         "general_standard": "0130",
-        "frequency_rank": 455
+        "frequency_rank": 455,
+        "gloss": "trozo; (clasif.)",
+        "example": {
+            "word": "照片",
+            "pinyin": "zhào piàn",
+            "es": "foto"
+        }
     },
     {
         "character": "史",
@@ -1097,7 +1691,13 @@
         "strokes": 5,
         "hsk_level": 3,
         "general_standard": "0248",
-        "frequency_rank": 456
+        "frequency_rank": 456,
+        "gloss": "historia",
+        "example": {
+            "word": "历史",
+            "pinyin": "lì shǐ",
+            "es": "historia"
+        }
     },
     {
         "character": "乎",
@@ -1106,7 +1706,13 @@
         "radical": "丿",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "乎"
+        "traditional": "乎",
+        "gloss": "(partícula; en 几乎)",
+        "example": {
+            "word": "几乎",
+            "pinyin": "jī hū",
+            "es": "casi"
+        }
     },
     {
         "character": "查",
@@ -1115,7 +1721,13 @@
         "radical": "木",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "查"
+        "traditional": "查",
+        "gloss": "revisar; buscar",
+        "example": {
+            "word": "调查",
+            "pinyin": "diào chá",
+            "es": "investigar"
+        }
     },
     {
         "character": "轻",
@@ -1124,7 +1736,13 @@
         "radical": "車",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "輕"
+        "traditional": "輕",
+        "gloss": "ligero; joven",
+        "example": {
+            "word": "年轻",
+            "pinyin": "nián qīng",
+            "es": "joven"
+        }
     },
     {
         "character": "易",
@@ -1133,7 +1751,13 @@
         "radical": "日",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "易"
+        "traditional": "易",
+        "gloss": "fácil; cambiar",
+        "example": {
+            "word": "容易",
+            "pinyin": "róng yì",
+            "es": "fácil"
+        }
     },
     {
         "character": "除",
@@ -1142,7 +1766,13 @@
         "radical": "阜",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "除"
+        "traditional": "除",
+        "gloss": "quitar; excepto",
+        "example": {
+            "word": "除了",
+            "pinyin": "chú le",
+            "es": "excepto; además de"
+        }
     },
     {
         "character": "阿",
@@ -1151,7 +1781,13 @@
         "radical": "阜",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "阿"
+        "traditional": "阿",
+        "gloss": "(prefijo familiar)",
+        "example": {
+            "word": "阿姨",
+            "pinyin": "ā yí",
+            "es": "tía; señora"
+        }
     },
     {
         "character": "李",
@@ -1160,7 +1796,13 @@
         "radical": "木",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "李"
+        "traditional": "李",
+        "gloss": "ciruela; li (apellido)",
+        "example": {
+            "word": "行李",
+            "pinyin": "xíng li",
+            "es": "equipaje"
+        }
     },
     {
         "character": "图",
@@ -1169,7 +1811,13 @@
         "radical": "囗",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "圖"
+        "traditional": "圖",
+        "gloss": "imagen; mapa",
+        "example": {
+            "word": "图书馆",
+            "pinyin": "tú shū guǎn",
+            "es": "biblioteca"
+        }
     },
     {
         "character": "历",
@@ -1178,7 +1826,13 @@
         "radical": "厂",
         "strokes": 4,
         "hsk_level": 3,
-        "traditional": "歷"
+        "traditional": "歷",
+        "gloss": "historia; pasar por",
+        "example": {
+            "word": "经历",
+            "pinyin": "jīng lì",
+            "es": "experiencia; vivir algo"
+        }
     },
     {
         "character": "突",
@@ -1187,7 +1841,13 @@
         "radical": "穴",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "突"
+        "traditional": "突",
+        "gloss": "de repente",
+        "example": {
+            "word": "突然",
+            "pinyin": "tū rán",
+            "es": "de repente"
+        }
     },
     {
         "character": "周",
@@ -1196,7 +1856,13 @@
         "radical": "口",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "周"
+        "traditional": "周",
+        "gloss": "semana; alrededor",
+        "example": {
+            "word": "周末",
+            "pinyin": "zhōu mò",
+            "es": "fin de semana"
+        }
     },
     {
         "character": "较",
@@ -1205,7 +1871,13 @@
         "radical": "車",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "較"
+        "traditional": "較",
+        "gloss": "bastante; comparar",
+        "example": {
+            "word": "比较",
+            "pinyin": "bǐ jiào",
+            "es": "bastante; comparar"
+        }
     },
     {
         "character": "注",
@@ -1214,7 +1886,13 @@
         "radical": "水",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "注"
+        "traditional": "注",
+        "gloss": "prestar atención",
+        "example": {
+            "word": "注意",
+            "pinyin": "zhù yì",
+            "es": "prestar atención"
+        }
     },
     {
         "character": "选",
@@ -1223,7 +1901,13 @@
         "radical": "辵",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "選"
+        "traditional": "選",
+        "gloss": "elegir",
+        "example": {
+            "word": "选择",
+            "pinyin": "xuǎn zé",
+            "es": "elegir"
+        }
     },
     {
         "character": "响",
@@ -1232,7 +1916,13 @@
         "radical": "口",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "響"
+        "traditional": "響",
+        "gloss": "sonar; ruidoso",
+        "example": {
+            "word": "影响",
+            "pinyin": "yǐng xiǎng",
+            "es": "influir; influencia"
+        }
     },
     {
         "character": "参",
@@ -1241,7 +1931,13 @@
         "radical": "厶",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "參"
+        "traditional": "參",
+        "gloss": "participar",
+        "example": {
+            "word": "参观",
+            "pinyin": "cān guān",
+            "es": "visitar"
+        }
     },
     {
         "character": "半",
@@ -1250,7 +1946,13 @@
         "radical": "十",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "半"
+        "traditional": "半",
+        "gloss": "medio; mitad",
+        "example": {
+            "word": "半天",
+            "pinyin": "bàn tiān",
+            "es": "mucho rato"
+        }
     },
     {
         "character": "节",
@@ -1259,7 +1961,13 @@
         "radical": "艸",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "節"
+        "traditional": "節",
+        "gloss": "fiesta; sección",
+        "example": {
+            "word": "节日",
+            "pinyin": "jié rì",
+            "es": "festivo"
+        }
     },
     {
         "character": "护",
@@ -1268,7 +1976,13 @@
         "radical": "手",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "護"
+        "traditional": "護",
+        "gloss": "proteger",
+        "example": {
+            "word": "护照",
+            "pinyin": "hù zhào",
+            "es": "pasaporte"
+        }
     },
     {
         "character": "音",
@@ -1277,7 +1991,13 @@
         "radical": "音",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "音"
+        "traditional": "音",
+        "gloss": "sonido",
+        "example": {
+            "word": "音乐",
+            "pinyin": "yīn yuè",
+            "es": "música"
+        }
     },
     {
         "character": "跟",
@@ -1286,7 +2006,13 @@
         "radical": "足",
         "strokes": 13,
         "hsk_level": 3,
-        "traditional": "跟"
+        "traditional": "跟",
+        "gloss": "con; seguir",
+        "example": {
+            "word": "跟着",
+            "pinyin": "gēn zhe",
+            "es": "seguir a"
+        }
     },
     {
         "character": "留",
@@ -1295,7 +2021,13 @@
         "radical": "田",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "留"
+        "traditional": "留",
+        "gloss": "quedarse; dejar",
+        "example": {
+            "word": "留学",
+            "pinyin": "liú xué",
+            "es": "estudiar fuera"
+        }
     },
     {
         "character": "讲",
@@ -1304,7 +2036,13 @@
         "radical": "言",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "講"
+        "traditional": "講",
+        "gloss": "hablar; explicar",
+        "example": {
+            "word": "讲故事",
+            "pinyin": "jiǎng gù shi",
+            "es": "contar un cuento"
+        }
     },
     {
         "character": "料",
@@ -1313,7 +2051,13 @@
         "radical": "斗",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "料"
+        "traditional": "料",
+        "gloss": "material",
+        "example": {
+            "word": "材料",
+            "pinyin": "cái liào",
+            "es": "material"
+        }
     },
     {
         "character": "终",
@@ -1322,7 +2066,13 @@
         "radical": "糸",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "終"
+        "traditional": "終",
+        "gloss": "fin; final",
+        "example": {
+            "word": "终于",
+            "pinyin": "zhōng yú",
+            "es": "por fin"
+        }
     },
     {
         "character": "答",
@@ -1331,7 +2081,13 @@
         "radical": "竹",
         "strokes": 12,
         "hsk_level": 3,
-        "traditional": "答"
+        "traditional": "答",
+        "gloss": "responder",
+        "example": {
+            "word": "回答",
+            "pinyin": "huí dá",
+            "es": "responder"
+        }
     },
     {
         "character": "黄",
@@ -1340,7 +2096,13 @@
         "radical": "黃",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "黃"
+        "traditional": "黃",
+        "gloss": "amarillo",
+        "example": {
+            "word": "黄色",
+            "pinyin": "huáng sè",
+            "es": "amarillo"
+        }
     },
     {
         "character": "奇",
@@ -1349,7 +2111,13 @@
         "radical": "大",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "奇"
+        "traditional": "奇",
+        "gloss": "extraño",
+        "example": {
+            "word": "好奇",
+            "pinyin": "hào qí",
+            "es": "curioso"
+        }
     },
     {
         "character": "段",
@@ -1358,7 +2126,13 @@
         "radical": "殳",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "段"
+        "traditional": "段",
+        "gloss": "tramo; periodo",
+        "example": {
+            "word": "一段时间",
+            "pinyin": "yí duàn shí jiān",
+            "es": "un tiempo"
+        }
     },
     {
         "character": "故",
@@ -1367,7 +2141,13 @@
         "radical": "攴",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "故"
+        "traditional": "故",
+        "gloss": "motivo; antiguo",
+        "example": {
+            "word": "故事",
+            "pinyin": "gù shi",
+            "es": "historia, cuento"
+        }
     },
     {
         "character": "河",
@@ -1376,7 +2156,13 @@
         "radical": "水",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "河"
+        "traditional": "河",
+        "gloss": "río",
+        "example": {
+            "word": "黄河",
+            "pinyin": "huáng hé",
+            "es": "río amarillo"
+        }
     },
     {
         "character": "害",
@@ -1385,7 +2171,13 @@
         "radical": "宀",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "害"
+        "traditional": "害",
+        "gloss": "dañar",
+        "example": {
+            "word": "害怕",
+            "pinyin": "hài pà",
+            "es": "tener miedo"
+        }
     },
     {
         "character": "双",
@@ -1394,7 +2186,13 @@
         "radical": "又",
         "strokes": 4,
         "hsk_level": 3,
-        "traditional": "雙"
+        "traditional": "雙",
+        "gloss": "par; doble",
+        "example": {
+            "word": "双手",
+            "pinyin": "shuāng shǒu",
+            "es": "ambas manos"
+        }
     },
     {
         "character": "境",
@@ -1403,7 +2201,13 @@
         "radical": "土",
         "strokes": 14,
         "hsk_level": 3,
-        "traditional": "境"
+        "traditional": "境",
+        "gloss": "entorno; frontera",
+        "example": {
+            "word": "环境",
+            "pinyin": "huán jìng",
+            "es": "entorno; medio ambiente"
+        }
     },
     {
         "character": "愿",
@@ -1412,7 +2216,13 @@
         "radical": "心",
         "strokes": 14,
         "hsk_level": 3,
-        "traditional": "願"
+        "traditional": "願",
+        "gloss": "desear; querer",
+        "example": {
+            "word": "愿意",
+            "pinyin": "yuàn yì",
+            "es": "estar dispuesto"
+        }
     },
     {
         "character": "网",
@@ -1421,7 +2231,13 @@
         "radical": "网",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "網"
+        "traditional": "網",
+        "gloss": "red; internet",
+        "example": {
+            "word": "上网",
+            "pinyin": "shàng wǎng",
+            "es": "navegar por internet"
+        }
     },
     {
         "character": "育",
@@ -1430,7 +2246,13 @@
         "radical": "肉",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "育"
+        "traditional": "育",
+        "gloss": "educar; criar",
+        "example": {
+            "word": "体育",
+            "pinyin": "tǐ yù",
+            "es": "deporte, educación física"
+        }
     },
     {
         "character": "船",
@@ -1439,7 +2261,13 @@
         "radical": "舟",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "船"
+        "traditional": "船",
+        "gloss": "barco",
+        "example": {
+            "word": "坐船",
+            "pinyin": "zuò chuán",
+            "es": "ir en barco"
+        }
     },
     {
         "character": "脸",
@@ -1448,7 +2276,13 @@
         "radical": "肉",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "臉"
+        "traditional": "臉",
+        "gloss": "cara",
+        "example": {
+            "word": "洗脸",
+            "pinyin": "xǐ liǎn",
+            "es": "lavarse la cara"
+        }
     },
     {
         "character": "刻",
@@ -1457,7 +2291,13 @@
         "radical": "刀",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "刻"
+        "traditional": "刻",
+        "gloss": "cuarto de hora; tallar",
+        "example": {
+            "word": "立刻",
+            "pinyin": "lì kè",
+            "es": "inmediatamente"
+        }
     },
     {
         "character": "刚",
@@ -1466,7 +2306,13 @@
         "radical": "刀",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "剛"
+        "traditional": "剛",
+        "gloss": "acabar de; justo",
+        "example": {
+            "word": "刚刚",
+            "pinyin": "gāng gāng",
+            "es": "hace un momento"
+        }
     },
     {
         "character": "般",
@@ -1475,7 +2321,13 @@
         "radical": "舟",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "般"
+        "traditional": "般",
+        "gloss": "clase; manera",
+        "example": {
+            "word": "一般",
+            "pinyin": "yì bān",
+            "es": "normal; en general"
+        }
     },
     {
         "character": "怕",
@@ -1484,7 +2336,13 @@
         "radical": "心",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "怕"
+        "traditional": "怕",
+        "gloss": "temer",
+        "example": {
+            "word": "恐怕",
+            "pinyin": "kǒng pà",
+            "es": "me temo que"
+        }
     },
     {
         "character": "假",
@@ -1493,7 +2351,13 @@
         "radical": "人",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "假"
+        "traditional": "假",
+        "gloss": "falso",
+        "example": {
+            "word": "假话",
+            "pinyin": "jiǎ huà",
+            "es": "mentira"
+        }
     },
     {
         "character": "久",
@@ -1502,7 +2366,13 @@
         "radical": "丿",
         "strokes": 3,
         "hsk_level": 3,
-        "traditional": "久"
+        "traditional": "久",
+        "gloss": "mucho tiempo",
+        "example": {
+            "word": "好久",
+            "pinyin": "hǎo jiǔ",
+            "es": "mucho tiempo"
+        }
     },
     {
         "character": "拿",
@@ -1511,7 +2381,13 @@
         "radical": "手",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "拿"
+        "traditional": "拿",
+        "gloss": "coger; llevar",
+        "example": {
+            "word": "拿走",
+            "pinyin": "ná zǒu",
+            "es": "llevarse"
+        }
     },
     {
         "character": "阳",
@@ -1520,7 +2396,13 @@
         "radical": "阜",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "陽"
+        "traditional": "陽",
+        "gloss": "sol; yang",
+        "example": {
+            "word": "太阳",
+            "pinyin": "tài yáng",
+            "es": "sol"
+        }
     },
     {
         "character": "急",
@@ -1529,7 +2411,13 @@
         "radical": "心",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "急"
+        "traditional": "急",
+        "gloss": "urgente; ansioso",
+        "example": {
+            "word": "着急",
+            "pinyin": "zháo jí",
+            "es": "preocupado, impaciente"
+        }
     },
     {
         "character": "居",
@@ -1538,7 +2426,13 @@
         "radical": "尸",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "居"
+        "traditional": "居",
+        "gloss": "vivir, residir",
+        "example": {
+            "word": "居住",
+            "pinyin": "jū zhù",
+            "es": "residir"
+        }
     },
     {
         "character": "环",
@@ -1547,7 +2441,13 @@
         "radical": "玉",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "環"
+        "traditional": "環",
+        "gloss": "anillo; rodear",
+        "example": {
+            "word": "环保",
+            "pinyin": "huán bǎo",
+            "es": "ecología"
+        }
     },
     {
         "character": "树",
@@ -1556,7 +2456,13 @@
         "radical": "木",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "樹"
+        "traditional": "樹",
+        "gloss": "árbol",
+        "example": {
+            "word": "树叶",
+            "pinyin": "shù yè",
+            "es": "hoja de árbol"
+        }
     },
     {
         "character": "层",
@@ -1565,7 +2471,13 @@
         "radical": "尸",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "層"
+        "traditional": "層",
+        "gloss": "piso; capa",
+        "example": {
+            "word": "楼层",
+            "pinyin": "lóu céng",
+            "es": "planta de un edificio"
+        }
     },
     {
         "character": "句",
@@ -1574,7 +2486,13 @@
         "radical": "口",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "句"
+        "traditional": "句",
+        "gloss": "frase; (clasif.)",
+        "example": {
+            "word": "句子",
+            "pinyin": "jù zi",
+            "es": "oración, frase"
+        }
     },
     {
         "character": "简",
@@ -1583,7 +2501,13 @@
         "radical": "竹",
         "strokes": 13,
         "hsk_level": 3,
-        "traditional": "簡"
+        "traditional": "簡",
+        "gloss": "simple",
+        "example": {
+            "word": "简单",
+            "pinyin": "jiǎn dān",
+            "es": "sencillo"
+        }
     },
     {
         "character": "卡",
@@ -1592,7 +2516,13 @@
         "radical": "卜",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "卡"
+        "traditional": "卡",
+        "gloss": "tarjeta",
+        "example": {
+            "word": "信用卡",
+            "pinyin": "xìn yòng kǎ",
+            "es": "tarjeta de crédito"
+        }
     },
     {
         "character": "担",
@@ -1601,7 +2531,13 @@
         "radical": "手",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "擔"
+        "traditional": "擔",
+        "gloss": "cargar; asumir",
+        "example": {
+            "word": "担心",
+            "pinyin": "dān xīn",
+            "es": "preocuparse"
+        }
     },
     {
         "character": "静",
@@ -1610,7 +2546,13 @@
         "radical": "青",
         "strokes": 14,
         "hsk_level": 3,
-        "traditional": "靜"
+        "traditional": "靜",
+        "gloss": "silencioso; tranquilo",
+        "example": {
+            "word": "安静",
+            "pinyin": "ān jìng",
+            "es": "tranquilo, silencioso"
+        }
     },
     {
         "character": "检",
@@ -1619,7 +2561,13 @@
         "radical": "木",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "檢"
+        "traditional": "檢",
+        "gloss": "revisar",
+        "example": {
+            "word": "检查",
+            "pinyin": "jiǎn chá",
+            "es": "revisar; examen"
+        }
     },
     {
         "character": "差",
@@ -1628,7 +2576,13 @@
         "radical": "工",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "差"
+        "traditional": "差",
+        "gloss": "faltar; malo",
+        "example": {
+            "word": "差不多",
+            "pinyin": "chà bu duō",
+            "es": "casi; más o menos"
+        }
     },
     {
         "character": "角",
@@ -1637,7 +2591,13 @@
         "radical": "角",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "角"
+        "traditional": "角",
+        "gloss": "ángulo; esquina",
+        "example": {
+            "word": "角度",
+            "pinyin": "jiǎo dù",
+            "es": "ángulo; punto de vista"
+        }
     },
     {
         "character": "皮",
@@ -1646,7 +2606,13 @@
         "radical": "皮",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "皮"
+        "traditional": "皮",
+        "gloss": "piel; cuero",
+        "example": {
+            "word": "皮肤",
+            "pinyin": "pí fū",
+            "es": "piel"
+        }
     },
     {
         "character": "啊",
@@ -1655,7 +2621,13 @@
         "radical": "口",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "啊"
+        "traditional": "啊",
+        "gloss": "(partícula exclamativa)",
+        "example": {
+            "word": "好啊",
+            "pinyin": "hǎo a",
+            "es": "¡vale!"
+        }
     },
     {
         "character": "超",
@@ -1664,7 +2636,13 @@
         "radical": "走",
         "strokes": 12,
         "hsk_level": 3,
-        "traditional": "超"
+        "traditional": "超",
+        "gloss": "superar",
+        "example": {
+            "word": "超过",
+            "pinyin": "chāo guò",
+            "es": "superar"
+        }
     },
     {
         "character": "银",
@@ -1673,7 +2651,13 @@
         "radical": "金",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "銀"
+        "traditional": "銀",
+        "gloss": "plata",
+        "example": {
+            "word": "银行",
+            "pinyin": "yín háng",
+            "es": "banco"
+        }
     },
     {
         "character": "怪",
@@ -1682,7 +2666,13 @@
         "radical": "心",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "怪"
+        "traditional": "怪",
+        "gloss": "raro; culpar",
+        "example": {
+            "word": "奇怪",
+            "pinyin": "qí guài",
+            "es": "raro, extraño"
+        }
     },
     {
         "character": "香",
@@ -1691,7 +2681,13 @@
         "radical": "香",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "香"
+        "traditional": "香",
+        "gloss": "fragante; rico",
+        "example": {
+            "word": "香水",
+            "pinyin": "xiāng shuǐ",
+            "es": "perfume"
+        }
     },
     {
         "character": "铁",
@@ -1700,7 +2696,13 @@
         "radical": "金",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "鐵"
+        "traditional": "鐵",
+        "gloss": "hierro",
+        "example": {
+            "word": "地铁",
+            "pinyin": "dì tiě",
+            "es": "metro"
+        }
     },
     {
         "character": "草",
@@ -1709,7 +2711,13 @@
         "radical": "艸",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "草"
+        "traditional": "草",
+        "gloss": "hierba",
+        "example": {
+            "word": "草地",
+            "pinyin": "cǎo dì",
+            "es": "césped, prado"
+        }
     },
     {
         "character": "脚",
@@ -1718,7 +2726,13 @@
         "radical": "肉",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "腳"
+        "traditional": "腳",
+        "gloss": "pie",
+        "example": {
+            "word": "手脚",
+            "pinyin": "shǒu jiǎo",
+            "es": "manos y pies"
+        }
     },
     {
         "character": "酒",
@@ -1727,7 +2741,13 @@
         "radical": "酉",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "酒"
+        "traditional": "酒",
+        "gloss": "alcohol; vino",
+        "example": {
+            "word": "酒店",
+            "pinyin": "jiǔ diàn",
+            "es": "hotel"
+        }
     },
     {
         "character": "顾",
@@ -1736,7 +2756,13 @@
         "radical": "頁",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "顧"
+        "traditional": "顧",
+        "gloss": "cuidar; mirar",
+        "example": {
+            "word": "照顾",
+            "pinyin": "zhào gù",
+            "es": "cuidar"
+        }
     },
     {
         "character": "换",
@@ -1745,7 +2771,13 @@
         "radical": "手",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "換"
+        "traditional": "換",
+        "gloss": "cambiar",
+        "example": {
+            "word": "换钱",
+            "pinyin": "huàn qián",
+            "es": "cambiar dinero"
+        }
     },
     {
         "character": "闻",
@@ -1754,7 +2786,13 @@
         "radical": "門",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "聞"
+        "traditional": "聞",
+        "gloss": "oler; oír",
+        "example": {
+            "word": "新闻",
+            "pinyin": "xīn wén",
+            "es": "noticias"
+        }
     },
     {
         "character": "坏",
@@ -1763,7 +2801,13 @@
         "radical": "土",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "壞"
+        "traditional": "壞",
+        "gloss": "malo; roto",
+        "example": {
+            "word": "坏人",
+            "pinyin": "huài rén",
+            "es": "mala persona"
+        }
     },
     {
         "character": "楚",
@@ -1772,7 +2816,13 @@
         "radical": "木",
         "strokes": 13,
         "hsk_level": 3,
-        "traditional": "楚"
+        "traditional": "楚",
+        "gloss": "claro (en 清楚)",
+        "example": {
+            "word": "清楚",
+            "pinyin": "qīng chu",
+            "es": "claro"
+        }
     },
     {
         "character": "楼",
@@ -1781,7 +2831,13 @@
         "radical": "木",
         "strokes": 13,
         "hsk_level": 3,
-        "traditional": "樓"
+        "traditional": "樓",
+        "gloss": "edificio; planta",
+        "example": {
+            "word": "楼上",
+            "pinyin": "lóu shàng",
+            "es": "piso de arriba"
+        }
     },
     {
         "character": "画",
@@ -1790,7 +2846,13 @@
         "radical": "田",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "畫"
+        "traditional": "畫",
+        "gloss": "dibujar; cuadro",
+        "example": {
+            "word": "画家",
+            "pinyin": "huà jiā",
+            "es": "pintor"
+        }
     },
     {
         "character": "耳",
@@ -1799,7 +2861,13 @@
         "radical": "耳",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "耳"
+        "traditional": "耳",
+        "gloss": "oreja",
+        "example": {
+            "word": "耳朵",
+            "pinyin": "ěr duo",
+            "es": "oreja"
+        }
     },
     {
         "character": "短",
@@ -1808,7 +2876,13 @@
         "radical": "矢",
         "strokes": 12,
         "hsk_level": 3,
-        "traditional": "短"
+        "traditional": "短",
+        "gloss": "corto",
+        "example": {
+            "word": "短信",
+            "pinyin": "duǎn xìn",
+            "es": "mensaje de texto"
+        }
     },
     {
         "character": "遇",
@@ -1817,7 +2891,13 @@
         "radical": "辵",
         "strokes": 12,
         "hsk_level": 3,
-        "traditional": "遇"
+        "traditional": "遇",
+        "gloss": "encontrarse con",
+        "example": {
+            "word": "遇到",
+            "pinyin": "yù dào",
+            "es": "encontrarse con"
+        }
     },
     {
         "character": "康",
@@ -1826,7 +2906,13 @@
         "radical": "广",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "康"
+        "traditional": "康",
+        "gloss": "salud",
+        "example": {
+            "word": "健康",
+            "pinyin": "jiàn kāng",
+            "es": "sano; salud"
+        }
     },
     {
         "character": "旧",
@@ -1835,7 +2921,13 @@
         "radical": "日",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "舊"
+        "traditional": "舊",
+        "gloss": "viejo, usado",
+        "example": {
+            "word": "旧书",
+            "pinyin": "jiù shū",
+            "es": "libro viejo"
+        }
     },
     {
         "character": "春",
@@ -1844,7 +2936,13 @@
         "radical": "日",
         "strokes": 9,
         "hsk_level": 3,
-        "traditional": "春"
+        "traditional": "春",
+        "gloss": "primavera",
+        "example": {
+            "word": "春天",
+            "pinyin": "chūn tiān",
+            "es": "primavera"
+        }
     },
     {
         "character": "附",
@@ -1853,7 +2951,13 @@
         "radical": "阜",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "附"
+        "traditional": "附",
+        "gloss": "cerca; adjuntar",
+        "example": {
+            "word": "附近",
+            "pinyin": "fù jìn",
+            "es": "cerca, alrededores"
+        }
     },
     {
         "character": "礼",
@@ -1862,7 +2966,13 @@
         "radical": "示",
         "strokes": 5,
         "hsk_level": 3,
-        "traditional": "禮"
+        "traditional": "禮",
+        "gloss": "regalo; cortesía",
+        "example": {
+            "word": "礼物",
+            "pinyin": "lǐ wù",
+            "es": "regalo"
+        }
     },
     {
         "character": "板",
@@ -1871,7 +2981,13 @@
         "radical": "木",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "板"
+        "traditional": "板",
+        "gloss": "tabla; pizarra",
+        "example": {
+            "word": "老板",
+            "pinyin": "lǎo bǎn",
+            "es": "jefe"
+        }
     },
     {
         "character": "婚",
@@ -1880,7 +2996,13 @@
         "radical": "女",
         "strokes": 11,
         "hsk_level": 3,
-        "traditional": "婚"
+        "traditional": "婚",
+        "gloss": "boda; matrimonio",
+        "example": {
+            "word": "结婚",
+            "pinyin": "jié hūn",
+            "es": "casarse"
+        }
     },
     {
         "character": "鲜",
@@ -1889,7 +3011,13 @@
         "radical": "魚",
         "strokes": 14,
         "hsk_level": 3,
-        "traditional": "鮮"
+        "traditional": "鮮",
+        "gloss": "fresco",
+        "example": {
+            "word": "新鲜",
+            "pinyin": "xīn xiān",
+            "es": "fresco"
+        }
     },
     {
         "character": "词",
@@ -1898,7 +3026,13 @@
         "radical": "言",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "詞"
+        "traditional": "詞",
+        "gloss": "palabra",
+        "example": {
+            "word": "生词",
+            "pinyin": "shēng cí",
+            "es": "palabra nueva"
+        }
     },
     {
         "character": "择",
@@ -1907,7 +3041,13 @@
         "radical": "手",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "擇"
+        "traditional": "擇",
+        "gloss": "elegir",
+        "example": {
+            "word": "选择",
+            "pinyin": "xuǎn zé",
+            "es": "elegir"
+        }
     },
     {
         "character": "健",
@@ -1916,7 +3056,13 @@
         "radical": "人",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "健"
+        "traditional": "健",
+        "gloss": "sano; fuerte",
+        "example": {
+            "word": "健身",
+            "pinyin": "jiàn shēn",
+            "es": "hacer ejercicio"
+        }
     },
     {
         "character": "借",
@@ -1925,7 +3071,13 @@
         "radical": "人",
         "strokes": 10,
         "hsk_level": 3,
-        "traditional": "借"
+        "traditional": "借",
+        "gloss": "prestar; pedir prestado",
+        "example": {
+            "word": "借书",
+            "pinyin": "jiè shū",
+            "es": "tomar un libro prestado"
+        }
     },
     {
         "character": "园",
@@ -1934,7 +3086,13 @@
         "radical": "囗",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "園"
+        "traditional": "園",
+        "gloss": "jardín; parque",
+        "example": {
+            "word": "公园",
+            "pinyin": "gōng yuán",
+            "es": "parque"
+        }
     },
     {
         "character": "牙",
@@ -1943,7 +3101,13 @@
         "radical": "牙",
         "strokes": 4,
         "hsk_level": 3,
-        "traditional": "牙"
+        "traditional": "牙",
+        "gloss": "diente",
+        "example": {
+            "word": "牙膏",
+            "pinyin": "yá gāo",
+            "es": "pasta de dientes"
+        }
     },
     {
         "character": "束",
@@ -1952,7 +3116,13 @@
         "radical": "木",
         "strokes": 7,
         "hsk_level": 3,
-        "traditional": "束"
+        "traditional": "束",
+        "gloss": "atar; ramo",
+        "example": {
+            "word": "结束",
+            "pinyin": "jié shù",
+            "es": "terminar"
+        }
     },
     {
         "character": "练",
@@ -1961,7 +3131,13 @@
         "radical": "糸",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "練"
+        "traditional": "練",
+        "gloss": "practicar",
+        "example": {
+            "word": "练习",
+            "pinyin": "liàn xí",
+            "es": "practicar; ejercicio"
+        }
     },
     {
         "character": "爷",
@@ -1970,7 +3146,13 @@
         "radical": "父",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "爺"
+        "traditional": "爺",
+        "gloss": "abuelo",
+        "example": {
+            "word": "爷爷",
+            "pinyin": "yé ye",
+            "es": "abuelo (paterno)"
+        }
     },
     {
         "character": "嘴",
@@ -1979,7 +3161,13 @@
         "radical": "口",
         "strokes": 16,
         "hsk_level": 3,
-        "traditional": "嘴"
+        "traditional": "嘴",
+        "gloss": "boca",
+        "example": {
+            "word": "嘴巴",
+            "pinyin": "zuǐ ba",
+            "es": "boca"
+        }
     },
     {
         "character": "戏",
@@ -1988,7 +3176,13 @@
         "radical": "戈",
         "strokes": 6,
         "hsk_level": 3,
-        "traditional": "戲"
+        "traditional": "戲",
+        "gloss": "juego; teatro",
+        "example": {
+            "word": "游戏",
+            "pinyin": "yóu xì",
+            "es": "juego"
+        }
     },
     {
         "character": "典",
@@ -1997,7 +3191,13 @@
         "radical": "八",
         "strokes": 8,
         "hsk_level": 3,
-        "traditional": "典"
+        "traditional": "典",
+        "gloss": "clásico; norma",
+        "example": {
+            "word": "词典",
+            "pinyin": "cí diǎn",
+            "es": "diccionario"
+        }
     },
     {
         "character": "盘",
@@ -2006,7 +3206,13 @@
         "definition": "bandeja, plato, fuente; examinar",
         "radical": "皿",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "plato; bandeja",
+        "example": {
+            "word": "盘子",
+            "pinyin": "pán zi",
+            "es": "plato"
+        }
     },
     {
         "character": "忘",
@@ -2015,7 +3221,13 @@
         "definition": "olvidar; descuidar; echar en falta, omitir",
         "radical": "心",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "olvidar",
+        "example": {
+            "word": "忘记",
+            "pinyin": "wàng jì",
+            "es": "olvidar"
+        }
     },
     {
         "character": "赛",
@@ -2024,7 +3236,13 @@
         "definition": "competir; contienda, carrera",
         "radical": "宀",
         "strokes": 14,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "competición",
+        "example": {
+            "word": "比赛",
+            "pinyin": "bǐ sài",
+            "es": "partido; competición"
+        }
     },
     {
         "character": "趣",
@@ -2033,7 +3251,13 @@
         "definition": "interés; interesante; diversión",
         "radical": "走",
         "strokes": 15,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "interés; gracia",
+        "example": {
+            "word": "有趣",
+            "pinyin": "yǒu qù",
+            "es": "interesante"
+        }
     },
     {
         "character": "迎",
@@ -2042,7 +3266,13 @@
         "definition": "recibir, dar la bienvenida, saludar",
         "radical": "辵",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "recibir; dar bienvenida",
+        "example": {
+            "word": "欢迎",
+            "pinyin": "huān yíng",
+            "es": "bienvenido"
+        }
     },
     {
         "character": "冰",
@@ -2051,7 +3281,13 @@
         "definition": "hielo; helado",
         "radical": "冫",
         "strokes": 6,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "hielo",
+        "example": {
+            "word": "冰箱",
+            "pinyin": "bīng xiāng",
+            "es": "nevera"
+        }
     },
     {
         "character": "努",
@@ -2060,7 +3296,13 @@
         "definition": "esforzarse, hacer un esfuerzo; fruncir",
         "radical": "力",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "esforzarse",
+        "example": {
+            "word": "努力",
+            "pinyin": "nǔ lì",
+            "es": "esforzarse"
+        }
     },
     {
         "character": "绿",
@@ -2069,7 +3311,13 @@
         "definition": "verde; cloro",
         "radical": "糸",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "verde",
+        "example": {
+            "word": "绿色",
+            "pinyin": "lǜ sè",
+            "es": "verde"
+        }
     },
     {
         "character": "街",
@@ -2078,7 +3326,13 @@
         "definition": "calle, vía, avenida",
         "radical": "行",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "calle",
+        "example": {
+            "word": "街道",
+            "pinyin": "jiē dào",
+            "es": "calle"
+        }
     },
     {
         "character": "灯",
@@ -2087,7 +3341,13 @@
         "definition": "linterna, lámpara",
         "radical": "火",
         "strokes": 6,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "lámpara; luz",
+        "example": {
+            "word": "电灯",
+            "pinyin": "diàn dēng",
+            "es": "luz eléctrica"
+        }
     },
     {
         "character": "夏",
@@ -2096,7 +3356,13 @@
         "definition": "verano; grande, magnífico",
         "radical": "夊",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "verano",
+        "example": {
+            "word": "夏天",
+            "pinyin": "xià tiān",
+            "es": "verano"
+        }
     },
     {
         "character": "秋",
@@ -2105,7 +3371,13 @@
         "definition": "otoño; año",
         "radical": "禾",
         "strokes": 9,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "otoño",
+        "example": {
+            "word": "秋天",
+            "pinyin": "qiū tiān",
+            "es": "otoño"
+        }
     },
     {
         "character": "末",
@@ -2114,7 +3386,13 @@
         "definition": "final, último, fin; insignificante",
         "radical": "木",
         "strokes": 5,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "final",
+        "example": {
+            "word": "周末",
+            "pinyin": "zhōu mò",
+            "es": "fin de semana"
+        }
     },
     {
         "character": "蓝",
@@ -2123,7 +3401,13 @@
         "definition": "azul; índigo; apellido",
         "radical": "艸",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "azul",
+        "example": {
+            "word": "蓝色",
+            "pinyin": "lán sè",
+            "es": "azul"
+        }
     },
     {
         "character": "烧",
@@ -2132,7 +3416,13 @@
         "definition": "quemar; hornear; calentar; asar",
         "radical": "火",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "quemar; cocinar",
+        "example": {
+            "word": "发烧",
+            "pinyin": "fā shāo",
+            "es": "tener fiebre"
+        }
     },
     {
         "character": "哭",
@@ -2141,7 +3431,13 @@
         "definition": "llorar, gemir, lamentarse",
         "radical": "口",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "llorar",
+        "example": {
+            "word": "别哭",
+            "pinyin": "bié kū",
+            "es": "no llores"
+        }
     },
     {
         "character": "冒",
@@ -2150,7 +3446,13 @@
         "definition": "arriesgarse, atreverse",
         "radical": "冂",
         "strokes": 9,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "emitir; arriesgarse",
+        "example": {
+            "word": "感冒",
+            "pinyin": "gǎn mào",
+            "es": "resfriado"
+        }
     },
     {
         "character": "惯",
@@ -2159,7 +3461,13 @@
         "definition": "hábito, costumbre; habitual, usual",
         "radical": "心",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "acostumbrarse",
+        "example": {
+            "word": "习惯",
+            "pinyin": "xí guàn",
+            "es": "costumbre"
+        }
     },
     {
         "character": "鸟",
@@ -2168,7 +3476,13 @@
         "definition": "pájaro; radical KangXi 196",
         "radical": "鳥",
         "strokes": 5,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "pájaro",
+        "example": {
+            "word": "小鸟",
+            "pinyin": "xiǎo niǎo",
+            "es": "pajarito"
+        }
     },
     {
         "character": "季",
@@ -2177,7 +3491,13 @@
         "definition": "trimestre; estación; apellido",
         "radical": "子",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "estación; temporada",
+        "example": {
+            "word": "季节",
+            "pinyin": "jì jié",
+            "es": "estación del año"
+        }
     },
     {
         "character": "鼻",
@@ -2186,7 +3506,13 @@
         "definition": "nariz; primero; radical KangXi 209",
         "radical": "鼻",
         "strokes": 14,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "nariz",
+        "example": {
+            "word": "鼻子",
+            "pinyin": "bí zi",
+            "es": "nariz"
+        }
     },
     {
         "character": "腿",
@@ -2195,7 +3521,13 @@
         "definition": "piernas, muslos",
         "radical": "肉",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "pierna",
+        "example": {
+            "word": "大腿",
+            "pinyin": "dà tuǐ",
+            "es": "muslo"
+        }
     },
     {
         "character": "迟",
@@ -2204,7 +3536,13 @@
         "definition": "tarde; lento; retrasar",
         "radical": "辵",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "tarde; lento",
+        "example": {
+            "word": "迟到",
+            "pinyin": "chí dào",
+            "es": "llegar tarde"
+        }
     },
     {
         "character": "辆",
@@ -2213,7 +3551,13 @@
         "definition": "clasificador para vehículos",
         "radical": "車",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "(clasif. vehículos)",
+        "example": {
+            "word": "车辆",
+            "pinyin": "chē liàng",
+            "es": "vehículos"
+        }
     },
     {
         "character": "净",
@@ -2222,7 +3566,13 @@
         "definition": "limpio, puro; limpiar",
         "radical": "冫",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "limpio",
+        "example": {
+            "word": "干净",
+            "pinyin": "gān jìng",
+            "es": "limpio"
+        }
     },
     {
         "character": "冬",
@@ -2231,7 +3581,13 @@
         "definition": "invierno; undécimo mes lunar",
         "radical": "冫",
         "strokes": 5,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "invierno",
+        "example": {
+            "word": "冬天",
+            "pinyin": "dōng tiān",
+            "es": "invierno"
+        }
     },
     {
         "character": "骑",
@@ -2240,7 +3596,13 @@
         "definition": "montar a caballo; caballería",
         "radical": "馬",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "montar (bici, caballo)",
+        "example": {
+            "word": "骑车",
+            "pinyin": "qí chē",
+            "es": "ir en bici"
+        }
     },
     {
         "character": "叔",
@@ -2249,7 +3611,13 @@
         "definition": "tío (hermano menor del padre)",
         "radical": "又",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "tío",
+        "example": {
+            "word": "叔叔",
+            "pinyin": "shū shu",
+            "es": "tío"
+        }
     },
     {
         "character": "爬",
@@ -2258,7 +3626,13 @@
         "definition": "arrastrarse, trepar, escalar",
         "radical": "爪",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "trepar; subir",
+        "example": {
+            "word": "爬山",
+            "pinyin": "pá shān",
+            "es": "subir a la montaña"
+        }
     },
     {
         "character": "扫",
@@ -2267,7 +3641,13 @@
         "definition": "barrer, limpiar; exterminar",
         "radical": "手",
         "strokes": 6,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "barrer",
+        "example": {
+            "word": "打扫",
+            "pinyin": "dǎ sǎo",
+            "es": "limpiar, barrer"
+        }
     },
     {
         "character": "箱",
@@ -2276,7 +3656,13 @@
         "definition": "caja, cofre, baúl",
         "radical": "竹",
         "strokes": 15,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "caja; maleta",
+        "example": {
+            "word": "箱子",
+            "pinyin": "xiāng zi",
+            "es": "caja; maleta"
+        }
     },
     {
         "character": "舒",
@@ -2285,7 +3671,13 @@
         "definition": "abrir, desplegar; cómodo, fácil",
         "radical": "舌",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "cómodo; estirar",
+        "example": {
+            "word": "舒服",
+            "pinyin": "shū fu",
+            "es": "cómodo"
+        }
     },
     {
         "character": "绩",
@@ -2294,7 +3686,13 @@
         "definition": "hilar; logros",
         "radical": "糸",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "logro; resultado",
+        "example": {
+            "word": "成绩",
+            "pinyin": "chéng jì",
+            "es": "notas, resultados"
+        }
     },
     {
         "character": "饮",
@@ -2303,7 +3701,13 @@
         "definition": "beber; tragar; tipo de bebida",
         "radical": "食",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "beber",
+        "example": {
+            "word": "饮料",
+            "pinyin": "yǐn liào",
+            "es": "bebida"
+        }
     },
     {
         "character": "朵",
@@ -2312,7 +3716,13 @@
         "definition": "racimo de flores; lóbulo de la oreja",
         "radical": "木",
         "strokes": 6,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "(clasif. flores)",
+        "example": {
+            "word": "花朵",
+            "pinyin": "huā duǒ",
+            "es": "flor"
+        }
     },
     {
         "character": "鞋",
@@ -2321,7 +3731,13 @@
         "definition": "zapatos, calzado en general",
         "radical": "革",
         "strokes": 15,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "zapato",
+        "example": {
+            "word": "皮鞋",
+            "pinyin": "pí xié",
+            "es": "zapatos de piel"
+        }
     },
     {
         "character": "邮",
@@ -2330,7 +3746,13 @@
         "definition": "postal; correo; oficina de correos",
         "radical": "邑",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "correo",
+        "example": {
+            "word": "邮局",
+            "pinyin": "yóu jú",
+            "es": "oficina de correos"
+        }
     },
     {
         "character": "邻",
@@ -2339,7 +3761,13 @@
         "definition": "vecino; vecindario",
         "radical": "邑",
         "strokes": 7,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "vecino",
+        "example": {
+            "word": "邻居",
+            "pinyin": "lín jū",
+            "es": "vecino"
+        }
     },
     {
         "character": "聪",
@@ -2348,7 +3776,13 @@
         "definition": "inteligente, listo, brillante",
         "radical": "耳",
         "strokes": 15,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "listo; oído fino",
+        "example": {
+            "word": "聪明",
+            "pinyin": "cōng ming",
+            "es": "inteligente"
+        }
     },
     {
         "character": "梯",
@@ -2357,7 +3791,13 @@
         "definition": "escalera, peldaños; inclinarse",
         "radical": "木",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "escalera",
+        "example": {
+            "word": "电梯",
+            "pinyin": "diàn tī",
+            "es": "ascensor"
+        }
     },
     {
         "character": "瓶",
@@ -2366,7 +3806,13 @@
         "definition": "jarra, jarrón, vaso, frasco, botella",
         "radical": "瓦",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "botella",
+        "example": {
+            "word": "瓶子",
+            "pinyin": "píng zi",
+            "es": "botella"
+        }
     },
     {
         "character": "疼",
@@ -2375,7 +3821,13 @@
         "definition": "dolores; tener cariño; amar",
         "radical": "疒",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "doler",
+        "example": {
+            "word": "头疼",
+            "pinyin": "tóu téng",
+            "es": "dolor de cabeza"
+        }
     },
     {
         "character": "熊",
@@ -2384,7 +3836,13 @@
         "definition": "oso; brillante; apellido",
         "radical": "火",
         "strokes": 14,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "oso",
+        "example": {
+            "word": "熊猫",
+            "pinyin": "xióng māo",
+            "es": "panda"
+        }
     },
     {
         "character": "帽",
@@ -2393,7 +3851,13 @@
         "definition": "sombrero, gorra; tapas tipo capucha",
         "radical": "巾",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "sombrero; gorra",
+        "example": {
+            "word": "帽子",
+            "pinyin": "mào zi",
+            "es": "sombrero"
+        }
     },
     {
         "character": "炼",
@@ -2402,7 +3866,13 @@
         "definition": "fundir, refinar; destilar, condensar",
         "radical": "火",
         "strokes": 9,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "refinar; forjar",
+        "example": {
+            "word": "锻炼",
+            "pinyin": "duàn liàn",
+            "es": "hacer ejercicio"
+        }
     },
     {
         "character": "搬",
@@ -2411,7 +3881,13 @@
         "definition": "trasladar, mover, quitar, desplazar",
         "radical": "手",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "mover; mudarse",
+        "example": {
+            "word": "搬家",
+            "pinyin": "bān jiā",
+            "es": "mudarse"
+        }
     },
     {
         "character": "刷",
@@ -2420,7 +3896,13 @@
         "definition": "cepillo; fregar, limpiar con cepillo",
         "radical": "刀",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "cepillar; cepillo",
+        "example": {
+            "word": "刷牙",
+            "pinyin": "shuā yá",
+            "es": "cepillarse los dientes"
+        }
     },
     {
         "character": "瘦",
@@ -2429,7 +3911,13 @@
         "definition": "delgado, enjuto; escaso",
         "radical": "疒",
         "strokes": 14,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "delgado",
+        "example": {
+            "word": "很瘦",
+            "pinyin": "hěn shòu",
+            "es": "muy delgado"
+        }
     },
     {
         "character": "斤",
@@ -2438,7 +3926,13 @@
         "definition": "jin (≈500 g); hacha; perspicaz; radical 69",
         "radical": "斤",
         "strokes": 4,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "jin (medio kilo)",
+        "example": {
+            "word": "公斤",
+            "pinyin": "gōng jīn",
+            "es": "kilogramo"
+        }
     },
     {
         "character": "胖",
@@ -2447,7 +3941,13 @@
         "definition": "gordo, obeso; graso",
         "radical": "肉",
         "strokes": 9,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "gordo",
+        "example": {
+            "word": "胖子",
+            "pinyin": "pàng zi",
+            "es": "gordo (persona)"
+        }
     },
     {
         "character": "饿",
@@ -2456,7 +3956,13 @@
         "definition": "hambriento; ávido de; hambre",
         "radical": "食",
         "strokes": 10,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "hambriento",
+        "example": {
+            "word": "很饿",
+            "pinyin": "hěn è",
+            "es": "tener mucha hambre"
+        }
     },
     {
         "character": "聊",
@@ -2465,7 +3971,13 @@
         "definition": "algo, ligeramente; al menos",
         "radical": "耳",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "charlar",
+        "example": {
+            "word": "聊天",
+            "pinyin": "liáo tiān",
+            "es": "charlar"
+        }
     },
     {
         "character": "碗",
@@ -2474,7 +3986,13 @@
         "definition": "cuenco, tazón, platillo",
         "radical": "石",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "cuenco",
+        "example": {
+            "word": "洗碗",
+            "pinyin": "xǐ wǎn",
+            "es": "fregar los platos"
+        }
     },
     {
         "character": "渴",
@@ -2483,7 +4001,13 @@
         "definition": "sediento; anhelar, ansiar",
         "radical": "水",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "sediento",
+        "example": {
+            "word": "口渴",
+            "pinyin": "kǒu kě",
+            "es": "tener sed"
+        }
     },
     {
         "character": "饱",
@@ -2492,7 +4016,13 @@
         "definition": "lleno; saciado",
         "radical": "食",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "lleno, saciado",
+        "example": {
+            "word": "吃饱",
+            "pinyin": "chī bǎo",
+            "es": "comer hasta llenarse"
+        }
     },
     {
         "character": "甜",
@@ -2501,7 +4031,13 @@
         "definition": "dulce, dulzor",
         "radical": "甘",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "dulce",
+        "example": {
+            "word": "甜点",
+            "pinyin": "tián diǎn",
+            "es": "postre"
+        }
     },
     {
         "character": "矮",
@@ -2510,7 +4046,13 @@
         "definition": "bajo; enano",
         "radical": "矢",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "bajo (de estatura)",
+        "example": {
+            "word": "很矮",
+            "pinyin": "hěn ǎi",
+            "es": "muy bajo"
+        }
     },
     {
         "character": "裤",
@@ -2519,7 +4061,13 @@
         "definition": "pantalones",
         "radical": "衣",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "pantalón",
+        "example": {
+            "word": "裤子",
+            "pinyin": "kù zi",
+            "es": "pantalones"
+        }
     },
     {
         "character": "衫",
@@ -2528,7 +4076,13 @@
         "definition": "camisa; túnica; chaqueta",
         "radical": "衣",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "camisa; prenda",
+        "example": {
+            "word": "衬衫",
+            "pinyin": "chèn shān",
+            "es": "camisa"
+        }
     },
     {
         "character": "伞",
@@ -2537,7 +4091,13 @@
         "definition": "paraguas, parasol, paracaídas",
         "radical": "人",
         "strokes": 6,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "paraguas",
+        "example": {
+            "word": "雨伞",
+            "pinyin": "yǔ sǎn",
+            "es": "paraguas"
+        }
     },
     {
         "character": "姨",
@@ -2546,7 +4106,13 @@
         "definition": "tía (hermana de la madre)",
         "radical": "女",
         "strokes": 9,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "tía (materna)",
+        "example": {
+            "word": "阿姨",
+            "pinyin": "ā yí",
+            "es": "tía; señora"
+        }
     },
     {
         "character": "刮",
@@ -2555,7 +4121,13 @@
         "definition": "afeitar, raspar, pelar",
         "radical": "刀",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "soplar; afeitar",
+        "example": {
+            "word": "刮风",
+            "pinyin": "guā fēng",
+            "es": "hacer viento"
+        }
     },
     {
         "character": "糕",
@@ -2564,7 +4136,13 @@
         "definition": "pasteles, repostería",
         "radical": "米",
         "strokes": 16,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "pastel",
+        "example": {
+            "word": "蛋糕",
+            "pinyin": "dàn gāo",
+            "es": "pastel, tarta"
+        }
     },
     {
         "character": "裙",
@@ -2573,7 +4151,13 @@
         "definition": "falda, delantal, enagua",
         "radical": "衣",
         "strokes": 12,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "falda",
+        "example": {
+            "word": "裙子",
+            "pinyin": "qún zi",
+            "es": "falda"
+        }
     },
     {
         "character": "衬",
@@ -2582,7 +4166,13 @@
         "definition": "ropa interior; prendas internas",
         "radical": "衣",
         "strokes": 8,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "forro; de debajo",
+        "example": {
+            "word": "衬衫",
+            "pinyin": "chèn shān",
+            "es": "camisa"
+        }
     },
     {
         "character": "锻",
@@ -2591,7 +4181,13 @@
         "definition": "forjar metal; templar, refinar",
         "radical": "金",
         "strokes": 14,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "forjar",
+        "example": {
+            "word": "锻炼",
+            "pinyin": "duàn liàn",
+            "es": "hacer ejercicio"
+        }
     },
     {
         "character": "澡",
@@ -2600,7 +4196,13 @@
         "definition": "lavar, bañarse",
         "radical": "水",
         "strokes": 16,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "bañarse",
+        "example": {
+            "word": "洗澡",
+            "pinyin": "xǐ zǎo",
+            "es": "ducharse, bañarse"
+        }
     },
     {
         "character": "啤",
@@ -2609,7 +4211,13 @@
         "definition": "cerveza",
         "radical": "口",
         "strokes": 11,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "cerveza (en 啤酒)",
+        "example": {
+            "word": "啤酒",
+            "pinyin": "pí jiǔ",
+            "es": "cerveza"
+        }
     },
     {
         "character": "蕉",
@@ -2618,7 +4226,13 @@
         "definition": "plátano; banano",
         "radical": "艸",
         "strokes": 15,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "plátano (en 香蕉)",
+        "example": {
+            "word": "香蕉",
+            "pinyin": "xiāng jiāo",
+            "es": "plátano"
+        }
     },
     {
         "character": "筷",
@@ -2627,6 +4241,12 @@
         "definition": "palillos (para comer)",
         "radical": "竹",
         "strokes": 13,
-        "hsk_level": 3
+        "hsk_level": 3,
+        "gloss": "palillos",
+        "example": {
+            "word": "筷子",
+            "pinyin": "kuài zi",
+            "es": "palillos"
+        }
     }
 ]
