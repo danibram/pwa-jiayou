@@ -1,6 +1,7 @@
 import { Component, createResource, createSignal, For, Show } from 'solid-js';
 import RiceGrid from '../components/RiceGrid';
 import TopBar from '../components/TopBar';
+import OfflineStatus from '../components/OfflineStatus';
 import { loadStrokeData } from '../utils/strokeData';
 
 interface AcercaProps {
@@ -108,6 +109,7 @@ const Acerca: Component<AcercaProps> = (props) => {
           </div>
         </div>
 
+        <OfflineStatus />
         <div class="sheet mt-5 overflow-hidden animate-rise [animation-delay:120ms]">
           <For each={GROUPS}>
             {(group, index) => (
