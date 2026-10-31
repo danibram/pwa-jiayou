@@ -7,6 +7,7 @@ import { loadStrokeData } from '../utils/strokeData';
 
 interface AcercaProps {
   onBack: () => void;
+  onManageLists: () => void;
 }
 
 interface CreditLink {
@@ -128,6 +129,16 @@ const Acerca: Component<AcercaProps> = (props) => {
             <p class="mt-0.5 text-sm text-ink-soft">Tarjetas para aprender caracteres HSK.</p>
           </div>
         </div>
+
+        <section class="sheet mt-5 p-4 animate-rise [animation-delay:90ms]">
+          <h2 class="font-display text-lg font-semibold">Listas</h2>
+          <p class="mt-1 text-sm leading-relaxed text-ink-soft">
+            HSK 1 viene con la app. Las otras listas se guardan en este dispositivo cuando las pides.
+          </p>
+          <button type="button" class="btn-quiet mt-3 h-11 px-4 text-sm" onClick={props.onManageLists}>
+            Elegir listas
+          </button>
+        </section>
 
         <OfflineStatus />
         <ProgressBackup />

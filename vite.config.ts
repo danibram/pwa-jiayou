@@ -37,6 +37,8 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,json,png,svg,ico,woff2,mp3}'],
+        // Optional HSK lists are fetched into their own cache after the user asks for them.
+        globIgnores: ['**/packs/**'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

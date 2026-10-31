@@ -1,9 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { characterStore, formatHskLevels, selectionFromSaved } from '../src/stores/characterStore';
+import { readFileSync } from 'node:fs';
+import { characterStore, formatHskLevels, parseCharacterList, selectionFromSaved } from '../src/stores/characterStore';
+
+const pack = (level: number) => JSON.parse(readFileSync(`public/packs/hsk${level}.json`, 'utf8'));
 
 describe('Character Store', () => {
   beforeEach(() => {
     localStorage.clear();
+    characterStore.removeLevel(2);
+    characterStore.removeLevel(3);
     characterStore.reset();
   });
 
@@ -15,6 +20,7 @@ describe('Character Store', () => {
     });
 
     it('keeps several levels and mixes their characters', () => {
+      characterStore.installCharacters(parseCharacterList(pack(2), 2));
       characterStore.selectLevel(1);
       characterStore.toggleLevel(2);
       expect(characterStore.state.selectedLevels).toEqual([1, 2]);
@@ -180,6 +186,8 @@ describe('Character Store', () => {
 
 describe('Character data', () => {
   it('normalises stroke counts across level files', () => {
+    characterStore.installCharacters(parseCharacterList(pack(2), 2));
+    characterStore.installCharacters(parseCharacterList(pack(3), 3));
     for (const level of [1, 2, 3] as const) {
       characterStore.selectLevel(level);
       const chars = characterStore.getCharactersByLevel();
@@ -191,7 +199,12 @@ describe('Character data', () => {
     expect(characterStore.state.characters.every((c) => !!c.traditional)).toBe(true);
   });
 
-  it('only offers levels that have characters', () => {
+  it('only offers levels that are installed', () => {
+    characterStore.removeLevel(2);
+    characterStore.removeLevel(3);
+    expect(characterStore.getAvailableLevels()).toEqual([1]);
+    characterStore.installCharacters(parseCharacterList(pack(2), 2));
+    characterStore.installCharacters(parseCharacterList(pack(3), 3));
     expect(characterStore.getAvailableLevels()).toEqual([1, 2, 3]);
   });
 
@@ -210,13 +223,22 @@ describe('Character data', () => {
 });
 
 describe('Glosses', () => {
-  it('gives every character a short gloss and an example word that contains it', () => {
+  it('gives every installed character a short gloss and an example word that contains it', () => {
     for (const c of characterStore.state.characters) {
       const gloss = c.gloss;
       expect(gloss, c.character).toBeTruthy();
       if (!gloss) return;
       expect(gloss.length, c.character).toBeLessThanOrEqual(30);
       expect(c.example?.word, c.character).toContain(c.character);
+    }
+  });
+
+  it('keeps the same gloss rule in the downloadable lists', () => {
+    for (const level of [2, 3]) {
+      for (const row of pack(level)) {
+        expect(row.gloss.length, row.character).toBeLessThanOrEqual(30);
+        expect(row.example.word, row.character).toContain(row.character);
+      }
     }
   });
 });

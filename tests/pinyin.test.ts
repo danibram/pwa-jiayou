@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import clips from '../src/data/syllable-clips.json';
 import cmnClips from '../src/data/syllable-clips-cmn.json';
-import { characterStore } from '../src/stores/characterStore';
 import { pinyinParts, splitPinyin, syllableKey, toneOf } from '../src/utils/pinyin';
+
+const readings = () => {
+  const bundled = JSON.parse(readFileSync('src/data/hsk1.json', 'utf8')) as { character: string; pinyin: string }[];
+  const packs = [2, 3].flatMap(
+    (level) => JSON.parse(readFileSync(`public/packs/hsk${level}.json`, 'utf8')) as { character: string; pinyin: string }[],
+  );
+  return [...bundled, ...packs];
+};
 
 describe('pinyin tones', () => {
   it('reads the tone from the diacritic', () => {
@@ -47,7 +55,7 @@ describe('pinyin tones', () => {
   it('has a recorded clip for every character reading', () => {
     const have = new Set(clips);
     const missing: string[] = [];
-    for (const row of characterStore.state.characters) {
+    for (const row of readings()) {
       for (const part of row.pinyin.split(/[\s,;/]+/)) {
         if (!part) continue;
         const key = syllableKey(part);

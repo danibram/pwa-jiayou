@@ -1,4 +1,5 @@
-import type { HSKCharacter } from '../types';
+import type { HSKCharacter, HskLevel } from '../types';
+import { characterLevel } from './catalog';
 
 /** A character may sit in more than one topic. 吃 is both a verb and food. */
 export interface Topic {
@@ -158,4 +159,20 @@ export const charactersInTopic = (id: string, all: HSKCharacter[]): HSKCharacter
     const found = byChar.get(char);
     return found ? [found] : [];
   });
+};
+
+/** Characters the topic lists that are not on this device, and the levels they belong to. */
+export const topicGap = (id: string, installed: HSKCharacter[]): { missing: number; levels: HskLevel[] } => {
+  const topic = topicById(id);
+  if (!topic) return { missing: 0, levels: [] };
+  const have = new Set(installed.map((char) => char.character));
+  const levels = new Set<HskLevel>();
+  let missing = 0;
+  for (const char of topic.characters) {
+    if (have.has(char)) continue;
+    missing += 1;
+    const level = characterLevel(char);
+    if (level) levels.add(level);
+  }
+  return { missing, levels: [...levels].sort((a, b) => a - b) };
 };

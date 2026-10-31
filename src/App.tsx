@@ -1,8 +1,9 @@
-import { Component, createSignal, Match, Switch } from 'solid-js';
+import { Component, createSignal, Match, onMount, Show, Switch } from 'solid-js';
 import { charactersInTopic } from './data/topics';
 import Acerca from './pages/Acerca';
 import Entrenamiento from './pages/Entrenamiento';
 import Home from './pages/Home';
+import Listas from './pages/Listas';
 import Tarjetas from './pages/Tarjetas';
 import Tema from './pages/Tema';
 import Temas from './pages/Temas';
@@ -17,10 +18,23 @@ import {
 } from './screen';
 import { createScreenHistory } from './createScreenHistory';
 import { characterStore } from './stores/characterStore';
+import { BUNDLED_LEVEL, catalogLevels } from './data/catalog';
+import { hasUsedApp, loadInstalledPacks, readInstalledLevels, writeInstalledLevels } from './utils/levelPacks';
+
+const installedChoice = () => readInstalledLevels();
+
+const initialGate = (): 'choose' | 'load' | 'app' => {
+  const saved = installedChoice();
+  if (saved === null) return hasUsedApp() ? 'load' : 'choose';
+  const ready = saved.every((level) => level === BUNDLED_LEVEL || characterStore.hasLevel(level));
+  return ready ? 'app' : 'load';
+};
 
 const App: Component = () => {
   const [screen, setScreen] = createSignal<Screen>(homeScreen);
   const { goHome, leaveFinishedSession } = createScreenHistory(screen, setScreen);
+  const [gate, setGate] = createSignal(initialGate());
+  const [canCancelLists, setCanCancelLists] = createSignal(false);
   const openStrokes = (char: string) =>
     setScreen((current) => ({ page: 'trazos', focus: { kind: 'character', char }, from: current }));
 
@@ -32,14 +46,52 @@ const App: Component = () => {
     setScreen(target);
   };
 
+  const openLists = () => {
+    setCanCancelLists(true);
+    setGate('choose');
+  };
+
+  onMount(() => {
+    if (gate() !== 'load') return;
+    const saved = installedChoice();
+    const levels = saved ?? catalogLevels.filter((row) => row.available).map((row) => row.level);
+    void loadInstalledPacks(levels)
+      .then(() => {
+        if (saved === null) writeInstalledLevels(levels);
+        setGate('app');
+      })
+      .catch(() => {
+        setCanCancelLists(false);
+        setGate('choose');
+      });
+  });
+
   return (
     <div class="app w-full">
+      <Show
+        when={gate() === 'app'}
+        fallback={
+          <Show
+            when={gate() === 'choose'}
+            fallback={
+              <div class="screen">
+                <p class="m-auto text-sm text-ink-soft">Preparando las listas…</p>
+              </div>
+            }
+          >
+            <Listas
+              onDone={() => setGate('app')}
+              onCancel={canCancelLists() ? () => setGate('app') : undefined}
+            />
+          </Show>
+        }
+      >
       <Switch>
         <Match when={screen().page === 'home'}>
           <Home onNavigate={navigate} />
         </Match>
         <Match when={screen().page === 'acerca'}>
-          <Acerca onBack={goHome} />
+          <Acerca onBack={goHome} onManageLists={openLists} />
         </Match>
         <Match when={screen().page === 'temas'}>
           <Temas
@@ -102,6 +154,7 @@ const App: Component = () => {
           )}
         </Match>
       </Switch>
+      </Show>
     </div>
   );
 };

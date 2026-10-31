@@ -1,8 +1,13 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { describe, expect, it } from 'vitest';
+import { beforeEach } from 'vitest';
 import App from '../src/App';
 import { characterStore } from '../src/stores/characterStore';
 import { loadSession } from '../src/utils/sessionStore';
+
+beforeEach(() => {
+  localStorage.setItem('hsk-installed-levels', JSON.stringify([1]));
+});
 
 describe('app browser history', () => {
   it('restores a paused training screen on Back and Forward', async () => {
