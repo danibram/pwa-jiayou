@@ -1,27 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore, formatHskLevels, selectionFromSaved } from '../src/stores/characterStore';
-
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value.toString();
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    clear: () => {
-      store = {};
-    },
-  };
-})();
-
-Object.defineProperty(global, 'localStorage', {
-  value: localStorageMock,
-});
 
 describe('Character Store', () => {
   beforeEach(() => {
@@ -237,5 +215,23 @@ describe('Glosses', () => {
       expect(c.gloss!.length, c.character).toBeLessThanOrEqual(30);
       expect(c.example?.word, c.character).toContain(c.character);
     }
+  });
+});
+
+
+describe('Saved character progress', () => {
+  it.each([
+    [{ selectedLevels: [99, 1, -1, 1], currentIndex: 3 }, [1], 3],
+    [{ selectedLevel: 2, currentIndex: -1 }, [2], 0],
+    [{ selectedLevels: [1], currentIndex: 99999 }, [1], 0],
+    [{ selectedLevels: [1], currentIndex: 1.5 }, [1], 0],
+    [{ selectedLevels: [99], currentIndex: 2 }, [], 0],
+    [null, [], 0],
+  ])('validates saved progress %j', async (saved, levels, index) => {
+    localStorage.setItem('hsk-flashcards-progress', JSON.stringify(saved));
+    vi.resetModules();
+    const { characterStore: restored } = await import('../src/stores/characterStore');
+    expect(restored.state.selectedLevels).toEqual(levels);
+    expect(restored.state.currentIndex).toBe(index);
   });
 });
