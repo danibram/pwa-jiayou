@@ -97,11 +97,11 @@ const Home: Component<HomeProps> = (props) => {
   return (
     <div class="h-[100dvh] w-full overflow-y-auto overscroll-contain">
     <div
-      class="mx-auto flex min-h-full w-full max-w-[40rem] min-w-0 flex-col px-4 pb-8"
+      class="home-layout mx-auto flex min-h-full w-full max-w-[40rem] min-w-0 flex-col px-4 pb-8"
       style={{ 'padding-top': 'max(env(safe-area-inset-top), 1.25rem)' }}
     >
       {/* Wordmark and streak */}
-      <header class="flex items-center gap-3 animate-rise">
+      <header class="home-header flex items-center gap-3 animate-rise">
         <img src="/icon.svg" alt="" class="h-10 w-10 rounded-[0.7rem] shadow-lift rotate-[-3deg]" />
         <div class="leading-tight flex-1">
           <div class="font-sans text-[1.375rem] font-semibold tracking-tight">Jiāyóu</div>
@@ -118,7 +118,7 @@ const Home: Component<HomeProps> = (props) => {
       </header>
 
       {/* Today */}
-      <section class="sheet mt-6 p-5 animate-rise [animation-delay:60ms]">
+      <section class="home-today sheet mt-6 p-5 animate-rise [animation-delay:60ms]">
         <p class="font-display text-[1.65rem] font-semibold leading-snug text-balance">
           {todayLine()}
         </p>
@@ -187,7 +187,7 @@ const Home: Component<HomeProps> = (props) => {
       {/* Character of the day */}
       <button
         onClick={() => props.onNavigate({ page: 'trazos', char: daily().character })}
-        class="tile mt-4 p-3 flex items-center gap-3 text-left animate-rise [animation-delay:240ms] active:scale-[0.99] transition-transform"
+        class="home-daily tile mt-4 p-3 flex items-center gap-3 text-left animate-rise [animation-delay:240ms] active:scale-[0.99] transition-transform"
         aria-label={`Carácter del día: ${daily().character}. Ver sus trazos`}
       >
         <div class="relative h-[4.5rem] w-[4.5rem] flex-shrink-0">
@@ -209,7 +209,7 @@ const Home: Component<HomeProps> = (props) => {
         <Icon name="next" size={18} class="text-ink-faint flex-shrink-0" />
       </button>
 
-      <nav class="mt-4 border-t border-line/80 animate-rise [animation-delay:90ms]">
+      <nav class="home-modes mt-4 border-t border-line/80 animate-rise [animation-delay:90ms]">
         <For each={modes}>
           {(mode) => (
             <button
@@ -221,7 +221,7 @@ const Home: Component<HomeProps> = (props) => {
                   ? 'Todo el nivel'
                   : mode.title}
               </span>
-              <span class="mr-2 max-w-[11rem] truncate text-sm text-ink-soft">{mode.body}</span>
+              <span class="mr-2 max-w-[11rem] truncate text-sm text-ink-soft lg:max-w-none">{mode.body}</span>
               <Icon name="next" size={16} class="text-ink-faint" />
             </button>
           )}
@@ -230,12 +230,12 @@ const Home: Component<HomeProps> = (props) => {
 
       <button
         onClick={() => props.onNavigate({ page: 'acerca' })}
-        class="mt-1 mx-auto flex h-11 items-center justify-center px-4 text-sm text-ink-soft"
+        class="home-about mt-1 mx-auto flex h-11 items-center justify-center px-4 text-sm text-ink-soft"
       >
         Acerca de
       </button>
 
-      <div class="mt-auto pt-4">
+      <div class="home-action mt-auto pt-4">
         <Show
           when={pending() > 0}
           fallback={
