@@ -27,19 +27,26 @@ export const selectionFromSaved = (raw: unknown): number[] => {
     : [];
   const legacy = typeof parsed.selectedLevel === 'number' ? [parsed.selectedLevel] : [];
   const levels = list.length > 0 ? list : legacy;
-  return [...new Set(levels)].sort((a, b) => a - b);
+  const available = new Set<number>(allCharacters.map((character) => character.hsk_level));
+  return [...new Set(levels.filter((level) => available.has(level)))].sort((a, b) => a - b);
 };
 
-const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'> | Record<string, never> => {
+const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'> => {
+  const empty = { selectedLevels: [], currentIndex: 0 };
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return {};
-    const parsed = JSON.parse(saved) as { currentIndex?: unknown };
+    if (!saved) return empty;
+    const parsed: unknown = JSON.parse(saved);
+    if (!parsed || typeof parsed !== 'object') return empty;
     const selectedLevels = selectionFromSaved(parsed);
-    const currentIndex = typeof parsed.currentIndex === 'number' ? parsed.currentIndex : 0;
+    const index = (parsed as { currentIndex?: unknown }).currentIndex;
+    const count = allCharacters.filter((character) => selectedLevels.includes(character.hsk_level)).length;
+    const currentIndex = typeof index === 'number' && Number.isInteger(index) && index >= 0 && index < count
+      ? index
+      : 0;
     return { selectedLevels, currentIndex };
   } catch {
-    return {};
+    return empty;
   }
 };
 
@@ -85,14 +92,12 @@ const allCharacters: HSKCharacter[] = (
 // Initialize store
 const initialState: CharacterStore = {
   characters: allCharacters,
-  selectedLevels: [],
-  currentIndex: 0,
+  ...loadProgress(),
   trainingMode: false,
   trainingResults: {
     correct: 0,
     incorrect: 0,
   },
-  ...loadProgress(),
 };
 
 const [store, setStore] = createStore(initialState);

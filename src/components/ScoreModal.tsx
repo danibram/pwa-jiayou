@@ -2,6 +2,7 @@ import { Component, For, Show } from 'solid-js';
 import { HSKCharacter } from '../types';
 import Icon from './Icon';
 import Pinyin from './Pinyin';
+import { createDialogFocus } from '../utils/dialog';
 
 export interface SessionSummary {
   again: number;
@@ -29,6 +30,8 @@ const RADIUS = 52;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 const ScoreModal: Component<ScoreModalProps> = (props) => {
+  let dialog: HTMLDivElement | undefined;
+  createDialogFocus(() => props.summary !== null, () => dialog, () => props.onGoHome());
   const result = () => props.summary!;
   const lesson = () => result().total === 0;
   const verdict = () => {
@@ -69,6 +72,8 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
           class="w-full max-w-md bg-surface rounded-t-card sm:rounded-card border border-line shadow-card px-6 pt-7 animate-rise max-h-[92dvh] overflow-y-auto"
           style={{ 'padding-bottom': 'max(env(safe-area-inset-bottom), 1.5rem)' }}
           role="dialog"
+          ref={dialog}
+          tabIndex={-1}
           aria-modal="true"
           aria-labelledby="score-title"
         >

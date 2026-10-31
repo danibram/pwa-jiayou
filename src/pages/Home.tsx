@@ -6,12 +6,13 @@ import { progressStore } from '../stores/progressStore';
 import Pinyin from '../components/Pinyin';
 import { spokenMeaning } from '../utils/meaning';
 import type { ReviewPool } from './Entrenamiento';
+import { loadSession } from '../utils/sessionStore';
 
 export type HomeTarget =
   | { page: 'tarjetas' }
   | { page: 'temas' }
   | { page: 'acerca' }
-  | { page: 'entrenamiento'; pool: ReviewPool }
+  | { page: 'entrenamiento'; pool: ReviewPool; resume?: boolean }
   | { page: 'trazos'; char?: string };
 
 interface HomeProps {
@@ -31,6 +32,7 @@ const Home: Component<HomeProps> = (props) => {
   const daily = createMemo(() => characterStore.getDailyCharacter());
   const queue = createMemo(() => progressStore.buildQueue(chars()));
   const log = () => progressStore.daily;
+  const savedSession = loadSession(characterStore.state.characters);
   const pending = () => queue().due.length + queue().fresh.length;
 
   const todayLine = () => {
@@ -236,6 +238,9 @@ const Home: Component<HomeProps> = (props) => {
       </button>
 
       <div class="home-action mt-auto pt-4">
+        <Show when={savedSession}>
+          {(session) => <button class="btn-ink h-14 w-full text-base mb-2" onClick={() => props.onNavigate({ page: 'entrenamiento', pool: session().pool, resume: true })}>Continuar sesión</button>}
+        </Show>
         <Show
           when={pending() > 0}
           fallback={

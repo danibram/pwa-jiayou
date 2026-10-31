@@ -3,6 +3,7 @@ import { render } from 'solid-js/web';
 import './index.css';
 import App from './App';
 import UpdateNotice from './components/UpdateNotice';
+import { ProgressStorageNotice } from './components/ProgressBackup';
 
 document.documentElement.addEventListener('pointerdown', () => {
   document.documentElement.dataset.pointer = '';
@@ -19,4 +20,4 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <><App /><UpdateNotice /></>, root!);
+render(() => <><App /><UpdateNotice /><ProgressStorageNotice /></>, root!);

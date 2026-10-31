@@ -15,7 +15,7 @@ type Screen =
   | { page: 'temas' }
   | { page: 'tema'; topicId: string; index: number }
   | { page: 'tarjetas' }
-  | { page: 'entrenamiento'; pool: ReviewPool }
+  | { page: 'entrenamiento'; pool: ReviewPool; resume?: boolean }
   | { page: 'trazos'; char?: string; topicId?: string; from: Screen };
 
 const asPage = <P extends Screen['page']>(screen: Screen, page: P) =>
@@ -69,6 +69,7 @@ const App: Component = () => {
           {(s) => (
             <Entrenamiento
               pool={s.pool}
+              resume={s.resume}
               onGoHome={goHome}
               backLabel="Volver"
               onOpenStrokes={openStrokes}

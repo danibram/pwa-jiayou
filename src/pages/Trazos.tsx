@@ -15,6 +15,7 @@ import { characterStore } from '../stores/characterStore';
 import { Grade, progressStore } from '../stores/progressStore';
 import { spokenMeaning } from '../utils/meaning';
 import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
+import { shouldHandleShortcut } from '../utils/keyboard';
 
 /** watch the order, trace over the guide, then write from memory. */
 export type StrokeStage = 'watch' | 'trace' | 'memory';
@@ -149,6 +150,7 @@ const Trazos: Component<TrazosProps> = (props) => {
   };
 
   const onKey = (e: KeyboardEvent) => {
+    if (!shouldHandleShortcut(e)) return;
     if (e.key === 'ArrowRight') go(1);
     else if (e.key === 'ArrowLeft') go(-1);
     else if (e.key === ' ' && stage() === 'watch') {
