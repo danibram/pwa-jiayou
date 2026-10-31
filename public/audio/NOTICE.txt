@@ -1,0 +1,20 @@
+Syllable clips used by the app. Two sources, refreshed by the scripts in scripts/.
+See docs/audio.md.
+
+----- CNS11643 -----
+Woman and man, public/audio/f and public/audio/m.
+From CNS11643 Voice.zip (female.zip and male.zip), re-encoded to mono MP3.
+Neutral-tone words with no clip use the character's citation tone.
+數位發展部，CNS11643中文標準交換碼全字庫網站，https://www.cns11643.gov.tw
+政府資料開放授權條款-第1版
+----- end CNS11643 -----
+
+----- audio-cmn -----
+Third voice, public/audio/c.
+Syllables recorded by Chen Wang, copied unchanged from 64k/syllabs.
+Hugo Lopez, PLIDAM, INALCO: curation and file names. Nicolas Vion: recording software.
+https://github.com/hugolpz/audio-cmn
+CC-BY-SA-3.0. Copyright 2013 Wang Chen, Lopez Hugo, Vion Nicolas.
+The recording tags Chen Wang as a woman, from Jiangsu.
+A syllable this set does not include plays the woman's CNS clip instead.
+----- end audio-cmn -----

@@ -1,0 +1,2632 @@
+[
+    {
+        "character": "地",
+        "traditional": "地",
+        "pinyin": "de",
+        "definition": "tierra; suelo; terreno; región",
+        "radical": "土",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0366",
+        "frequency_rank": 21
+    },
+    {
+        "character": "而",
+        "traditional": "而",
+        "pinyin": "ér",
+        "definition": "y; luego; sin embargo; pero",
+        "radical": "而",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0392",
+        "frequency_rank": 36
+    },
+    {
+        "character": "于",
+        "traditional": "於",
+        "pinyin": "yú",
+        "definition": "en; sobre; en; ir a; apellido",
+        "radical": "二",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0024",
+        "frequency_rank": 40
+    },
+    {
+        "character": "自",
+        "traditional": "自",
+        "pinyin": "zì",
+        "definition": "uno mismo; privado; personal; desde",
+        "radical": "自",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0477",
+        "frequency_rank": 43
+    },
+    {
+        "character": "发",
+        "traditional": "發",
+        "pinyin": "fā",
+        "definition": "emitir; despachar; enviar; cabello",
+        "radical": "又",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0339",
+        "frequency_rank": 47
+    },
+    {
+        "character": "用",
+        "traditional": "用",
+        "pinyin": "yòng",
+        "definition": "usar; emplear; aplicar; operar",
+        "radical": "用",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0283",
+        "frequency_rank": 51
+    },
+    {
+        "character": "行",
+        "traditional": "行",
+        "pinyin": "xíng",
+        "definition": "ir; caminar; moverse; viajar; circular",
+        "radical": "行",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0483",
+        "frequency_rank": 53
+    },
+    {
+        "character": "种",
+        "traditional": "種",
+        "pinyin": "zhǒng",
+        "definition": "semilla; raza; especie; plantar",
+        "radical": "禾",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1549",
+        "frequency_rank": 57
+    },
+    {
+        "character": "成",
+        "traditional": "成",
+        "pinyin": "chéng",
+        "definition": "completar; terminar; fijo",
+        "radical": "戈",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0401",
+        "frequency_rank": 59
+    },
+    {
+        "character": "方",
+        "traditional": "方",
+        "pinyin": "fāng",
+        "definition": "cuadrado; región; local",
+        "radical": "方",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0163",
+        "frequency_rank": 60
+    },
+    {
+        "character": "法",
+        "traditional": "法",
+        "pinyin": "fǎ",
+        "definition": "ley; regla; regulación; estatuto; Francia; francés",
+        "radical": "水",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1241",
+        "frequency_rank": 65
+    },
+    {
+        "character": "如",
+        "traditional": "如",
+        "pinyin": "rú",
+        "definition": "si; suponiendo; como si; como",
+        "radical": "女",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0578",
+        "frequency_rank": 67
+    },
+    {
+        "character": "当",
+        "traditional": "當",
+        "pinyin": "dāng",
+        "definition": "asumir; aceptar; emprender; justo",
+        "radical": "小",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0418",
+        "frequency_rank": 71
+    },
+    {
+        "character": "定",
+        "traditional": "定",
+        "pinyin": "dìng",
+        "definition": "decidir; fijar; establecer",
+        "radical": "宀",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1276",
+        "frequency_rank": 77
+    },
+    {
+        "character": "其",
+        "traditional": "其",
+        "pinyin": "qí",
+        "definition": "su; ese; aquel",
+        "radical": "八",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "0996",
+        "frequency_rank": 85
+    },
+    {
+        "character": "主",
+        "traditional": "主",
+        "pinyin": "zhǔ",
+        "definition": "maestro; propietario; anfitrión; señor",
+        "radical": "丶",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0300",
+        "frequency_rank": 87
+    },
+    {
+        "character": "理",
+        "traditional": "理",
+        "pinyin": "lǐ",
+        "definition": "razón; lógica; gestionar",
+        "radical": "玉",
+        "strokes": 11,
+        "hsk_level": 3,
+        "general_standard": "2157",
+        "frequency_rank": 89
+    },
+    {
+        "character": "心",
+        "traditional": "心",
+        "pinyin": "xīn",
+        "definition": "corazón; mente; inteligencia; alma",
+        "radical": "心",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0174",
+        "frequency_rank": 90
+    },
+    {
+        "character": "只",
+        "traditional": "只",
+        "pinyin": "zhǐ",
+        "definition": "solo; únicamente; simplemente",
+        "radical": "口",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0246",
+        "frequency_rank": 97
+    },
+    {
+        "character": "实",
+        "traditional": "實",
+        "pinyin": "shí",
+        "definition": "real; verdadero; honesto; sincero",
+        "radical": "宀",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1285",
+        "frequency_rank": 100
+    },
+    {
+        "character": "者",
+        "traditional": "者",
+        "pinyin": "zhě",
+        "definition": "el que; los que; aquello que",
+        "radical": "老",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "0969",
+        "frequency_rank": 103
+    },
+    {
+        "character": "力",
+        "traditional": "力",
+        "pinyin": "lì",
+        "definition": "poder; capacidad; influencia",
+        "radical": "力",
+        "strokes": 2,
+        "hsk_level": 3,
+        "general_standard": "0019",
+        "frequency_rank": 106
+    },
+    {
+        "character": "把",
+        "traditional": "把",
+        "pinyin": "bǎ",
+        "definition": "sostener; tomar; guardar; considerar como",
+        "radical": "手",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0655",
+        "frequency_rank": 110
+    },
+    {
+        "character": "又",
+        "traditional": "又",
+        "pinyin": "yòu",
+        "definition": "y; también; de nuevo; además",
+        "radical": "又",
+        "strokes": 2,
+        "hsk_level": 3,
+        "general_standard": "0021",
+        "frequency_rank": 126
+    },
+    {
+        "character": "业",
+        "traditional": "業",
+        "pinyin": "yè",
+        "definition": "profesión; negocio",
+        "radical": "一",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0231",
+        "frequency_rank": 130
+    },
+    {
+        "character": "重",
+        "traditional": "重",
+        "pinyin": "zhòng",
+        "definition": "pesado; importante; doble",
+        "radical": "里",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1552",
+        "frequency_rank": 140
+    },
+    {
+        "character": "物",
+        "traditional": "物",
+        "pinyin": "wù",
+        "definition": "cosa; sustancia; criatura",
+        "radical": "牛",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1127",
+        "frequency_rank": 142
+    },
+    {
+        "character": "应",
+        "traditional": "應",
+        "pinyin": "yīng",
+        "definition": "debería; debe",
+        "radical": "广",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0836",
+        "frequency_rank": 144
+    },
+    {
+        "character": "向",
+        "traditional": "向",
+        "pinyin": "xiàng",
+        "definition": "hacia; dirección; tendencia",
+        "radical": "口",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0480",
+        "frequency_rank": 146
+    },
+    {
+        "character": "头",
+        "traditional": "頭",
+        "pinyin": "tóu",
+        "definition": "cabeza; cima; jefe; primero",
+        "radical": "大",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0310",
+        "frequency_rank": 147
+    },
+    {
+        "character": "文",
+        "traditional": "文",
+        "pinyin": "wén",
+        "definition": "literatura; cultura; escritura",
+        "radical": "文",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0161",
+        "frequency_rank": 148
+    },
+    {
+        "character": "相",
+        "traditional": "相",
+        "pinyin": "xiāng",
+        "definition": "mutuo; recíproco; entre sí",
+        "radical": "目",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1430",
+        "frequency_rank": 152
+    },
+    {
+        "character": "被",
+        "traditional": "被",
+        "pinyin": "bèi",
+        "definition": "marcador pasivo; manta",
+        "radical": "衣",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "2118",
+        "frequency_rank": 154
+    },
+    {
+        "character": "或",
+        "traditional": "或",
+        "pinyin": "huò",
+        "definition": "o; ya sea; quizá; tal vez",
+        "radical": "戈",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1035",
+        "frequency_rank": 160
+    },
+    {
+        "character": "己",
+        "traditional": "己",
+        "pinyin": "jǐ",
+        "definition": "uno mismo; personal; privado",
+        "radical": "己",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0060",
+        "frequency_rank": 162
+    },
+    {
+        "character": "加",
+        "traditional": "加",
+        "pinyin": "jiā",
+        "definition": "añadir; aumentar; incrementar",
+        "radical": "力",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0335",
+        "frequency_rank": 166
+    },
+    {
+        "character": "特",
+        "traditional": "特",
+        "pinyin": "tè",
+        "definition": "especial; único; distinguido",
+        "radical": "牛",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "1938",
+        "frequency_rank": 173
+    },
+    {
+        "character": "信",
+        "traditional": "信",
+        "pinyin": "xìn",
+        "definition": "confiar; creer; carta",
+        "radical": "人",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1570",
+        "frequency_rank": 176
+    },
+    {
+        "character": "化",
+        "traditional": "化",
+        "pinyin": "huà",
+        "definition": "cambiar; convertir; reformar; -izar",
+        "radical": "匕",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0132",
+        "frequency_rank": 178
+    },
+    {
+        "character": "世",
+        "traditional": "世",
+        "pinyin": "shì",
+        "definition": "generación; mundo; era",
+        "radical": "一",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0206",
+        "frequency_rank": 181
+    },
+    {
+        "character": "位",
+        "traditional": "位",
+        "pinyin": "wèi",
+        "definition": "puesto; cargo; rango; estado; asiento",
+        "radical": "人",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0784",
+        "frequency_rank": 182
+    },
+    {
+        "character": "声",
+        "traditional": "聲",
+        "pinyin": "shēng",
+        "definition": "sonido; voz; ruido; tono; música",
+        "radical": "士",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0654",
+        "frequency_rank": 195
+    },
+    {
+        "character": "提",
+        "traditional": "提",
+        "pinyin": "tí",
+        "definition": "sostener en la mano; levantar; mencionar",
+        "radical": "手",
+        "strokes": 12,
+        "hsk_level": 3,
+        "general_standard": "2520",
+        "frequency_rank": 196
+    },
+    {
+        "character": "解",
+        "traditional": "解",
+        "pinyin": "jiě",
+        "definition": "aflojar; desatar; explicar",
+        "radical": "角",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "2981",
+        "frequency_rank": 201
+    },
+    {
+        "character": "口",
+        "traditional": "口",
+        "pinyin": "kǒu",
+        "definition": "boca; extremo abierto; entrada; puerta",
+        "radical": "口",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0038",
+        "frequency_rank": 212
+    },
+    {
+        "character": "平",
+        "traditional": "平",
+        "pinyin": "píng",
+        "definition": "plano; nivelado; pacífico",
+        "radical": "干",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0222",
+        "frequency_rank": 215
+    },
+    {
+        "character": "更",
+        "traditional": "更",
+        "pinyin": "gèng",
+        "definition": "más; aún más",
+        "radical": "曰",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0693",
+        "frequency_rank": 221
+    },
+    {
+        "character": "变",
+        "traditional": "變",
+        "pinyin": "biàn",
+        "definition": "cambiar; transformar; alterar; rebelarse",
+        "radical": "又",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1204",
+        "frequency_rank": 225
+    },
+    {
+        "character": "总",
+        "traditional": "總",
+        "pinyin": "zǒng",
+        "definition": "colectar; general; en total",
+        "radical": "八",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1654",
+        "frequency_rank": 228
+    },
+    {
+        "character": "数",
+        "traditional": "數",
+        "pinyin": "shù",
+        "definition": "número; varios; contar; destino",
+        "radical": "攴",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "2999",
+        "frequency_rank": 231
+    },
+    {
+        "character": "安",
+        "traditional": "安",
+        "pinyin": "ān",
+        "definition": "pacífico; tranquilo; quieto",
+        "radical": "宀",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0549",
+        "frequency_rank": 232
+    },
+    {
+        "character": "才",
+        "traditional": "才",
+        "pinyin": "cái",
+        "definition": "talento; habilidad; recién; solo",
+        "radical": "手",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0029",
+        "frequency_rank": 235
+    },
+    {
+        "character": "结",
+        "traditional": "結",
+        "pinyin": "jié",
+        "definition": "nudo; atar; unir; conectar",
+        "radical": "糸",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1754",
+        "frequency_rank": 236
+    },
+    {
+        "character": "目",
+        "traditional": "目",
+        "pinyin": "mù",
+        "definition": "ojo; mirar; ver; división; tema",
+        "radical": "目",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0236",
+        "frequency_rank": 239
+    },
+    {
+        "character": "感",
+        "traditional": "感",
+        "pinyin": "gǎn",
+        "definition": "sentir; percibir; emoción",
+        "radical": "心",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "2875",
+        "frequency_rank": 243
+    },
+    {
+        "character": "接",
+        "traditional": "接",
+        "pinyin": "jiē",
+        "definition": "recibir; continuar; atrapar; conectar",
+        "radical": "手",
+        "strokes": 11,
+        "hsk_level": 3,
+        "general_standard": "2185",
+        "frequency_rank": 247
+    },
+    {
+        "character": "必",
+        "traditional": "必",
+        "pinyin": "bì",
+        "definition": "seguramente; sin duda; debe",
+        "radical": "心",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0321",
+        "frequency_rank": 248
+    },
+    {
+        "character": "市",
+        "traditional": "市",
+        "pinyin": "shì",
+        "definition": "mercado; feria; ciudad; comercio",
+        "radical": "巾",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0301",
+        "frequency_rank": 254
+    },
+    {
+        "character": "直",
+        "traditional": "直",
+        "pinyin": "zhí",
+        "definition": "recto; erguido; vertical",
+        "radical": "目",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1011",
+        "frequency_rank": 255
+    },
+    {
+        "character": "山",
+        "traditional": "山",
+        "pinyin": "shān",
+        "definition": "montaña; colina; pico",
+        "radical": "山",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0039",
+        "frequency_rank": 259
+    },
+    {
+        "character": "空",
+        "traditional": "空",
+        "pinyin": "kōng",
+        "definition": "vacío; hueco; desierto",
+        "radical": "穴",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1282",
+        "frequency_rank": 272
+    },
+    {
+        "character": "决",
+        "traditional": "決",
+        "pinyin": "jué",
+        "definition": "decidir; determinar; juzgar",
+        "radical": "冫",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0523",
+        "frequency_rank": 273
+    },
+    {
+        "character": "马",
+        "traditional": "馬",
+        "pinyin": "mǎ",
+        "definition": "caballo; apellido",
+        "radical": "馬",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0072",
+        "frequency_rank": 276
+    },
+    {
+        "character": "界",
+        "traditional": "界",
+        "pinyin": "jiè",
+        "definition": "frontera; límite; ámbito; sociedad; el mundo",
+        "radical": "田",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1496",
+        "frequency_rank": 288
+    },
+    {
+        "character": "放",
+        "traditional": "放",
+        "pinyin": "fàng",
+        "definition": "poner; soltar; liberar",
+        "radical": "攴",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1223",
+        "frequency_rank": 291
+    },
+    {
+        "character": "像",
+        "traditional": "像",
+        "pinyin": "xiàng",
+        "definition": "imagen; figura; parecerse",
+        "radical": "人",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "2961",
+        "frequency_rank": 294
+    },
+    {
+        "character": "且",
+        "traditional": "且",
+        "pinyin": "qiě",
+        "definition": "además; también; estar a punto de",
+        "radical": "一",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0237",
+        "frequency_rank": 296
+    },
+    {
+        "character": "难",
+        "traditional": "難",
+        "pinyin": "nán",
+        "definition": "difícil; arduo; incapaz",
+        "radical": "又",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "2147",
+        "frequency_rank": 295
+    },
+    {
+        "character": "记",
+        "traditional": "記",
+        "pinyin": "jì",
+        "definition": "registrar; recordar",
+        "radical": "言",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0323",
+        "frequency_rank": 306
+    },
+    {
+        "character": "南",
+        "traditional": "南",
+        "pinyin": "nán",
+        "definition": "sur; parte sur; hacia el sur",
+        "radical": "十",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1422",
+        "frequency_rank": 307
+    },
+    {
+        "character": "求",
+        "traditional": "求",
+        "pinyin": "qiú",
+        "definition": "buscar; pedir; solicitar; rogar",
+        "radical": "水",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0690",
+        "frequency_rank": 312
+    },
+    {
+        "character": "据",
+        "traditional": "據",
+        "pinyin": "jù",
+        "definition": "ocupar; tomar posesión; base; posición",
+        "radical": "手",
+        "strokes": 11,
+        "hsk_level": 3,
+        "general_standard": "2189",
+        "frequency_rank": 313
+    },
+    {
+        "character": "张",
+        "traditional": "張",
+        "pinyin": "zhāng",
+        "definition": "estirar; extender; ampliar; hoja (clasificador)",
+        "radical": "弓",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0909",
+        "frequency_rank": 318
+    },
+    {
+        "character": "该",
+        "traditional": "該",
+        "pinyin": "gāi",
+        "definition": "deber; tener que; necesitar",
+        "radical": "言",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1300",
+        "frequency_rank": 319
+    },
+    {
+        "character": "万",
+        "traditional": "萬",
+        "pinyin": "wàn",
+        "definition": "diez mil; innumerable",
+        "radical": "一",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0035",
+        "frequency_rank": 322
+    },
+    {
+        "character": "清",
+        "traditional": "清",
+        "pinyin": "qīng",
+        "definition": "claro; puro; limpio; pacífico",
+        "radical": "水",
+        "strokes": 11,
+        "hsk_level": 3,
+        "general_standard": "2410",
+        "frequency_rank": 335
+    },
+    {
+        "character": "带",
+        "traditional": "帶",
+        "pinyin": "dài",
+        "definition": "cinturón; banda; correa; zona",
+        "radical": "巾",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1407",
+        "frequency_rank": 342
+    },
+    {
+        "character": "风",
+        "traditional": "風",
+        "pinyin": "fēng",
+        "definition": "viento; aire; modales; ambiente",
+        "radical": "風",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0154",
+        "frequency_rank": 348
+    },
+    {
+        "character": "根",
+        "traditional": "根",
+        "pinyin": "gēn",
+        "definition": "raíz; base; fundamento",
+        "radical": "木",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "1850",
+        "frequency_rank": 352
+    },
+    {
+        "character": "干",
+        "traditional": "幹",
+        "pinyin": "gàn",
+        "definition": "oponerse; ofender; invadir; seco",
+        "radical": "干",
+        "strokes": 3,
+        "hsk_level": 3,
+        "general_standard": "0023",
+        "frequency_rank": 353
+    },
+    {
+        "character": "极",
+        "traditional": "極",
+        "pinyin": "jí",
+        "definition": "extremo; máximo; último; final",
+        "radical": "木",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0687",
+        "frequency_rank": 363
+    },
+    {
+        "character": "办",
+        "traditional": "辦",
+        "pinyin": "bàn",
+        "definition": "gestionar; hacer; manejar; tratar",
+        "radical": "力",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0181",
+        "frequency_rank": 367
+    },
+    {
+        "character": "议",
+        "traditional": "議",
+        "pinyin": "yì",
+        "definition": "consultar; discutir; deliberar",
+        "radical": "言",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0320",
+        "frequency_rank": 368
+    },
+    {
+        "character": "元",
+        "traditional": "元",
+        "pinyin": "yuán",
+        "definition": "primero; yuan; origen; cabeza",
+        "radical": "儿",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0080",
+        "frequency_rank": 370
+    },
+    {
+        "character": "单",
+        "traditional": "單",
+        "pinyin": "dān",
+        "definition": "único; individual; solo",
+        "radical": "八",
+        "strokes": 8,
+        "hsk_level": 3,
+        "general_standard": "1232",
+        "frequency_rank": 389
+    },
+    {
+        "character": "调",
+        "traditional": "調",
+        "pinyin": "diào",
+        "definition": "transferir; mover; cambiar; tono",
+        "radical": "言",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "2123",
+        "frequency_rank": 400
+    },
+    {
+        "character": "算",
+        "traditional": "算",
+        "pinyin": "suàn",
+        "definition": "contar; calcular; planear",
+        "radical": "竹",
+        "strokes": 14,
+        "hsk_level": 3,
+        "general_standard": "3121",
+        "frequency_rank": 403
+    },
+    {
+        "character": "需",
+        "traditional": "需",
+        "pinyin": "xū",
+        "definition": "necesitar; requerir; debe",
+        "radical": "雨",
+        "strokes": 14,
+        "hsk_level": 3,
+        "general_standard": "3095",
+        "frequency_rank": 408
+    },
+    {
+        "character": "花",
+        "traditional": "花",
+        "pinyin": "huā",
+        "definition": "flor; flores",
+        "radical": "艸",
+        "strokes": 7,
+        "hsk_level": 3,
+        "general_standard": "0665",
+        "frequency_rank": 410
+    },
+    {
+        "character": "城",
+        "traditional": "城",
+        "pinyin": "chéng",
+        "definition": "castillo; ciudad; municipio",
+        "radical": "土",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1373",
+        "frequency_rank": 413
+    },
+    {
+        "character": "级",
+        "traditional": "級",
+        "pinyin": "jí",
+        "definition": "nivel; rango; clase; grado",
+        "radical": "糸",
+        "strokes": 6,
+        "hsk_level": 3,
+        "general_standard": "0594",
+        "frequency_rank": 415
+    },
+    {
+        "character": "复",
+        "traditional": "復",
+        "pinyin": "fù",
+        "definition": "volver; repetir; repetidamente",
+        "radical": "夊",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1553",
+        "frequency_rank": 426
+    },
+    {
+        "character": "满",
+        "traditional": "滿",
+        "pinyin": "mǎn",
+        "definition": "llenar; lleno; satisfecho",
+        "radical": "水",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "3005",
+        "frequency_rank": 436
+    },
+    {
+        "character": "越",
+        "traditional": "越",
+        "pinyin": "yuè",
+        "definition": "exceder; ir más allá; cuanto más...",
+        "radical": "走",
+        "strokes": 12,
+        "hsk_level": 3,
+        "general_standard": "2514",
+        "frequency_rank": 440
+    },
+    {
+        "character": "容",
+        "traditional": "容",
+        "pinyin": "róng",
+        "definition": "apariencia; figura; forma",
+        "radical": "宀",
+        "strokes": 10,
+        "hsk_level": 3,
+        "general_standard": "2105",
+        "frequency_rank": 442
+    },
+    {
+        "character": "照",
+        "traditional": "照",
+        "pinyin": "zhào",
+        "definition": "brillar; iluminar; reflejar",
+        "radical": "火",
+        "strokes": 13,
+        "hsk_level": 3,
+        "general_standard": "2911",
+        "frequency_rank": 443
+    },
+    {
+        "character": "须",
+        "traditional": "須",
+        "pinyin": "xū",
+        "definition": "debe; tener que; necesario",
+        "radical": "彡",
+        "strokes": 9,
+        "hsk_level": 3,
+        "general_standard": "1585",
+        "frequency_rank": 444
+    },
+    {
+        "character": "包",
+        "traditional": "包",
+        "pinyin": "bāo",
+        "definition": "envolver; empacar; paquete",
+        "radical": "勹",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0298",
+        "frequency_rank": 454
+    },
+    {
+        "character": "片",
+        "traditional": "片",
+        "pinyin": "piàn",
+        "definition": "rebanada; astilla; tira",
+        "radical": "片",
+        "strokes": 4,
+        "hsk_level": 3,
+        "general_standard": "0130",
+        "frequency_rank": 455
+    },
+    {
+        "character": "史",
+        "traditional": "史",
+        "pinyin": "shǐ",
+        "definition": "historia; crónica; anales",
+        "radical": "口",
+        "strokes": 5,
+        "hsk_level": 3,
+        "general_standard": "0248",
+        "frequency_rank": 456
+    },
+    {
+        "character": "乎",
+        "pinyin": "hū",
+        "definition": "partícula interrogativa o exclamativa final",
+        "radical": "丿",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "乎"
+    },
+    {
+        "character": "查",
+        "pinyin": "chá",
+        "definition": "investigar, examinar, indagar",
+        "radical": "木",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "查"
+    },
+    {
+        "character": "轻",
+        "pinyin": "qīng",
+        "definition": "ligero; fácil, simple; suave",
+        "radical": "車",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "輕"
+    },
+    {
+        "character": "易",
+        "pinyin": "yì",
+        "definition": "cambiar; fácil",
+        "radical": "日",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "易"
+    },
+    {
+        "character": "除",
+        "pinyin": "chú",
+        "definition": "eliminar, quitar, excepto",
+        "radical": "阜",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "除"
+    },
+    {
+        "character": "阿",
+        "pinyin": "ā",
+        "definition": "prefijo fonético; ¡ah!",
+        "radical": "阜",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "阿"
+    },
+    {
+        "character": "李",
+        "pinyin": "lǐ",
+        "definition": "ciruela; juez; apellido",
+        "radical": "木",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "李"
+    },
+    {
+        "character": "图",
+        "pinyin": "tú",
+        "definition": "diagrama; mapa; imagen",
+        "radical": "囗",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "圖"
+    },
+    {
+        "character": "历",
+        "pinyin": "lì",
+        "definition": "historia; calendario",
+        "radical": "厂",
+        "strokes": 4,
+        "hsk_level": 3,
+        "traditional": "歷"
+    },
+    {
+        "character": "突",
+        "pinyin": "tū",
+        "definition": "de repente; abruptamente; inesperadamente",
+        "radical": "穴",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "突"
+    },
+    {
+        "character": "周",
+        "pinyin": "zhōu",
+        "definition": "dinastía Zhou; circunferencia",
+        "radical": "口",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "周"
+    },
+    {
+        "character": "较",
+        "pinyin": "jiào",
+        "definition": "comparar; relativamente, más",
+        "radical": "車",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "較"
+    },
+    {
+        "character": "注",
+        "pinyin": "zhù",
+        "definition": "concentrar, enfocar, dirigir",
+        "radical": "水",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "注"
+    },
+    {
+        "character": "选",
+        "pinyin": "xuǎn",
+        "definition": "elegir, seleccionar; elección",
+        "radical": "辵",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "選"
+    },
+    {
+        "character": "响",
+        "pinyin": "xiǎng",
+        "definition": "hacer sonido; sonido",
+        "radical": "口",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "響"
+    },
+    {
+        "character": "参",
+        "pinyin": "cān",
+        "definition": "participar, intervenir; ginseng",
+        "radical": "厶",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "參"
+    },
+    {
+        "character": "半",
+        "pinyin": "bàn",
+        "definition": "mitad",
+        "radical": "十",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "半"
+    },
+    {
+        "character": "节",
+        "pinyin": "jié",
+        "definition": "nudo; sección; articulación",
+        "radical": "艸",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "節"
+    },
+    {
+        "character": "护",
+        "pinyin": "hù",
+        "definition": "proteger, guardar, defender",
+        "radical": "手",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "護"
+    },
+    {
+        "character": "音",
+        "pinyin": "yīn",
+        "definition": "sonido; tono; pronunciación",
+        "radical": "音",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "音"
+    },
+    {
+        "character": "跟",
+        "pinyin": "gēn",
+        "definition": "talón; seguir, acompañar; con",
+        "radical": "足",
+        "strokes": 13,
+        "hsk_level": 3,
+        "traditional": "跟"
+    },
+    {
+        "character": "留",
+        "pinyin": "liú",
+        "definition": "detener; permanecer; conservar",
+        "radical": "田",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "留"
+    },
+    {
+        "character": "讲",
+        "pinyin": "jiǎng",
+        "definition": "explicar; discutir; hablar",
+        "radical": "言",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "講"
+    },
+    {
+        "character": "料",
+        "pinyin": "liào",
+        "definition": "considerar, conjeturar; materiales, ingredientes",
+        "radical": "斗",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "料"
+    },
+    {
+        "character": "终",
+        "pinyin": "zhōng",
+        "definition": "fin; finalmente",
+        "radical": "糸",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "終"
+    },
+    {
+        "character": "答",
+        "pinyin": "dá",
+        "definition": "responder; contestar; aceptar",
+        "radical": "竹",
+        "strokes": 12,
+        "hsk_level": 3,
+        "traditional": "答"
+    },
+    {
+        "character": "黄",
+        "pinyin": "huáng",
+        "definition": "amarillo; apellido",
+        "radical": "黃",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "黃"
+    },
+    {
+        "character": "奇",
+        "pinyin": "qí",
+        "definition": "extraño, inusual, peculiar",
+        "radical": "大",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "奇"
+    },
+    {
+        "character": "段",
+        "pinyin": "duàn",
+        "definition": "sección; tramo; división",
+        "radical": "殳",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "段"
+    },
+    {
+        "character": "故",
+        "pinyin": "gù",
+        "definition": "antiguo; razón; porque",
+        "radical": "攴",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "故"
+    },
+    {
+        "character": "河",
+        "pinyin": "hé",
+        "definition": "río; arroyo; Río Amarillo",
+        "radical": "水",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "河"
+    },
+    {
+        "character": "害",
+        "pinyin": "hài",
+        "definition": "dañar, perjudicar; destruir; matar",
+        "radical": "宀",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "害"
+    },
+    {
+        "character": "双",
+        "pinyin": "shuāng",
+        "definition": "par; conjunto de dos; ambos",
+        "radical": "又",
+        "strokes": 4,
+        "hsk_level": 3,
+        "traditional": "雙"
+    },
+    {
+        "character": "境",
+        "pinyin": "jìng",
+        "definition": "frontera, límite; zona, región",
+        "radical": "土",
+        "strokes": 14,
+        "hsk_level": 3,
+        "traditional": "境"
+    },
+    {
+        "character": "愿",
+        "pinyin": "yuàn",
+        "definition": "sincero, honesto, virtuoso; deseo",
+        "radical": "心",
+        "strokes": 14,
+        "hsk_level": 3,
+        "traditional": "願"
+    },
+    {
+        "character": "网",
+        "pinyin": "wǎng",
+        "definition": "red; malla; internet",
+        "radical": "网",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "網"
+    },
+    {
+        "character": "育",
+        "pinyin": "yù",
+        "definition": "producir, dar a luz; educar",
+        "radical": "肉",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "育"
+    },
+    {
+        "character": "船",
+        "pinyin": "chuán",
+        "definition": "barco, nave, embarcación",
+        "radical": "舟",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "船"
+    },
+    {
+        "character": "脸",
+        "pinyin": "liǎn",
+        "definition": "cara; mejilla; reputación",
+        "radical": "肉",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "臉"
+    },
+    {
+        "character": "刻",
+        "pinyin": "kè",
+        "definition": "tallar, grabar; cuarto de hora",
+        "radical": "刀",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "刻"
+    },
+    {
+        "character": "刚",
+        "pinyin": "gāng",
+        "definition": "duro, rígido, fuerte",
+        "radical": "刀",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "剛"
+    },
+    {
+        "character": "般",
+        "pinyin": "bān",
+        "definition": "tipo, clase, manera, categoría",
+        "radical": "舟",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "般"
+    },
+    {
+        "character": "怕",
+        "pinyin": "pà",
+        "definition": "temer, tener miedo; aprensivo",
+        "radical": "心",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "怕"
+    },
+    {
+        "character": "假",
+        "pinyin": "jiǎ",
+        "definition": "falso, fingido; vacaciones",
+        "radical": "人",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "假"
+    },
+    {
+        "character": "久",
+        "pinyin": "jiǔ",
+        "definition": "mucho tiempo; paso del tiempo",
+        "radical": "丿",
+        "strokes": 3,
+        "hsk_level": 3,
+        "traditional": "久"
+    },
+    {
+        "character": "拿",
+        "pinyin": "ná",
+        "definition": "tomar, sostener, agarrar; traer; con",
+        "radical": "手",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "拿"
+    },
+    {
+        "character": "阳",
+        "pinyin": "yáng",
+        "definition": "yang; lado soleado",
+        "radical": "阜",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "陽"
+    },
+    {
+        "character": "急",
+        "pinyin": "jí",
+        "definition": "rápido; urgente, apremiante",
+        "radical": "心",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "急"
+    },
+    {
+        "character": "居",
+        "pinyin": "jū",
+        "definition": "vivir, residir, morar; sentarse",
+        "radical": "尸",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "居"
+    },
+    {
+        "character": "环",
+        "pinyin": "huán",
+        "definition": "anillo de jade; aro, anillo",
+        "radical": "玉",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "環"
+    },
+    {
+        "character": "树",
+        "pinyin": "shù",
+        "definition": "árbol; plantar; establecer",
+        "radical": "木",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "樹"
+    },
+    {
+        "character": "层",
+        "pinyin": "céng",
+        "definition": "piso, capa, estrato, nivel",
+        "radical": "尸",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "層"
+    },
+    {
+        "character": "句",
+        "pinyin": "jù",
+        "definition": "frase; oración",
+        "radical": "口",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "句"
+    },
+    {
+        "character": "简",
+        "pinyin": "jiǎn",
+        "definition": "simple, conciso; carta",
+        "radical": "竹",
+        "strokes": 13,
+        "hsk_level": 3,
+        "traditional": "簡"
+    },
+    {
+        "character": "卡",
+        "pinyin": "kǎ",
+        "definition": "tarjeta; caloría",
+        "radical": "卜",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "卡"
+    },
+    {
+        "character": "担",
+        "pinyin": "dān",
+        "definition": "llevar, soportar, asumir",
+        "radical": "手",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "擔"
+    },
+    {
+        "character": "静",
+        "pinyin": "jìng",
+        "definition": "tranquilo, silencioso; apacible",
+        "radical": "青",
+        "strokes": 14,
+        "hsk_level": 3,
+        "traditional": "靜"
+    },
+    {
+        "character": "检",
+        "pinyin": "jiǎn",
+        "definition": "comprobar; examinar",
+        "radical": "木",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "檢"
+    },
+    {
+        "character": "差",
+        "pinyin": "chà",
+        "definition": "diferir; diferente; casi; oficial",
+        "radical": "工",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "差"
+    },
+    {
+        "character": "角",
+        "pinyin": "jiǎo",
+        "definition": "cuerno; ángulo, esquina; punto",
+        "radical": "角",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "角"
+    },
+    {
+        "character": "皮",
+        "pinyin": "pí",
+        "definition": "piel, cuero, pelaje; exterior",
+        "radical": "皮",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "皮"
+    },
+    {
+        "character": "啊",
+        "pinyin": "a",
+        "definition": "partícula exclamativa",
+        "radical": "口",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "啊"
+    },
+    {
+        "character": "超",
+        "pinyin": "chāo",
+        "definition": "saltar/sobrepasar; superar",
+        "radical": "走",
+        "strokes": 12,
+        "hsk_level": 3,
+        "traditional": "超"
+    },
+    {
+        "character": "银",
+        "pinyin": "yín",
+        "definition": "plata; efectivo, dinero, riqueza",
+        "radical": "金",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "銀"
+    },
+    {
+        "character": "怪",
+        "pinyin": "guài",
+        "definition": "extraño, inusual, peculiar",
+        "radical": "心",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "怪"
+    },
+    {
+        "character": "香",
+        "pinyin": "xiāng",
+        "definition": "fragante, aromático; incienso",
+        "radical": "香",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "香"
+    },
+    {
+        "character": "铁",
+        "pinyin": "tiě",
+        "definition": "hierro; fuerte, sólido, firme",
+        "radical": "金",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "鐵"
+    },
+    {
+        "character": "草",
+        "pinyin": "cǎo",
+        "definition": "hierba, paja, broza; hierbas",
+        "radical": "艸",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "草"
+    },
+    {
+        "character": "脚",
+        "pinyin": "jiǎo",
+        "definition": "pierna, pie; base, soporte",
+        "radical": "肉",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "腳"
+    },
+    {
+        "character": "酒",
+        "pinyin": "jiǔ",
+        "definition": "vino, licor, bebida alcohólica",
+        "radical": "酉",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "酒"
+    },
+    {
+        "character": "顾",
+        "pinyin": "gù",
+        "definition": "mirar atrás; mirar; cuidar",
+        "radical": "頁",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "顧"
+    },
+    {
+        "character": "换",
+        "pinyin": "huàn",
+        "definition": "cambiar; intercambiar",
+        "radical": "手",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "換"
+    },
+    {
+        "character": "闻",
+        "pinyin": "wén",
+        "definition": "oír; oler; dar a conocer; noticias",
+        "radical": "門",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "聞"
+    },
+    {
+        "character": "坏",
+        "pinyin": "huài",
+        "definition": "podrido, estropeado, malo, averiado",
+        "radical": "土",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "壞"
+    },
+    {
+        "character": "楚",
+        "pinyin": "chǔ",
+        "definition": "nombre de un estado feudal; claro",
+        "radical": "木",
+        "strokes": 13,
+        "hsk_level": 3,
+        "traditional": "楚"
+    },
+    {
+        "character": "楼",
+        "pinyin": "lóu",
+        "definition": "edificio de dos o más pisos",
+        "radical": "木",
+        "strokes": 13,
+        "hsk_level": 3,
+        "traditional": "樓"
+    },
+    {
+        "character": "画",
+        "pinyin": "huà",
+        "definition": "pintura, dibujo; dibujar",
+        "radical": "田",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "畫"
+    },
+    {
+        "character": "耳",
+        "pinyin": "ěr",
+        "definition": "oreja; meramente; asa",
+        "radical": "耳",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "耳"
+    },
+    {
+        "character": "短",
+        "pinyin": "duǎn",
+        "definition": "corto; breve; deficiente",
+        "radical": "矢",
+        "strokes": 12,
+        "hsk_level": 3,
+        "traditional": "短"
+    },
+    {
+        "character": "遇",
+        "pinyin": "yù",
+        "definition": "encontrarse, tropezar con; hallar",
+        "radical": "辵",
+        "strokes": 12,
+        "hsk_level": 3,
+        "traditional": "遇"
+    },
+    {
+        "character": "康",
+        "pinyin": "kāng",
+        "definition": "pacífico, tranquilo; feliz, sano",
+        "radical": "广",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "康"
+    },
+    {
+        "character": "旧",
+        "pinyin": "jiù",
+        "definition": "viejo, antiguo; anterior, pasado",
+        "radical": "日",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "舊"
+    },
+    {
+        "character": "春",
+        "pinyin": "chūn",
+        "definition": "primavera; libertino",
+        "radical": "日",
+        "strokes": 9,
+        "hsk_level": 3,
+        "traditional": "春"
+    },
+    {
+        "character": "附",
+        "pinyin": "fù",
+        "definition": "adherirse, adjuntar; depender de; cerca de",
+        "radical": "阜",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "附"
+    },
+    {
+        "character": "礼",
+        "pinyin": "lǐ",
+        "definition": "costumbre social; modales; cortesía",
+        "radical": "示",
+        "strokes": 5,
+        "hsk_level": 3,
+        "traditional": "禮"
+    },
+    {
+        "character": "板",
+        "pinyin": "bǎn",
+        "definition": "tablón, tabla; plancha de metal",
+        "radical": "木",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "板"
+    },
+    {
+        "character": "婚",
+        "pinyin": "hūn",
+        "definition": "casarse; matrimonio, boda",
+        "radical": "女",
+        "strokes": 11,
+        "hsk_level": 3,
+        "traditional": "婚"
+    },
+    {
+        "character": "鲜",
+        "pinyin": "xiān",
+        "definition": "fresco; delicioso; atractivo",
+        "radical": "魚",
+        "strokes": 14,
+        "hsk_level": 3,
+        "traditional": "鮮"
+    },
+    {
+        "character": "词",
+        "pinyin": "cí",
+        "definition": "palabras; frase, expresión",
+        "radical": "言",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "詞"
+    },
+    {
+        "character": "择",
+        "pinyin": "zé",
+        "definition": "seleccionar, elegir, escoger",
+        "radical": "手",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "擇"
+    },
+    {
+        "character": "健",
+        "pinyin": "jiàn",
+        "definition": "fuerte, robusto, sano; vigor",
+        "radical": "人",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "健"
+    },
+    {
+        "character": "借",
+        "pinyin": "jiè",
+        "definition": "pedir prestado; prestar; usar de pretexto",
+        "radical": "人",
+        "strokes": 10,
+        "hsk_level": 3,
+        "traditional": "借"
+    },
+    {
+        "character": "园",
+        "pinyin": "yuán",
+        "definition": "jardín; parque, huerto",
+        "radical": "囗",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "園"
+    },
+    {
+        "character": "牙",
+        "pinyin": "yá",
+        "definition": "diente, muela; serrado",
+        "radical": "牙",
+        "strokes": 4,
+        "hsk_level": 3,
+        "traditional": "牙"
+    },
+    {
+        "character": "束",
+        "pinyin": "shù",
+        "definition": "atar, controlar; fardo",
+        "radical": "木",
+        "strokes": 7,
+        "hsk_level": 3,
+        "traditional": "束"
+    },
+    {
+        "character": "练",
+        "pinyin": "liàn",
+        "definition": "practicar, entrenar, ejercitar",
+        "radical": "糸",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "練"
+    },
+    {
+        "character": "爷",
+        "pinyin": "yé",
+        "definition": "padre, abuelo",
+        "radical": "父",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "爺"
+    },
+    {
+        "character": "嘴",
+        "pinyin": "zuǐ",
+        "definition": "boca, labios",
+        "radical": "口",
+        "strokes": 16,
+        "hsk_level": 3,
+        "traditional": "嘴"
+    },
+    {
+        "character": "戏",
+        "pinyin": "xì",
+        "definition": "obra teatral, espectáculo",
+        "radical": "戈",
+        "strokes": 6,
+        "hsk_level": 3,
+        "traditional": "戲"
+    },
+    {
+        "character": "典",
+        "pinyin": "diǎn",
+        "definition": "ley, canon; documentación; clásico",
+        "radical": "八",
+        "strokes": 8,
+        "hsk_level": 3,
+        "traditional": "典"
+    },
+    {
+        "character": "盘",
+        "traditional": "盤",
+        "pinyin": "pán",
+        "definition": "bandeja, plato, fuente; examinar",
+        "radical": "皿",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "忘",
+        "traditional": "忘",
+        "pinyin": "wàng",
+        "definition": "olvidar; descuidar; echar en falta, omitir",
+        "radical": "心",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "赛",
+        "traditional": "賽",
+        "pinyin": "sài",
+        "definition": "competir; contienda, carrera",
+        "radical": "宀",
+        "strokes": 14,
+        "hsk_level": 3
+    },
+    {
+        "character": "趣",
+        "traditional": "趣",
+        "pinyin": "qù",
+        "definition": "interés; interesante; diversión",
+        "radical": "走",
+        "strokes": 15,
+        "hsk_level": 3
+    },
+    {
+        "character": "迎",
+        "traditional": "迎",
+        "pinyin": "yíng",
+        "definition": "recibir, dar la bienvenida, saludar",
+        "radical": "辵",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "冰",
+        "traditional": "冰",
+        "pinyin": "bīng",
+        "definition": "hielo; helado",
+        "radical": "冫",
+        "strokes": 6,
+        "hsk_level": 3
+    },
+    {
+        "character": "努",
+        "traditional": "努",
+        "pinyin": "nǔ",
+        "definition": "esforzarse, hacer un esfuerzo; fruncir",
+        "radical": "力",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "绿",
+        "traditional": "綠",
+        "pinyin": "lǜ",
+        "definition": "verde; cloro",
+        "radical": "糸",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "街",
+        "traditional": "街",
+        "pinyin": "jiē",
+        "definition": "calle, vía, avenida",
+        "radical": "行",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "灯",
+        "traditional": "燈",
+        "pinyin": "dēng",
+        "definition": "linterna, lámpara",
+        "radical": "火",
+        "strokes": 6,
+        "hsk_level": 3
+    },
+    {
+        "character": "夏",
+        "traditional": "夏",
+        "pinyin": "xià",
+        "definition": "verano; grande, magnífico",
+        "radical": "夊",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "秋",
+        "traditional": "秋",
+        "pinyin": "qiū",
+        "definition": "otoño; año",
+        "radical": "禾",
+        "strokes": 9,
+        "hsk_level": 3
+    },
+    {
+        "character": "末",
+        "traditional": "末",
+        "pinyin": "mò",
+        "definition": "final, último, fin; insignificante",
+        "radical": "木",
+        "strokes": 5,
+        "hsk_level": 3
+    },
+    {
+        "character": "蓝",
+        "traditional": "藍",
+        "pinyin": "lán",
+        "definition": "azul; índigo; apellido",
+        "radical": "艸",
+        "strokes": 13,
+        "hsk_level": 3
+    },
+    {
+        "character": "烧",
+        "traditional": "燒",
+        "pinyin": "shāo",
+        "definition": "quemar; hornear; calentar; asar",
+        "radical": "火",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "哭",
+        "traditional": "哭",
+        "pinyin": "kū",
+        "definition": "llorar, gemir, lamentarse",
+        "radical": "口",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "冒",
+        "traditional": "冒",
+        "pinyin": "mào",
+        "definition": "arriesgarse, atreverse",
+        "radical": "冂",
+        "strokes": 9,
+        "hsk_level": 3
+    },
+    {
+        "character": "惯",
+        "traditional": "慣",
+        "pinyin": "guàn",
+        "definition": "hábito, costumbre; habitual, usual",
+        "radical": "心",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "鸟",
+        "traditional": "鳥",
+        "pinyin": "niǎo",
+        "definition": "pájaro; radical KangXi 196",
+        "radical": "鳥",
+        "strokes": 5,
+        "hsk_level": 3
+    },
+    {
+        "character": "季",
+        "traditional": "季",
+        "pinyin": "jì",
+        "definition": "trimestre; estación; apellido",
+        "radical": "子",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "鼻",
+        "traditional": "鼻",
+        "pinyin": "bí",
+        "definition": "nariz; primero; radical KangXi 209",
+        "radical": "鼻",
+        "strokes": 14,
+        "hsk_level": 3
+    },
+    {
+        "character": "腿",
+        "traditional": "腿",
+        "pinyin": "tuǐ",
+        "definition": "piernas, muslos",
+        "radical": "肉",
+        "strokes": 13,
+        "hsk_level": 3
+    },
+    {
+        "character": "迟",
+        "traditional": "遲",
+        "pinyin": "chí",
+        "definition": "tarde; lento; retrasar",
+        "radical": "辵",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "辆",
+        "traditional": "輛",
+        "pinyin": "liàng",
+        "definition": "clasificador para vehículos",
+        "radical": "車",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "净",
+        "traditional": "淨",
+        "pinyin": "jìng",
+        "definition": "limpio, puro; limpiar",
+        "radical": "冫",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "冬",
+        "traditional": "冬",
+        "pinyin": "dōng",
+        "definition": "invierno; undécimo mes lunar",
+        "radical": "冫",
+        "strokes": 5,
+        "hsk_level": 3
+    },
+    {
+        "character": "骑",
+        "traditional": "騎",
+        "pinyin": "qí",
+        "definition": "montar a caballo; caballería",
+        "radical": "馬",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "叔",
+        "traditional": "叔",
+        "pinyin": "shū",
+        "definition": "tío (hermano menor del padre)",
+        "radical": "又",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "爬",
+        "traditional": "爬",
+        "pinyin": "pá",
+        "definition": "arrastrarse, trepar, escalar",
+        "radical": "爪",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "扫",
+        "traditional": "掃",
+        "pinyin": "sǎo",
+        "definition": "barrer, limpiar; exterminar",
+        "radical": "手",
+        "strokes": 6,
+        "hsk_level": 3
+    },
+    {
+        "character": "箱",
+        "traditional": "箱",
+        "pinyin": "xiāng",
+        "definition": "caja, cofre, baúl",
+        "radical": "竹",
+        "strokes": 15,
+        "hsk_level": 3
+    },
+    {
+        "character": "舒",
+        "traditional": "舒",
+        "pinyin": "shū",
+        "definition": "abrir, desplegar; cómodo, fácil",
+        "radical": "舌",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "绩",
+        "traditional": "績",
+        "pinyin": "jī",
+        "definition": "hilar; logros",
+        "radical": "糸",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "饮",
+        "traditional": "飲",
+        "pinyin": "yǐn",
+        "definition": "beber; tragar; tipo de bebida",
+        "radical": "食",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "朵",
+        "traditional": "朵",
+        "pinyin": "duǒ",
+        "definition": "racimo de flores; lóbulo de la oreja",
+        "radical": "木",
+        "strokes": 6,
+        "hsk_level": 3
+    },
+    {
+        "character": "鞋",
+        "traditional": "鞋",
+        "pinyin": "xié",
+        "definition": "zapatos, calzado en general",
+        "radical": "革",
+        "strokes": 15,
+        "hsk_level": 3
+    },
+    {
+        "character": "邮",
+        "traditional": "郵",
+        "pinyin": "yóu",
+        "definition": "postal; correo; oficina de correos",
+        "radical": "邑",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "邻",
+        "traditional": "鄰",
+        "pinyin": "lín",
+        "definition": "vecino; vecindario",
+        "radical": "邑",
+        "strokes": 7,
+        "hsk_level": 3
+    },
+    {
+        "character": "聪",
+        "traditional": "聰",
+        "pinyin": "cōng",
+        "definition": "inteligente, listo, brillante",
+        "radical": "耳",
+        "strokes": 15,
+        "hsk_level": 3
+    },
+    {
+        "character": "梯",
+        "traditional": "梯",
+        "pinyin": "tī",
+        "definition": "escalera, peldaños; inclinarse",
+        "radical": "木",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "瓶",
+        "traditional": "瓶",
+        "pinyin": "píng",
+        "definition": "jarra, jarrón, vaso, frasco, botella",
+        "radical": "瓦",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "疼",
+        "traditional": "疼",
+        "pinyin": "téng",
+        "definition": "dolores; tener cariño; amar",
+        "radical": "疒",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "熊",
+        "traditional": "熊",
+        "pinyin": "xióng",
+        "definition": "oso; brillante; apellido",
+        "radical": "火",
+        "strokes": 14,
+        "hsk_level": 3
+    },
+    {
+        "character": "帽",
+        "traditional": "帽",
+        "pinyin": "mào",
+        "definition": "sombrero, gorra; tapas tipo capucha",
+        "radical": "巾",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "炼",
+        "traditional": "煉",
+        "pinyin": "liàn",
+        "definition": "fundir, refinar; destilar, condensar",
+        "radical": "火",
+        "strokes": 9,
+        "hsk_level": 3
+    },
+    {
+        "character": "搬",
+        "traditional": "搬",
+        "pinyin": "bān",
+        "definition": "trasladar, mover, quitar, desplazar",
+        "radical": "手",
+        "strokes": 13,
+        "hsk_level": 3
+    },
+    {
+        "character": "刷",
+        "traditional": "刷",
+        "pinyin": "shuā",
+        "definition": "cepillo; fregar, limpiar con cepillo",
+        "radical": "刀",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "瘦",
+        "traditional": "瘦",
+        "pinyin": "shòu",
+        "definition": "delgado, enjuto; escaso",
+        "radical": "疒",
+        "strokes": 14,
+        "hsk_level": 3
+    },
+    {
+        "character": "斤",
+        "traditional": "斤",
+        "pinyin": "jīn",
+        "definition": "jin (≈500 g); hacha; perspicaz; radical 69",
+        "radical": "斤",
+        "strokes": 4,
+        "hsk_level": 3
+    },
+    {
+        "character": "胖",
+        "traditional": "胖",
+        "pinyin": "pàng",
+        "definition": "gordo, obeso; graso",
+        "radical": "肉",
+        "strokes": 9,
+        "hsk_level": 3
+    },
+    {
+        "character": "饿",
+        "traditional": "餓",
+        "pinyin": "è",
+        "definition": "hambriento; ávido de; hambre",
+        "radical": "食",
+        "strokes": 10,
+        "hsk_level": 3
+    },
+    {
+        "character": "聊",
+        "traditional": "聊",
+        "pinyin": "liáo",
+        "definition": "algo, ligeramente; al menos",
+        "radical": "耳",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "碗",
+        "traditional": "碗",
+        "pinyin": "wǎn",
+        "definition": "cuenco, tazón, platillo",
+        "radical": "石",
+        "strokes": 13,
+        "hsk_level": 3
+    },
+    {
+        "character": "渴",
+        "traditional": "渴",
+        "pinyin": "kě",
+        "definition": "sediento; anhelar, ansiar",
+        "radical": "水",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "饱",
+        "traditional": "飽",
+        "pinyin": "bǎo",
+        "definition": "lleno; saciado",
+        "radical": "食",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "甜",
+        "traditional": "甜",
+        "pinyin": "tián",
+        "definition": "dulce, dulzor",
+        "radical": "甘",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "矮",
+        "traditional": "矮",
+        "pinyin": "ǎi",
+        "definition": "bajo; enano",
+        "radical": "矢",
+        "strokes": 13,
+        "hsk_level": 3
+    },
+    {
+        "character": "裤",
+        "traditional": "褲",
+        "pinyin": "kù",
+        "definition": "pantalones",
+        "radical": "衣",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "衫",
+        "traditional": "衫",
+        "pinyin": "shān",
+        "definition": "camisa; túnica; chaqueta",
+        "radical": "衣",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "伞",
+        "traditional": "傘",
+        "pinyin": "sǎn",
+        "definition": "paraguas, parasol, paracaídas",
+        "radical": "人",
+        "strokes": 6,
+        "hsk_level": 3
+    },
+    {
+        "character": "姨",
+        "traditional": "姨",
+        "pinyin": "yí",
+        "definition": "tía (hermana de la madre)",
+        "radical": "女",
+        "strokes": 9,
+        "hsk_level": 3
+    },
+    {
+        "character": "刮",
+        "traditional": "刮",
+        "pinyin": "guā",
+        "definition": "afeitar, raspar, pelar",
+        "radical": "刀",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "糕",
+        "traditional": "糕",
+        "pinyin": "gāo",
+        "definition": "pasteles, repostería",
+        "radical": "米",
+        "strokes": 16,
+        "hsk_level": 3
+    },
+    {
+        "character": "裙",
+        "traditional": "裙",
+        "pinyin": "qún",
+        "definition": "falda, delantal, enagua",
+        "radical": "衣",
+        "strokes": 12,
+        "hsk_level": 3
+    },
+    {
+        "character": "衬",
+        "traditional": "襯",
+        "pinyin": "chèn",
+        "definition": "ropa interior; prendas internas",
+        "radical": "衣",
+        "strokes": 8,
+        "hsk_level": 3
+    },
+    {
+        "character": "锻",
+        "traditional": "鍛",
+        "pinyin": "duàn",
+        "definition": "forjar metal; templar, refinar",
+        "radical": "金",
+        "strokes": 14,
+        "hsk_level": 3
+    },
+    {
+        "character": "澡",
+        "traditional": "澡",
+        "pinyin": "zǎo",
+        "definition": "lavar, bañarse",
+        "radical": "水",
+        "strokes": 16,
+        "hsk_level": 3
+    },
+    {
+        "character": "啤",
+        "traditional": "啤",
+        "pinyin": "pí",
+        "definition": "cerveza",
+        "radical": "口",
+        "strokes": 11,
+        "hsk_level": 3
+    },
+    {
+        "character": "蕉",
+        "traditional": "蕉",
+        "pinyin": "jiāo",
+        "definition": "plátano; banano",
+        "radical": "艸",
+        "strokes": 15,
+        "hsk_level": 3
+    },
+    {
+        "character": "筷",
+        "traditional": "筷",
+        "pinyin": "kuài",
+        "definition": "palillos (para comer)",
+        "radical": "竹",
+        "strokes": 13,
+        "hsk_level": 3
+    }
+]
