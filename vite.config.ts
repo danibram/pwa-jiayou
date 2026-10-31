@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     solid(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['*.png', '*.svg', '*.ico'],
       manifest: {
         name: '加油 · Hanzi HSK',

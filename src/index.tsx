@@ -2,6 +2,7 @@
 import { render } from 'solid-js/web';
 import './index.css';
 import App from './App';
+import UpdateNotice from './components/UpdateNotice';
 
 document.documentElement.addEventListener('pointerdown', () => {
   document.documentElement.dataset.pointer = '';
@@ -18,4 +19,4 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <App />, root!);
+render(() => <><App /><UpdateNotice /></>, root!);
