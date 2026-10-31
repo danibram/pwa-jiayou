@@ -96,10 +96,10 @@ const Home: Component<HomeProps> = (props) => {
 
   return (
     <div
-      class="mx-auto flex min-h-[100dvh] w-full max-w-[40rem] flex-col px-4 pb-8"
+      class="mx-auto h-[100dvh] w-full max-w-[40rem] overflow-y-auto overscroll-contain px-4 pb-8"
       style={{ 'padding-top': 'max(env(safe-area-inset-top), 1.25rem)' }}
     >
-    <div class="flex min-w-0 flex-1 flex-col">
+    <div class="flex min-h-full min-w-0 flex-col">
       {/* Wordmark and streak */}
       <header class="flex items-center gap-3 animate-rise">
         <img src="/icon.svg" alt="" class="h-10 w-10 rounded-[0.7rem] shadow-lift rotate-[-3deg]" />
