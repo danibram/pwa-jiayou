@@ -4,28 +4,31 @@ A modern, interactive Progressive Web App (PWA) for learning Chinese characters 
 
 ## Features
 
-### 📚 **Flashcards Mode**
-- Browse freely through HSK characters
-- Swipe left/right or use arrow keys to navigate
-- Tap to flip cards and see translations
-- View simplified and traditional characters
-- See pinyin pronunciation and Spanish definitions
-- Integration with Pleco dictionary for detailed lookups
+### Today's review (spaced repetition)
+- Home shows what is due today, how many new characters you get, a daily goal ring and your streak
+- Recall first, reveal for free, then grade yourself: Otra vez, Difícil or Bien
+- SM-2 style intervals (1, 3, 8... days); a character counts as mastered at a 21-day interval
+- Missed cards come back at the end of the session; the summary lists them with a shortcut to practise their strokes
 
-### 🎯 **Training Mode**
-- Test your knowledge with a randomized quiz
-- Swipe right for correct, left for incorrect
-- Track your score and progress in real-time
-- Get immediate visual feedback
-- View detailed statistics at the end
+### Content
+- Every character has a curated Spanish gloss in the sense HSK uses (`src/data/glosses/`), plus one example word with tone-coloured pinyin and audio
+- The full dictionary definition stays on the card as a quieter second line
 
-### ✨ **Modern UI/UX**
-- Beautiful glassmorphism design
-- Smooth 3D flip animations
-- Touch-optimized for mobile devices
-- Responsive layout for all screen sizes
-- Intuitive swipe gestures
-- PWA support for offline use
+### Explorar
+- Browse a level at your own pace, swipe or use the arrow keys
+- The character stays in place on its 米字格 grid while pinyin (coloured by tone), meaning, radical and stroke count slide in
+- Pronunciation through the device's Chinese voice, and a Pleco shortcut
+
+### Escribir (stroke order)
+- Ver: animated stroke order with the radical in red, plus a step-by-step view showing where each stroke starts and which way it goes
+- Calcar: trace over a guide with your finger; mistakes shake the grid and a hint appears after two misses
+- De memoria: write on an empty grid; the result feeds the spaced-repetition schedule
+- Stroke data for all 617 characters ships with the app, so it works offline
+
+### Look and feel
+- Rice paper and ink palette with light and dark themes
+- Kai typeface (LXGW WenKai, subset to the app's characters) so printed shapes match handwritten strokes
+- Installable PWA, offline after the first visit
 
 ## Tech Stack
 
@@ -66,28 +69,35 @@ npm test
 
 ```
 src/
-├── components/       # Reusable UI components
-│   ├── Card.tsx              # Flashcard with flip animation
-│   ├── SwipeableCard.tsx     # Card with swipe detection
-│   ├── LevelSelector.tsx     # HSK level selection
-│   ├── ProgressBar.tsx       # Progress indicator
-│   └── ScoreModal.tsx        # Training results modal
-├── pages/           # Main application pages
-│   ├── Home.tsx              # Landing page with mode selection
-│   ├── Tarjetas.tsx          # Flashcards mode
-│   └── Entrenamiento.tsx     # Training mode
-├── stores/          # State management
-│   └── characterStore.ts     # Character data and progress
-├── utils/           # Utility functions
-│   ├── swipeDetection.ts     # Touch/mouse swipe detection
-│   └── plecoIntegration.ts   # Pleco dictionary integration
-├── data/            # HSK character data (JSON)
-│   ├── hsk1.json
-│   ├── hsk2.json
-│   └── hsk3.json
-├── types.ts         # TypeScript type definitions
-└── index.css        # Global styles and Tailwind config
+├── components/
+│   ├── Card.tsx              # Character on a 米字格 grid; reading slides in on reveal
+│   ├── SwipeableCard.tsx     # Card with swipe detection and grading stamps
+│   ├── StrokeCanvas.tsx      # hanzi-writer wrapper: animation, step view, finger quiz
+│   ├── ScoreModal.tsx        # Session summary sheet
+│   ├── Pinyin.tsx            # Tone-coloured pinyin
+│   ├── RiceGrid.tsx, TopBar.tsx, Icon.tsx
+├── pages/
+│   ├── Home.tsx              # Today's queue, level, modes, character of the day
+│   ├── Tarjetas.tsx          # Explorar
+│   ├── Entrenamiento.tsx     # Graded review
+│   └── Trazos.tsx            # Escribir: watch, trace, from memory
+├── stores/
+│   ├── characterStore.ts     # Character data (normalised across level files)
+│   └── progressStore.ts      # Spaced repetition, daily goal, streak
+├── utils/                    # swipe, pinyin tones, speech, stroke data, shuffle, Pleco
+├── data/                     # hsk1-3.json
+└── index.css                 # Design tokens (light and dark)
 ```
+
+## Stroke data and font
+
+- `npm run strokes` copies hanzi-writer stroke data for every HSK character into `public/strokes/`
+- `public/fonts/wenkai-hsk.woff2` is LXGW WenKai Medium subset to the app's characters; see `scripts/hanzi-chars.mjs` for how to rebuild it after changing the data
+
+## Licenses
+
+- Stroke data: hanzi-writer-data, derived from Make Me a Hanzi and Arphic fonts, under the Arphic Public License (`docs/licenses/hanzi-writer-data-ARPHICPL.txt`)
+- Font: LXGW WenKai, SIL Open Font License (`docs/licenses/LXGW-WenKai-OFL.txt`)
 
 ## Data
 

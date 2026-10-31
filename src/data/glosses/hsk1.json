@@ -1,0 +1,1394 @@
+{
+  "的": {
+    "gloss": "Partícula posesiva",
+    "example": {
+      "word": "我的",
+      "pinyin": "wǒ de",
+      "es": "mío, mi"
+    }
+  },
+  "一": {
+    "gloss": "uno; un, una",
+    "example": {
+      "word": "一个",
+      "pinyin": "yí ge",
+      "es": "uno, un"
+    }
+  },
+  "是": {
+    "gloss": "ser; sí",
+    "example": {
+      "word": "是的",
+      "pinyin": "shì de",
+      "es": "sí, así es"
+    }
+  },
+  "不": {
+    "gloss": "no",
+    "example": {
+      "word": "不好",
+      "pinyin": "bù hǎo",
+      "es": "no está bien"
+    }
+  },
+  "了": {
+    "gloss": "(partícula) ya; terminado",
+    "example": {
+      "word": "好了",
+      "pinyin": "hǎo le",
+      "es": "ya está, listo"
+    }
+  },
+  "在": {
+    "gloss": "estar en; en",
+    "example": {
+      "word": "在家",
+      "pinyin": "zài jiā",
+      "es": "en casa"
+    }
+  },
+  "人": {
+    "gloss": "persona; gente",
+    "example": {
+      "word": "中国人",
+      "pinyin": "Zhōng guó rén",
+      "es": "chino (persona)"
+    }
+  },
+  "有": {
+    "gloss": "tener; haber",
+    "example": {
+      "word": "没有",
+      "pinyin": "méi yǒu",
+      "es": "no tener; no hay"
+    }
+  },
+  "我": {
+    "gloss": "yo; me",
+    "example": {
+      "word": "我们",
+      "pinyin": "wǒ men",
+      "es": "nosotros"
+    }
+  },
+  "他": {
+    "gloss": "él",
+    "example": {
+      "word": "他们",
+      "pinyin": "tā men",
+      "es": "ellos"
+    }
+  },
+  "这": {
+    "gloss": "este; esto",
+    "example": {
+      "word": "这个",
+      "pinyin": "zhè ge",
+      "es": "este, esto"
+    }
+  },
+  "个": {
+    "gloss": "(clasificador general)",
+    "example": {
+      "word": "一个",
+      "pinyin": "yí ge",
+      "es": "uno, un"
+    }
+  },
+  "们": {
+    "gloss": "(sufijo plural)",
+    "example": {
+      "word": "你们",
+      "pinyin": "nǐ men",
+      "es": "vosotros"
+    }
+  },
+  "中": {
+    "gloss": "centro; medio; dentro",
+    "example": {
+      "word": "中文",
+      "pinyin": "Zhōng wén",
+      "es": "chino (idioma)"
+    }
+  },
+  "来": {
+    "gloss": "venir",
+    "example": {
+      "word": "回来",
+      "pinyin": "huí lái",
+      "es": "volver (aquí)"
+    }
+  },
+  "上": {
+    "gloss": "arriba; subir; anterior",
+    "example": {
+      "word": "上午",
+      "pinyin": "shàng wǔ",
+      "es": "la mañana"
+    }
+  },
+  "大": {
+    "gloss": "grande",
+    "example": {
+      "word": "大学",
+      "pinyin": "dà xué",
+      "es": "universidad"
+    }
+  },
+  "和": {
+    "gloss": "y; con",
+    "example": {
+      "word": "我和你",
+      "pinyin": "wǒ hé nǐ",
+      "es": "tú y yo"
+    }
+  },
+  "国": {
+    "gloss": "país",
+    "example": {
+      "word": "中国",
+      "pinyin": "Zhōng guó",
+      "es": "China"
+    }
+  },
+  "说": {
+    "gloss": "hablar; decir",
+    "example": {
+      "word": "说话",
+      "pinyin": "shuō huà",
+      "es": "hablar"
+    }
+  },
+  "时": {
+    "gloss": "tiempo; hora",
+    "example": {
+      "word": "时间",
+      "pinyin": "shí jiān",
+      "es": "tiempo"
+    }
+  },
+  "出": {
+    "gloss": "salir",
+    "example": {
+      "word": "出去",
+      "pinyin": "chū qù",
+      "es": "salir (fuera)"
+    }
+  },
+  "会": {
+    "gloss": "saber hacer; reunión",
+    "example": {
+      "word": "开会",
+      "pinyin": "kāi huì",
+      "es": "tener una reunión"
+    }
+  },
+  "你": {
+    "gloss": "tú",
+    "example": {
+      "word": "你好",
+      "pinyin": "nǐ hǎo",
+      "es": "hola"
+    }
+  },
+  "对": {
+    "gloss": "correcto; hacia",
+    "example": {
+      "word": "对不起",
+      "pinyin": "duì bu qǐ",
+      "es": "perdón, lo siento"
+    }
+  },
+  "生": {
+    "gloss": "nacer; vida",
+    "example": {
+      "word": "生日",
+      "pinyin": "shēng rì",
+      "es": "cumpleaños"
+    }
+  },
+  "能": {
+    "gloss": "poder",
+    "example": {
+      "word": "可能",
+      "pinyin": "kě néng",
+      "es": "posible; quizá"
+    }
+  },
+  "子": {
+    "gloss": "(sufijo de sustantivo)",
+    "example": {
+      "word": "孩子",
+      "pinyin": "hái zi",
+      "es": "niño"
+    }
+  },
+  "那": {
+    "gloss": "ese; aquel; entonces",
+    "example": {
+      "word": "那个",
+      "pinyin": "nà ge",
+      "es": "ese, aquel"
+    }
+  },
+  "下": {
+    "gloss": "abajo; bajar; siguiente",
+    "example": {
+      "word": "下午",
+      "pinyin": "xià wǔ",
+      "es": "la tarde"
+    }
+  },
+  "年": {
+    "gloss": "año",
+    "example": {
+      "word": "今年",
+      "pinyin": "jīn nián",
+      "es": "este año"
+    }
+  },
+  "后": {
+    "gloss": "detrás; después",
+    "example": {
+      "word": "以后",
+      "pinyin": "yǐ hòu",
+      "es": "después"
+    }
+  },
+  "作": {
+    "gloss": "hacer; trabajar",
+    "example": {
+      "word": "工作",
+      "pinyin": "gōng zuò",
+      "es": "trabajo; trabajar"
+    }
+  },
+  "里": {
+    "gloss": "dentro",
+    "example": {
+      "word": "这里",
+      "pinyin": "zhè lǐ",
+      "es": "aquí"
+    }
+  },
+  "家": {
+    "gloss": "casa; familia",
+    "example": {
+      "word": "大家",
+      "pinyin": "dà jiā",
+      "es": "todos"
+    }
+  },
+  "多": {
+    "gloss": "mucho; más de",
+    "example": {
+      "word": "很多",
+      "pinyin": "hěn duō",
+      "es": "mucho, muchos"
+    }
+  },
+  "么": {
+    "gloss": "(sufijo interrogativo)",
+    "example": {
+      "word": "什么",
+      "pinyin": "shén me",
+      "es": "qué"
+    }
+  },
+  "去": {
+    "gloss": "ir",
+    "example": {
+      "word": "去年",
+      "pinyin": "qù nián",
+      "es": "el año pasado"
+    }
+  },
+  "学": {
+    "gloss": "estudiar; aprender",
+    "example": {
+      "word": "学生",
+      "pinyin": "xué sheng",
+      "es": "estudiante"
+    }
+  },
+  "都": {
+    "gloss": "todos; ya",
+    "example": {
+      "word": "都是",
+      "pinyin": "dōu shì",
+      "es": "todos son"
+    }
+  },
+  "同": {
+    "gloss": "igual; juntos",
+    "example": {
+      "word": "同学",
+      "pinyin": "tóng xué",
+      "es": "compañero de clase"
+    }
+  },
+  "现": {
+    "gloss": "ahora; aparecer",
+    "example": {
+      "word": "现在",
+      "pinyin": "xiàn zài",
+      "es": "ahora"
+    }
+  },
+  "没": {
+    "gloss": "no (haber, tener)",
+    "example": {
+      "word": "没有",
+      "pinyin": "méi yǒu",
+      "es": "no tener; no hay"
+    }
+  },
+  "面": {
+    "gloss": "cara; lado; fideos",
+    "example": {
+      "word": "面条",
+      "pinyin": "miàn tiáo",
+      "es": "fideos"
+    }
+  },
+  "起": {
+    "gloss": "levantarse; empezar",
+    "example": {
+      "word": "起床",
+      "pinyin": "qǐ chuáng",
+      "es": "levantarse (de la cama)"
+    }
+  },
+  "看": {
+    "gloss": "mirar; ver; leer",
+    "example": {
+      "word": "看书",
+      "pinyin": "kàn shū",
+      "es": "leer (un libro)"
+    }
+  },
+  "天": {
+    "gloss": "cielo; día",
+    "example": {
+      "word": "每天",
+      "pinyin": "měi tiān",
+      "es": "cada día"
+    }
+  },
+  "分": {
+    "gloss": "minuto; dividir",
+    "example": {
+      "word": "分钟",
+      "pinyin": "fēn zhōng",
+      "es": "minuto"
+    }
+  },
+  "好": {
+    "gloss": "bueno; bien",
+    "example": {
+      "word": "好的",
+      "pinyin": "hǎo de",
+      "es": "vale, de acuerdo"
+    }
+  },
+  "小": {
+    "gloss": "pequeño",
+    "example": {
+      "word": "小姐",
+      "pinyin": "xiǎo jiě",
+      "es": "señorita"
+    }
+  },
+  "些": {
+    "gloss": "algunos; un poco",
+    "example": {
+      "word": "这些",
+      "pinyin": "zhè xiē",
+      "es": "estos"
+    }
+  },
+  "样": {
+    "gloss": "forma; manera",
+    "example": {
+      "word": "怎么样",
+      "pinyin": "zěn me yàng",
+      "es": "¿qué tal?"
+    }
+  },
+  "她": {
+    "gloss": "ella",
+    "example": {
+      "word": "她们",
+      "pinyin": "tā men",
+      "es": "ellas"
+    }
+  },
+  "本": {
+    "gloss": "(clas. libros); origen",
+    "example": {
+      "word": "本子",
+      "pinyin": "běn zi",
+      "es": "cuaderno"
+    }
+  },
+  "前": {
+    "gloss": "delante; antes",
+    "example": {
+      "word": "前面",
+      "pinyin": "qián miàn",
+      "es": "delante"
+    }
+  },
+  "开": {
+    "gloss": "abrir; encender; conducir",
+    "example": {
+      "word": "开车",
+      "pinyin": "kāi chē",
+      "es": "conducir"
+    }
+  },
+  "想": {
+    "gloss": "querer; pensar",
+    "example": {
+      "word": "我想",
+      "pinyin": "wǒ xiǎng",
+      "es": "quiero; creo"
+    }
+  },
+  "机": {
+    "gloss": "máquina",
+    "example": {
+      "word": "手机",
+      "pinyin": "shǒu jī",
+      "es": "móvil"
+    }
+  },
+  "十": {
+    "gloss": "diez",
+    "example": {
+      "word": "十月",
+      "pinyin": "shí yuè",
+      "es": "octubre"
+    }
+  },
+  "工": {
+    "gloss": "trabajo; obrero",
+    "example": {
+      "word": "工作",
+      "pinyin": "gōng zuò",
+      "es": "trabajo; trabajar"
+    }
+  },
+  "明": {
+    "gloss": "claro; brillante",
+    "example": {
+      "word": "明天",
+      "pinyin": "míng tiān",
+      "es": "mañana"
+    }
+  },
+  "三": {
+    "gloss": "tres",
+    "example": {
+      "word": "三月",
+      "pinyin": "sān yuè",
+      "es": "marzo"
+    }
+  },
+  "关": {
+    "gloss": "cerrar; relación",
+    "example": {
+      "word": "关门",
+      "pinyin": "guān mén",
+      "es": "cerrar la puerta"
+    }
+  },
+  "点": {
+    "gloss": "punto; hora; un poco",
+    "example": {
+      "word": "几点",
+      "pinyin": "jǐ diǎn",
+      "es": "¿qué hora es?"
+    }
+  },
+  "高": {
+    "gloss": "alto",
+    "example": {
+      "word": "高兴",
+      "pinyin": "gāo xìng",
+      "es": "contento"
+    }
+  },
+  "很": {
+    "gloss": "muy",
+    "example": {
+      "word": "很好",
+      "pinyin": "hěn hǎo",
+      "es": "muy bien"
+    }
+  },
+  "见": {
+    "gloss": "ver; encontrarse",
+    "example": {
+      "word": "看见",
+      "pinyin": "kàn jiàn",
+      "es": "ver"
+    }
+  },
+  "什": {
+    "gloss": "(en 什么) qué",
+    "example": {
+      "word": "什么",
+      "pinyin": "shén me",
+      "es": "qué"
+    }
+  },
+  "二": {
+    "gloss": "dos",
+    "example": {
+      "word": "二月",
+      "pinyin": "èr yuè",
+      "es": "febrero"
+    }
+  },
+  "果": {
+    "gloss": "fruta; resultado",
+    "example": {
+      "word": "苹果",
+      "pinyin": "píng guǒ",
+      "es": "manzana"
+    }
+  },
+  "西": {
+    "gloss": "oeste",
+    "example": {
+      "word": "东西",
+      "pinyin": "dōng xi",
+      "es": "cosa"
+    }
+  },
+  "月": {
+    "gloss": "mes; luna",
+    "example": {
+      "word": "一月",
+      "pinyin": "yī yuè",
+      "es": "enero"
+    }
+  },
+  "话": {
+    "gloss": "habla; palabras",
+    "example": {
+      "word": "电话",
+      "pinyin": "diàn huà",
+      "es": "teléfono"
+    }
+  },
+  "回": {
+    "gloss": "volver; vez",
+    "example": {
+      "word": "回家",
+      "pinyin": "huí jiā",
+      "es": "volver a casa"
+    }
+  },
+  "老": {
+    "gloss": "viejo",
+    "example": {
+      "word": "老人",
+      "pinyin": "lǎo rén",
+      "es": "anciano"
+    }
+  },
+  "先": {
+    "gloss": "primero; antes",
+    "example": {
+      "word": "先生",
+      "pinyin": "xiān sheng",
+      "es": "señor"
+    }
+  },
+  "儿": {
+    "gloss": "hijo; niño",
+    "example": {
+      "word": "儿子",
+      "pinyin": "ér zi",
+      "es": "hijo"
+    }
+  },
+  "东": {
+    "gloss": "este (punto cardinal)",
+    "example": {
+      "word": "东西",
+      "pinyin": "dōng xi",
+      "es": "cosa"
+    }
+  },
+  "水": {
+    "gloss": "agua",
+    "example": {
+      "word": "水果",
+      "pinyin": "shuǐ guǒ",
+      "es": "fruta"
+    }
+  },
+  "名": {
+    "gloss": "nombre; famoso",
+    "example": {
+      "word": "名字",
+      "pinyin": "míng zi",
+      "es": "nombre"
+    }
+  },
+  "几": {
+    "gloss": "¿cuántos?; unos pocos",
+    "example": {
+      "word": "几个",
+      "pinyin": "jǐ ge",
+      "es": "¿cuántos?"
+    }
+  },
+  "认": {
+    "gloss": "reconocer; conocer",
+    "example": {
+      "word": "认识",
+      "pinyin": "rèn shi",
+      "es": "conocer"
+    }
+  },
+  "系": {
+    "gloss": "relación; sistema",
+    "example": {
+      "word": "没关系",
+      "pinyin": "méi guān xi",
+      "es": "no pasa nada"
+    }
+  },
+  "气": {
+    "gloss": "aire; gas",
+    "example": {
+      "word": "天气",
+      "pinyin": "tiān qì",
+      "es": "el tiempo (clima)"
+    }
+  },
+  "打": {
+    "gloss": "golpear; llamar; jugar",
+    "example": {
+      "word": "打电话",
+      "pinyin": "dǎ diàn huà",
+      "es": "llamar por teléfono"
+    }
+  },
+  "女": {
+    "gloss": "mujer; femenino",
+    "example": {
+      "word": "女儿",
+      "pinyin": "nǚ ér",
+      "es": "hija"
+    }
+  },
+  "四": {
+    "gloss": "cuatro",
+    "example": {
+      "word": "四月",
+      "pinyin": "sì yuè",
+      "es": "abril"
+    }
+  },
+  "电": {
+    "gloss": "electricidad",
+    "example": {
+      "word": "电视",
+      "pinyin": "diàn shì",
+      "es": "televisión"
+    }
+  },
+  "少": {
+    "gloss": "poco; faltar",
+    "example": {
+      "word": "多少",
+      "pinyin": "duō shao",
+      "es": "¿cuánto?"
+    }
+  },
+  "太": {
+    "gloss": "demasiado; muy",
+    "example": {
+      "word": "太好了",
+      "pinyin": "tài hǎo le",
+      "es": "¡genial!"
+    }
+  },
+  "再": {
+    "gloss": "otra vez; luego",
+    "example": {
+      "word": "再见",
+      "pinyin": "zài jiàn",
+      "es": "adiós"
+    }
+  },
+  "做": {
+    "gloss": "hacer",
+    "example": {
+      "word": "做饭",
+      "pinyin": "zuò fàn",
+      "es": "cocinar"
+    }
+  },
+  "期": {
+    "gloss": "período; fecha",
+    "example": {
+      "word": "星期",
+      "pinyin": "xīng qī",
+      "es": "semana"
+    }
+  },
+  "五": {
+    "gloss": "cinco",
+    "example": {
+      "word": "五月",
+      "pinyin": "wǔ yuè",
+      "es": "mayo"
+    }
+  },
+  "书": {
+    "gloss": "libro",
+    "example": {
+      "word": "书店",
+      "pinyin": "shū diàn",
+      "es": "librería"
+    }
+  },
+  "听": {
+    "gloss": "escuchar; oír",
+    "example": {
+      "word": "听说",
+      "pinyin": "tīng shuō",
+      "es": "oír decir"
+    }
+  },
+  "住": {
+    "gloss": "vivir; alojarse",
+    "example": {
+      "word": "住在",
+      "pinyin": "zhù zài",
+      "es": "vivir en"
+    }
+  },
+  "北": {
+    "gloss": "norte",
+    "example": {
+      "word": "北京",
+      "pinyin": "Běi jīng",
+      "es": "Pekín"
+    }
+  },
+  "觉": {
+    "gloss": "sentir; notar",
+    "example": {
+      "word": "觉得",
+      "pinyin": "jué de",
+      "es": "creer, parecer"
+    }
+  },
+  "师": {
+    "gloss": "maestro",
+    "example": {
+      "word": "老师",
+      "pinyin": "lǎo shī",
+      "es": "profesor"
+    }
+  },
+  "今": {
+    "gloss": "hoy; actual",
+    "example": {
+      "word": "今天",
+      "pinyin": "jīn tiān",
+      "es": "hoy"
+    }
+  },
+  "院": {
+    "gloss": "patio; institución",
+    "example": {
+      "word": "医院",
+      "pinyin": "yī yuàn",
+      "es": "hospital"
+    }
+  },
+  "识": {
+    "gloss": "conocer; saber",
+    "example": {
+      "word": "认识",
+      "pinyin": "rèn shi",
+      "es": "conocer"
+    }
+  },
+  "候": {
+    "gloss": "(en 时候) momento",
+    "example": {
+      "word": "时候",
+      "pinyin": "shí hou",
+      "es": "momento, cuando"
+    }
+  },
+  "飞": {
+    "gloss": "volar",
+    "example": {
+      "word": "飞机",
+      "pinyin": "fēi jī",
+      "es": "avión"
+    }
+  },
+  "车": {
+    "gloss": "coche; vehículo",
+    "example": {
+      "word": "火车",
+      "pinyin": "huǒ chē",
+      "es": "tren"
+    }
+  },
+  "服": {
+    "gloss": "ropa; servir",
+    "example": {
+      "word": "服务员",
+      "pinyin": "fú wù yuán",
+      "es": "camarero"
+    }
+  },
+  "怎": {
+    "gloss": "¿cómo?",
+    "example": {
+      "word": "怎么",
+      "pinyin": "zěn me",
+      "es": "cómo"
+    }
+  },
+  "呢": {
+    "gloss": "(partícula) ¿y...?",
+    "example": {
+      "word": "你呢",
+      "pinyin": "nǐ ne",
+      "es": "¿y tú?"
+    }
+  },
+  "叫": {
+    "gloss": "llamarse; llamar",
+    "example": {
+      "word": "你叫什么",
+      "pinyin": "nǐ jiào shén me",
+      "es": "¿cómo te llamas?"
+    }
+  },
+  "影": {
+    "gloss": "sombra; imagen",
+    "example": {
+      "word": "电影",
+      "pinyin": "diàn yǐng",
+      "es": "película"
+    }
+  },
+  "字": {
+    "gloss": "carácter; letra",
+    "example": {
+      "word": "汉字",
+      "pinyin": "Hàn zì",
+      "es": "carácter chino"
+    }
+  },
+  "爱": {
+    "gloss": "amar; gustar",
+    "example": {
+      "word": "我爱你",
+      "pinyin": "wǒ ài nǐ",
+      "es": "te quiero"
+    }
+  },
+  "商": {
+    "gloss": "comercio",
+    "example": {
+      "word": "商店",
+      "pinyin": "shāng diàn",
+      "es": "tienda"
+    }
+  },
+  "请": {
+    "gloss": "por favor; invitar",
+    "example": {
+      "word": "请问",
+      "pinyin": "qǐng wèn",
+      "es": "disculpe, ¿...?"
+    }
+  },
+  "视": {
+    "gloss": "mirar; ver",
+    "example": {
+      "word": "电视",
+      "pinyin": "diàn shì",
+      "es": "televisión"
+    }
+  },
+  "九": {
+    "gloss": "nueve",
+    "example": {
+      "word": "九月",
+      "pinyin": "jiǔ yuè",
+      "es": "septiembre"
+    }
+  },
+  "写": {
+    "gloss": "escribir",
+    "example": {
+      "word": "写字",
+      "pinyin": "xiě zì",
+      "es": "escribir (caracteres)"
+    }
+  },
+  "八": {
+    "gloss": "ocho",
+    "example": {
+      "word": "八月",
+      "pinyin": "bā yuè",
+      "es": "agosto"
+    }
+  },
+  "吗": {
+    "gloss": "(partícula interrogativa)",
+    "example": {
+      "word": "你好吗",
+      "pinyin": "nǐ hǎo ma",
+      "es": "¿qué tal estás?"
+    }
+  },
+  "吃": {
+    "gloss": "comer",
+    "example": {
+      "word": "好吃",
+      "pinyin": "hǎo chī",
+      "es": "rico, sabroso"
+    }
+  },
+  "六": {
+    "gloss": "seis",
+    "example": {
+      "word": "六月",
+      "pinyin": "liù yuè",
+      "es": "junio"
+    }
+  },
+  "医": {
+    "gloss": "médico; medicina",
+    "example": {
+      "word": "医生",
+      "pinyin": "yī shēng",
+      "es": "médico"
+    }
+  },
+  "号": {
+    "gloss": "número; día del mes",
+    "example": {
+      "word": "几号",
+      "pinyin": "jǐ hào",
+      "es": "¿qué día?"
+    }
+  },
+  "语": {
+    "gloss": "idioma; lengua",
+    "example": {
+      "word": "汉语",
+      "pinyin": "Hàn yǔ",
+      "es": "chino (idioma)"
+    }
+  },
+  "七": {
+    "gloss": "siete",
+    "example": {
+      "word": "七月",
+      "pinyin": "qī yuè",
+      "es": "julio"
+    }
+  },
+  "兴": {
+    "gloss": "interés; alegría",
+    "example": {
+      "word": "高兴",
+      "pinyin": "gāo xìng",
+      "es": "contento"
+    }
+  },
+  "星": {
+    "gloss": "estrella",
+    "example": {
+      "word": "星期",
+      "pinyin": "xīng qī",
+      "es": "semana"
+    }
+  },
+  "京": {
+    "gloss": "capital",
+    "example": {
+      "word": "北京",
+      "pinyin": "Běi jīng",
+      "es": "Pekín"
+    }
+  },
+  "米": {
+    "gloss": "arroz; metro",
+    "example": {
+      "word": "米饭",
+      "pinyin": "mǐ fàn",
+      "es": "arroz cocido"
+    }
+  },
+  "客": {
+    "gloss": "invitado; cliente",
+    "example": {
+      "word": "客人",
+      "pinyin": "kè rén",
+      "es": "invitado"
+    }
+  },
+  "友": {
+    "gloss": "amigo",
+    "example": {
+      "word": "朋友",
+      "pinyin": "péng you",
+      "es": "amigo"
+    }
+  },
+  "钱": {
+    "gloss": "dinero",
+    "example": {
+      "word": "多少钱",
+      "pinyin": "duō shao qián",
+      "es": "¿cuánto cuesta?"
+    }
+  },
+  "热": {
+    "gloss": "caliente; calor",
+    "example": {
+      "word": "很热",
+      "pinyin": "hěn rè",
+      "es": "hace mucho calor"
+    }
+  },
+  "坐": {
+    "gloss": "sentarse; ir en",
+    "example": {
+      "word": "请坐",
+      "pinyin": "qǐng zuò",
+      "es": "siéntese"
+    }
+  },
+  "校": {
+    "gloss": "escuela",
+    "example": {
+      "word": "学校",
+      "pinyin": "xué xiào",
+      "es": "escuela"
+    }
+  },
+  "脑": {
+    "gloss": "cerebro",
+    "example": {
+      "word": "电脑",
+      "pinyin": "diàn nǎo",
+      "es": "ordenador"
+    }
+  },
+  "谁": {
+    "gloss": "¿quién?",
+    "example": {
+      "word": "谁的",
+      "pinyin": "shuí de",
+      "es": "¿de quién?"
+    }
+  },
+  "哪": {
+    "gloss": "¿cuál?; ¿dónde?",
+    "example": {
+      "word": "哪个",
+      "pinyin": "nǎ ge",
+      "es": "¿cuál?"
+    }
+  },
+  "喜": {
+    "gloss": "alegría; gustar",
+    "example": {
+      "word": "喜欢",
+      "pinyin": "xǐ huan",
+      "es": "gustar"
+    }
+  },
+  "习": {
+    "gloss": "practicar",
+    "example": {
+      "word": "学习",
+      "pinyin": "xué xí",
+      "es": "estudiar"
+    }
+  },
+  "欢": {
+    "gloss": "alegre; contento",
+    "example": {
+      "word": "欢迎",
+      "pinyin": "huān yíng",
+      "es": "bienvenido"
+    }
+  },
+  "冷": {
+    "gloss": "frío",
+    "example": {
+      "word": "很冷",
+      "pinyin": "hěn lěng",
+      "es": "hace mucho frío"
+    }
+  },
+  "汉": {
+    "gloss": "chino (etnia, idioma)",
+    "example": {
+      "word": "汉语",
+      "pinyin": "Hàn yǔ",
+      "es": "chino (idioma)"
+    }
+  },
+  "衣": {
+    "gloss": "ropa",
+    "example": {
+      "word": "衣服",
+      "pinyin": "yī fu",
+      "es": "ropa"
+    }
+  },
+  "妈": {
+    "gloss": "mamá",
+    "example": {
+      "word": "妈妈",
+      "pinyin": "mā ma",
+      "es": "mamá"
+    }
+  },
+  "读": {
+    "gloss": "leer; estudiar",
+    "example": {
+      "word": "读书",
+      "pinyin": "dú shū",
+      "es": "leer; estudiar"
+    }
+  },
+  "买": {
+    "gloss": "comprar",
+    "example": {
+      "word": "买东西",
+      "pinyin": "mǎi dōng xi",
+      "es": "ir de compras"
+    }
+  },
+  "岁": {
+    "gloss": "años (de edad)",
+    "example": {
+      "word": "几岁",
+      "pinyin": "jǐ suì",
+      "es": "¿cuántos años?"
+    }
+  },
+  "块": {
+    "gloss": "yuan (coloquial); trozo",
+    "example": {
+      "word": "三块钱",
+      "pinyin": "sān kuài qián",
+      "es": "tres yuanes"
+    }
+  },
+  "姐": {
+    "gloss": "hermana mayor",
+    "example": {
+      "word": "姐姐",
+      "pinyin": "jiě jie",
+      "es": "hermana mayor"
+    }
+  },
+  "亮": {
+    "gloss": "brillante; luz",
+    "example": {
+      "word": "月亮",
+      "pinyin": "yuè liang",
+      "es": "luna"
+    }
+  },
+  "朋": {
+    "gloss": "amigo",
+    "example": {
+      "word": "朋友",
+      "pinyin": "péng you",
+      "es": "amigo"
+    }
+  },
+  "谢": {
+    "gloss": "agradecer",
+    "example": {
+      "word": "谢谢",
+      "pinyin": "xiè xie",
+      "es": "gracias"
+    }
+  },
+  "钟": {
+    "gloss": "reloj; hora",
+    "example": {
+      "word": "三点钟",
+      "pinyin": "sān diǎn zhōng",
+      "es": "las tres en punto"
+    }
+  },
+  "雨": {
+    "gloss": "lluvia",
+    "example": {
+      "word": "下雨",
+      "pinyin": "xià yǔ",
+      "es": "llover"
+    }
+  },
+  "饭": {
+    "gloss": "comida; arroz cocido",
+    "example": {
+      "word": "吃饭",
+      "pinyin": "chī fàn",
+      "es": "comer"
+    }
+  },
+  "睡": {
+    "gloss": "dormir",
+    "example": {
+      "word": "睡觉",
+      "pinyin": "shuì jiào",
+      "es": "dormir"
+    }
+  },
+  "喝": {
+    "gloss": "beber",
+    "example": {
+      "word": "喝水",
+      "pinyin": "hē shuǐ",
+      "es": "beber agua"
+    }
+  },
+  "午": {
+    "gloss": "mediodía",
+    "example": {
+      "word": "中午",
+      "pinyin": "zhōng wǔ",
+      "es": "mediodía"
+    }
+  },
+  "店": {
+    "gloss": "tienda",
+    "example": {
+      "word": "饭店",
+      "pinyin": "fàn diàn",
+      "es": "restaurante; hotel"
+    }
+  },
+  "爸": {
+    "gloss": "papá",
+    "example": {
+      "word": "爸爸",
+      "pinyin": "bà ba",
+      "es": "papá"
+    }
+  },
+  "桌": {
+    "gloss": "mesa",
+    "example": {
+      "word": "桌子",
+      "pinyin": "zhuō zi",
+      "es": "mesa"
+    }
+  },
+  "菜": {
+    "gloss": "plato; verdura",
+    "example": {
+      "word": "中国菜",
+      "pinyin": "Zhōng guó cài",
+      "es": "comida china"
+    }
+  },
+  "茶": {
+    "gloss": "té",
+    "example": {
+      "word": "喝茶",
+      "pinyin": "hē chá",
+      "es": "tomar té"
+    }
+  },
+  "狗": {
+    "gloss": "perro",
+    "example": {
+      "word": "小狗",
+      "pinyin": "xiǎo gǒu",
+      "es": "perrito"
+    }
+  },
+  "杯": {
+    "gloss": "vaso; taza",
+    "example": {
+      "word": "杯子",
+      "pinyin": "bēi zi",
+      "es": "vaso, taza"
+    }
+  },
+  "租": {
+    "gloss": "alquilar",
+    "example": {
+      "word": "出租车",
+      "pinyin": "chū zū chē",
+      "es": "taxi"
+    }
+  },
+  "昨": {
+    "gloss": "ayer",
+    "example": {
+      "word": "昨天",
+      "pinyin": "zuó tiān",
+      "es": "ayer"
+    }
+  },
+  "漂": {
+    "gloss": "(en 漂亮) bonito",
+    "example": {
+      "word": "漂亮",
+      "pinyin": "piào liang",
+      "es": "bonito, guapo"
+    }
+  },
+  "椅": {
+    "gloss": "silla",
+    "example": {
+      "word": "椅子",
+      "pinyin": "yǐ zi",
+      "es": "silla"
+    }
+  },
+  "猫": {
+    "gloss": "gato",
+    "example": {
+      "word": "小猫",
+      "pinyin": "xiǎo māo",
+      "es": "gatito"
+    }
+  },
+  "喂": {
+    "gloss": "¡oye!; ¿diga? (teléfono)",
+    "example": {
+      "word": "喂，你好",
+      "pinyin": "wèi, nǐ hǎo",
+      "es": "¿diga?, hola"
+    }
+  },
+  "苹": {
+    "gloss": "(en 苹果) manzana",
+    "example": {
+      "word": "苹果",
+      "pinyin": "píng guǒ",
+      "es": "manzana"
+    }
+  }
+}

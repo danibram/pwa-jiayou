@@ -5,15 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "build:only": "vite build",
-    "typecheck": "tsc --noEmit",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "strokes": "node scripts/copy-strokes.mjs"
   },
   "dependencies": {
-    "posthog-js": "^1.280.1",
+    "hanzi-writer": "^3.7.3",
     "solid-js": "^1.8.7"
   },
   "devDependencies": {
@@ -21,6 +20,7 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@types/node": "^20.10.5",
     "autoprefixer": "^10.4.16",
+    "hanzi-writer-data": "^2.0.1",
     "jsdom": "^23.0.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
