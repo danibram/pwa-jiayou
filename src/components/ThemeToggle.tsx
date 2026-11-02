@@ -9,7 +9,7 @@ const ThemeToggle: Component<{ class?: string }> = (props) => {
   return (
     <button
       type="button"
-      class={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink text-ink transition duration-200 ease-out active:scale-[0.96] ${props.class ?? ''}`}
+      class={`btn-quiet h-10 w-10 shrink-0 p-0 text-ink-soft hover:text-ink ${props.class ?? ''}`}
       aria-label={`${themeLabel()}. Cambiar tema`}
       title={themeLabel()}
       onClick={() => {
