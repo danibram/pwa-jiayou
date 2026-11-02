@@ -10,10 +10,12 @@ const target = join(root, 'public/strokes');
 mkdirSync(target, { recursive: true });
 
 const chars = new Set();
-for (const level of [1, 2, 3]) {
-    const data = JSON.parse(readFileSync(join(root, `src/data/hsk${level}.json`), 'utf8'));
-    for (const entry of data) chars.add(entry.character);
-}
+const addFile = (path) => {
+  const data = JSON.parse(readFileSync(path, 'utf8'));
+  for (const entry of data) chars.add(entry.character);
+};
+addFile(join(root, 'src/data/hsk1.json'));
+// Levels 2–6 ship strokes inside public/packs/hskN/strokes/ (see build-media-packs.mjs).
 
 const missing = [];
 for (const char of chars) {

@@ -1101,7 +1101,7 @@
     },
     {
         "character": "今",
-        "traditional": null,
+        "traditional": "今",
         "pinyin": "jīn",
         "definition": "ahora, hoy, era moderna",
         "radical": "人",
@@ -1110,7 +1110,7 @@
     },
     {
         "character": "院",
-        "traditional": null,
+        "traditional": "院",
         "pinyin": "yuàn",
         "definition": "patio, tribunal, escuela",
         "radical": "阜",
@@ -1128,7 +1128,7 @@
     },
     {
         "character": "候",
-        "traditional": null,
+        "traditional": "候",
         "pinyin": "hòu",
         "definition": "esperar; anticipar; visitar; saludar",
         "radical": "人",
@@ -1155,7 +1155,7 @@
     },
     {
         "character": "服",
-        "traditional": null,
+        "traditional": "服",
         "pinyin": "fú",
         "definition": "ropa; vestir",
         "radical": "月",
@@ -1164,7 +1164,7 @@
     },
     {
         "character": "怎",
-        "traditional": null,
+        "traditional": "怎",
         "pinyin": "zěn",
         "definition": "¿qué? ¿por qué? ¿cómo?",
         "radical": "心",
@@ -1173,7 +1173,7 @@
     },
     {
         "character": "呢",
-        "traditional": null,
+        "traditional": "呢",
         "pinyin": "ne",
         "definition": "partícula interrogativa o enfática final; (cant.) este",
         "radical": "口",
@@ -1182,7 +1182,7 @@
     },
     {
         "character": "叫",
-        "traditional": null,
+        "traditional": "叫",
         "pinyin": "jiào",
         "definition": "gritar; saludar, llamar",
         "radical": "口",
@@ -1191,7 +1191,7 @@
     },
     {
         "character": "影",
-        "traditional": null,
+        "traditional": "影",
         "pinyin": "yǐng",
         "definition": "sombra; imagen, reflejo; fotografía",
         "radical": "彡",
@@ -1200,7 +1200,7 @@
     },
     {
         "character": "字",
-        "traditional": null,
+        "traditional": "字",
         "pinyin": "zì",
         "definition": "letra, carácter, palabra",
         "radical": "子",
@@ -1218,7 +1218,7 @@
     },
     {
         "character": "商",
-        "traditional": null,
+        "traditional": "商",
         "pinyin": "shāng",
         "definition": "comercio, negocios, intercambio",
         "radical": "口",
@@ -1245,7 +1245,7 @@
     },
     {
         "character": "九",
-        "traditional": null,
+        "traditional": "九",
         "pinyin": "jiǔ",
         "definition": "nueve",
         "radical": "乙",
@@ -1263,7 +1263,7 @@
     },
     {
         "character": "八",
-        "traditional": null,
+        "traditional": "八",
         "pinyin": "bā",
         "definition": "ocho; alrededor, a todos lados",
         "radical": "八",
@@ -1281,7 +1281,7 @@
     },
     {
         "character": "吃",
-        "traditional": null,
+        "traditional": "吃",
         "pinyin": "chī",
         "definition": "comer; beber; sufrir, soportar, aguantar",
         "radical": "口",
@@ -1290,7 +1290,7 @@
     },
     {
         "character": "六",
-        "traditional": null,
+        "traditional": "六",
         "pinyin": "liù",
         "definition": "seis",
         "radical": "八",
@@ -1326,7 +1326,7 @@
     },
     {
         "character": "七",
-        "traditional": null,
+        "traditional": "七",
         "pinyin": "qī",
         "definition": "siete",
         "radical": "一",
@@ -1344,7 +1344,7 @@
     },
     {
         "character": "星",
-        "traditional": null,
+        "traditional": "星",
         "pinyin": "xīng",
         "definition": "estrella, planeta; punto de luz",
         "radical": "日",
@@ -1353,7 +1353,7 @@
     },
     {
         "character": "京",
-        "traditional": null,
+        "traditional": "京",
         "pinyin": "jīng",
         "definition": "ciudad capital",
         "radical": "亠",
@@ -1362,7 +1362,7 @@
     },
     {
         "character": "米",
-        "traditional": null,
+        "traditional": "米",
         "pinyin": "mǐ",
         "definition": "arroz sin cáscara crudo",
         "radical": "米",
@@ -1371,7 +1371,7 @@
     },
     {
         "character": "客",
-        "traditional": null,
+        "traditional": "客",
         "pinyin": "kè",
         "definition": "huésped, viajero; cliente",
         "radical": "宀",
@@ -1380,7 +1380,7 @@
     },
     {
         "character": "友",
-        "traditional": null,
+        "traditional": "友",
         "pinyin": "yǒu",
         "definition": "amigo, compañero; fraternidad",
         "radical": "又",
@@ -1407,7 +1407,7 @@
     },
     {
         "character": "坐",
-        "traditional": null,
+        "traditional": "坐",
         "pinyin": "zuò",
         "definition": "sentarse; asiento; viajar en",
         "radical": "土",
@@ -1416,7 +1416,7 @@
     },
     {
         "character": "校",
-        "traditional": null,
+        "traditional": "校",
         "pinyin": "xiào",
         "definition": "escuela; oficial de campo militar",
         "radical": "木",
@@ -1443,7 +1443,7 @@
     },
     {
         "character": "哪",
-        "traditional": null,
+        "traditional": "哪",
         "pinyin": "nǎ",
         "definition": "¿cuál? ¿dónde? ¿cómo?",
         "radical": "口",
@@ -1452,7 +1452,7 @@
     },
     {
         "character": "喜",
-        "traditional": null,
+        "traditional": "喜",
         "pinyin": "xǐ",
         "definition": "gustar, amar, disfrutar; cosa alegre",
         "radical": "口",
@@ -1479,7 +1479,7 @@
     },
     {
         "character": "冷",
-        "traditional": null,
+        "traditional": "冷",
         "pinyin": "lěng",
         "definition": "frío, fresco; solitario",
         "radical": "冫",
@@ -1497,7 +1497,7 @@
     },
     {
         "character": "衣",
-        "traditional": null,
+        "traditional": "衣",
         "pinyin": "yī",
         "definition": "ropa, vestimenta; cubrir, piel",
         "radical": "衣",
@@ -1551,7 +1551,7 @@
     },
     {
         "character": "姐",
-        "traditional": null,
+        "traditional": "姐",
         "pinyin": "jiě",
         "definition": "hermana mayor, señorita",
         "radical": "女",
@@ -1560,7 +1560,7 @@
     },
     {
         "character": "亮",
-        "traditional": null,
+        "traditional": "亮",
         "pinyin": "liàng",
         "definition": "brillante, radiante, luz",
         "radical": "亠",
@@ -1569,7 +1569,7 @@
     },
     {
         "character": "朋",
-        "traditional": null,
+        "traditional": "朋",
         "pinyin": "péng",
         "definition": "amigo, colega, conocido",
         "radical": "月",
@@ -1596,7 +1596,7 @@
     },
     {
         "character": "雨",
-        "traditional": null,
+        "traditional": "雨",
         "pinyin": "yǔ",
         "definition": "lluvia; lluvioso",
         "radical": "雨",
@@ -1614,7 +1614,7 @@
     },
     {
         "character": "睡",
-        "traditional": null,
+        "traditional": "睡",
         "pinyin": "shuì",
         "definition": "dormir, cabecear",
         "radical": "目",
@@ -1623,7 +1623,7 @@
     },
     {
         "character": "喝",
-        "traditional": null,
+        "traditional": "喝",
         "pinyin": "hē",
         "definition": "beber; gritar, llamar",
         "radical": "口",
@@ -1632,7 +1632,7 @@
     },
     {
         "character": "午",
-        "traditional": null,
+        "traditional": "午",
         "pinyin": "wǔ",
         "definition": "mediodía; séptima rama terrestre",
         "radical": "十",
@@ -1641,7 +1641,7 @@
     },
     {
         "character": "店",
-        "traditional": null,
+        "traditional": "店",
         "pinyin": "diàn",
         "definition": "tienda, comercio; posada, hotel",
         "radical": "广",
@@ -1650,7 +1650,7 @@
     },
     {
         "character": "爸",
-        "traditional": null,
+        "traditional": "爸",
         "pinyin": "bà",
         "definition": "padre, papá",
         "radical": "父",
@@ -1659,7 +1659,7 @@
     },
     {
         "character": "桌",
-        "traditional": null,
+        "traditional": "桌",
         "pinyin": "zhuō",
         "definition": "mesa, escritorio, soporte",
         "radical": "木",
@@ -1668,7 +1668,7 @@
     },
     {
         "character": "菜",
-        "traditional": null,
+        "traditional": "菜",
         "pinyin": "cài",
         "definition": "verduras; plato; comida",
         "radical": "艸",
@@ -1677,7 +1677,7 @@
     },
     {
         "character": "茶",
-        "traditional": null,
+        "traditional": "茶",
         "pinyin": "chá",
         "definition": "té",
         "radical": "艸",
@@ -1686,7 +1686,7 @@
     },
     {
         "character": "狗",
-        "traditional": null,
+        "traditional": "狗",
         "pinyin": "gǒu",
         "definition": "perro",
         "radical": "犬",
@@ -1695,7 +1695,7 @@
     },
     {
         "character": "杯",
-        "traditional": null,
+        "traditional": "杯",
         "pinyin": "bēi",
         "definition": "taza, vaso",
         "radical": "木",
@@ -1704,7 +1704,7 @@
     },
     {
         "character": "租",
-        "traditional": null,
+        "traditional": "租",
         "pinyin": "zū",
         "definition": "alquilar; alquiler; impuesto",
         "radical": "禾",
@@ -1713,7 +1713,7 @@
     },
     {
         "character": "昨",
-        "traditional": null,
+        "traditional": "昨",
         "pinyin": "zuó",
         "definition": "ayer; tiempos pasados",
         "radical": "日",
@@ -1722,7 +1722,7 @@
     },
     {
         "character": "漂",
-        "traditional": null,
+        "traditional": "漂",
         "pinyin": "piào",
         "definition": "flotar, derivar; a la deriva",
         "radical": "水",
@@ -1731,7 +1731,7 @@
     },
     {
         "character": "椅",
-        "traditional": null,
+        "traditional": "椅",
         "pinyin": "yǐ",
         "definition": "silla, asiento",
         "radical": "木",
@@ -1749,7 +1749,7 @@
     },
     {
         "character": "喂",
-        "traditional": null,
+        "traditional": "喂",
         "pinyin": "wèi",
         "definition": "interjección para llamar la atención",
         "radical": "口",

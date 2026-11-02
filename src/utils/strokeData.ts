@@ -1,4 +1,6 @@
 import type { CharacterJson } from 'hanzi-writer';
+import { characterLevel } from '../data/catalog';
+import { CACHE_NAME, packMediaRoot, remoteStrokeUrl } from './levelPacks';
 import { isFiniteNumber, isNonEmpty, isRecord, isString } from './parse';
 
 const cache = new Map<string, Promise<CharacterJson>>();
@@ -26,17 +28,43 @@ const parseCharacterJson = (value: unknown): CharacterJson => {
   return data;
 };
 
-/** Stroke data ships in public/strokes so the mode works offline. */
+const strokeUrls = (char: string) => {
+  const base = import.meta.env.BASE_URL;
+  const encoded = encodeURIComponent(char);
+  const urls = [`${base}strokes/${encoded}.json`];
+  const level = characterLevel(char);
+  if (level && level > 1) urls.push(`${packMediaRoot(level)}strokes/${encoded}.json`);
+  return urls;
+};
+
+/** `keep`: save a fetched copy. Bundled and pack files are cached when their list is saved; the CDN's are kept on first use. */
+const loadFrom = async (url: string, keep: boolean) => {
+  const cacheStorage = 'caches' in globalThis ? await caches.open(CACHE_NAME) : null;
+  const hit = cacheStorage ? await cacheStorage.match(url) : undefined;
+  if (hit) return parseCharacterJson(await hit.json());
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`No stroke data at ${url}`);
+  const data = parseCharacterJson(await response.clone().json());
+  if (keep && cacheStorage) await cacheStorage.put(url, response);
+  return data;
+};
+
+/** Stroke data: HSK 1 in public/strokes, other levels in their downloadable pack, anything else from the CDN. */
 export const loadStrokeData = (char: string): Promise<CharacterJson> => {
   let pending = cache.get(char);
   if (!pending) {
-    pending = fetch(`${import.meta.env.BASE_URL}strokes/${encodeURIComponent(char)}.json`).then(
-      async (res) => {
-        if (!res.ok) throw new Error(`No stroke data for ${char}`);
-        const body: unknown = await res.json();
-        return parseCharacterJson(body);
+    pending = (async () => {
+      let lastError: unknown;
+      const remote = remoteStrokeUrl(char);
+      for (const url of [...strokeUrls(char), remote]) {
+        try {
+          return await loadFrom(url, url === remote);
+        } catch (error) {
+          lastError = error;
+        }
       }
-    );
+      throw lastError ?? new Error(`No stroke data for ${char}`);
+    })();
     pending.catch(() => cache.delete(char));
     cache.set(char, pending);
   }
@@ -46,18 +74,17 @@ export const loadStrokeData = (char: string): Promise<CharacterJson> => {
 /** Reads a theme token from :root as an rgb() string for libraries that need literal colours. */
 export const themeColor = (token: string, alpha = 1): string => {
   const raw = getComputedStyle(document.documentElement).getPropertyValue(`--${token}`).trim();
-  const [r, g, b] = raw.split(/\s+/);
+  // Without the stylesheet (tests, a page still loading) fall back to a neutral grey.
+  const [r, g, b] = raw ? raw.split(/\s+/) : ['128', '128', '128'];
   return alpha === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
 /** Blends one theme token over another, for libraries where alpha would double up on overlaps. */
 export const themeMix = (fg: string, bg: string, amount: number): string => {
-  const read = (token: string) =>
-    getComputedStyle(document.documentElement)
-      .getPropertyValue(`--${token}`)
-      .trim()
-      .split(/\s+/)
-      .map(Number);
+  const read = (token: string) => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(`--${token}`).trim();
+    return raw ? raw.split(/\s+/).map(Number) : [128, 128, 128];
+  };
   const [a, b] = [read(fg), read(bg)];
   const mixed = a.map((v, i) => Math.round(v * amount + b[i] * (1 - amount)));
   return `rgb(${mixed.join(', ')})`;

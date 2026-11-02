@@ -37,7 +37,21 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,json,png,svg,ico,woff2,mp3}'],
+        // Optional HSK lists are fetched into their own cache after the user asks for them.
+        globIgnores: ['**/packs/**'],
         runtimeCaching: [
+          {
+            // The app saves pack clips into this cache itself; <audio> requests only see it through the worker.
+            // Strokes and lists are read with caches.match and stay off this route.
+            urlPattern: ({ url }) => /^\/packs\/hsk\d\/audio\//.test(url.pathname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'hsk-packs-v2',
+              rangeRequests: true,
+              // A missing clip comes back as the HTML shell with status 200; never store that as audio.
+              cacheableResponse: { statuses: [200], headers: { 'content-type': 'audio/mpeg' } },
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'StaleWhileRevalidate',

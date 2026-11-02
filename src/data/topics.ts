@@ -1,4 +1,5 @@
-import type { HSKCharacter } from '../types';
+import type { HSKCharacter, HskLevel } from '../types';
+import { characterLevel } from './catalog';
 
 /** A character may sit in more than one topic. 吃 is both a verb and food. */
 export interface Topic {
@@ -105,6 +106,16 @@ export const topics: Topic[] = [
     characters: ['学', '校', '师', '书', '写', '读', '习', '课', '考', '班', '笔', '纸', '铅', '词', '句', '问', '答', '教', '练', '识'],
   },
   {
+    id: 'trabajos',
+    title: 'Trabajos',
+    glyph: '工',
+    characters: [
+      '工', '作', '做', '职', '业', '班', '干', '劳', '师', '医', '员', '教', '警', '士', '护', '厨', '农', '商',
+      '兵', '军', '官', '公', '司', '办', '企', '厂', '店', '局', '聘', '雇', '招', '退', '休', '辞', '服', '务',
+      '经', '理', '记', '者', '导', '演', '律', '程', '计', '秘', '书', '售', '长', '总', '薪', '资',
+    ],
+  },
+  {
     id: 'personas',
     title: 'Personas',
     glyph: '人',
@@ -141,12 +152,39 @@ export const topics: Topic[] = [
     characters: ['钱', '买', '卖', '块', '贵', '元', '租', '店'],
   },
   {
+    id: 'clasificadores',
+    title: 'Clasificadores',
+    glyph: '个',
+    characters: [
+      '个', '只', '条', '张', '本', '杯', '件', '辆', '双', '位', '口', '头', '匹', '棵', '支', '台', '场', '次',
+      '遍', '层', '段', '节', '份', '把', '间', '座', '栋', '篇', '页', '首', '封', '幅', '片', '块', '顿', '趟',
+      '朵', '套', '副', '艘', '册', '枚', '颗', '粒', '顶', '根', '项', '所', '届', '枝', '株', '串', '幢', '番',
+      '堆', '批', '滴', '些', '点', '回', '包', '袋', '瓶', '盘', '碗', '扇', '卷', '壶', '盒', '箱', '架', '列',
+      '部',
+    ],
+  },
+  {
     id: 'gramatica',
     title: 'Gramática',
     glyph: '的',
     characters: ['的', '了', '不', '没', '都', '也', '很', '太', '再', '吗', '呢', '吧', '着', '个', '最', '就', '还', '把', '被', '从', '和', '对', '们', '些', '过', '地'],
   },
 ];
+
+const topicTitlesByChar = new Map<string, string[]>();
+for (const topic of topics) {
+  for (const character of topic.characters) {
+    const titles = topicTitlesByChar.get(character) ?? [];
+    if (!titles.includes(topic.title)) titles.push(topic.title);
+    topicTitlesByChar.set(character, titles);
+  }
+}
+
+/** Topic names (Temas) this character appears in, sorted for display. */
+export const topicTitlesForCharacter = (character: string): string[] => {
+  const titles = topicTitlesByChar.get(character) ?? [];
+  return [...titles].sort((a, b) => a.localeCompare(b, 'es'));
+};
 
 export const topicById = (id: string): Topic | undefined => topics.find((topic) => topic.id === id);
 
@@ -158,4 +196,20 @@ export const charactersInTopic = (id: string, all: HSKCharacter[]): HSKCharacter
     const found = byChar.get(char);
     return found ? [found] : [];
   });
+};
+
+/** Characters the topic lists that are not on this device, and the levels they belong to. */
+export const topicGap = (id: string, installed: HSKCharacter[]): { missing: number; levels: HskLevel[] } => {
+  const topic = topicById(id);
+  if (!topic) return { missing: 0, levels: [] };
+  const have = new Set(installed.map((char) => char.character));
+  const levels = new Set<HskLevel>();
+  let missing = 0;
+  for (const char of topic.characters) {
+    if (have.has(char)) continue;
+    missing += 1;
+    const level = characterLevel(char);
+    if (level) levels.add(level);
+  }
+  return { missing, levels: [...levels].sort((a, b) => a - b) };
 };

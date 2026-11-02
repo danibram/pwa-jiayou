@@ -55,6 +55,7 @@ export default {
         fade: 'fade 0.3s ease-out both',
         nudge: 'nudge 1.2s ease-in-out 2',
         shake: 'shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both',
+        tick: 'tick 0.45s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       keyframes: {
         rise: {
@@ -78,6 +79,11 @@ export default {
           '20%, 80%': { transform: 'translateX(3px)' },
           '30%, 50%, 70%': { transform: 'translateX(-5px)' },
           '40%, 60%': { transform: 'translateX(5px)' },
+        },
+        tick: {
+          '0%': { transform: 'scale(0.4)', opacity: '0' },
+          '55%': { transform: 'scale(1.18)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
         },
       },
     },

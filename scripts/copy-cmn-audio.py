@@ -27,6 +27,8 @@ REPO = "https://github.com/hugolpz/audio-cmn.git"
 DATA = ROOT / "src" / "data"
 OUT = ROOT / "public" / "audio" / "c"
 CLIPS = DATA / "syllable-clips.json"
+# The source recording contains French speech instead of the neutral syllable.
+EXCLUDED = {"ba5"}
 
 
 def cmn_name(key: str) -> str:
@@ -83,6 +85,8 @@ def main() -> None:
     missing: list[str] = []
     OUT.mkdir(parents=True, exist_ok=True)
     for key in wanted:
+        if key in EXCLUDED:
+            continue
         src = folder / cmn_name(key)
         if not src.is_file():
             missing.append(key)

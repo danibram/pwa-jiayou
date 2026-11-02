@@ -38,12 +38,14 @@ PLAIN = {
     "ū": "u", "ú": "u", "ǔ": "u", "ù": "u",
     "ǖ": "v", "ǘ": "v", "ǚ": "v", "ǜ": "v",
     "ü": "v", "ê": "eh",
+    "ń": "n", "ň": "n", "ǹ": "n",
 }
 TONES = {
     "ā": 1, "ē": 1, "ī": 1, "ō": 1, "ū": 1, "ǖ": 1,
     "á": 2, "é": 2, "í": 2, "ó": 2, "ú": 2, "ǘ": 2,
     "ǎ": 3, "ě": 3, "ǐ": 3, "ǒ": 3, "ǔ": 3, "ǚ": 3,
     "à": 4, "è": 4, "ì": 4, "ò": 4, "ù": 4, "ǜ": 4,
+    "ń": 2, "ň": 3, "ǹ": 4,
 }
 
 
@@ -68,12 +70,25 @@ def tokens(pinyin: str) -> list[str]:
     return [part for part in re.split(r"[\s,;/]+", pinyin) if part]
 
 
-def needed_keys() -> set[str]:
-    chars: dict[str, str] = {}
-    examples: list[tuple[str, str]] = []
+def load_character_rows() -> list[dict]:
+    rows: list[dict] = []
     for path in sorted(DATA.glob("hsk*.json")):
-        for row in json.loads(path.read_text()):
-            chars[row["character"]] = row["pinyin"]
+        rows.extend(json.loads(path.read_text()))
+    pack_dir = ROOT / "public" / "packs"
+    if pack_dir.exists():
+        for path in sorted(pack_dir.glob("hsk*.json")):
+            rows.extend(json.loads(path.read_text()))
+    return rows
+
+
+def needed_keys() -> set[str]:
+    rows = load_character_rows()
+    chars: dict[str, str] = {row["character"]: row["pinyin"] for row in rows}
+    examples: list[tuple[str, str]] = []
+    for row in rows:
+        example = row.get("example") or {}
+        if example.get("pinyin") and example.get("word"):
+            examples.append((example["word"], example["pinyin"]))
     for path in sorted((DATA / "glosses").glob("*.json")):
         for value in json.loads(path.read_text()).values():
             example = value.get("example") or {}
