@@ -14,7 +14,7 @@ describe('progress backup', () => {
     localStorage.setItem(key, JSON.stringify({ 好: { right: 2, wrong: 1 } }));
     const store = await freshStore();
     const backup = store.exportBackup();
-    expect(JSON.parse(backup)).toMatchObject({ version: 2, chars: { 好: { right: 2, wrong: 1 } } });
+    expect(JSON.parse(backup)).toMatchObject({ version: 3, chars: { 好: { right: 2, wrong: 1 } } });
     store.clear();
     store.importBackup(backup);
     expect(store.get('好')).toMatchObject({ right: 2, wrong: 1, ease: 2.5 });

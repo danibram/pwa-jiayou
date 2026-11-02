@@ -2,12 +2,14 @@ import type { HSKCharacter, HskLevel, ReviewPool } from '../types';
 import { GRADES, type Grade } from '../stores/progressStore';
 import { isHskLevel, isNonNegativeInteger, isOneOf, isRecord } from './parse';
 
-export type CardKind = 'learn' | 'quiz' | 'write' | 'retry';
-export type NewStep = 'learn' | 'seen' | 'ask' | 'check';
+/** `rewrite` is a written miss asked again in writing, once, like `retry` is for recall. */
+export type CardKind = 'learn' | 'quiz' | 'write' | 'retry' | 'rewrite';
+/** A new character: the card, its strokes animated, one traced pass, then written from memory. */
+export type NewStep = 'learn' | 'seen' | 'watch' | 'trace' | 'ask' | 'check';
 
-const CARD_KINDS = ['learn', 'quiz', 'write', 'retry'] as const satisfies readonly CardKind[];
-const NEW_STEPS = ['learn', 'seen', 'ask', 'check'] as const satisfies readonly NewStep[];
-const POOLS = ['today', 'more', 'all'] as const satisfies readonly ReviewPool[];
+const CARD_KINDS = ['learn', 'quiz', 'write', 'retry', 'rewrite'] as const satisfies readonly CardKind[];
+const NEW_STEPS = ['learn', 'seen', 'watch', 'trace', 'ask', 'check'] as const satisfies readonly NewStep[];
+const POOLS = ['today', 'more', 'all', 'weak'] as const satisfies readonly ReviewPool[];
 
 export interface SessionCard {
   char: HSKCharacter;
@@ -30,6 +32,8 @@ export interface SessionSnapshot {
   taught: HSKCharacter[];
   heading: string;
   writeState: { done: number; total: number; mistakes: number; hint: boolean };
+  /** Progress as it was when the session began, so "descartar" can put it back. Null in older saves. */
+  checkpoint: string | null;
 }
 
 const KEY = 'jiayou-session-v1';
@@ -116,6 +120,7 @@ const readSession = (parsed: Record<string, unknown>, characters: HSKCharacter[]
   if (typeof parsed.revealed !== 'boolean' || !isOneOf(NEW_STEPS, parsed.step)) return undefined;
   if (feedback !== null && !isOneOf(GRADES, feedback)) return undefined;
   if (typeof parsed.heading !== 'string') return undefined;
+  if (parsed.checkpoint !== undefined && parsed.checkpoint !== null && typeof parsed.checkpoint !== 'string') return undefined;
   return {
     version: 1,
     pool: parsed.pool,
@@ -131,6 +136,7 @@ const readSession = (parsed: Record<string, unknown>, characters: HSKCharacter[]
     taught,
     heading: parsed.heading,
     writeState,
+    checkpoint: typeof parsed.checkpoint === 'string' ? parsed.checkpoint : null,
   };
 };
 
@@ -169,6 +175,7 @@ const serialize = (snapshot: SessionSnapshot) => JSON.stringify({
   taught: snapshot.taught.map((char) => char.character),
   heading: snapshot.heading,
   writeState: snapshot.writeState,
+  checkpoint: snapshot.checkpoint,
 });
 
 export function saveSession(snapshot: SessionSnapshot): boolean {
@@ -185,4 +192,24 @@ export function saveSession(snapshot: SessionSnapshot): boolean {
 
 export function discardSession(): boolean {
   try { localStorage.removeItem(KEY); return localStorage.getItem(KEY) === null; } catch { return false; }
+}
+
+const WRITE_MISSES_KEY = 'jiayou-write-misses';
+
+const readWriteMisses = (): string[] => {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(WRITE_MISSES_KEY) ?? '[]');
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === 'string') : [];
+  } catch { return []; }
+};
+
+/** Characters whose last miss was in writing. Their next question is a written one. */
+export function missedInWriting(char: string): boolean {
+  return readWriteMisses().includes(char);
+}
+
+export function recordWriting(char: string, missed: boolean): void {
+  const list = readWriteMisses().filter((item) => item !== char);
+  if (missed) list.push(char);
+  try { localStorage.setItem(WRITE_MISSES_KEY, JSON.stringify(list)); } catch { /* Only a preference for the next question. */ }
 }

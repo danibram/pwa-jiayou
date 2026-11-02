@@ -1,0 +1,37 @@
+{
+  "source": "https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/wordlists/exclusive/old",
+  "sourceId": "hsk-2-0",
+  "retrieved": "2026-11-01",
+  "levels": [
+    {
+      "level": 1,
+      "count": 150,
+      "path": "src/data/vocabulary/hsk1.json"
+    },
+    {
+      "level": 2,
+      "count": 147,
+      "path": "src/data/vocabulary/hsk2.json"
+    },
+    {
+      "level": 3,
+      "count": 298,
+      "path": "src/data/vocabulary/hsk3.json"
+    },
+    {
+      "level": 4,
+      "count": 598,
+      "path": "src/data/vocabulary/hsk4.json"
+    },
+    {
+      "level": 5,
+      "count": 1298,
+      "path": "src/data/vocabulary/hsk5.json"
+    },
+    {
+      "level": 6,
+      "count": 2500,
+      "path": "src/data/vocabulary/hsk6.json"
+    }
+  ]
+}

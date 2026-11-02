@@ -41,8 +41,19 @@ interface StrokeCanvasProps {
   onStroke?: (done: number, mistakes: number) => void;
   onMistake?: (strokeNum: number, mistakes: number) => void;
   onComplete?: (mistakes: number) => void;
+  /** Three misses on one stroke: that stroke is drawn for the learner, once per stroke. */
+  onStrokeCeiling?: (strokeNum: number) => void;
+  /** Eight misses in all: time to show the whole character. Fires once per quiz. */
+  onTotalCeiling?: () => void;
+  /** First sight of a character: strokes animate about 1.5x slower. */
+  slow?: boolean;
+  /** Keep the learner's own strokes on the board for a moment after finishing, and under a shown answer. */
+  echoInk?: boolean;
   api?: (api: StrokeCanvasApi) => void;
 }
+
+const STROKE_CEILING = 3;
+const TOTAL_CEILING = 8;
 
 const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
   let host: HTMLDivElement | undefined;
@@ -56,6 +67,30 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
   const [quizActive, setQuizActive] = createSignal(false);
   const [idle, setIdle] = createSignal(false);
   const [cueHidden, setCueHidden] = createSignal(false);
+  /** Two misses on the current stroke: show where it starts, whatever the hint setting. */
+  const [stuck, setStuck] = createSignal(false);
+  /** What the learner drew on a wrong stroke, shown in red for a moment. */
+  const [misses, setMisses] = createSignal<{ id: number; d: string }[]>([]);
+  let missId = 0;
+  const pathOf = (points: { x: number; y: number }[]) => points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(' ');
+  /** Everything the learner drew in this quiz, right and wrong, for "Tu trazo". */
+  const [drawn, setDrawn] = createSignal<string[]>([]);
+  const [inkShown, setInkShown] = createSignal(false);
+  /** The stroke a "Pista" points at. It stays until the learner starts drawing. */
+  const [hinted, setHinted] = createSignal<number | null>(null);
+  let inkTimer: ReturnType<typeof setTimeout> | undefined;
+  let ceilingStrokes = new Set<number>();
+  let totalCeilingHit = false;
+  const keepInk = (points: { x: number; y: number }[]) => {
+    if (points.length >= 2) setDrawn((list) => [...list, pathOf(points)]);
+  };
+  const showMiss = (points: { x: number; y: number }[]) => {
+    if (points.length < 2) return;
+    const id = ++missId;
+    const d = pathOf(points);
+    setMisses((list) => [...list, { id, d }]);
+    setTimeout(() => setMisses((list) => list.filter((miss) => miss.id !== id)), 700);
+  };
   const armIdle = () => {
     clearTimeout(idleTimer);
     setIdle(false);
@@ -70,6 +105,14 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     quizMistakes = 0;
     setCurrentStroke(0);
     setCueHidden(false);
+    setStuck(false);
+    setMisses([]);
+    setDrawn([]);
+    setInkShown(false);
+    setHinted(null);
+    clearTimeout(inkTimer);
+    ceilingStrokes = new Set();
+    totalCeilingHit = false;
     setQuizActive(true);
     armIdle();
     props.onStroke?.(0, 0);
@@ -81,19 +124,45 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
       showHintAfterMisses: 2,
       leniency: 1.1,
       onCorrectStroke: (s) => {
+        keepInk(s.drawnPath.points);
         quizStroke = s.strokeNum + 1;
         setCurrentStroke(quizStroke);
         setCueHidden(false);
+        setStuck(false);
         armIdle();
         props.onStroke?.(quizStroke, s.totalMistakes);
       },
       onMistake: (s) => {
         quizMistakes = s.totalMistakes;
+        showMiss(s.drawnPath.points);
+        keepInk(s.drawnPath.points);
+        if (s.mistakesOnStroke >= 2 && !stuck()) {
+          setStuck(true);
+          setCueHidden(false);
+          writer?.highlightStroke(s.strokeNum);
+        }
         props.onMistake?.(s.strokeNum, quizMistakes);
+        if (s.mistakesOnStroke >= STROKE_CEILING && !ceilingStrokes.has(s.strokeNum)) {
+          ceilingStrokes.add(s.strokeNum);
+          // Draw it for them, then let them carry on.
+          setHinted(s.strokeNum);
+          writer?.highlightStroke(s.strokeNum);
+          props.onStrokeCeiling?.(s.strokeNum);
+        }
+        if (s.totalMistakes >= TOTAL_CEILING && !totalCeilingHit) {
+          totalCeilingHit = true;
+          props.onTotalCeiling?.();
+        }
       },
       onComplete: (summary) => {
         setQuizActive(false);
         clearTimeout(idleTimer);
+        setHinted(null);
+        if (props.echoInk && drawn().length > 0) {
+          setInkShown(true);
+          clearTimeout(inkTimer);
+          inkTimer = setTimeout(() => setInkShown(false), 1100);
+        }
         props.onComplete?.(summary.totalMistakes);
       },
     });
@@ -145,8 +214,8 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
       drawingColor: themeColor('ink', 0.75),
       highlightColor: themeColor('gold'),
       drawingWidth: Math.max(14, Math.round(size() / 22)),
-      strokeAnimationSpeed: 1.1,
-      delayBetweenStrokes: 280,
+      strokeAnimationSpeed: props.slow ? 0.72 : 1.1,
+      delayBetweenStrokes: props.slow ? 420 : 280,
       strokeFadeDuration: 250,
       charDataLoader: (char, onLoad, onError) => {
         loadStrokeData(char).then(onLoad, onError);
@@ -156,11 +225,26 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     // quiz() waits for the character data internally.
     if (props.mode === 'write') startQuiz();
 
+    // The writer bakes colours in at creation, so a theme switch must repaint them.
+    const scheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const repaint = () => {
+      if (!writer) return;
+      const next = themeColor('ink');
+      writer.updateColor('strokeColor', next);
+      writer.updateColor('radicalColor', next);
+      writer.updateColor('outlineColor', themeMix('ink', 'surface', 0.22));
+      writer.updateColor('drawingColor', themeColor('ink', 0.75));
+      writer.updateColor('highlightColor', themeColor('gold'));
+    };
+    scheme.addEventListener('change', repaint);
+    onCleanup(() => scheme.removeEventListener('change', repaint));
+
     props.api?.({
       play,
       restartQuiz: startQuiz,
       hint: () => {
         props.onHint?.();
+        setHinted(quizStroke);
         writer?.highlightStroke(quizStroke);
       },
       showAnswer: (onDone) => {
@@ -168,6 +252,12 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
         writer.cancelQuiz();
         setQuizActive(false);
         clearTimeout(idleTimer);
+        setHinted(null);
+        // The model is drawn over what the learner wrote, so they can compare.
+        if (props.echoInk && drawn().length > 0) {
+          clearTimeout(inkTimer);
+          setInkShown(true);
+        }
         writer.hideCharacter({ duration: 0 });
         writer.animateCharacter({ onComplete: () => onDone?.() });
       },
@@ -208,6 +298,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
   onCleanup(() => {
     writer?.cancelQuiz();
     clearTimeout(idleTimer);
+    clearTimeout(inkTimer);
     animationRun++;
   });
 
@@ -215,7 +306,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     props.mode === 'write' &&
     quizActive() &&
     !cueHidden() &&
-    (props.startHint === 'always' || (props.startHint === 'idle' && idle()));
+    (stuck() || props.startHint === 'always' || (props.startHint === 'idle' && idle()));
 
   // A 撇 starts with a short sideways press. Aim along the stroke after that flick.
   const aim = (pts: number[][]) => {
@@ -419,6 +510,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
       ref={frame}
       onPointerDown={() => {
         setCueHidden(true);
+        setHinted(null);
         if (props.mode === 'write') armIdle();
       }}
       class="relative aspect-square w-full overflow-hidden bg-surface"
@@ -440,6 +532,58 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
         }
         role="img"
       />
+
+      {/* Pista: the stroke to draw next, held until the pen goes down. */}
+      <Show when={props.mode === 'write' && hinted() !== null ? data()?.strokes[hinted() as number] : undefined}>
+        {(path) => (
+          <svg viewBox="0 0 1024 1024" class="absolute inset-2 pointer-events-none animate-fade" aria-hidden="true">
+            <g transform="translate(0, 900) scale(1, -1)">
+              <path d={path()} fill="rgb(var(--gold))" fill-opacity="0.55" />
+            </g>
+          </svg>
+        )}
+      </Show>
+
+      {/* Tu trazo: the learner's own strokes, faint, next to the model. */}
+      <Show when={inkShown()}>
+        <svg viewBox="0 0 1024 1024" class="absolute inset-2 pointer-events-none animate-fade" aria-hidden="true">
+          <g transform="translate(0, 900) scale(1, -1)">
+            <For each={drawn()}>
+              {(d) => (
+                <path d={d} fill="none" stroke="rgb(var(--seal))" stroke-opacity="0.45" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" />
+              )}
+            </For>
+          </g>
+        </svg>
+        <span class="pointer-events-none absolute left-3 top-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-seal/80">
+          Tu trazo
+        </span>
+      </Show>
+
+      {/* A wrong stroke stays visible in red long enough to see what went wrong. */}
+      <Show when={props.mode === 'write' && misses().length > 0}>
+        <svg viewBox="0 0 1024 1024" class="absolute inset-2 pointer-events-none" aria-hidden="true">
+          <g transform="translate(0, 900) scale(1, -1)">
+            <For each={misses()}>
+              {(miss) => (
+                <path
+                  d={miss.d}
+                  ref={(el) => {
+                    // Reduced motion keeps the red stroke still until it is removed.
+                    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+                    el.animate?.([{ opacity: 0.85 }, { opacity: 0.85, offset: 0.35 }, { opacity: 0 }], { duration: 650, easing: 'ease-out', fill: 'forwards' });
+                  }}
+                  fill="none"
+                  stroke="rgb(var(--seal))"
+                  stroke-width="48"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              )}
+            </For>
+          </g>
+        </svg>
+      </Show>
 
       {/* The stroke you are tracing. The others stay a faint outline under this. */}
       <Show when={outlinePath()}>

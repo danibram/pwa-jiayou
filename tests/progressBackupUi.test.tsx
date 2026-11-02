@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ProgressBackup from '../src/components/ProgressBackup';
-import { progressStore } from '../src/stores/progressStore';
+import { progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { hasStoredVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import { progressReset } from '../src/utils/progressReset';
 
 const backup = (right: number) => JSON.stringify({
@@ -92,4 +93,42 @@ describe('progress backup UI', () => {
     expect(reset()).toBe(before + 1);
     await testing.waitFor(() => expect(testing.screen.queryByRole('alert')).toBeNull());
   });
+  it('restores word progress and discards the saved word session', async () => {
+    vocabularyProgressStore.grade('hello', 'good');
+    const saved = progressStore.exportBackup();
+    progressStore.clear();
+    vocabularyProgressStore.grade('other', 'good');
+    const entry = { id: 'other', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hello', level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
+    saveVocabularySession({ version: 1, deck: [{ entry, kind: 'review' }], position: 0, revealed: false, step: 'ask', feedback: null, counts: { again: 0, hard: 0, good: 0 }, heading: 'Words' });
+    render(() => <ProgressBackup />);
+    const file = new File([saved], 'progress.json');
+    Object.defineProperty(file, 'text', { value: vi.fn().mockResolvedValue(saved) });
+    fireEvent.change(screen.getByLabelText('Importar copia'), { target: { files: [file] } });
+    await screen.findByText(/Contiene 0 registros de caracteres y 1 de palabras/);
+    fireEvent.click(screen.getByRole('button', { name: 'Reemplazar progreso' }));
+    expect(vocabularyProgressStore.get('hello')?.right).toBe(1);
+    expect(vocabularyProgressStore.get('other')).toBeUndefined();
+    expect(hasStoredVocabularySession()).toBe(false);
+  });
+
+  it('keeps both histories and the word session if writing the import fails', async () => {
+    vocabularyProgressStore.grade('existing', 'good');
+    progressStore.grade('人', 'good');
+    const stored = localStorage.getItem('hsk-flashcards-stats');
+    localStorage.setItem('jiayou-vocabulary-session-v1', JSON.stringify({ version: 1 }));
+    render(() => <ProgressBackup />);
+    const file = new File(['backup'], 'progress.json');
+    Object.defineProperty(file, 'text', { value: vi.fn().mockResolvedValue(backup(4)) });
+    fireEvent.change(screen.getByLabelText('Importar copia'), { target: { files: [file] } });
+    await screen.findByText(/Contiene 1 registro de caracteres y 0 de palabras/);
+    const write = vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new Error('full'); });
+    fireEvent.click(screen.getByRole('button', { name: 'Reemplazar progreso' }));
+    write.mockRestore();
+    expect(screen.getByRole('status')).toHaveTextContent('Tu progreso actual sigue disponible');
+    expect(progressStore.get('人')?.right).toBe(1);
+    expect(vocabularyProgressStore.get('existing')?.right).toBe(1);
+    expect(localStorage.getItem('hsk-flashcards-stats')).toBe(stored);
+    expect(hasStoredVocabularySession()).toBe(true);
+  });
+
 });

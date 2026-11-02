@@ -1,4 +1,5 @@
 import { createStore } from 'solid-js/store';
+import { withToneSandhi } from '../utils/pinyin';
 import { BUNDLED_LEVEL, catalogLevels } from '../data/catalog';
 import hsk1Data from '../data/hsk1.json';
 import { ExampleWord, HSKCharacter, HskLevel, TrainingResult } from '../types';
@@ -70,7 +71,7 @@ const count = (value: unknown): number =>
 
 const parseExample = (value: unknown): ExampleWord | undefined => {
   if (!isRecord(value) || !isString(value.word) || !isString(value.pinyin) || !isString(value.es)) return undefined;
-  return { word: value.word, pinyin: value.pinyin, es: value.es };
+  return { word: value.word, pinyin: withToneSandhi(value.word, value.pinyin), es: value.es };
 };
 
 const parseGlossFile = (value: unknown): Record<string, { gloss: string; example: ExampleWord }> => {
@@ -118,6 +119,12 @@ export const parseCharacterList = (value: unknown, level?: HskLevel): HSKCharact
     throw new Error(`La lista de HSK ${level} trae otro nivel.`);
   }
   return parsed;
+};
+
+/** Days since the epoch on the learner's local calendar. */
+export const dayNumber = () => {
+  const now = new Date();
+  return Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86_400_000);
 };
 
 const bundled = parseCharacterList(hsk1Data, BUNDLED_LEVEL);
@@ -237,10 +244,11 @@ export const characterStore = {
   },
 
   // Same character all day, different each day
+  /** Seeded by the date only, from the bundled level, so ticking levels never swaps it mid-day. */
   getDailyCharacter(): HSKCharacter {
-    const selected = store.selectedLevels.length > 0 ? this.getCharactersByLevel() : store.characters;
-    const pool = selected.length > 0 ? selected : store.characters;
-    return pool[Math.floor(Date.now() / 86_400_000) % pool.length];
+    const bundled = store.characters.filter((char) => char.hsk_level === BUNDLED_LEVEL);
+    const pool = bundled.length > 0 ? bundled : store.characters;
+    return pool[dayNumber() % pool.length];
   },
 
   // Count characters by level

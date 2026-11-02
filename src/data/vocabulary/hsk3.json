@@ -1,0 +1,4645 @@
+[
+  {
+    "id": "word-963f-59e8-a-yi2",
+    "simplified": "阿姨",
+    "traditional": "阿姨",
+    "pinyin": "ā yí",
+    "meaning": "tía; señora",
+    "level": 3,
+    "characters": [
+      "阿",
+      "姨"
+    ],
+    "topicIds": [
+      "familia"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-554a-a",
+    "simplified": "啊",
+    "traditional": "啊",
+    "pinyin": "ā",
+    "meaning": "¡ah! (partícula exclamativa)",
+    "level": 3,
+    "characters": [
+      "啊"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-77ee-ai3",
+    "simplified": "矮",
+    "traditional": "矮",
+    "pinyin": "ǎi",
+    "meaning": "bajo (de estatura)",
+    "level": 3,
+    "characters": [
+      "矮"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7231-597d-ai4-hao4",
+    "simplified": "爱好",
+    "traditional": "愛好",
+    "pinyin": "ài hào",
+    "meaning": "afición; gustar",
+    "level": 3,
+    "characters": [
+      "爱",
+      "好"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5b89-9759-an-jing4",
+    "simplified": "安静",
+    "traditional": "安靜",
+    "pinyin": "ān jìng",
+    "meaning": "tranquilo",
+    "level": 3,
+    "characters": [
+      "安",
+      "静"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-628a-ba3",
+    "simplified": "把",
+    "traditional": "把",
+    "pinyin": "bǎ",
+    "meaning": "(marca de objeto); asir",
+    "level": 3,
+    "characters": [
+      "把"
+    ],
+    "topicIds": [
+      "gramatica",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-73ed-ban",
+    "simplified": "班",
+    "traditional": "班",
+    "pinyin": "bān",
+    "meaning": "clase; turno",
+    "level": 3,
+    "characters": [
+      "班"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-642c-ban",
+    "simplified": "搬",
+    "traditional": "搬",
+    "pinyin": "bān",
+    "meaning": "mover; mudarse",
+    "level": 3,
+    "characters": [
+      "搬"
+    ],
+    "topicIds": [
+      "verbos",
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-529e-6cd5-ban4-fa3",
+    "simplified": "办法",
+    "traditional": "辦法",
+    "pinyin": "bàn fǎ",
+    "meaning": "manera; solución",
+    "level": 3,
+    "characters": [
+      "办",
+      "法"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-529e-516c-5ba4-ban4-gong-shi4",
+    "simplified": "办公室",
+    "traditional": "辦公室",
+    "pinyin": "bàn gōng shì",
+    "meaning": "oficina",
+    "level": 3,
+    "characters": [
+      "办",
+      "公",
+      "室"
+    ],
+    "topicIds": [
+      "trabajos",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-534a-ban4",
+    "simplified": "半",
+    "traditional": "半",
+    "pinyin": "bàn",
+    "meaning": "medio; mitad",
+    "level": 3,
+    "characters": [
+      "半"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e2e-5fd9-bang-mang2",
+    "simplified": "帮忙",
+    "traditional": "幫忙",
+    "pinyin": "bāng máng",
+    "meaning": "ayudar; echar una mano",
+    "level": 3,
+    "characters": [
+      "帮",
+      "忙"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5305-bao",
+    "simplified": "包",
+    "traditional": "包",
+    "pinyin": "bāo",
+    "meaning": "bolsa; envolver",
+    "level": 3,
+    "characters": [
+      "包"
+    ],
+    "topicIds": [
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9971-bao3",
+    "simplified": "饱",
+    "traditional": "飽",
+    "pinyin": "bǎo",
+    "meaning": "lleno; saciado",
+    "level": 3,
+    "characters": [
+      "饱"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5317-65b9-bei3-fang",
+    "simplified": "北方",
+    "traditional": "北方",
+    "pinyin": "běi fāng",
+    "meaning": "norte",
+    "level": 3,
+    "characters": [
+      "北",
+      "方"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-88ab-bei4",
+    "simplified": "被",
+    "traditional": "被",
+    "pinyin": "bèi",
+    "meaning": "(voz pasiva); manta",
+    "level": 3,
+    "characters": [
+      "被"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9f3b-5b50-bi2-zi5",
+    "simplified": "鼻子",
+    "traditional": "鼻子",
+    "pinyin": "bí zi",
+    "meaning": "nariz",
+    "level": 3,
+    "characters": [
+      "鼻",
+      "子"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6bd4-8f83-bi3-jiao4",
+    "simplified": "比较",
+    "traditional": "比較",
+    "pinyin": "bǐ jiào",
+    "meaning": "comparar",
+    "level": 3,
+    "characters": [
+      "比",
+      "较"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6bd4-8d5b-bi3-sai4",
+    "simplified": "比赛",
+    "traditional": "比賽",
+    "pinyin": "bǐ sài",
+    "meaning": "competición (deportes, etc.)",
+    "level": 3,
+    "characters": [
+      "比",
+      "赛"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5fc5-987b-bi4-xu",
+    "simplified": "必须",
+    "traditional": "必須",
+    "pinyin": "bì xū",
+    "meaning": "tener que",
+    "level": 3,
+    "characters": [
+      "必",
+      "须"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53d8-5316-bian4-hua4",
+    "simplified": "变化",
+    "traditional": "變化",
+    "pinyin": "biàn huà",
+    "meaning": "cambiar; cambio",
+    "level": 3,
+    "characters": [
+      "变",
+      "化"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8868-793a-biao3-shi4",
+    "simplified": "表示",
+    "traditional": "表示",
+    "pinyin": "biǎo shì",
+    "meaning": "expresar",
+    "level": 3,
+    "characters": [
+      "表",
+      "示"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8868-6f14-biao3-yan3",
+    "simplified": "表演",
+    "traditional": "表演",
+    "pinyin": "biǎo yǎn",
+    "meaning": "actuar; actuación",
+    "level": 3,
+    "characters": [
+      "表",
+      "演"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-522b-4eba-bie2-ren5",
+    "simplified": "别人",
+    "traditional": "別人",
+    "pinyin": "bié ren",
+    "meaning": "otras personas",
+    "level": 3,
+    "characters": [
+      "别",
+      "人"
+    ],
+    "topicIds": [
+      "personas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5bbe-9986-bin-guan3",
+    "simplified": "宾馆",
+    "traditional": "賓館",
+    "pinyin": "bīn guǎn",
+    "meaning": "hotel",
+    "level": 3,
+    "characters": [
+      "宾",
+      "馆"
+    ],
+    "topicIds": [
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-51b0-7bb1-bing-xiang",
+    "simplified": "冰箱",
+    "traditional": "冰箱",
+    "pinyin": "bīng xiāng",
+    "meaning": "nevera",
+    "level": 3,
+    "characters": [
+      "冰",
+      "箱"
+    ],
+    "topicIds": [
+      "comida",
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-624d-cai2",
+    "simplified": "才",
+    "traditional": "才",
+    "pinyin": "cái",
+    "meaning": "solo entonces; talento",
+    "level": 3,
+    "characters": [
+      "才"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-83dc-5355-cai4-dan",
+    "simplified": "菜单",
+    "traditional": "菜單",
+    "pinyin": "cài dān",
+    "meaning": "menú",
+    "level": 3,
+    "characters": [
+      "菜",
+      "单"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53c2-52a0-can-jia",
+    "simplified": "参加",
+    "traditional": "參加",
+    "pinyin": "cān jiā",
+    "meaning": "participar",
+    "level": 3,
+    "characters": [
+      "参",
+      "加"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8349-cao3",
+    "simplified": "草",
+    "traditional": "艸",
+    "pinyin": "cǎo",
+    "meaning": "hierba",
+    "level": 3,
+    "characters": [
+      "草"
+    ],
+    "topicIds": [
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5c42-ceng2",
+    "simplified": "层",
+    "traditional": "層",
+    "pinyin": "céng",
+    "meaning": "piso; capa",
+    "level": 3,
+    "characters": [
+      "层"
+    ],
+    "topicIds": [
+      "casa",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5dee-cha4",
+    "simplified": "差",
+    "traditional": "差",
+    "pinyin": "chà",
+    "meaning": "faltar; malo",
+    "level": 3,
+    "characters": [
+      "差"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8d85-5e02-chao-shi4",
+    "simplified": "超市",
+    "traditional": "超市",
+    "pinyin": "chāo shì",
+    "meaning": "supermercado",
+    "level": 3,
+    "characters": [
+      "超",
+      "市"
+    ],
+    "topicIds": [
+      "lugares",
+      "compras"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-886c-886b-chen4-shan",
+    "simplified": "衬衫",
+    "traditional": "襯衫",
+    "pinyin": "chèn shān",
+    "meaning": "camisa",
+    "level": 3,
+    "characters": [
+      "衬",
+      "衫"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6210-7ee9-cheng2-ji4",
+    "simplified": "成绩",
+    "traditional": "成績",
+    "pinyin": "chéng jì",
+    "meaning": "nota; resultado",
+    "level": 3,
+    "characters": [
+      "成",
+      "绩"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-57ce-5e02-cheng2-shi4",
+    "simplified": "城市",
+    "traditional": "城市",
+    "pinyin": "chéng shì",
+    "meaning": "ciudad",
+    "level": 3,
+    "characters": [
+      "城",
+      "市"
+    ],
+    "topicIds": [
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8fdf-5230-chi2-dao4",
+    "simplified": "迟到",
+    "traditional": "遲到",
+    "pinyin": "chí dào",
+    "meaning": "llegar tarde",
+    "level": 3,
+    "characters": [
+      "迟",
+      "到"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-51fa-73b0-chu-xian4",
+    "simplified": "出现",
+    "traditional": "出現",
+    "pinyin": "chū xiàn",
+    "meaning": "aparecer",
+    "level": 3,
+    "characters": [
+      "出",
+      "现"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9664-4e86-chu2-le5",
+    "simplified": "除了",
+    "traditional": "除了",
+    "pinyin": "chú le",
+    "meaning": "excepto; además de",
+    "level": 3,
+    "characters": [
+      "除",
+      "了"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53a8-623f-chu2-fang2",
+    "simplified": "厨房",
+    "traditional": "廚房",
+    "pinyin": "chú fáng",
+    "meaning": "cocina",
+    "level": 3,
+    "characters": [
+      "厨",
+      "房"
+    ],
+    "topicIds": [
+      "comida",
+      "casa",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6625-chun",
+    "simplified": "春",
+    "traditional": "旾",
+    "pinyin": "chūn",
+    "meaning": "primavera",
+    "level": 3,
+    "characters": [
+      "春"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8bcd-8bed-ci2-yu3",
+    "simplified": "词语",
+    "traditional": "詞語",
+    "pinyin": "cí yǔ",
+    "meaning": "palabra; expresión",
+    "level": 3,
+    "characters": [
+      "词",
+      "语"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-806a-660e-cong-ming5",
+    "simplified": "聪明",
+    "traditional": "聰明",
+    "pinyin": "cōng ming",
+    "meaning": "inteligente",
+    "level": 3,
+    "characters": [
+      "聪",
+      "明"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6253-626b-da3-sao3",
+    "simplified": "打扫",
+    "traditional": "打掃",
+    "pinyin": "dǎ sǎo",
+    "meaning": "limpiar",
+    "level": 3,
+    "characters": [
+      "打",
+      "扫"
+    ],
+    "topicIds": [
+      "verbos",
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6253-7b97-da3-suan4",
+    "simplified": "打算",
+    "traditional": "打算",
+    "pinyin": "dǎ suàn",
+    "meaning": "planear",
+    "level": 3,
+    "characters": [
+      "打",
+      "算"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e26-dai4",
+    "simplified": "带",
+    "traditional": "帶",
+    "pinyin": "dài",
+    "meaning": "llevar; traer; cinta",
+    "level": 3,
+    "characters": [
+      "带"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-62c5-5fc3-dan-xin",
+    "simplified": "担心",
+    "traditional": "擔心",
+    "pinyin": "dān xīn",
+    "meaning": "preocuparse",
+    "level": 3,
+    "characters": [
+      "担",
+      "心"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-86cb-7cd5-dan4-gao",
+    "simplified": "蛋糕",
+    "traditional": "蛋糕",
+    "pinyin": "dàn gāo",
+    "meaning": "pastel",
+    "level": 3,
+    "characters": [
+      "蛋",
+      "糕"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5f53-7136-dang-ran2",
+    "simplified": "当然",
+    "traditional": "當然",
+    "pinyin": "dāng rán",
+    "meaning": "por supuesto",
+    "level": 3,
+    "characters": [
+      "当",
+      "然"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5730-de5",
+    "simplified": "地",
+    "traditional": "地",
+    "pinyin": "de",
+    "meaning": "(partícula adverbial)",
+    "level": 3,
+    "characters": [
+      "地"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5730-65b9-di4-fang5",
+    "simplified": "地方",
+    "traditional": "地方",
+    "pinyin": "dì fang",
+    "meaning": "lugar; sitio",
+    "level": 3,
+    "characters": [
+      "地",
+      "方"
+    ],
+    "topicIds": [
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5730-94c1-di4-tie3",
+    "simplified": "地铁",
+    "traditional": "地鐵",
+    "pinyin": "dì tiě",
+    "meaning": "metro",
+    "level": 3,
+    "characters": [
+      "地",
+      "铁"
+    ],
+    "topicIds": [
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5730-56fe-di4-tu2",
+    "simplified": "地图",
+    "traditional": "地圖",
+    "pinyin": "dì tú",
+    "meaning": "mapa",
+    "level": 3,
+    "characters": [
+      "地",
+      "图"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-706f-deng",
+    "simplified": "灯",
+    "traditional": "燈",
+    "pinyin": "dēng",
+    "meaning": "lámpara; luz",
+    "level": 3,
+    "characters": [
+      "灯"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f4e-di",
+    "simplified": "低",
+    "traditional": "低",
+    "pinyin": "dī",
+    "meaning": "bajo; bajar",
+    "level": 3,
+    "characters": [
+      "低"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7535-68af-dian4-ti",
+    "simplified": "电梯",
+    "traditional": "電梯",
+    "pinyin": "diàn tī",
+    "meaning": "ascensor",
+    "level": 3,
+    "characters": [
+      "电",
+      "梯"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7535-5b50-dian4-zi3",
+    "simplified": "电子",
+    "traditional": "電子",
+    "pinyin": "diàn zǐ",
+    "meaning": "electrónico",
+    "level": 3,
+    "characters": [
+      "电",
+      "子"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e1c-dong",
+    "simplified": "东",
+    "traditional": "東",
+    "pinyin": "dōng",
+    "meaning": "este (punto cardinal)",
+    "level": 3,
+    "characters": [
+      "东"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-51ac-dong",
+    "simplified": "冬",
+    "traditional": "冬",
+    "pinyin": "dōng",
+    "meaning": "invierno",
+    "level": 3,
+    "characters": [
+      "冬"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-52a8-7269-dong4-wu4",
+    "simplified": "动物",
+    "traditional": "動物",
+    "pinyin": "dòng wù",
+    "meaning": "animal",
+    "level": 3,
+    "characters": [
+      "动",
+      "物"
+    ],
+    "topicIds": [
+      "animales",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-77ed-duan3",
+    "simplified": "短",
+    "traditional": "短",
+    "pinyin": "duǎn",
+    "meaning": "corto",
+    "level": 3,
+    "characters": [
+      "短"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6bb5-duan4",
+    "simplified": "段",
+    "traditional": "段",
+    "pinyin": "duàn",
+    "meaning": "tramo; periodo",
+    "level": 3,
+    "characters": [
+      "段"
+    ],
+    "topicIds": [
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-953b-70bc-duan4-lian4",
+    "simplified": "锻炼",
+    "traditional": "鍛鍊",
+    "pinyin": "duàn liàn",
+    "meaning": "hacer ejercicio",
+    "level": 3,
+    "characters": [
+      "锻",
+      "炼"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-591a-4e48-duo-me5",
+    "simplified": "多么",
+    "traditional": "多麼",
+    "pinyin": "duō me",
+    "meaning": "¡qué…! (exclamación); cuán",
+    "level": 3,
+    "characters": [
+      "多",
+      "么"
+    ],
+    "topicIds": [
+      "preguntas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-997f-e4",
+    "simplified": "饿",
+    "traditional": "餓",
+    "pinyin": "è",
+    "meaning": "tener hambre",
+    "level": 3,
+    "characters": [
+      "饿"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-800c-4e14-er2-qie3",
+    "simplified": "而且",
+    "traditional": "而且",
+    "pinyin": "ér qiě",
+    "meaning": "además; y también",
+    "level": 3,
+    "characters": [
+      "而",
+      "且"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8033-6735-er3-duo5",
+    "simplified": "耳朵",
+    "traditional": "耳朵",
+    "pinyin": "ěr duo",
+    "meaning": "oreja",
+    "level": 3,
+    "characters": [
+      "耳",
+      "朵"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53d1-70e7-fa-shao",
+    "simplified": "发烧",
+    "traditional": "發燒",
+    "pinyin": "fā shāo",
+    "meaning": "tener fiebre",
+    "level": 3,
+    "characters": [
+      "发",
+      "烧"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53d1-73b0-fa-xian4",
+    "simplified": "发现",
+    "traditional": "發現",
+    "pinyin": "fā xiàn",
+    "meaning": "descubrir; darse cuenta",
+    "level": 3,
+    "characters": [
+      "发",
+      "现"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-65b9-4fbf-fang-bian4",
+    "simplified": "方便",
+    "traditional": "方便",
+    "pinyin": "fāng biàn",
+    "meaning": "conveniente",
+    "level": 3,
+    "characters": [
+      "方",
+      "便"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-653e-fang4",
+    "simplified": "放",
+    "traditional": "放",
+    "pinyin": "fàng",
+    "meaning": "poner; soltar",
+    "level": 3,
+    "characters": [
+      "放"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-653e-5fc3-fang4-xin",
+    "simplified": "放心",
+    "traditional": "放心",
+    "pinyin": "fàng xīn",
+    "meaning": "quedarse tranquilo",
+    "level": 3,
+    "characters": [
+      "放",
+      "心"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5206-fen",
+    "simplified": "分",
+    "traditional": "分",
+    "pinyin": "fēn",
+    "meaning": "minuto; dividir",
+    "level": 3,
+    "characters": [
+      "分"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9644-8fd1-fu4-jin4",
+    "simplified": "附近",
+    "traditional": "附近",
+    "pinyin": "fù jìn",
+    "meaning": "cerca; alrededores",
+    "level": 3,
+    "characters": [
+      "附",
+      "近"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-590d-4e60-fu4-xi2",
+    "simplified": "复习",
+    "traditional": "復習",
+    "pinyin": "fù xí",
+    "meaning": "repasar",
+    "level": 3,
+    "characters": [
+      "复",
+      "习"
+    ],
+    "topicIds": [
+      "verbos",
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6562-gan3",
+    "simplified": "敢",
+    "traditional": "敢",
+    "pinyin": "gǎn",
+    "meaning": "atreverse",
+    "level": 3,
+    "characters": [
+      "敢"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-611f-5192-gan3-mao4",
+    "simplified": "感冒",
+    "traditional": "感冒",
+    "pinyin": "gǎn mào",
+    "meaning": "resfriado; resfriarse",
+    "level": 3,
+    "characters": [
+      "感",
+      "冒"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e72-51c0-gan-jing4",
+    "simplified": "干净",
+    "traditional": "乾淨",
+    "pinyin": "gān jìng",
+    "meaning": "limpio",
+    "level": 3,
+    "characters": [
+      "干",
+      "净"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-521a-624d-gang-cai2",
+    "simplified": "刚才",
+    "traditional": "剛才",
+    "pinyin": "gāng cái",
+    "meaning": "hace un momento",
+    "level": 3,
+    "characters": [
+      "刚",
+      "才"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6839-636e-gen-ju4",
+    "simplified": "根据",
+    "traditional": "根據",
+    "pinyin": "gēn jù",
+    "meaning": "según",
+    "level": 3,
+    "characters": [
+      "根",
+      "据"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8ddf-gen",
+    "simplified": "跟",
+    "traditional": "跟",
+    "pinyin": "gēn",
+    "meaning": "con; seguir",
+    "level": 3,
+    "characters": [
+      "跟"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-66f4-geng4",
+    "simplified": "更",
+    "traditional": "更",
+    "pinyin": "gèng",
+    "meaning": "más; aún más",
+    "level": 3,
+    "characters": [
+      "更"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-516c-56ed-gong-yuan2",
+    "simplified": "公园",
+    "traditional": "公園",
+    "pinyin": "gōng yuán",
+    "meaning": "parque",
+    "level": 3,
+    "characters": [
+      "公",
+      "园"
+    ],
+    "topicIds": [
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6545-4e8b-gu4-shi5",
+    "simplified": "故事",
+    "traditional": "故事",
+    "pinyin": "gù shi",
+    "meaning": "cuento; historia",
+    "level": 3,
+    "characters": [
+      "故",
+      "事"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-522e-gua",
+    "simplified": "刮",
+    "traditional": "刮",
+    "pinyin": "guā",
+    "meaning": "soplar (viento); afeitar",
+    "level": 3,
+    "characters": [
+      "刮"
+    ],
+    "topicIds": [
+      "verbos",
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5173-guan",
+    "simplified": "关",
+    "traditional": "關",
+    "pinyin": "guān",
+    "meaning": "cerrar; relación",
+    "level": 3,
+    "characters": [
+      "关"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5173-7cfb-guan-xi5",
+    "simplified": "关系",
+    "traditional": "關係",
+    "pinyin": "guān xi",
+    "meaning": "relación",
+    "level": 3,
+    "characters": [
+      "关",
+      "系"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5173-5fc3-guan-xin",
+    "simplified": "关心",
+    "traditional": "關心",
+    "pinyin": "guān xīn",
+    "meaning": "preocuparse por",
+    "level": 3,
+    "characters": [
+      "关",
+      "心"
+    ],
+    "topicIds": [
+      "verbos",
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5173-4e8e-guan-yu2",
+    "simplified": "关于",
+    "traditional": "關於",
+    "pinyin": "guān yú",
+    "meaning": "sobre; acerca de",
+    "level": 3,
+    "characters": [
+      "关",
+      "于"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-56fd-5bb6-guo2-jia",
+    "simplified": "国家",
+    "traditional": "國家",
+    "pinyin": "guó jiā",
+    "meaning": "país",
+    "level": 3,
+    "characters": [
+      "国",
+      "家"
+    ],
+    "topicIds": [
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-679c-6c41-guo3-zhi",
+    "simplified": "果汁",
+    "traditional": "果汁",
+    "pinyin": "guǒ zhī",
+    "meaning": "zumo de frutas",
+    "level": 3,
+    "characters": [
+      "果",
+      "汁"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8fc7-53bb-guo4-qu4",
+    "simplified": "过去",
+    "traditional": "過去",
+    "pinyin": "guò qù",
+    "meaning": "pasado; pasar",
+    "level": 3,
+    "characters": [
+      "过",
+      "去"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8fd8-662f-hai2-shi5",
+    "simplified": "还是",
+    "traditional": "還是",
+    "pinyin": "hái shi",
+    "meaning": "o (en preguntas); todavía",
+    "level": 3,
+    "characters": [
+      "还",
+      "是"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5bb3-6015-hai4-pa4",
+    "simplified": "害怕",
+    "traditional": "害怕",
+    "pinyin": "hài pà",
+    "meaning": "tener miedo",
+    "level": 3,
+    "characters": [
+      "害",
+      "怕"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6cb3-he2",
+    "simplified": "河",
+    "traditional": "河",
+    "pinyin": "hé",
+    "meaning": "río",
+    "level": 3,
+    "characters": [
+      "河"
+    ],
+    "topicIds": [
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9ed1-677f-hei-ban3",
+    "simplified": "黑板",
+    "traditional": "黑板",
+    "pinyin": "hēi bǎn",
+    "meaning": "pizarra",
+    "level": 3,
+    "characters": [
+      "黑",
+      "板"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-62a4-7167-hu4-zhao4",
+    "simplified": "护照",
+    "traditional": "護照",
+    "pinyin": "hù zhào",
+    "meaning": "pasaporte",
+    "level": 3,
+    "characters": [
+      "护",
+      "照"
+    ],
+    "topicIds": [
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-82b1-hua",
+    "simplified": "花",
+    "traditional": "花",
+    "pinyin": "huā",
+    "meaning": "flor; gastar",
+    "level": 3,
+    "characters": [
+      "花"
+    ],
+    "topicIds": [
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-82b1-56ed-hua-yuan2",
+    "simplified": "花园",
+    "traditional": "花園",
+    "pinyin": "huā yuán",
+    "meaning": "jardín",
+    "level": 3,
+    "characters": [
+      "花",
+      "园"
+    ],
+    "topicIds": [
+      "casa",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-753b-hua4",
+    "simplified": "画",
+    "traditional": "畫",
+    "pinyin": "huà",
+    "meaning": "dibujar; cuadro",
+    "level": 3,
+    "characters": [
+      "画"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-574f-huai4",
+    "simplified": "坏",
+    "traditional": "壞",
+    "pinyin": "huài",
+    "meaning": "malo; roto",
+    "level": 3,
+    "characters": [
+      "坏"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-73af-5883-huan2-jing4",
+    "simplified": "环境",
+    "traditional": "環境",
+    "pinyin": "huán jìng",
+    "meaning": "ambiente",
+    "level": 3,
+    "characters": [
+      "环",
+      "境"
+    ],
+    "topicIds": [
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6362-huan4",
+    "simplified": "换",
+    "traditional": "換",
+    "pinyin": "huàn",
+    "meaning": "cambiar",
+    "level": 3,
+    "characters": [
+      "换"
+    ],
+    "topicIds": [
+      "verbos",
+      "compras"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9ec4-huang2",
+    "simplified": "黄",
+    "traditional": "黃",
+    "pinyin": "huáng",
+    "meaning": "amarillo",
+    "level": 3,
+    "characters": [
+      "黄"
+    ],
+    "topicIds": [
+      "colores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f1a-8bae-hui4-yi4",
+    "simplified": "会议",
+    "traditional": "會議",
+    "pinyin": "huì yì",
+    "meaning": "reunión",
+    "level": 3,
+    "characters": [
+      "会",
+      "议"
+    ],
+    "topicIds": [
+      "trabajos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6216-8005-huo4-zhe3",
+    "simplified": "或者",
+    "traditional": "或者",
+    "pinyin": "huò zhě",
+    "meaning": "o",
+    "level": 3,
+    "characters": [
+      "或",
+      "者"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-673a-4f1a-ji-hui4",
+    "simplified": "机会",
+    "traditional": "機會",
+    "pinyin": "jī huì",
+    "meaning": "oportunidad",
+    "level": 3,
+    "characters": [
+      "机",
+      "会"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6781-ji2",
+    "simplified": "极",
+    "traditional": "極",
+    "pinyin": "jí",
+    "meaning": "extremo; sumamente",
+    "level": 3,
+    "characters": [
+      "极"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-51e0-4e4e-ji-hu",
+    "simplified": "几乎",
+    "traditional": "幾乎",
+    "pinyin": "jī hū",
+    "meaning": "casi",
+    "level": 3,
+    "characters": [
+      "几",
+      "乎"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8bb0-5f97-ji4-de5",
+    "simplified": "记得",
+    "traditional": "記得",
+    "pinyin": "jì de",
+    "meaning": "recordar",
+    "level": 3,
+    "characters": [
+      "记",
+      "得"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5b63-8282-ji4-jie2",
+    "simplified": "季节",
+    "traditional": "季節",
+    "pinyin": "jì jié",
+    "meaning": "estación (del año)",
+    "level": 3,
+    "characters": [
+      "季",
+      "节"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-68c0-67e5-jian3-cha2",
+    "simplified": "检查",
+    "traditional": "檢查",
+    "pinyin": "jiǎn chá",
+    "meaning": "revisar; examen",
+    "level": 3,
+    "characters": [
+      "检",
+      "查"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7b80-5355-jian3-dan",
+    "simplified": "简单",
+    "traditional": "簡單",
+    "pinyin": "jiǎn dān",
+    "meaning": "simple",
+    "level": 3,
+    "characters": [
+      "简",
+      "单"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-89c1-9762-jian4-mian4",
+    "simplified": "见面",
+    "traditional": "見面",
+    "pinyin": "jiàn miàn",
+    "meaning": "encontrarse",
+    "level": 3,
+    "characters": [
+      "见",
+      "面"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5065-5eb7-jian4-kang",
+    "simplified": "健康",
+    "traditional": "健康",
+    "pinyin": "jiàn kāng",
+    "meaning": "salud",
+    "level": 3,
+    "characters": [
+      "健",
+      "康"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8bb2-jiang3",
+    "simplified": "讲",
+    "traditional": "講",
+    "pinyin": "jiǎng",
+    "meaning": "hablar; explicar",
+    "level": 3,
+    "characters": [
+      "讲"
+    ],
+    "topicIds": [
+      "verbos",
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-89d2-jiao3",
+    "simplified": "角",
+    "traditional": "角",
+    "pinyin": "jiǎo",
+    "meaning": "esquina; ángulo; jiao (moneda)",
+    "level": 3,
+    "characters": [
+      "角"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-811a-jiao3",
+    "simplified": "脚",
+    "traditional": "腳",
+    "pinyin": "jiǎo",
+    "meaning": "pie",
+    "level": 3,
+    "characters": [
+      "脚"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6559-jiao",
+    "simplified": "教",
+    "traditional": "教",
+    "pinyin": "jiāo",
+    "meaning": "enseñar",
+    "level": 3,
+    "characters": [
+      "教"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-63a5-jie",
+    "simplified": "接",
+    "traditional": "接",
+    "pinyin": "jiē",
+    "meaning": "recibir; recoger",
+    "level": 3,
+    "characters": [
+      "接"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8857-9053-jie-dao4",
+    "simplified": "街道",
+    "traditional": "街道",
+    "pinyin": "jiē dào",
+    "meaning": "calle",
+    "level": 3,
+    "characters": [
+      "街",
+      "道"
+    ],
+    "topicIds": [
+      "transporte",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8282-76ee-jie2-mu4",
+    "simplified": "节目",
+    "traditional": "節目",
+    "pinyin": "jié mù",
+    "meaning": "programa (de televisión)",
+    "level": 3,
+    "characters": [
+      "节",
+      "目"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8282-65e5-jie2-ri4",
+    "simplified": "节日",
+    "traditional": "節日",
+    "pinyin": "jié rì",
+    "meaning": "día festivo",
+    "level": 3,
+    "characters": [
+      "节",
+      "日"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ed3-5a5a-jie2-hun",
+    "simplified": "结婚",
+    "traditional": "結婚",
+    "pinyin": "jié hūn",
+    "meaning": "casarse",
+    "level": 3,
+    "characters": [
+      "结",
+      "婚"
+    ],
+    "topicIds": [
+      "verbos",
+      "familia"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ed3-675f-jie2-shu4",
+    "simplified": "结束",
+    "traditional": "結束",
+    "pinyin": "jié shù",
+    "meaning": "terminar",
+    "level": 3,
+    "characters": [
+      "结",
+      "束"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-89e3-51b3-jie3-jue2",
+    "simplified": "解决",
+    "traditional": "解決",
+    "pinyin": "jiě jué",
+    "meaning": "resolver",
+    "level": 3,
+    "characters": [
+      "解",
+      "决"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-501f-jie4",
+    "simplified": "借",
+    "traditional": "借",
+    "pinyin": "jiè",
+    "meaning": "prestar; pedir prestado",
+    "level": 3,
+    "characters": [
+      "借"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ecf-5e38-jing-chang2",
+    "simplified": "经常",
+    "traditional": "經常",
+    "pinyin": "jīng cháng",
+    "meaning": "frecuentemente",
+    "level": 3,
+    "characters": [
+      "经",
+      "常"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ecf-8fc7-jing-guo4",
+    "simplified": "经过",
+    "traditional": "經過",
+    "pinyin": "jīng guò",
+    "meaning": "pasar",
+    "level": 3,
+    "characters": [
+      "经",
+      "过"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ecf-7406-jing-li3",
+    "simplified": "经理",
+    "traditional": "經理",
+    "pinyin": "jīng lǐ",
+    "meaning": "gerente",
+    "level": 3,
+    "characters": [
+      "经",
+      "理"
+    ],
+    "topicIds": [
+      "trabajos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e45-jiu3",
+    "simplified": "久",
+    "traditional": "久",
+    "pinyin": "jiǔ",
+    "meaning": "mucho tiempo",
+    "level": 3,
+    "characters": [
+      "久"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-65e7-jiu4",
+    "simplified": "旧",
+    "traditional": "舊",
+    "pinyin": "jiù",
+    "meaning": "viejo, usado",
+    "level": 3,
+    "characters": [
+      "旧"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e3e-884c-ju3-xing2",
+    "simplified": "举行",
+    "traditional": "舉行",
+    "pinyin": "jǔ xíng",
+    "meaning": "celebrar (un acto)",
+    "level": 3,
+    "characters": [
+      "举",
+      "行"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53e5-5b50-ju4-zi5",
+    "simplified": "句子",
+    "traditional": "句子",
+    "pinyin": "jù zi",
+    "meaning": "frase",
+    "level": 3,
+    "characters": [
+      "句",
+      "子"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-51b3-5b9a-jue2-ding4",
+    "simplified": "决定",
+    "traditional": "決定",
+    "pinyin": "jué dìng",
+    "meaning": "decidir; decisión",
+    "level": 3,
+    "characters": [
+      "决",
+      "定"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53ef-7231-ke3-ai4",
+    "simplified": "可爱",
+    "traditional": "可愛",
+    "pinyin": "kě ài",
+    "meaning": "adorable",
+    "level": 3,
+    "characters": [
+      "可",
+      "爱"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6e34-ke3",
+    "simplified": "渴",
+    "traditional": "渴",
+    "pinyin": "kě",
+    "meaning": "tener sed",
+    "level": 3,
+    "characters": [
+      "渴"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-523b-ke4",
+    "simplified": "刻",
+    "traditional": "刻",
+    "pinyin": "kè",
+    "meaning": "cuarto de hora; tallar",
+    "level": 3,
+    "characters": [
+      "刻"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5ba2-4eba-ke4-ren2",
+    "simplified": "客人",
+    "traditional": "客人",
+    "pinyin": "kè rén",
+    "meaning": "invitado",
+    "level": 3,
+    "characters": [
+      "客",
+      "人"
+    ],
+    "topicIds": [
+      "personas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7a7a-8c03-kong-tiao2",
+    "simplified": "空调",
+    "traditional": "空調",
+    "pinyin": "kōng tiáo",
+    "meaning": "aire acondicionado",
+    "level": 3,
+    "characters": [
+      "空",
+      "调"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53e3-kou3",
+    "simplified": "口",
+    "traditional": "口",
+    "pinyin": "kǒu",
+    "meaning": "boca; entrada",
+    "level": 3,
+    "characters": [
+      "口"
+    ],
+    "topicIds": [
+      "cuerpo",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-54ed-ku",
+    "simplified": "哭",
+    "traditional": "哭",
+    "pinyin": "kū",
+    "meaning": "llorar",
+    "level": 3,
+    "characters": [
+      "哭"
+    ],
+    "topicIds": [
+      "verbos",
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-88e4-5b50-ku4-zi5",
+    "simplified": "裤子",
+    "traditional": "袴子",
+    "pinyin": "kù zi",
+    "meaning": "pantalones",
+    "level": 3,
+    "characters": [
+      "裤",
+      "子"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7b77-5b50-kuai4-zi5",
+    "simplified": "筷子",
+    "traditional": "筷子",
+    "pinyin": "kuài zi",
+    "meaning": "palillos",
+    "level": 3,
+    "characters": [
+      "筷",
+      "子"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-84dd-lan2",
+    "simplified": "蓝",
+    "traditional": "藍",
+    "pinyin": "lán",
+    "meaning": "azul",
+    "level": 3,
+    "characters": [
+      "蓝"
+    ],
+    "topicIds": [
+      "colores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8001-lao3",
+    "simplified": "老",
+    "traditional": "老",
+    "pinyin": "lǎo",
+    "meaning": "viejo",
+    "level": 3,
+    "characters": [
+      "老"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e86-89e3-liao3-jie3",
+    "simplified": "了解",
+    "traditional": "了解",
+    "pinyin": "liǎo jiě",
+    "meaning": "conocer; entender",
+    "level": 3,
+    "characters": [
+      "了",
+      "解"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-79bb-5f00-li2-kai",
+    "simplified": "离开",
+    "traditional": "離開",
+    "pinyin": "lí kāi",
+    "meaning": "irse; dejar",
+    "level": 3,
+    "characters": [
+      "离",
+      "开"
+    ],
+    "topicIds": [
+      "verbos",
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-793c-7269-li3-wu4",
+    "simplified": "礼物",
+    "traditional": "禮物",
+    "pinyin": "lǐ wù",
+    "meaning": "regalo",
+    "level": 3,
+    "characters": [
+      "礼",
+      "物"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5386-53f2-li4-shi3",
+    "simplified": "历史",
+    "traditional": "歷史",
+    "pinyin": "lì shǐ",
+    "meaning": "historia",
+    "level": 3,
+    "characters": [
+      "历",
+      "史"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8138-lian3",
+    "simplified": "脸",
+    "traditional": "臉",
+    "pinyin": "liǎn",
+    "meaning": "cara",
+    "level": 3,
+    "characters": [
+      "脸"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ec3-4e60-lian4-xi2",
+    "simplified": "练习",
+    "traditional": "練習",
+    "pinyin": "liàn xí",
+    "meaning": "practicar",
+    "level": 3,
+    "characters": [
+      "练",
+      "习"
+    ],
+    "topicIds": [
+      "verbos",
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8f86-liang4",
+    "simplified": "辆",
+    "traditional": "輛",
+    "pinyin": "liàng",
+    "meaning": "(clasif. vehículos)",
+    "level": 3,
+    "characters": [
+      "辆"
+    ],
+    "topicIds": [
+      "compras",
+      "transporte",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-90bb-5c45-lin2-ju",
+    "simplified": "邻居",
+    "traditional": "鄰居",
+    "pinyin": "lín jū",
+    "meaning": "vecino",
+    "level": 3,
+    "characters": [
+      "邻",
+      "居"
+    ],
+    "topicIds": [
+      "casa",
+      "personas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-697c-lou2",
+    "simplified": "楼",
+    "traditional": "樓",
+    "pinyin": "lóu",
+    "meaning": "edificio; planta",
+    "level": 3,
+    "characters": [
+      "楼"
+    ],
+    "topicIds": [
+      "casa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7eff-lv4",
+    "simplified": "绿",
+    "traditional": "綠",
+    "pinyin": "lǜ",
+    "meaning": "verde",
+    "level": 3,
+    "characters": [
+      "绿"
+    ],
+    "topicIds": [
+      "colores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9a6c-ma3",
+    "simplified": "马",
+    "traditional": "馬",
+    "pinyin": "mǎ",
+    "meaning": "caballo",
+    "level": 3,
+    "characters": [
+      "马"
+    ],
+    "topicIds": [
+      "animales"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9a6c-4e0a-ma3-shang4",
+    "simplified": "马上",
+    "traditional": "馬上",
+    "pinyin": "mǎ shàng",
+    "meaning": "enseguida; inmediatamente",
+    "level": 3,
+    "characters": [
+      "马",
+      "上"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6ee1-610f-man3-yi4",
+    "simplified": "满意",
+    "traditional": "滿意",
+    "pinyin": "mǎn yì",
+    "meaning": "satisfecho",
+    "level": 3,
+    "characters": [
+      "满",
+      "意"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e3d-5b50-mao4-zi5",
+    "simplified": "帽子",
+    "traditional": "帽子",
+    "pinyin": "mào zi",
+    "meaning": "sombrero",
+    "level": 3,
+    "characters": [
+      "帽",
+      "子"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7c73-mi3",
+    "simplified": "米",
+    "traditional": "米",
+    "pinyin": "mǐ",
+    "meaning": "metro (medida); arroz",
+    "level": 3,
+    "characters": [
+      "米"
+    ],
+    "topicIds": [
+      "numeros",
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9762-5305-mian4-bao",
+    "simplified": "面包",
+    "traditional": "麵包",
+    "pinyin": "miàn bāo",
+    "meaning": "pan",
+    "level": 3,
+    "characters": [
+      "面",
+      "包"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9762-6761-mian4-tiao2",
+    "simplified": "面条",
+    "traditional": "麵條",
+    "pinyin": "miàn tiáo",
+    "meaning": "fideos",
+    "level": 3,
+    "characters": [
+      "面",
+      "条"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-660e-767d-ming2-bai5",
+    "simplified": "明白",
+    "traditional": "明白",
+    "pinyin": "míng bai",
+    "meaning": "entender; claro",
+    "level": 3,
+    "characters": [
+      "明",
+      "白"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-62ff-na2",
+    "simplified": "拿",
+    "traditional": "拿",
+    "pinyin": "ná",
+    "meaning": "coger; llevar",
+    "level": 3,
+    "characters": [
+      "拿"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5976-5976-nai3-nai5",
+    "simplified": "奶奶",
+    "traditional": "奶奶",
+    "pinyin": "nǎi nai",
+    "meaning": "abuela (paterna)",
+    "level": 3,
+    "characters": [
+      "奶",
+      "奶"
+    ],
+    "topicIds": [
+      "familia"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5357-nan2",
+    "simplified": "南",
+    "traditional": "南",
+    "pinyin": "nán",
+    "meaning": "sur",
+    "level": 3,
+    "characters": [
+      "南"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-96be-nan2",
+    "simplified": "难",
+    "traditional": "難",
+    "pinyin": "nán",
+    "meaning": "difícil",
+    "level": 3,
+    "characters": [
+      "难"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-96be-8fc7-nan2-guo4",
+    "simplified": "难过",
+    "traditional": "難過",
+    "pinyin": "nán guò",
+    "meaning": "sentirse triste",
+    "level": 3,
+    "characters": [
+      "难",
+      "过"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e74-7ea7-nian2-ji2",
+    "simplified": "年级",
+    "traditional": "年級",
+    "pinyin": "nián jí",
+    "meaning": "curso; año escolar",
+    "level": 3,
+    "characters": [
+      "年",
+      "级"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e74-8f7b-nian2-qing",
+    "simplified": "年轻",
+    "traditional": "年輕",
+    "pinyin": "nián qīng",
+    "meaning": "joven",
+    "level": 3,
+    "characters": [
+      "年",
+      "轻"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9e1f-niao3",
+    "simplified": "鸟",
+    "traditional": "鳥",
+    "pinyin": "niǎo",
+    "meaning": "pájaro",
+    "level": 3,
+    "characters": [
+      "鸟"
+    ],
+    "topicIds": [
+      "animales",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-52aa-529b-nu3-li4",
+    "simplified": "努力",
+    "traditional": "努力",
+    "pinyin": "nǔ lì",
+    "meaning": "esforzarse",
+    "level": 3,
+    "characters": [
+      "努",
+      "力"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-722c-5c71-pa2-shan",
+    "simplified": "爬山",
+    "traditional": "爬山",
+    "pinyin": "pá shān",
+    "meaning": "subir a la montaña",
+    "level": 3,
+    "characters": [
+      "爬",
+      "山"
+    ],
+    "topicIds": [
+      "verbos",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-76d8-5b50-pan2-zi5",
+    "simplified": "盘子",
+    "traditional": "盤子",
+    "pinyin": "pán zi",
+    "meaning": "plato",
+    "level": 3,
+    "characters": [
+      "盘",
+      "子"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-80d6-pang4",
+    "simplified": "胖",
+    "traditional": "胖",
+    "pinyin": "pàng",
+    "meaning": "gordo",
+    "level": 3,
+    "characters": [
+      "胖"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5564-9152-pi2-jiu3",
+    "simplified": "啤酒",
+    "traditional": "啤酒",
+    "pinyin": "pí jiǔ",
+    "meaning": "cerveza",
+    "level": 3,
+    "characters": [
+      "啤",
+      "酒"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8461-8404-pu2-tao5",
+    "simplified": "葡萄",
+    "traditional": "葡萄",
+    "pinyin": "pú tao",
+    "meaning": "uva",
+    "level": 3,
+    "characters": [
+      "葡",
+      "萄"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-666e-901a-8bdd-pu3-tong-hua4",
+    "simplified": "普通话",
+    "traditional": "普通話",
+    "pinyin": "pǔ tōng huà",
+    "meaning": "mandarín estándar",
+    "level": 3,
+    "characters": [
+      "普",
+      "通",
+      "话"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5176-5b9e-qi2-shi2",
+    "simplified": "其实",
+    "traditional": "其實",
+    "pinyin": "qí shí",
+    "meaning": "de hecho",
+    "level": 3,
+    "characters": [
+      "其",
+      "实"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5176-4ed6-qi2-ta",
+    "simplified": "其他",
+    "traditional": "其他",
+    "pinyin": "qí tā",
+    "meaning": "otro",
+    "level": 3,
+    "characters": [
+      "其",
+      "他"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5947-602a-qi2-guai4",
+    "simplified": "奇怪",
+    "traditional": "奇怪",
+    "pinyin": "qí guài",
+    "meaning": "extraño",
+    "level": 3,
+    "characters": [
+      "奇",
+      "怪"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9a91-qi2",
+    "simplified": "骑",
+    "traditional": "騎",
+    "pinyin": "qí",
+    "meaning": "montar (en bici, a caballo)",
+    "level": 3,
+    "characters": [
+      "骑"
+    ],
+    "topicIds": [
+      "verbos",
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-94c5-7b14-qian-bi3",
+    "simplified": "铅笔",
+    "traditional": "鉛筆",
+    "pinyin": "qiān bǐ",
+    "meaning": "lápiz",
+    "level": 3,
+    "characters": [
+      "铅",
+      "笔"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6e05-695a-qing-chu5",
+    "simplified": "清楚",
+    "traditional": "清楚",
+    "pinyin": "qīng chu",
+    "meaning": "claro",
+    "level": 3,
+    "characters": [
+      "清",
+      "楚"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-79cb-qiu",
+    "simplified": "秋",
+    "traditional": "秋",
+    "pinyin": "qiū",
+    "meaning": "otoño",
+    "level": 3,
+    "characters": [
+      "秋"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-88d9-5b50-qun2-zi5",
+    "simplified": "裙子",
+    "traditional": "裙子",
+    "pinyin": "qún zi",
+    "meaning": "falda",
+    "level": 3,
+    "characters": [
+      "裙",
+      "子"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7136-540e-ran2-hou4",
+    "simplified": "然后",
+    "traditional": "然後",
+    "pinyin": "rán hòu",
+    "meaning": "entonces",
+    "level": 3,
+    "characters": [
+      "然",
+      "后"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-70ed-60c5-re4-qing2",
+    "simplified": "热情",
+    "traditional": "熱情",
+    "pinyin": "rè qíng",
+    "meaning": "cordial; entusiasta",
+    "level": 3,
+    "characters": [
+      "热",
+      "情"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8ba4-4e3a-ren4-wei2",
+    "simplified": "认为",
+    "traditional": "認為",
+    "pinyin": "rèn wéi",
+    "meaning": "creer",
+    "level": 3,
+    "characters": [
+      "认",
+      "为"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8ba4-771f-ren4-zhen",
+    "simplified": "认真",
+    "traditional": "認真",
+    "pinyin": "rèn zhēn",
+    "meaning": "serio; aplicado",
+    "level": 3,
+    "characters": [
+      "认",
+      "真"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5bb9-6613-rong2-yi4",
+    "simplified": "容易",
+    "traditional": "容易",
+    "pinyin": "róng yì",
+    "meaning": "fácil",
+    "level": 3,
+    "characters": [
+      "容",
+      "易"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5982-679c-ru2-guo3",
+    "simplified": "如果",
+    "traditional": "如果",
+    "pinyin": "rú guǒ",
+    "meaning": "si",
+    "level": 3,
+    "characters": [
+      "如",
+      "果"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f1e-san3",
+    "simplified": "伞",
+    "traditional": "傘",
+    "pinyin": "sǎn",
+    "meaning": "paraguas",
+    "level": 3,
+    "characters": [
+      "伞"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e0a-7f51-shang4-wang3",
+    "simplified": "上网",
+    "traditional": "上網",
+    "pinyin": "shàng wǎng",
+    "meaning": "conectarse a internet",
+    "level": 3,
+    "characters": [
+      "上",
+      "网"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-751f-6c14-sheng-qi4",
+    "simplified": "生气",
+    "traditional": "生氣",
+    "pinyin": "shēng qì",
+    "meaning": "enojarse",
+    "level": 3,
+    "characters": [
+      "生",
+      "气"
+    ],
+    "topicIds": [
+      "verbos",
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-58f0-97f3-sheng-yin",
+    "simplified": "声音",
+    "traditional": "聲音",
+    "pinyin": "shēng yīn",
+    "meaning": "voz",
+    "level": 3,
+    "characters": [
+      "声",
+      "音"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f7f-shi3",
+    "simplified": "使",
+    "traditional": "使",
+    "pinyin": "shǐ",
+    "meaning": "hacer que; usar",
+    "level": 3,
+    "characters": [
+      "使"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e16-754c-shi4-jie4",
+    "simplified": "世界",
+    "traditional": "世界",
+    "pinyin": "shì jiè",
+    "meaning": "mundo",
+    "level": 3,
+    "characters": [
+      "世",
+      "界"
+    ],
+    "topicIds": [
+      "naturaleza",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7626-shou4",
+    "simplified": "瘦",
+    "traditional": "瘦",
+    "pinyin": "shòu",
+    "meaning": "delgado",
+    "level": 3,
+    "characters": [
+      "瘦"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53d4-53d4-shu-shu5",
+    "simplified": "叔叔",
+    "traditional": "叔叔",
+    "pinyin": "shū shu",
+    "meaning": "tío",
+    "level": 3,
+    "characters": [
+      "叔",
+      "叔"
+    ],
+    "topicIds": [
+      "familia"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8212-670d-shu-fu5",
+    "simplified": "舒服",
+    "traditional": "舒服",
+    "pinyin": "shū fu",
+    "meaning": "cómodo",
+    "level": 3,
+    "characters": [
+      "舒",
+      "服"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6811-shu4",
+    "simplified": "树",
+    "traditional": "樹",
+    "pinyin": "shù",
+    "meaning": "árbol",
+    "level": 3,
+    "characters": [
+      "树"
+    ],
+    "topicIds": [
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6570-5b66-shu4-xue2",
+    "simplified": "数学",
+    "traditional": "數學",
+    "pinyin": "shù xué",
+    "meaning": "matemáticas",
+    "level": 3,
+    "characters": [
+      "数",
+      "学"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5237-shua",
+    "simplified": "刷",
+    "traditional": "刷",
+    "pinyin": "shuā",
+    "meaning": "cepillar",
+    "level": 3,
+    "characters": [
+      "刷"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53cc-shuang",
+    "simplified": "双",
+    "traditional": "雙",
+    "pinyin": "shuāng",
+    "meaning": "par; doble",
+    "level": 3,
+    "characters": [
+      "双"
+    ],
+    "topicIds": [
+      "compras",
+      "numeros",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6c34-5e73-shui3-ping2",
+    "simplified": "水平",
+    "traditional": "水平",
+    "pinyin": "shuǐ píng",
+    "meaning": "nivel",
+    "level": 3,
+    "characters": [
+      "水",
+      "平"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53f8-673a-si-ji",
+    "simplified": "司机",
+    "traditional": "司機",
+    "pinyin": "sī jī",
+    "meaning": "chofer",
+    "level": 3,
+    "characters": [
+      "司",
+      "机"
+    ],
+    "topicIds": [
+      "transporte",
+      "trabajos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-867d-7136-sui-ran2",
+    "simplified": "虽然",
+    "traditional": "雖然",
+    "pinyin": "suī rán",
+    "meaning": "aunque",
+    "level": 3,
+    "characters": [
+      "虽",
+      "然"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-592a-9633-tai4-yang5",
+    "simplified": "太阳",
+    "traditional": "太陽",
+    "pinyin": "tài yang",
+    "meaning": "sol",
+    "level": 3,
+    "characters": [
+      "太",
+      "阳"
+    ],
+    "topicIds": [
+      "tiempo",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7cd6-tang2",
+    "simplified": "糖",
+    "traditional": "糖",
+    "pinyin": "táng",
+    "meaning": "azúcar; dulce",
+    "level": 3,
+    "characters": [
+      "糖"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7279-522b-te4-bie2",
+    "simplified": "特别",
+    "traditional": "特別",
+    "pinyin": "tè bié",
+    "meaning": "especial; especialmente",
+    "level": 3,
+    "characters": [
+      "特",
+      "别"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-75bc-teng2",
+    "simplified": "疼",
+    "traditional": "疼",
+    "pinyin": "téng",
+    "meaning": "doler",
+    "level": 3,
+    "characters": [
+      "疼"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-63d0-9ad8-ti2-gao",
+    "simplified": "提高",
+    "traditional": "提高",
+    "pinyin": "tí gāo",
+    "meaning": "mejorar; elevar",
+    "level": 3,
+    "characters": [
+      "提",
+      "高"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f53-80b2-ti3-yu4",
+    "simplified": "体育",
+    "traditional": "體育",
+    "pinyin": "tǐ yù",
+    "meaning": "deportes",
+    "level": 3,
+    "characters": [
+      "体",
+      "育"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-751c-tian2",
+    "simplified": "甜",
+    "traditional": "甜",
+    "pinyin": "tián",
+    "meaning": "dulce",
+    "level": 3,
+    "characters": [
+      "甜"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6761-tiao2",
+    "simplified": "条",
+    "traditional": "條",
+    "pinyin": "tiáo",
+    "meaning": "(clasificador alargado)",
+    "level": 3,
+    "characters": [
+      "条"
+    ],
+    "topicIds": [
+      "compras",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-540c-4e8b-tong2-shi4",
+    "simplified": "同事",
+    "traditional": "同事",
+    "pinyin": "tóng shì",
+    "meaning": "colega",
+    "level": 3,
+    "characters": [
+      "同",
+      "事"
+    ],
+    "topicIds": [
+      "trabajos",
+      "personas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-540c-610f-tong2-yi4",
+    "simplified": "同意",
+    "traditional": "同意",
+    "pinyin": "tóng yì",
+    "meaning": "estar de acuerdo",
+    "level": 3,
+    "characters": [
+      "同",
+      "意"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5934-53d1-tou2-fa5",
+    "simplified": "头发",
+    "traditional": "頭髮",
+    "pinyin": "tóu fa",
+    "meaning": "pelo",
+    "level": 3,
+    "characters": [
+      "头",
+      "发"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7a81-7136-tu-ran2",
+    "simplified": "突然",
+    "traditional": "突然",
+    "pinyin": "tū rán",
+    "meaning": "repentino",
+    "level": 3,
+    "characters": [
+      "突",
+      "然"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-56fe-4e66-9986-tu2-shu-guan3",
+    "simplified": "图书馆",
+    "traditional": "圖書館",
+    "pinyin": "tú shū guǎn",
+    "meaning": "biblioteca",
+    "level": 3,
+    "characters": [
+      "图",
+      "书",
+      "馆"
+    ],
+    "topicIds": [
+      "escuela",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-817f-tui3",
+    "simplified": "腿",
+    "traditional": "腿",
+    "pinyin": "tuǐ",
+    "meaning": "pierna",
+    "level": 3,
+    "characters": [
+      "腿"
+    ],
+    "topicIds": [
+      "cuerpo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5b8c-6210-wan2-cheng2",
+    "simplified": "完成",
+    "traditional": "完成",
+    "pinyin": "wán chéng",
+    "meaning": "completar",
+    "level": 3,
+    "characters": [
+      "完",
+      "成"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7897-wan3",
+    "simplified": "碗",
+    "traditional": "碗",
+    "pinyin": "wǎn",
+    "meaning": "cuenco",
+    "level": 3,
+    "characters": [
+      "碗"
+    ],
+    "topicIds": [
+      "comida",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e07-wan4",
+    "simplified": "万",
+    "traditional": "万",
+    "pinyin": "wàn",
+    "meaning": "diez mil",
+    "level": 3,
+    "characters": [
+      "万"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5fd8-8bb0-wang4-ji4",
+    "simplified": "忘记",
+    "traditional": "忘記",
+    "pinyin": "wàng jì",
+    "meaning": "olvidar",
+    "level": 3,
+    "characters": [
+      "忘",
+      "记"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e3a-4e86-wei4-le5",
+    "simplified": "为了",
+    "traditional": "為了",
+    "pinyin": "wèi le",
+    "meaning": "para",
+    "level": 3,
+    "characters": [
+      "为",
+      "了"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e3a-4ec0-4e48-wei4-shen2-me5",
+    "simplified": "为什么",
+    "traditional": "為什麼",
+    "pinyin": "wèi shén me",
+    "meaning": "¿por qué?",
+    "level": 3,
+    "characters": [
+      "为",
+      "什",
+      "么"
+    ],
+    "topicIds": [
+      "preguntas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f4d-wei4",
+    "simplified": "位",
+    "traditional": "位",
+    "pinyin": "wèi",
+    "meaning": "(clasif. cortés); puesto",
+    "level": 3,
+    "characters": [
+      "位"
+    ],
+    "topicIds": [
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6587-5316-wen2-hua4",
+    "simplified": "文化",
+    "traditional": "文化",
+    "pinyin": "wén huà",
+    "meaning": "cultura",
+    "level": 3,
+    "characters": [
+      "文",
+      "化"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e60-60ef-xi2-guan4",
+    "simplified": "习惯",
+    "traditional": "習慣",
+    "pinyin": "xí guàn",
+    "meaning": "hábito",
+    "level": 3,
+    "characters": [
+      "习",
+      "惯"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6d17-624b-95f4-xi3-shou3-jian",
+    "simplified": "洗手间",
+    "traditional": "洗手間",
+    "pinyin": "xǐ shǒu jiān",
+    "meaning": "baño",
+    "level": 3,
+    "characters": [
+      "洗",
+      "手",
+      "间"
+    ],
+    "topicIds": [
+      "casa",
+      "lugares"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6d17-6fa1-xi3-zao3",
+    "simplified": "洗澡",
+    "traditional": "洗澡",
+    "pinyin": "xǐ zǎo",
+    "meaning": "bañarse",
+    "level": 3,
+    "characters": [
+      "洗",
+      "澡"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-897f-xi",
+    "simplified": "西",
+    "traditional": "西",
+    "pinyin": "xī",
+    "meaning": "oeste",
+    "level": 3,
+    "characters": [
+      "西"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-590f-xia4",
+    "simplified": "夏",
+    "traditional": "夏",
+    "pinyin": "xià",
+    "meaning": "verano",
+    "level": 3,
+    "characters": [
+      "夏"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5148-xian",
+    "simplified": "先",
+    "traditional": "先",
+    "pinyin": "xiān",
+    "meaning": "primero; antes",
+    "level": 3,
+    "characters": [
+      "先"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-76f8-540c-xiang-tong2",
+    "simplified": "相同",
+    "traditional": "相同",
+    "pinyin": "xiāng tóng",
+    "meaning": "igual",
+    "level": 3,
+    "characters": [
+      "相",
+      "同"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-76f8-4fe1-xiang-xin4",
+    "simplified": "相信",
+    "traditional": "相信",
+    "pinyin": "xiāng xìn",
+    "meaning": "creer; confiar",
+    "level": 3,
+    "characters": [
+      "相",
+      "信"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9999-8549-xiang-jiao",
+    "simplified": "香蕉",
+    "traditional": "香蕉",
+    "pinyin": "xiāng jiāo",
+    "meaning": "plátano",
+    "level": 3,
+    "characters": [
+      "香",
+      "蕉"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-50cf-xiang4",
+    "simplified": "像",
+    "traditional": "像",
+    "pinyin": "xiàng",
+    "meaning": "parecerse; como",
+    "level": 3,
+    "characters": [
+      "像"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5c0f-5fc3-xiao3-xin",
+    "simplified": "小心",
+    "traditional": "小心",
+    "pinyin": "xiǎo xīn",
+    "meaning": "tener cuidado",
+    "level": 3,
+    "characters": [
+      "小",
+      "心"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6821-957f-xiao4-zhang3",
+    "simplified": "校长",
+    "traditional": "校長",
+    "pinyin": "xiào zhǎng",
+    "meaning": "director (de escuela)",
+    "level": 3,
+    "characters": [
+      "校",
+      "长"
+    ],
+    "topicIds": [
+      "escuela",
+      "trabajos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-978b-xie2",
+    "simplified": "鞋",
+    "traditional": "鞋",
+    "pinyin": "xié",
+    "meaning": "zapato",
+    "level": 3,
+    "characters": [
+      "鞋"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-65b0-95fb-xin-wen2",
+    "simplified": "新闻",
+    "traditional": "新聞",
+    "pinyin": "xīn wén",
+    "meaning": "noticias",
+    "level": 3,
+    "characters": [
+      "新",
+      "闻"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-65b0-9c9c-xin-xian",
+    "simplified": "新鲜",
+    "traditional": "新鮮",
+    "pinyin": "xīn xiān",
+    "meaning": "fresco",
+    "level": 3,
+    "characters": [
+      "新",
+      "鲜"
+    ],
+    "topicIds": [
+      "comida"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4fe1-xin4",
+    "simplified": "信",
+    "traditional": "信",
+    "pinyin": "xìn",
+    "meaning": "carta; creer",
+    "level": 3,
+    "characters": [
+      "信"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-884c-674e-7bb1-xing2-li5-xiang",
+    "simplified": "行李箱",
+    "traditional": "行李箱",
+    "pinyin": "xíng li xiāng",
+    "meaning": "maleta",
+    "level": 3,
+    "characters": [
+      "行",
+      "李",
+      "箱"
+    ],
+    "topicIds": [
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5174-8da3-xing4-qu4",
+    "simplified": "兴趣",
+    "traditional": "興趣",
+    "pinyin": "xìng qù",
+    "meaning": "interés",
+    "level": 3,
+    "characters": [
+      "兴",
+      "趣"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-718a-732b-xiong2-mao",
+    "simplified": "熊猫",
+    "traditional": "熊貓",
+    "pinyin": "xióng māo",
+    "meaning": "panda",
+    "level": 3,
+    "characters": [
+      "熊",
+      "猫"
+    ],
+    "topicIds": [
+      "animales"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9700-8981-xu-yao4",
+    "simplified": "需要",
+    "traditional": "需要",
+    "pinyin": "xū yào",
+    "meaning": "necesitar",
+    "level": 3,
+    "characters": [
+      "需",
+      "要"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9009-62e9-xuan3-ze2",
+    "simplified": "选择",
+    "traditional": "選擇",
+    "pinyin": "xuǎn zé",
+    "meaning": "elegir; elección",
+    "level": 3,
+    "characters": [
+      "选",
+      "择"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-773c-955c-yan3-jing4",
+    "simplified": "眼镜",
+    "traditional": "眼鏡",
+    "pinyin": "yǎn jìng",
+    "meaning": "gafas",
+    "level": 3,
+    "characters": [
+      "眼",
+      "镜"
+    ],
+    "topicIds": [
+      "ropa"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8981-6c42-yao-qiu2",
+    "simplified": "要求",
+    "traditional": "要求",
+    "pinyin": "yāo qiú",
+    "meaning": "exigir; requisito",
+    "level": 3,
+    "characters": [
+      "要",
+      "求"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7237-7237-ye2-ye5",
+    "simplified": "爷爷",
+    "traditional": "爺爺",
+    "pinyin": "yé ye",
+    "meaning": "abuelo (paterno)",
+    "level": 3,
+    "characters": [
+      "爷",
+      "爷"
+    ],
+    "topicIds": [
+      "familia"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-822c-yi-ban",
+    "simplified": "一般",
+    "traditional": "一般",
+    "pinyin": "yī bān",
+    "meaning": "normalmente; corriente",
+    "level": 3,
+    "characters": [
+      "一",
+      "般"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-8fb9-yi-bian",
+    "simplified": "一边",
+    "traditional": "一邊",
+    "pinyin": "yī biān",
+    "meaning": "a la vez; a un lado",
+    "level": 3,
+    "characters": [
+      "一",
+      "边"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-5b9a-yi-ding4",
+    "simplified": "一定",
+    "traditional": "一定",
+    "pinyin": "yī dìng",
+    "meaning": "seguramente",
+    "level": 3,
+    "characters": [
+      "一",
+      "定"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-5171-yi-gong4",
+    "simplified": "一共",
+    "traditional": "一共",
+    "pinyin": "yī gòng",
+    "meaning": "en total",
+    "level": 3,
+    "characters": [
+      "一",
+      "共"
+    ],
+    "topicIds": [
+      "compras"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-4f1a-513f-yi-hui4-r5",
+    "simplified": "一会儿",
+    "traditional": "一會兒",
+    "pinyin": "yī huì r",
+    "meaning": "un rato",
+    "level": 3,
+    "characters": [
+      "一",
+      "会",
+      "儿"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-6837-yi-yang4",
+    "simplified": "一样",
+    "traditional": "一樣",
+    "pinyin": "yī yàng",
+    "meaning": "igual; lo mismo",
+    "level": 3,
+    "characters": [
+      "一",
+      "样"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e00-76f4-yi-zhi2",
+    "simplified": "一直",
+    "traditional": "一直",
+    "pinyin": "yī zhí",
+    "meaning": "todo recto; siempre",
+    "level": 3,
+    "characters": [
+      "一",
+      "直"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4ee5-540e-yi3-hou4",
+    "simplified": "以后",
+    "traditional": "以後",
+    "pinyin": "yǐ hòu",
+    "meaning": "después",
+    "level": 3,
+    "characters": [
+      "以",
+      "后"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4ee5-524d-yi3-qian2",
+    "simplified": "以前",
+    "traditional": "以前",
+    "pinyin": "yǐ qián",
+    "meaning": "antes",
+    "level": 3,
+    "characters": [
+      "以",
+      "前"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4ee5-4e3a-yi3-wei2",
+    "simplified": "以为",
+    "traditional": "以為",
+    "pinyin": "yǐ wéi",
+    "meaning": "creer (erróneamente)",
+    "level": 3,
+    "characters": [
+      "以",
+      "为"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-97f3-4e50-yin-yue4",
+    "simplified": "音乐",
+    "traditional": "音樂",
+    "pinyin": "yīn yuè",
+    "meaning": "música",
+    "level": 3,
+    "characters": [
+      "音",
+      "乐"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-94f6-884c-yin2-hang2",
+    "simplified": "银行",
+    "traditional": "銀行",
+    "pinyin": "yín háng",
+    "meaning": "banco",
+    "level": 3,
+    "characters": [
+      "银",
+      "行"
+    ],
+    "topicIds": [
+      "trabajos",
+      "lugares",
+      "compras"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5e94-8be5-ying-gai",
+    "simplified": "应该",
+    "traditional": "應該",
+    "pinyin": "yīng gāi",
+    "meaning": "debería",
+    "level": 3,
+    "characters": [
+      "应",
+      "该"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5f71-54cd-ying3-xiang3",
+    "simplified": "影响",
+    "traditional": "影響",
+    "pinyin": "yǐng xiǎng",
+    "meaning": "influencia",
+    "level": 3,
+    "characters": [
+      "影",
+      "响"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7528-yong4",
+    "simplified": "用",
+    "traditional": "用",
+    "pinyin": "yòng",
+    "meaning": "usar",
+    "level": 3,
+    "characters": [
+      "用"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6e38-620f-you2-xi4",
+    "simplified": "游戏",
+    "traditional": "遊戲",
+    "pinyin": "yóu xì",
+    "meaning": "juego",
+    "level": 3,
+    "characters": [
+      "游",
+      "戏"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6709-540d-you3-ming2",
+    "simplified": "有名",
+    "traditional": "有名",
+    "pinyin": "yǒu míng",
+    "meaning": "famoso",
+    "level": 3,
+    "characters": [
+      "有",
+      "名"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53c8-you4",
+    "simplified": "又",
+    "traditional": "又",
+    "pinyin": "yòu",
+    "meaning": "otra vez; y además",
+    "level": 3,
+    "characters": [
+      "又"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-9047-5230-yu4-dao4",
+    "simplified": "遇到",
+    "traditional": "遇到",
+    "pinyin": "yù dào",
+    "meaning": "encontrarse",
+    "level": 3,
+    "characters": [
+      "遇",
+      "到"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-613f-610f-yuan4-yi4",
+    "simplified": "愿意",
+    "traditional": "願意",
+    "pinyin": "yuàn yì",
+    "meaning": "estar dispuesto a",
+    "level": 3,
+    "characters": [
+      "愿",
+      "意"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6708-4eae-yue4-liang5",
+    "simplified": "月亮",
+    "traditional": "月亮",
+    "pinyin": "yuè liang",
+    "meaning": "luna",
+    "level": 3,
+    "characters": [
+      "月",
+      "亮"
+    ],
+    "topicIds": [
+      "tiempo",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8d8a-yue4",
+    "simplified": "越",
+    "traditional": "越",
+    "pinyin": "yuè",
+    "meaning": "cuanto más; superar",
+    "level": 3,
+    "characters": [
+      "越"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e91-yun2",
+    "simplified": "云",
+    "traditional": "云",
+    "pinyin": "yún",
+    "meaning": "nube",
+    "level": 3,
+    "characters": [
+      "云"
+    ],
+    "topicIds": [
+      "tiempo",
+      "naturaleza"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ad9-zhan4",
+    "simplified": "站",
+    "traditional": "站",
+    "pinyin": "zhàn",
+    "meaning": "estar de pie; estación",
+    "level": 3,
+    "characters": [
+      "站"
+    ],
+    "topicIds": [
+      "verbos",
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7167-987e-zhao4-gu5",
+    "simplified": "照顾",
+    "traditional": "照顧",
+    "pinyin": "zhào gu",
+    "meaning": "cuidar de",
+    "level": 3,
+    "characters": [
+      "照",
+      "顾"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7167-7247-zhao4-pian4",
+    "simplified": "照片",
+    "traditional": "照片",
+    "pinyin": "zhào piàn",
+    "meaning": "fotografía",
+    "level": 3,
+    "characters": [
+      "照",
+      "片"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7167-76f8-673a-zhao4-xiang4-ji",
+    "simplified": "照相机",
+    "traditional": "照相機",
+    "pinyin": "zhào xiàng jī",
+    "meaning": "cámara de fotos",
+    "level": 3,
+    "characters": [
+      "照",
+      "相",
+      "机"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7740-6025-zhao2-ji2",
+    "simplified": "着急",
+    "traditional": "著急",
+    "pinyin": "zháo jí",
+    "meaning": "estar nervioso; preocuparse",
+    "level": 3,
+    "characters": [
+      "着",
+      "急"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-53ea-zhi3",
+    "simplified": "只",
+    "traditional": "只",
+    "pinyin": "zhǐ",
+    "meaning": "solo",
+    "level": 3,
+    "characters": [
+      "只"
+    ],
+    "topicIds": [
+      "gramatica",
+      "clasificadores"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e2d-95f4-zhong-jian",
+    "simplified": "中间",
+    "traditional": "中間",
+    "pinyin": "zhōng jiān",
+    "meaning": "medio; centro",
+    "level": 3,
+    "characters": [
+      "中",
+      "间"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7ec8-4e8e-zhong-yu2",
+    "simplified": "终于",
+    "traditional": "終於",
+    "pinyin": "zhōng yú",
+    "meaning": "por fin",
+    "level": 3,
+    "characters": [
+      "终",
+      "于"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-79cd-zhong3",
+    "simplified": "种",
+    "traditional": "種",
+    "pinyin": "zhǒng",
+    "meaning": "tipo, clase; plantar",
+    "level": 3,
+    "characters": [
+      "种"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-91cd-8981-zhong4-yao4",
+    "simplified": "重要",
+    "traditional": "重要",
+    "pinyin": "zhòng yào",
+    "meaning": "importante",
+    "level": 3,
+    "characters": [
+      "重",
+      "要"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5468-672b-zhou-mo4",
+    "simplified": "周末",
+    "traditional": "週末",
+    "pinyin": "zhōu mò",
+    "meaning": "fin de semana",
+    "level": 3,
+    "characters": [
+      "周",
+      "末"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e3b-8981-zhu3-yao4",
+    "simplified": "主要",
+    "traditional": "主要",
+    "pinyin": "zhǔ yào",
+    "meaning": "principal",
+    "level": 3,
+    "characters": [
+      "主",
+      "要"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6ce8-610f-zhu4-yi4",
+    "simplified": "注意",
+    "traditional": "注意",
+    "pinyin": "zhù yì",
+    "meaning": "prestar atención",
+    "level": 3,
+    "characters": [
+      "注",
+      "意"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-795d-zhu4",
+    "simplified": "祝",
+    "traditional": "祝",
+    "pinyin": "zhù",
+    "meaning": "desear; felicitar",
+    "level": 3,
+    "characters": [
+      "祝"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5b57-5178-zi4-dian3",
+    "simplified": "字典",
+    "traditional": "字典",
+    "pinyin": "zì diǎn",
+    "meaning": "diccionario de caracteres",
+    "level": 3,
+    "characters": [
+      "字",
+      "典"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-81ea-5df1-zi4-ji3",
+    "simplified": "自己",
+    "traditional": "自己",
+    "pinyin": "zì jǐ",
+    "meaning": "uno mismo",
+    "level": 3,
+    "characters": [
+      "自",
+      "己"
+    ],
+    "topicIds": [
+      "personas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-603b-662f-zong3-shi4",
+    "simplified": "总是",
+    "traditional": "總是",
+    "pinyin": "zǒng shì",
+    "meaning": "siempre",
+    "level": 3,
+    "characters": [
+      "总",
+      "是"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-6700-8fd1-zui4-jin4",
+    "simplified": "最近",
+    "traditional": "最近",
+    "pinyin": "zuì jìn",
+    "meaning": "recientemente",
+    "level": 3,
+    "characters": [
+      "最",
+      "近"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f5c-4e1a-zuo4-ye4",
+    "simplified": "作业",
+    "traditional": "作業",
+    "pinyin": "zuò yè",
+    "meaning": "tarea escolar",
+    "level": 3,
+    "characters": [
+      "作",
+      "业"
+    ],
+    "topicIds": [
+      "escuela"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f5c-7528-zuo4-yong4",
+    "simplified": "作用",
+    "traditional": "作用",
+    "pinyin": "zuò yòng",
+    "meaning": "función; efecto",
+    "level": 3,
+    "characters": [
+      "作",
+      "用"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  }
+]

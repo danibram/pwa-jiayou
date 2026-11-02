@@ -4,13 +4,6 @@ import rawLevels from './characterLevels.json';
 
 const characterLevels = rawLevels as Record<string, number>;
 
-/** HanziDB counts for levels that have no character list in the app yet. */
-const ANNOUNCED: Partial<Record<HskLevel, number>> = {
-  4: 447,
-  5: 621,
-  6: 978,
-};
-
 export interface CatalogLevel {
   level: HskLevel;
   count: number;
@@ -31,10 +24,15 @@ const counts = listedCounts();
 
 export const BUNDLED_LEVEL: HskLevel = 1;
 
+const installablePack = (level: HskLevel) => {
+  if (level === BUNDLED_LEVEL) return true;
+  return level >= 2 && level <= 6 && (counts.get(level) ?? 0) > 0;
+};
+
 export const catalogLevels: CatalogLevel[] = ([1, 2, 3, 4, 5, 6] as const).map((level) => {
   const listed = counts.get(level) ?? 0;
-  if (listed > 0) return { level, count: listed, available: true };
-  return { level, count: ANNOUNCED[level] ?? 0, available: false };
+  if (listed > 0) return { level, count: listed, available: installablePack(level) };
+  return { level, count: 0, available: false };
 });
 
 export const catalogLevel = (level: HskLevel): CatalogLevel => {

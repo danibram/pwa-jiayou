@@ -63,7 +63,10 @@ export function createDialogFocus(
         }
       };
       const focusin = (event: FocusEvent) => {
-        if (event.target instanceof Node && !dialog.contains(event.target)) focusFirst();
+        // A dialog opened on top of this one keeps its focus; pulling it back here would loop.
+        if (!(event.target instanceof Element) || dialog.contains(event.target)) return;
+        if (event.target.closest('[role="dialog"], [role="alertdialog"]')) return;
+        focusFirst();
       };
       document.addEventListener('keydown', keydown, true);
       document.addEventListener('focusin', focusin);

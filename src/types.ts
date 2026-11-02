@@ -1,6 +1,6 @@
 export type HskLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-export type ReviewPool = 'today' | 'more' | 'all';
+export type ReviewPool = 'today' | 'more' | 'all' | 'weak';
 
 export interface HSKCharacter {
   character: string;

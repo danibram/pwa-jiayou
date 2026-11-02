@@ -1,5 +1,4 @@
-import type { ReviewPool } from './types';
-import { isNonNegativeInteger, isRecord } from './utils/parse';
+import { isRecord } from './utils/parse';
 
 export type StrokeFocus =
   | { kind: 'level' }
@@ -8,26 +7,22 @@ export type StrokeFocus =
 
 export type Screen =
   | { page: 'home' }
+  | { page: 'vocabulario'; topic?: boolean; wordId?: string }
+  | { page: 'vocabulary-review'; resume: boolean; practiceId?: string }
   | { page: 'acerca' }
-  | { page: 'temas' }
-  | { page: 'tema'; topicId: string; index: number }
-  | { page: 'tarjetas' }
-  | { page: 'entrenamiento'; pool: ReviewPool; resume: boolean }
+  | { page: 'opciones' }
+  | { page: 'mis-palabras' }
   | { page: 'trazos'; focus: StrokeFocus; from: Screen };
 
 export type HomeTarget =
-  | { page: 'tarjetas' }
-  | { page: 'temas' }
+  | { page: 'mis-palabras' }
+  | { page: 'vocabulario'; topic?: boolean; wordId?: string }
+  | { page: 'vocabulary-review'; resume: boolean; practiceId?: string }
   | { page: 'acerca' }
-  | { page: 'entrenamiento'; pool: ReviewPool; resume: boolean }
+  | { page: 'opciones' }
   | { page: 'trazos'; focus: Exclude<StrokeFocus, { kind: 'topic' }> };
 
 export const homeScreen = { page: 'home' } satisfies Screen;
-
-const POOLS = ['today', 'more', 'all'] as const satisfies readonly ReviewPool[];
-
-const isPool = (value: unknown): value is ReviewPool =>
-  typeof value === 'string' && POOLS.some((pool) => pool === value);
 
 const parseFocus = (value: Record<string, unknown>): StrokeFocus | undefined => {
   if (isRecord(value.focus)) {
@@ -52,17 +47,11 @@ const parseFocus = (value: Record<string, unknown>): StrokeFocus | undefined => 
 /** History state is untrusted. Returns a screen built from checked fields. */
 export const parseScreen = (value: unknown): Screen | undefined => {
   if (!isRecord(value)) return undefined;
-  if (value.page === 'home' || value.page === 'acerca' || value.page === 'temas' || value.page === 'tarjetas') {
+  if (value.page === 'home' || value.page === 'acerca' || value.page === 'opciones' || value.page === 'mis-palabras') {
     return { page: value.page };
   }
-  if (value.page === 'entrenamiento') {
-    if (!isPool(value.pool)) return undefined;
-    return { page: 'entrenamiento', pool: value.pool, resume: value.resume === true };
-  }
-  if (value.page === 'tema') {
-    if (typeof value.topicId !== 'string' || !isNonNegativeInteger(value.index)) return undefined;
-    return { page: 'tema', topicId: value.topicId, index: value.index };
-  }
+  if (value.page === 'vocabulario') return { page: 'vocabulario', topic: value.topic === true, ...(typeof value.wordId === 'string' ? { wordId: value.wordId } : {}) };
+  if (value.page === 'vocabulary-review') return { page: 'vocabulary-review', resume: true, ...(typeof value.practiceId === 'string' ? { practiceId: value.practiceId } : {}) };
   if (value.page === 'trazos') {
     if (!isRecord(value.from) || value.from.page === 'trazos') return undefined;
     const from = parseScreen(value.from);
@@ -73,7 +62,4 @@ export const parseScreen = (value: unknown): Screen | undefined => {
   return undefined;
 };
 
-export const temaScreen = (screen: Screen) => (screen.page === 'tema' ? screen : undefined);
-export const entrenamientoScreen = (screen: Screen) =>
-  (screen.page === 'entrenamiento' ? screen : undefined);
 export const trazosScreen = (screen: Screen) => (screen.page === 'trazos' ? screen : undefined);
