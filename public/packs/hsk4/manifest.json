@@ -1,0 +1,27 @@
+{
+  "level": 4,
+  "characters": 444,
+  "strokes": {
+    "copied": 444,
+    "missing": []
+  },
+  "syllables": 466,
+  "audioFiles": 1390,
+  "missingAudio": 42,
+  "missingSyllables": [
+    "dao5",
+    "du5",
+    "fan5",
+    "fu5",
+    "hai5",
+    "hu5",
+    "kuai5",
+    "nan5",
+    "nao5",
+    "po5",
+    "qi5",
+    "qin5",
+    "sou5",
+    "wu5"
+  ]
+}

@@ -1,0 +1,538 @@
+{
+  "1": {
+    "都": {
+      "pinyin": "dōu"
+    },
+    "读": {
+      "pinyin": "dú"
+    },
+    "个": {
+      "pinyin": "gè"
+    },
+    "后面": {
+      "pinyin": "hòu mian",
+      "meaning": "detrás; atrás"
+    },
+    "几": {
+      "pinyin": "jǐ"
+    },
+    "看": {
+      "pinyin": "kàn"
+    },
+    "吗": {
+      "pinyin": "ma"
+    },
+    "那": {
+      "pinyin": "nà"
+    },
+    "前面": {
+      "pinyin": "qián mian",
+      "meaning": "delante"
+    },
+    "认识": {
+      "meaning": "conocer"
+    },
+    "商店": {
+      "meaning": "tienda"
+    },
+    "上": {
+      "pinyin": "shàng"
+    },
+    "上午": {
+      "meaning": "por la mañana"
+    },
+    "时候": {
+      "meaning": "momento; cuando"
+    },
+    "睡觉": {
+      "meaning": "dormir"
+    },
+    "听": {
+      "pinyin": "tīng"
+    },
+    "同学": {
+      "meaning": "compañero de clase"
+    },
+    "喂": {
+      "pinyin": "wèi"
+    },
+    "先生": {
+      "meaning": "señor; marido"
+    },
+    "中国": {
+      "pinyin": "Zhōng guó",
+      "meaning": "China"
+    },
+    "怎么样": {
+      "meaning": "¿qué tal?"
+    },
+    "天气": {
+      "meaning": "tiempo (meteorológico)"
+    },
+    "会": {
+      "meaning": "saber hacer; poder"
+    },
+    "汉语": {
+      "meaning": "chino (idioma)"
+    }
+  },
+  "2": {
+    "吧": {
+      "pinyin": "ba"
+    },
+    "帮助": {
+      "meaning": "ayudar; ayuda"
+    },
+    "便宜": {
+      "pinyin": "pián yi",
+      "meaning": "barato"
+    },
+    "得": {
+      "pinyin": "de",
+      "meaning": "partícula de complemento"
+    },
+    "告诉": {
+      "pinyin": "gào su",
+      "meaning": "decir; contar"
+    },
+    "还": {
+      "pinyin": "hái"
+    },
+    "号": {
+      "pinyin": "hào"
+    },
+    "开始": {
+      "meaning": "empezar"
+    },
+    "考试": {
+      "meaning": "examen; examinarse"
+    },
+    "累": {
+      "pinyin": "lèi"
+    },
+    "离": {
+      "pinyin": "lí"
+    },
+    "男人": {
+      "meaning": "hombre"
+    },
+    "妻子": {
+      "pinyin": "qī zi",
+      "meaning": "esposa"
+    },
+    "身体": {
+      "meaning": "cuerpo; salud"
+    },
+    "事情": {
+      "meaning": "asunto; cosa"
+    },
+    "手机": {
+      "meaning": "teléfono móvil"
+    },
+    "为": {
+      "pinyin": "wèi"
+    },
+    "要": {
+      "pinyin": "yào"
+    },
+    "一起": {
+      "meaning": "juntos"
+    },
+    "运动": {
+      "meaning": "deporte; hacer ejercicio"
+    },
+    "早上": {
+      "meaning": "mañana (temprano)"
+    },
+    "长": {
+      "meaning": "largo"
+    },
+    "着": {
+      "pinyin": "zhe"
+    },
+    "准备": {
+      "meaning": "preparar"
+    },
+    "服务员": {
+      "meaning": "camarero"
+    },
+    "旅游": {
+      "meaning": "viajar; turismo"
+    },
+    "旁边": {
+      "meaning": "al lado"
+    },
+    "希望": {
+      "meaning": "esperar; esperanza"
+    },
+    "意思": {
+      "meaning": "significado; idea"
+    },
+    "正在": {
+      "meaning": "estar (haciendo algo)"
+    }
+  },
+  "3": {
+    "爱好": {
+      "meaning": "afición; gustar"
+    },
+    "办法": {
+      "meaning": "manera; solución"
+    },
+    "帮忙": {
+      "meaning": "ayudar; echar una mano"
+    },
+    "表演": {
+      "meaning": "actuar; actuación"
+    },
+    "宾馆": {
+      "meaning": "hotel"
+    },
+    "差": {
+      "pinyin": "chà"
+    },
+    "成绩": {
+      "meaning": "nota; resultado"
+    },
+    "除了": {
+      "meaning": "excepto; además de"
+    },
+    "担心": {
+      "meaning": "preocuparse"
+    },
+    "当然": {
+      "meaning": "por supuesto"
+    },
+    "地方": {
+      "pinyin": "dì fang",
+      "meaning": "lugar; sitio"
+    },
+    "地铁": {
+      "meaning": "metro"
+    },
+    "锻炼": {
+      "meaning": "hacer ejercicio"
+    },
+    "感冒": {
+      "meaning": "resfriado; resfriarse"
+    },
+    "刚才": {
+      "meaning": "hace un momento"
+    },
+    "更": {
+      "pinyin": "gèng"
+    },
+    "故事": {
+      "pinyin": "gù shi",
+      "meaning": "cuento; historia"
+    },
+    "过去": {
+      "meaning": "pasado; pasar"
+    },
+    "季节": {
+      "meaning": "estación (del año)"
+    },
+    "检查": {
+      "meaning": "revisar; examen"
+    },
+    "角": {
+      "pinyin": "jiǎo"
+    },
+    "教": {
+      "pinyin": "jiāo"
+    },
+    "结束": {
+      "meaning": "terminar"
+    },
+    "裤子": {
+      "meaning": "pantalones"
+    },
+    "年级": {
+      "meaning": "curso; año escolar"
+    },
+    "鸟": {
+      "pinyin": "niǎo"
+    },
+    "胖": {
+      "pinyin": "pàng"
+    },
+    "骑": {
+      "pinyin": "qí"
+    },
+    "上网": {
+      "meaning": "conectarse a internet"
+    },
+    "特别": {
+      "meaning": "especial; especialmente"
+    },
+    "万": {
+      "pinyin": "wàn"
+    },
+    "选择": {
+      "meaning": "elegir; elección"
+    },
+    "要求": {
+      "meaning": "exigir; requisito"
+    },
+    "爷爷": {
+      "meaning": "abuelo (paterno)"
+    },
+    "一般": {
+      "meaning": "normalmente; corriente"
+    },
+    "一直": {
+      "meaning": "todo recto; siempre"
+    },
+    "以为": {
+      "meaning": "creer (erróneamente)"
+    },
+    "字典": {
+      "meaning": "diccionario de caracteres"
+    },
+    "作用": {
+      "meaning": "función; efecto"
+    },
+    "相信": {
+      "meaning": "creer; confiar"
+    },
+    "注意": {
+      "meaning": "prestar atención"
+    },
+    "发现": {
+      "meaning": "descubrir; darse cuenta"
+    },
+    "校长": {
+      "meaning": "director (de escuela)"
+    },
+    "叔叔": {
+      "meaning": "tío"
+    },
+    "放心": {
+      "meaning": "quedarse tranquilo"
+    },
+    "变化": {
+      "meaning": "cambiar; cambio"
+    },
+    "词语": {
+      "meaning": "palabra; expresión"
+    },
+    "超市": {
+      "meaning": "supermercado"
+    },
+    "奶奶": {
+      "meaning": "abuela (paterna)"
+    },
+    "普通话": {
+      "meaning": "mandarín estándar"
+    }
+  },
+  "4": {
+    "成功": {
+      "pinyin": "chéng gōng",
+      "meaning": "éxito; tener éxito"
+    },
+    "大夫": {
+      "pinyin": "dài fu",
+      "meaning": "médico"
+    },
+    "干": {
+      "pinyin": "gàn"
+    },
+    "过": {
+      "pinyin": "guò"
+    },
+    "假": {
+      "pinyin": "jiǎ"
+    },
+    "京剧": {
+      "meaning": "ópera de Pekín"
+    },
+    "狮子": {
+      "pinyin": "shī zi",
+      "meaning": "león"
+    },
+    "孙子": {
+      "pinyin": "sūn zi",
+      "meaning": "nieto"
+    },
+    "现代": {
+      "pinyin": "xiàn dài",
+      "meaning": "moderno; época moderna"
+    },
+    "行": {
+      "pinyin": "xíng"
+    },
+    "亚洲": {
+      "meaning": "Asia"
+    },
+    "友好": {
+      "pinyin": "yǒu hǎo",
+      "meaning": "amistoso"
+    },
+    "长城": {
+      "meaning": "la Gran Muralla"
+    },
+    "长江": {
+      "pinyin": "Cháng jiāng",
+      "meaning": "río Yangtsé"
+    },
+    "中文": {
+      "pinyin": "zhōng wén",
+      "meaning": "chino (lengua)"
+    },
+    "地址": {
+      "meaning": "dirección (postal)"
+    },
+    "厉害": {
+      "meaning": "tremendo; impresionante; severo"
+    },
+    "联系": {
+      "meaning": "contactar; relación"
+    },
+    "群": {
+      "meaning": "grupo; multitud"
+    },
+    "呀": {
+      "meaning": "partícula exclamativa"
+    },
+    "咱们": {
+      "meaning": "nosotros (incluye al oyente)"
+    },
+    "报名": {
+      "meaning": "inscribirse"
+    },
+    "出差": {
+      "meaning": "viajar por trabajo"
+    },
+    "出发": {
+      "meaning": "salir; partir"
+    },
+    "打折": {
+      "meaning": "hacer descuento"
+    },
+    "合格": {
+      "meaning": "apto; cumplir los requisitos"
+    },
+    "理发": {
+      "meaning": "cortarse el pelo"
+    },
+    "请假": {
+      "meaning": "pedir permiso (para faltar)"
+    },
+    "收入": {
+      "meaning": "ingresos"
+    },
+    "填空": {
+      "meaning": "rellenar huecos"
+    },
+    "引起": {
+      "meaning": "provocar; causar"
+    },
+    "招聘": {
+      "meaning": "contratar; oferta de empleo"
+    },
+    "总结": {
+      "meaning": "resumir; resumen"
+    },
+    "难道": {
+      "meaning": "¿acaso...?"
+    },
+    "只好": {
+      "meaning": "no tener más remedio que"
+    }
+  },
+  "5": {
+    "薄": {
+      "pinyin": "báo"
+    },
+    "盖": {
+      "pinyin": "gài"
+    },
+    "管子": {
+      "pinyin": "guǎn zi",
+      "meaning": "tubo"
+    },
+    "和平": {
+      "pinyin": "hé píng",
+      "meaning": "paz"
+    },
+    "毛": {
+      "meaning": "pelo; pluma; diez céntimos"
+    },
+    "片": {
+      "pinyin": "piàn"
+    },
+    "时代": {
+      "pinyin": "shí dài",
+      "meaning": "época; era"
+    },
+    "吓": {
+      "pinyin": "xià"
+    },
+    "延长": {
+      "pinyin": "yán cháng",
+      "meaning": "prolongar; alargar"
+    },
+    "正": {
+      "pinyin": "zhèng"
+    },
+    "重": {
+      "pinyin": "zhòng"
+    },
+    "资源": {
+      "pinyin": "zī yuán",
+      "meaning": "recursos"
+    },
+    "礼拜天": {
+      "meaning": "domingo"
+    },
+    "丁": {
+      "meaning": "cuarto (en una serie); dado (de comida)"
+    },
+    "成语": {
+      "meaning": "modismo de cuatro caracteres"
+    },
+    "反复": {
+      "meaning": "repetidamente; una y otra vez"
+    },
+    "仿佛": {
+      "meaning": "como si; parecer"
+    },
+    "革命": {
+      "meaning": "revolución"
+    },
+    "公元": {
+      "meaning": "era común (d. C.)"
+    },
+    "柜台": {
+      "meaning": "mostrador"
+    },
+    "纪录": {
+      "meaning": "récord; registro"
+    },
+    "老板": {
+      "meaning": "jefe; dueño"
+    },
+    "录取": {
+      "meaning": "admitir (tras un examen)"
+    },
+    "收获": {
+      "meaning": "cosecha; fruto; logro"
+    },
+    "投资": {
+      "meaning": "invertir; inversión"
+    },
+    "行动": {
+      "meaning": "actuar; acción"
+    },
+    "雄伟": {
+      "meaning": "majestuoso; imponente"
+    },
+    "阳台": {
+      "meaning": "balcón"
+    },
+    "总之": {
+      "meaning": "en resumen"
+    }
+  }
+}

@@ -13,7 +13,15 @@ curl -L -o /tmp/Voice.zip https://www.cns11643.gov.tw/opendata/Voice.zip
 python3 scripts/copy-cns-audio.py /tmp/Voice.zip
 ```
 
-Eso deja en `public/audio/f` y `public/audio/m` solo las sílabas que usa la app, en MP3 mono, y regenera `src/data/syllable-clips.json`.
+Eso deja en `public/audio/f` y `public/audio/m` solo las sílabas que usa la app, en MP3 mono, y regenera `src/data/syllable-clips.json`. Incluye HSK 1–6 (lee `src/data/hsk*.json` y `public/packs/hsk*.json`).
+
+Después, reparte esos clips por nivel:
+
+```bash
+npm run media-packs
+```
+
+Crea `public/packs/hskN/strokes/`, `public/packs/hskN/audio/` y `syllables.json` para cada lista descargable (2–6). HSK 1 sigue en `public/strokes/`. `syllables.json` solo lista sílabas con MP3 real: si falta el archivo, Vite puede devolver el HTML de la app con 200 y la caché lo guarda como “audio”, y entonces todos los huecos suenan igual.
 
 ## Chen Wang, audio-cmn
 
@@ -36,3 +44,15 @@ python3 scripts/copy-cmn-audio.py ~/src/audio-cmn
 ```
 
 El script avisa de las sílabas que Chen Wang no grabó. Esas, al reproducir, usan el clip de la mujer. Lanza este script después del de CNS11643, porque la lista de sílabas sale de `syllable-clips.json`.
+
+## Lectura oficial y audio
+
+La lectura canónica es la del HSK / putonghua (continente): el pinyin de caracteres y de vocabulario no se adapta a Taiwán. Ejemplo: 朋友 se guarda como `péng you`, no como `péng yǒu` de la 國語辭典.
+
+El audio sí viene sobre todo de CNS11643 (Taiwán). Ese paquete marca el neutro con sufijo `5` y solo graba un set cerrado (~49 sílabas: `ba5`, `ma5`, `zi5`, `de5`…). No tiene `you5`, `xie5`, `xi5`, `shao5`, `bu5` ni `sheng5`. En Guoyu, además, 朋友 lleva tercer tono en 友.
+
+Política de reproducción:
+
+1. Si existe el clip de la sílaba HSK exacta, se usa.
+2. Si falta (casi siempre un neutro), se usa el tono de cita del carácter alineado, el que CNS sí tiene (`péng you` → `peng2` + `you3`, `xiè xie` → `xie4` + `xie4`). Se acepta por ahora.
+3. Si tampoco hay cita, síntesis `zh-CN` del navegador. Sin conexión hace falta una voz china instalada.

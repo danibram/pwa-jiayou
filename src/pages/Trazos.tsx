@@ -2,21 +2,33 @@ import {
   Component,
   createMemo,
   createSignal,
-  For,
   onCleanup,
   onMount,
   Show,
 } from 'solid-js';
+import SpeakButton from '../components/SpeakButton';
+import { glossHead } from '../utils/glossDisplay';
 import Icon from '../components/Icon';
+import SegmentedPicker from '../components/SegmentedPicker';
 import Pinyin from '../components/Pinyin';
 import StrokeCanvas, { StrokeCanvasApi } from '../components/StrokeCanvas';
 import { charactersInTopic } from '../data/topics';
 import { characterStore } from '../stores/characterStore';
+import { myWordsStore } from '../stores/myWordsStore';
 import { Grade, progressStore } from '../stores/progressStore';
 import { spokenMeaning } from '../utils/meaning';
-import { canSpeak, currentVoiceLabel, speak } from '../utils/speech';
+import { canSpeak } from '../utils/speech';
 import { shouldHandleShortcut } from '../utils/keyboard';
 import type { StrokeFocus } from '../screen';
+import type { HSKCharacter } from '../types';
+import { characterOrWordStub } from '../utils/wordCharacter';
+
+/** What the stroke page shows of a character. HSK rows have more; a character outside HSK has only this. */
+type StrokeCharacter = Pick<HSKCharacter, 'character' | 'pinyin' | 'stroke_count' | 'definition' | 'gloss' | 'example'>;
+
+/** A character the deck does not hold: a level not studied, or no level at all. */
+const loneCharacter = (char: string): StrokeCharacter =>
+  characterOrWordStub(char, characterStore.state.characters) ?? { character: char, pinyin: '', stroke_count: 0, definition: '' };
 
 /** watch the order, trace over the guide, then write from memory. */
 export type StrokeStage = 'watch' | 'trace' | 'memory';
@@ -37,12 +49,28 @@ const memoryGrade = (mistakes: number): Grade =>
   mistakes === 0 ? 'good' : mistakes <= 2 ? 'hard' : 'again';
 
 const Trazos: Component<TrazosProps> = (props) => {
-  const characters = () => {
+  const characters = (): StrokeCharacter[] => {
     const focus = props.focus;
     switch (focus.kind) {
-      case 'topic':
-        return charactersInTopic(focus.topicId, characterStore.state.characters);
-      case 'character':
+      case 'topic': {
+        const base = charactersInTopic(focus.topicId, characterStore.state.characters);
+        const seen = new Set(base.map((row) => row.character));
+        // Own words tagged with this topic add their characters after the catalog ones.
+        const extras: StrokeCharacter[] = [];
+        for (const word of myWordsStore.ownWords()) {
+          if (!word.topicIds.includes(focus.topicId)) continue;
+          for (const char of word.characters) {
+            if (seen.has(char)) continue;
+            seen.add(char);
+            extras.push(loneCharacter(char));
+          }
+        }
+        return [...base, ...extras];
+      }
+      case 'character': {
+        const deck = characterStore.getCharactersByLevel();
+        return deck.some((row) => row.character === focus.char) ? deck : [loneCharacter(focus.char)];
+      }
       case 'level':
         return characterStore.getCharactersByLevel();
       default: {
@@ -175,12 +203,9 @@ const Trazos: Component<TrazosProps> = (props) => {
 
   const strokeLine = () => {
     const n = count();
-    if (stage() === 'trace' && mistakes() > 0) {
-      return `${mistakes()} ${mistakes() === 1 ? 'error' : 'errores'}`;
-    }
     const currentStep = step();
     if (stage() === 'watch' && currentStep !== null) return `Trazo ${currentStep + 1} de ${n}`;
-    if (stage() === 'trace' && done() > 0) return `Trazo ${Math.min(done() + 1, n)} de ${n}`;
+    if (stage() !== 'watch' && done() > 0) return `Trazo ${Math.min(done() + 1, n)} de ${n}`;
     return `${n} ${n === 1 ? 'trazo' : 'trazos'}`;
   };
 
@@ -193,46 +218,48 @@ const Trazos: Component<TrazosProps> = (props) => {
 
   return (
     <div class="screen">
-      <header class="flex items-center gap-1 h-11 flex-shrink-0 -ml-1">
+      <header class="flex items-center gap-1 h-11 flex-shrink-0 -ml-1 animate-rise">
         <button
           onClick={() => props.onBack(current()?.character)}
-          class="btn-ghost h-11 w-11 shrink-0"
-          aria-label={props.backLabel ?? 'Volver'}
+          class="btn-ghost h-11 shrink-0 gap-0.5 px-2"
         >
-          <Icon name="back" size={22} />
+          <Icon name="back" size={20} />
+          <span class="text-sm font-medium">{props.backLabel ?? 'Volver'}</span>
         </button>
         <div class="flex min-w-0 flex-1 items-center justify-center">
           <span class="truncate text-sm font-medium tabular-nums text-ink">
             <Show when={current()}>{strokeLine()}</Show>
           </span>
+          <Show when={stage() !== 'watch' && mistakes() > 0}>
+            <span class="ml-2 shrink-0 rounded-full bg-seal-soft px-2 py-0.5 text-xs font-semibold tabular-nums text-seal">
+              {mistakes()} {mistakes() === 1 ? 'error' : 'errores'}
+            </span>
+          </Show>
         </div>
-        <Show when={current() && canSpeak()}>
-          <button
-            onClick={() => {
-              const char = current();
-              if (char) speak(char.pinyin, char.character);
-            }}
-            class="btn-quiet h-11 w-11 shrink-0"
-            aria-label={`Escuchar, voz ${currentVoiceLabel()}`}
-          >
-            <Icon name="sound" size={18} />
-          </button>
+        <Show when={canSpeak() && current()}>
+          {(char) => <SpeakButton pinyin={char().pinyin} hanzi={char().character} />}
         </Show>
       </header>
 
       <Show
         when={current()}
-        fallback={<p class="m-auto text-ink-soft">No hay caracteres en este nivel.</p>}
+        fallback={<p class="m-auto text-ink-soft animate-rise [animation-delay:60ms]">No hay caracteres en este nivel.</p>}
       >
         {(char) => (
-          <div class="flex-1 flex flex-col min-h-0 pb-2">
+          <div class="flex-1 flex flex-col min-h-0 pb-2 animate-rise [animation-delay:60ms]">
+            <div class="flex min-h-0 flex-1 flex-col justify-center">
             <div class="shrink-0 px-2 pt-3 text-center">
-              <p class="font-display text-2xl font-semibold leading-tight text-balance">
-                {spokenMeaning(char()).replace(/^./, (letter) => letter.toUpperCase())}
+              <p class="font-sans text-2xl font-semibold leading-tight text-balance">
+                {glossHead(spokenMeaning(char())).replace(/^./, (letter) => letter.toUpperCase())}
               </p>
               <Pinyin text={char().pinyin} class="mt-1 text-xl font-medium" />
             </div>
-            <div class="mt-6 shrink-0" classList={{ 'animate-shake': shake() }}>
+            <div class="relative mt-6 shrink-0" classList={{ 'animate-shake': shake() }}>
+              <div
+                class="pointer-events-none absolute inset-0 z-10 rounded-card ring-4 ring-seal/70 transition-opacity duration-300"
+                classList={{ 'opacity-100': shake(), 'opacity-0': !shake() }}
+                aria-hidden="true"
+              />
               <div
                 class="w-full"
                 onClick={() => {
@@ -265,30 +292,20 @@ const Trazos: Component<TrazosProps> = (props) => {
               />
               </div>
             </div>
-            <div class="mt-auto flex min-h-0 flex-col">
-            <div class="mt-4 grid grid-cols-3 gap-1 shrink-0" role="group" aria-label="Modo de práctica">
-              <For each={STAGES}>
-                {(s) => (
-                  <button
-                    aria-pressed={stage() === s.value}
-                    onClick={() => {
-                      if (s.value === 'watch' && stage() === 'watch') setStep(null);
-                      else switchStage(s.value);
-                    }}
-                    class="h-11 rounded-full text-sm transition-colors duration-100 ease-out"
-                    classList={{
-                      'font-semibold text-ink': stage() === s.value,
-                      'font-medium text-ink-soft': stage() !== s.value,
-                      'animate-nudge': s.value === 'trace' && nudge(),
-                    }}
-                  >
-                    <span classList={{ 'border-b-2 border-ink pb-0.5': stage() === s.value }}>{s.label}</span>
-                  </button>
-                )}
-              </For>
             </div>
+            <div class="flex shrink-0 flex-col">
+            <SegmentedPicker
+              class="mt-4 shrink-0"
+              label="Modo de práctica"
+              options={STAGES.map((s) => ({ ...s, class: s.value === 'trace' && nudge() ? 'animate-nudge' : '' }))}
+              value={stage()}
+              onChange={(value: StrokeStage) => {
+                if (value === 'watch' && stage() === 'watch') setStep(null);
+                else switchStage(value);
+              }}
+            />
 
-            <div class="mt-4 flex flex-col gap-4 shrink-0">
+            <div class="mt-4 flex min-h-[6.75rem] shrink-0 flex-col justify-end gap-4">
               <Show when={stage() === 'watch'}>
                 <div class="flex h-11 items-center justify-center gap-2">
                   <Show

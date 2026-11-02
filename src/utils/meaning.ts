@@ -1,5 +1,8 @@
 import { HSKCharacter } from '../types';
 
+/** What the meaning helpers read. A character outside HSK has only these. */
+type Meaning = Pick<HSKCharacter, 'definition' | 'gloss' | 'example' | 'pinyin'>;
+
 const senses = (definition: string) =>
   definition
     .split(/[;；]/)
@@ -7,7 +10,7 @@ const senses = (definition: string) =>
     .filter(Boolean);
 
 /** The short meaning to lead with: the curated gloss, or the first dictionary sense. */
-export const mainMeaning = (char: HSKCharacter): string =>
+export const mainMeaning = (char: Meaning): string =>
   char.gloss ?? senses(char.definition)[0] ?? '';
 
 const fold = (text: string) => text.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
@@ -17,7 +20,7 @@ const fold = (text: string) => text.toLowerCase().normalize('NFD').replace(/\p{M
  * is written in Chinese, gives way to the example. A gloss with its own words
  * stays, even when it starts with the syllable ("de (posesivo)" is not "mío").
  */
-export const spokenMeaning = (char: HSKCharacter): string => {
+export const spokenMeaning = (char: Meaning): string => {
   const gloss = mainMeaning(char);
   const example = char.example?.es;
   const head = gloss.split(/[\s;(（]/)[0] ?? '';
@@ -29,7 +32,7 @@ export const spokenMeaning = (char: HSKCharacter): string => {
 };
 
 /** The remaining dictionary senses, for a quieter second line. */
-export const otherMeanings = (char: HSKCharacter): string => {
+export const otherMeanings = (char: Meaning): string => {
   const all = senses(char.definition);
   return (char.gloss ? all : all.slice(1)).join(' · ');
 };

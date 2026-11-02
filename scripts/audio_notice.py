@@ -11,7 +11,7 @@ See docs/audio.md.
 ----- CNS11643 -----
 Woman and man, public/audio/f and public/audio/m.
 From CNS11643 Voice.zip (female.zip and male.zip), re-encoded to mono MP3.
-Neutral-tone words with no clip use the character's citation tone.
+Readings follow HSK / Mainland pinyin. Missing neutrals use the character's citation tone (the CNS clip that exists; Taiwanese full tone is an accepted mismatch for now).
 數位發展部，CNS11643中文標準交換碼全字庫網站，https://www.cns11643.gov.tw
 政府資料開放授權條款-第1版
 ----- end CNS11643 -----

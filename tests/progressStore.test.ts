@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
+import { CHAR_NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
 
 describe('progressStore', () => {
   beforeEach(() => {
@@ -45,10 +45,14 @@ describe('progressStore', () => {
     const chars = Array.from({ length: 30 }, (_, i) => ({
       character: String.fromCharCode(0x4e00 + i),
     }));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-10-29T12:00:00'));
     progressStore.grade(chars[5].character, 'again');
+    vi.setSystemTime(new Date('2026-10-30T12:00:00'));
     const { due, fresh } = progressStore.buildQueue(chars);
+    vi.useRealTimers();
     expect(due.map((c) => c.character)).toEqual([chars[5].character]);
-    expect(fresh.length).toBe(NEW_PER_DAY - 1);
+    expect(fresh.length).toBe(CHAR_NEW_PER_DAY);
     expect(fresh[0]).toBe(chars[0]);
   });
 

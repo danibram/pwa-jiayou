@@ -55,28 +55,33 @@ export default function OfflineStatus() {
     registration?.removeEventListener('updatefound', watchWorker);
     worker?.removeEventListener('statechange', workerChanged);
   });
+  const updateLine = (waiting: boolean, installing: boolean) => {
+    if (workerState() === 'failed') return 'No se pudo preparar la actualización. Vuelve a intentarlo con conexión.';
+    if (workerState() === 'ready' || waiting) return 'Hay una versión nueva lista. Se usará al volver a abrir la app.';
+    if (workerState() === 'installing' || installing) return 'Descargando una versión nueva…';
+    return '';
+  };
   return (
     <section class="sheet mt-5 p-4">
-      <h2 class="font-display text-lg font-semibold">En este dispositivo</h2>
-      <p class="mt-1 text-sm text-ink-soft">Recursos guardados por esta app para usarlos sin conexión.</p>
-      <Show when={!status.loading} fallback={<p class="mt-3 text-sm text-ink-soft">Consultando almacenamiento…</p>}>
-        <Show when={status()} fallback={<p class="mt-3 text-sm text-ink-soft">El navegador no permite consultar el almacenamiento.</p>}>
+      <h2 class="font-display text-lg font-semibold">Sin conexión</h2>
+      <Show when={!status.loading} fallback={<p class="mt-1 text-sm text-ink-soft">Comprobando…</p>}>
+        <Show when={status()} fallback={<p class="mt-1 text-sm text-ink-soft">Este navegador no deja ver qué hay guardado.</p>}>
           {(data) => <>
-            <ul class="mt-3 divide-y divide-line/70">
-              <For each={data().groups}>{(group) => <li>
-                <details class="py-2 text-sm">
-                  <summary class="cursor-pointer font-medium">{group.label} · {group.paths.length} archivos</summary>
-                  <ul class="mt-2 max-h-40 overflow-y-auto break-all text-xs text-ink-soft"><For each={group.paths}>{(path) => <li class="py-0.5">{decodeURI(path)}</li>}</For></ul>
-                </details>
-              </li>}</For>
+            <p class="mt-1 text-sm text-ink-soft">
+              Funciona sin internet con lo que ya está guardado
+              <Show when={data().usage !== undefined}> ({((data().usage ?? 0) / 1024 / 1024).toFixed(0)} MB)</Show>.
+            </p>
+            <ul class="mt-3 flex flex-wrap gap-2">
+              <For each={data().groups.filter((group) => group.paths.length > 0)}>{(group) => (
+                <li class="rounded-full border border-line px-3 py-1 text-xs font-medium text-ink-soft">{group.label}</li>
+              )}</For>
             </ul>
-            <Show when={data().usage !== undefined}><p class="mt-2 text-sm text-ink-soft">Espacio estimado del sitio: {((data().usage ?? 0) / 1024 / 1024).toFixed(1)} MB</p></Show>
-            <p role="status" class="mt-2 text-sm text-ink-soft">{workerState() === 'failed' ? 'No se pudo preparar la actualización. Vuelve a intentarlo con conexión.' : workerState() === 'unavailable' ? 'No se puede consultar el estado de actualización.' : workerState() === 'ready' || data().waiting ? 'Hay una actualización lista.' : workerState() === 'installing' || data().installing ? 'Se está descargando y preparando una actualización.' : 'No hay ninguna actualización pendiente en este momento.'}</p>
-            <p class="mt-2 text-xs text-ink-soft">El navegador puede borrar estos datos. El espacio es una estimación del sitio completo.</p>
+            <Show when={updateLine(!!data().waiting, !!data().installing)}>
+              {(line) => <p role="status" class="mt-3 text-sm text-ink">{line()}</p>}
+            </Show>
           </>}
         </Show>
       </Show>
-      <button type="button" class="btn-quiet mt-3 h-11 px-4 text-sm" onClick={() => refetch()}>Volver a consultar</button>
     </section>
   );
 }
