@@ -40,35 +40,34 @@
     color-scheme: light;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: 18 16 14;
-      --surface: 48 42 36;
-      --raised: 74 66 58;
-      --ink: 244 237 226;
-      --ink-soft: 200 188 172;
-      --ink-faint: 198 186 172;
-      --line: 88 78 68;
-      --seal: 214 96 82;
-      --seal-soft: 92 44 38;
-      --jade: 110 190 150;
-      --jade-soft: 32 74 58;
-      --gold: 214 176 104;
-      /* Lighter than the stroke, so the start arrow reads on the dark board. */
-      --gold-deep: 246 216 154;
-      /* Brighter than a finished stroke, darker than the arrow. */
-      --stroke: 176 128 56;
-      --shadow: 0 0 0;
-      --grid: 244 237 226;
+  /* Manual or OS-resolved dark. The class is set by src/utils/theme.ts. */
+  html.dark {
+    --paper: 18 16 14;
+    --surface: 48 42 36;
+    --raised: 74 66 58;
+    --ink: 244 237 226;
+    --ink-soft: 200 188 172;
+    --ink-faint: 198 186 172;
+    --line: 88 78 68;
+    --seal: 214 96 82;
+    --seal-soft: 92 44 38;
+    --jade: 110 190 150;
+    --jade-soft: 32 74 58;
+    --gold: 214 176 104;
+    /* Lighter than the stroke, so the start arrow reads on the dark board. */
+    --gold-deep: 246 216 154;
+    /* Brighter than a finished stroke, darker than the arrow. */
+    --stroke: 176 128 56;
+    --shadow: 0 0 0;
+    --grid: 244 237 226;
 
-      --tone-1: 142 174 236;
-      --tone-2: 196 160 230;
-      --tone-3: 168 196 96;
-      --tone-4: 236 148 180;
-      --tone-5: 244 237 226;
+    --tone-1: 142 174 236;
+    --tone-2: 196 160 230;
+    --tone-3: 168 196 96;
+    --tone-4: 236 148 180;
+    --tone-5: 244 237 226;
 
-      color-scheme: dark;
-    }
+    color-scheme: dark;
   }
 
   html,

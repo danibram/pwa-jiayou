@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import UpdateNotice from './components/UpdateNotice';
 import { ProgressStorageNotice } from './components/ProgressBackup';
+import { initTheme } from './utils/theme';
+
+initTheme();
 
 document.documentElement.addEventListener('pointerdown', () => {
   document.documentElement.dataset.pointer = '';
