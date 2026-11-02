@@ -1,17 +1,14 @@
-import { Component, createSignal, Match, onMount, Show, Switch } from 'solid-js';
-import { charactersInTopic } from './data/topics';
+import { Component, createEffect, createSignal, Match, on, onMount, Show, Switch } from 'solid-js';
 import Acerca from './pages/Acerca';
-import Entrenamiento from './pages/Entrenamiento';
+import Opciones from './pages/Opciones';
 import Home from './pages/Home';
 import Listas from './pages/Listas';
-import Tarjetas from './pages/Tarjetas';
-import Tema from './pages/Tema';
-import Temas from './pages/Temas';
+import MisPalabras from './pages/MisPalabras';
 import Trazos from './pages/Trazos';
+import Vocabulario, { type VocabularyBrowseState } from './pages/Vocabulario';
+import VocabularyReview from './pages/VocabularyReview';
 import {
-  entrenamientoScreen,
   homeScreen,
-  temaScreen,
   trazosScreen,
   type HomeTarget,
   type Screen,
@@ -19,7 +16,7 @@ import {
 import { createScreenHistory } from './createScreenHistory';
 import { characterStore } from './stores/characterStore';
 import { BUNDLED_LEVEL, catalogLevels } from './data/catalog';
-import { hasUsedApp, loadInstalledPacks, readInstalledLevels, writeInstalledLevels } from './utils/levelPacks';
+import { hasUsedApp, loadInstalledPacks, readInstalledLevels, saveStudyMedia, writeInstalledLevels } from './utils/levelPacks';
 
 const installedChoice = () => readInstalledLevels();
 
@@ -31,14 +28,21 @@ const initialGate = (): 'choose' | 'load' | 'app' => {
 };
 
 const App: Component = () => {
+  const [browse, setBrowse] = createSignal<VocabularyBrowseState>({ query: '', topic: '', scroll: 0, choosingTopic: false });
   const [screen, setScreen] = createSignal<Screen>(homeScreen);
-  const { goHome, leaveFinishedSession } = createScreenHistory(screen, setScreen);
+  const { goHome } = createScreenHistory(screen, setScreen);
   const [gate, setGate] = createSignal(initialGate());
   const [canCancelLists, setCanCancelLists] = createSignal(false);
   const openStrokes = (char: string) =>
     setScreen((current) => ({ page: 'trazos', focus: { kind: 'character', char }, from: current }));
 
+  let openedFromHome = false;
+  let openedFromMyWords = false;
   const navigate = (target: HomeTarget) => {
+    if (target.page === 'vocabulario') {
+      openedFromHome = target.wordId !== undefined;
+      setBrowse({ query: '', topic: '', scroll: 0, choosingTopic: target.topic === true });
+    }
     if (target.page === 'trazos') {
       setScreen({ page: 'trazos', focus: target.focus, from: homeScreen });
       return;
@@ -50,6 +54,9 @@ const App: Component = () => {
     setCanCancelLists(true);
     setGate('choose');
   };
+
+  // Once the app is open, fetch whatever the studied words still lack (lists added by an update, a failed file).
+  createEffect(on(gate, (current) => { if (current === 'app') void saveStudyMedia(); }));
 
   onMount(() => {
     if (gate() !== 'load') return;
@@ -90,64 +97,49 @@ const App: Component = () => {
         <Match when={screen().page === 'home'}>
           <Home onNavigate={navigate} />
         </Match>
+        <Match when={screen().page === 'vocabulario'}>
+          <Vocabulario onBack={goHome} onStrokes={openStrokes} browse={browse()} onBrowse={setBrowse} wordId={(() => { const s = screen(); return s.page === 'vocabulario' ? s.wordId : undefined; })()} onSelect={(wordId) => {
+            // A word opened straight from Home (palabra del día) closes back to Home, not to the list.
+            if (!wordId && openedFromMyWords) { openedFromMyWords = false; setScreen({ page: 'mis-palabras' }); return; }
+            if (!wordId && openedFromHome) { openedFromHome = false; setScreen(homeScreen); return; }
+            openedFromHome = false;
+            setScreen({ page: 'vocabulario', wordId });
+          }} onPractice={(practiceId) => setScreen({ page: 'vocabulary-review', resume: false, practiceId })} />
+        </Match>
+        <Match when={screen().page === 'vocabulary-review'}>
+          {/* Keyed so "Aprender 10 palabras" from an ended session starts a fresh one. */}
+          <Show when={(() => { const s = screen(); return s.page === 'vocabulary-review' ? s.practiceId ?? 'today' : undefined; })()} keyed>
+          {(_key: string) => <VocabularyReview onPractice={(practiceId) => setScreen({ page: 'vocabulary-review', resume: false, practiceId })} practiceId={(() => { const s = screen(); return s.page === 'vocabulary-review' ? s.practiceId : undefined; })()} resume={(() => { const s = screen(); return s.page === 'vocabulary-review' && s.resume; })()} onBack={() => {
+            const s = screen();
+            const practiceId = s.page === 'vocabulary-review' ? s.practiceId : undefined;
+            // `__all__`, `__more__` and `__weak__` are Home's sessions, not a word.
+            if (!practiceId || practiceId.startsWith('__')) {
+              setBrowse({ query: '', topic: '', scroll: 0, choosingTopic: false });
+              setScreen(homeScreen);
+            }
+            // A topic session returns to the topic's word list, which `browse` still holds.
+            else if (practiceId.startsWith('topic:')) setScreen({ page: 'vocabulario' });
+            else setScreen({ page: 'vocabulario', wordId: practiceId });
+          }} onStrokes={openStrokes} />}
+          </Show>
+        </Match>
         <Match when={screen().page === 'acerca'}>
-          <Acerca onBack={goHome} onManageLists={openLists} />
+          <Acerca onBack={goHome} />
         </Match>
-        <Match when={screen().page === 'temas'}>
-          <Temas
-            onBack={goHome}
-            onReview={(topicId) => setScreen({ page: 'tema', topicId, index: 0 })}
-          />
+        <Match when={screen().page === 'opciones'}>
+          <Opciones onBack={goHome} onManageLists={openLists} />
         </Match>
-        <Match when={temaScreen(screen())} keyed>
-          {(s) => (
-            <Tema
-              topicId={s.topicId}
-              initialIndex={s.index}
-              onBack={() => setScreen({ page: 'temas' })}
-              onOpenStrokes={(char, index) =>
-                setScreen({
-                  page: 'trazos',
-                  focus: { kind: 'topic', char, topicId: s.topicId },
-                  from: { page: 'tema', topicId: s.topicId, index },
-                })
-              }
-            />
-          )}
-        </Match>
-        <Match when={screen().page === 'tarjetas'}>
-          <Tarjetas onGoHome={goHome} onOpenStrokes={openStrokes} />
-        </Match>
-        <Match when={entrenamientoScreen(screen())} keyed>
-          {(s) => (
-            <Entrenamiento
-              pool={s.pool}
-              resume={s.resume}
-              onGoHome={goHome}
-              onLeaveFinished={leaveFinishedSession}
-              backLabel="Volver"
-              onOpenStrokes={openStrokes}
-            />
-          )}
+        <Match when={screen().page === 'mis-palabras'}>
+          <MisPalabras onBack={goHome} onOpenWord={(wordId) => { openedFromMyWords = true; setScreen({ page: 'vocabulario', wordId }); }} />
         </Match>
         <Match when={trazosScreen(screen())} keyed>
           {(s) => (
             <Trazos
               focus={s.focus}
-              // A topic returns to the character you were writing. A review returns home.
-              onBack={(char) => {
+              // A word session returns to its card; anything else goes back where it came from.
+              onBack={() => {
                 const from = s.from;
-                if (from.page === 'tema') {
-                  const list = charactersInTopic(from.topicId, characterStore.state.characters);
-                  const found = char ? list.findIndex((item) => item.character === char) : -1;
-                  setScreen({
-                    page: 'tema',
-                    topicId: from.topicId,
-                    index: found >= 0 ? found : from.index,
-                  });
-                  return;
-                }
-                setScreen(from.page === 'entrenamiento' ? { page: 'home' } : from);
+                setScreen(from.page === 'vocabulary-review' ? { ...from, resume: true } : from);
               }}
               backLabel="Volver"
             />

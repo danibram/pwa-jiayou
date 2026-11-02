@@ -1,6 +1,6 @@
 import { createEffect, onCleanup, onMount, type Accessor, type Setter } from 'solid-js';
-import { characterStore } from './stores/characterStore';
-import { loadSession } from './utils/sessionStore';
+import { allWords, findWord } from './stores/myWordsStore';
+import { loadVocabularySession } from './utils/vocabularySession';
 import { homeScreen, parseScreen, type Screen } from './screen';
 
 /** Keeps the browser history in step with the screen. Call it from the app setup. */
@@ -24,18 +24,17 @@ export function createScreenHistory(screen: Accessor<Screen>, setScreen: Setter<
     historyReady = true;
     const onPopState = (event: PopStateEvent) => {
       const savedScreen = event.state?.jiayou ? parseScreen(event.state.screen) : undefined;
-      if (savedScreen?.page === 'entrenamiento') {
-        const session = loadSession(characterStore.state.characters);
-        if (session?.pool === savedScreen.pool) {
+      if (savedScreen?.page === 'vocabulary-review') {
+        const session = loadVocabularySession(allWords(), savedScreen.practiceId);
+        if (session) {
           showFromHistory({ ...savedScreen, resume: true });
           return;
         }
-        history.replaceState({ jiayou: true, screen: homeScreen }, '');
-        if (screen().page === 'home') {
-          history.back();
-          return;
-        }
-        showFromHistory(homeScreen);
+        const fallback: Screen = savedScreen.practiceId && findWord(savedScreen.practiceId)
+          ? { page: 'vocabulario', wordId: savedScreen.practiceId }
+          : homeScreen;
+        history.replaceState({ jiayou: true, screen: fallback }, '');
+        showFromHistory(fallback);
         return;
       }
       showFromHistory(savedScreen ?? homeScreen);
@@ -54,13 +53,5 @@ export function createScreenHistory(screen: Accessor<Screen>, setScreen: Setter<
   });
 
   const goHome = () => setScreen(homeScreen);
-  const leaveFinishedSession = () => {
-    history.replaceState({ jiayou: true, screen: homeScreen }, '');
-    restoringHistory = true;
-    lastScreen = homeScreen;
-    setScreen(homeScreen);
-    history.back();
-  };
-
-  return { goHome, leaveFinishedSession };
+  return { goHome };
 }

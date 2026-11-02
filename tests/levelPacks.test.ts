@@ -1,9 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore } from '../src/stores/characterStore';
-import { applyLevelChoice, readInstalledLevels } from '../src/utils/levelPacks';
+import { vocabularyStore } from '../src/stores/vocabularyStore';
+import { wordsInLists } from '../src/data/lists';
+import { applyListChoice, packsForWords, readInstalledLevels } from '../src/utils/levelPacks';
 
 const body = (level: number) => readFileSync(`public/packs/hsk${level}.json`, 'utf8');
+const strokeJson = '{"strokes":["M0 0"],"medians":[[[0,0],[1,1]]]}';
 
 describe('level packs', () => {
   const stored = new Map<string, Response>();
@@ -20,39 +23,54 @@ describe('level packs', () => {
         put: async (key: string, response: Response) => {
           stored.set(key, response.clone());
         },
-        delete: async (key: string) => stored.delete(key),
+        delete: async (key: string | Request) => stored.delete(typeof key === 'string' ? key : new URL(key.url).pathname),
+        keys: async () => [...stored.keys()].map((key) => new Request(new URL(key, location.href).href)),
       }),
     });
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       const url = String(input);
+      if (url.includes('syllables.json')) return new Response('[]', { status: 200 });
+      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200 });
       const level = url.includes('hsk3') ? 3 : url.includes('hsk2') ? 2 : 0;
       if (!level || url.includes('fail')) return new Response('', { status: 404 });
       return new Response(body(level), { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
   });
 
-  it('downloads a list, remembers it, and removes it again', async () => {
-    await applyLevelChoice([1, 2]);
+  it('downloads the packs a level\'s words use, and only the strokes those words need', async () => {
+    const progress: number[] = [];
+    await applyListChoice(['hsk-1', 'hsk-2'], (done, total) => progress.push(total - done));
+    // HSK 2 words borrow nine HSK 3 characters, so that list comes too.
+    expect(packsForWords(wordsInLists(['hsk-1', 'hsk-2']))).toEqual([2, 3]);
+    expect(characterStore.hasLevel(2)).toBe(true);
+    expect(characterStore.hasLevel(3)).toBe(true);
+    expect(readInstalledLevels()).toEqual([1, 2, 3]);
+    expect(characterStore.state.selectedLevels).toEqual([1, 2]);
+    expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1', 'hsk-2']);
+    expect(progress.at(-1)).toBe(0);
+    const strokes = (level: number) => [...stored.keys()].filter((key) => key.includes(`/hsk${level}/strokes/`)).length;
+    expect(strokes(3)).toBeGreaterThan(0);
+    expect(strokes(3)).toBeLessThan(20);
+    expect([...stored.keys()].some((key) => key.endsWith('/hsk2/syllables.json'))).toBe(true);
+
+    await applyListChoice(['hsk-1']);
+    // HSK 1 words still use five HSK 2 characters.
     expect(characterStore.hasLevel(2)).toBe(true);
     expect(characterStore.hasLevel(3)).toBe(false);
     expect(readInstalledLevels()).toEqual([1, 2]);
-    expect(characterStore.state.selectedLevels).toEqual([1, 2]);
-    expect(stored.size).toBe(1);
-
-    await applyLevelChoice([1]);
-    expect(characterStore.hasLevel(2)).toBe(false);
-    expect(readInstalledLevels()).toEqual([1]);
     expect(characterStore.state.selectedLevels).toEqual([1]);
-    expect(stored.size).toBe(0);
+    expect([...stored.keys()].some((key) => key.includes('hsk3'))).toBe(false);
   });
 
   it('leaves the previous lists in place when a download fails', async () => {
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       const url = String(input);
+      if (url.includes('syllables.json')) return new Response('[]', { status: 200 });
       if (url.includes('hsk3')) return new Response('', { status: 404 });
+      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200 });
       return new Response(body(2), { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
-    await expect(applyLevelChoice([1, 2, 3])).rejects.toThrow(/HSK 3/);
+    await expect(applyListChoice(['hsk-1', 'hsk-2', 'hsk-3'])).rejects.toThrow(/HSK 3/);
     expect(characterStore.hasLevel(2)).toBe(false);
     expect(characterStore.hasLevel(3)).toBe(false);
     expect(readInstalledLevels()).toBeNull();

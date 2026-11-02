@@ -1,13 +1,10 @@
 import { Component, createResource, createSignal, For, Show } from 'solid-js';
 import RiceGrid from '../components/RiceGrid';
 import TopBar from '../components/TopBar';
-import OfflineStatus from '../components/OfflineStatus';
-import ProgressBackup from '../components/ProgressBackup';
 import { loadStrokeData } from '../utils/strokeData';
 
 interface AcercaProps {
   onBack: () => void;
-  onManageLists: () => void;
 }
 
 interface CreditLink {
@@ -42,16 +39,28 @@ const GROUPS: { title: string; credits: Credit[] }[] = [
       {
         kind: 'source',
         title: 'Mujer y hombre',
-        body: 'Las grabó el Ministerio de Asuntos Digitales de Taiwán, en CNS11643. Son las dos primeras voces del botón de escuchar.',
+        body: 'Las grabó el Ministerio de Asuntos Digitales de Taiwán, en CNS11643. Es el modo Taiwán del botón de escuchar (mujer, luego hombre). El pinyin de la app sigue el HSK; si CNS no tiene el neutro, suena el tono de cita y puede diferir del continente.',
         href: 'https://www.cns11643.gov.tw',
         source: 'CNS11643',
       },
       {
         kind: 'source',
         title: 'Chen Wang',
-        body: 'Sílabas de audio-cmn, grabadas en 2013. Es la tercera voz del botón de escuchar.',
+        body: 'Sílabas de audio-cmn (Jiangsu), grabadas en 2013. Es la voz del modo China continental.',
         href: 'https://github.com/hugolpz/audio-cmn',
         source: 'audio-cmn',
+      },
+    ],
+  },
+  {
+    title: 'Palabras',
+    credits: [
+      {
+        kind: 'source',
+        title: 'Vocabulario HSK 2.0',
+        body: 'Las listas exclusivas por nivel salen de Complete HSK Vocabulary. El español traduce sentidos de CC-CEDICT (CC BY-SA 4.0).',
+        href: 'https://github.com/drkameleon/complete-hsk-vocabulary',
+        source: 'Complete HSK Vocabulary',
       },
     ],
   },
@@ -126,34 +135,22 @@ const Acerca: Component<AcercaProps> = (props) => {
           <img src="/icon.svg" alt="" class="h-12 w-12 rounded-[0.8rem] shadow-lift" />
           <div>
             <div class="font-sans text-[1.75rem] font-semibold leading-tight">Jiāyóu</div>
-            <p class="mt-0.5 text-sm text-ink-soft">Tarjetas para aprender caracteres HSK.</p>
+            <p class="mt-0.5 text-sm text-ink-soft">Vocabulario chino del HSK 1 al 6.</p>
           </div>
         </div>
 
-        <section class="sheet mt-5 p-4 animate-rise [animation-delay:90ms]">
-          <h2 class="font-display text-lg font-semibold">Listas</h2>
-          <p class="mt-1 text-sm leading-relaxed text-ink-soft">
-            HSK 1 viene con la app. Las otras listas se guardan en este dispositivo cuando las pides.
-          </p>
-          <button type="button" class="btn-quiet mt-3 h-11 px-4 text-sm" onClick={props.onManageLists}>
-            Elegir listas
-          </button>
-        </section>
-
-        <OfflineStatus />
-        <ProgressBackup />
         <div class="sheet mt-5 overflow-hidden animate-rise [animation-delay:120ms]">
           <For each={GROUPS}>
             {(group, index) => (
               <section classList={{ 'border-t border-line': index() > 0 }}>
-                <h2 class="eyebrow px-4 pt-4">{group.title}</h2>
+                <h2 class="px-4 pt-4 font-display text-lg font-semibold">{group.title}</h2>
                 <For each={group.credits}>
                   {(credit) => (
                     <div class="px-4 pt-2.5 pb-4">
                       <Show when={credit.kind === 'links' ? undefined : credit}>
                         {(source) => (
                           <>
-                            <div class="font-display text-[1.0625rem] font-semibold leading-tight">
+                            <div class="text-[0.9375rem] font-semibold leading-tight">
                               {source().title}
                             </div>
                             <p class="mt-1 text-sm leading-relaxed text-ink-soft">{source().body}</p>

@@ -1,5 +1,27 @@
-import { Component, For } from 'solid-js';
-import { splitPinyin } from '../utils/pinyin';
+import { Component, For, createMemo, createRoot } from 'solid-js';
+import { pinyinSyllableHighlights } from '../utils/pinyinHighlights';
+import { endsInParticle, groupPinyin } from '../utils/pinyin';
+import { vocabulary } from '../data/vocabulary';
+import { myWordsStore } from '../stores/myWordsStore';
+
+/** Spellings of the multi-syllable words in `entries`, as space-joined lowercase pinyin. */
+const spellings = (entries: readonly { simplified: string; pinyin: string }[]) =>
+  entries
+    // A word written with a trailing 的/吗/呢 (似的) reads the same as a phrase (是的), which stays apart.
+    .filter((entry) => !/[的吗呢]$/.test(entry.simplified))
+    .map((entry) => entry.pinyin.trim().toLowerCase().replace(/\s+/g, ' '))
+    .filter((pinyin) => pinyin.includes(' '));
+
+let words: Set<string> | null = null;
+/** The learner's own words, rebuilt only when the list changes, not on every call. */
+const ownSpellings = createRoot(() => createMemo(() => new Set(spellings(myWordsStore.ownWords()))));
+
+/** A run of syllables is one word when the HSK list or the learner's own words have a word spelled that way. */
+const isWord = (syllables: string[]) => {
+  words ??= new Set(spellings(vocabulary));
+  const spelled = syllables.join(' ').toLowerCase();
+  return words.has(spelled) || ownSpellings().has(spelled);
+};
 
 const TONE_CLASS = {
   1: 'text-tone-1',
@@ -10,16 +32,33 @@ const TONE_CLASS = {
 } as const;
 
 /** Pinyin coloured by tone, the convention Pleco and most dictionaries use. */
-const Pinyin: Component<{ text: string; class?: string; plain?: boolean }> = (props) => {
+const Pinyin: Component<{
+  text: string;
+  class?: string;
+  plain?: boolean;
+  highlightQuery?: string;
+  /** The text is one word (an example word, a list entry), so its syllables are written together. */
+  word?: boolean;
+}> = (props) => {
+  const segments = createMemo(() => {
+    const parts = groupPinyin(props.text, props.word ? (syllables) => isWord(syllables) || !endsInParticle(syllables) : isWord);
+    const flags = pinyinSyllableHighlights(props.text, props.highlightQuery ?? '');
+    const active = !!props.highlightQuery?.trim();
+    let syllable = 0;
+    return parts.map((part) => {
+      const highlight = active && part.tone !== null && (flags[syllable++] ?? false);
+      return { part, highlight };
+    });
+  });
+
   return (
     <span class={`font-sans ${props.class ?? ''}`} lang="zh-Latn-pinyin">
-      <For each={splitPinyin(props.text)}>
-        {(part) => {
+      <For each={segments()}>
+        {({ part, highlight }) => {
           const colored = () => !!part.tone && !props.plain;
+          const mark = () => (highlight ? 'rounded-sm bg-jade/20 ring-1 ring-jade/35' : '');
           return part.tone ? (
-            <span class={colored() ? TONE_CLASS[part.tone] : 'text-ink'}>
-              {part.text}
-            </span>
+            <span class={`${colored() ? TONE_CLASS[part.tone] : 'text-ink'} ${mark()}`}>{part.text}</span>
           ) : (
             <span class="text-ink-faint">{part.text}</span>
           );

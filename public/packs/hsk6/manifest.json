@@ -1,0 +1,33 @@
+{
+  "level": 6,
+  "characters": 970,
+  "strokes": {
+    "copied": 970,
+    "missing": []
+  },
+  "syllables": 789,
+  "audioFiles": 2354,
+  "missingAudio": 60,
+  "missingSyllables": [
+    "cun5",
+    "dan5",
+    "dang5",
+    "dao5",
+    "fu5",
+    "gu5",
+    "he5",
+    "hua5",
+    "jia5",
+    "kou5",
+    "long5",
+    "peng5",
+    "qi5",
+    "shui5",
+    "suo5",
+    "ta5",
+    "ti5",
+    "wang5",
+    "wu5",
+    "xianr4"
+  ]
+}

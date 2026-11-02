@@ -92,12 +92,28 @@
     min-height: 100dvh;
   }
 
+  /* With a drawer up the page becomes a card that shrinks back, so it paints its own paper over a black body. */
+  html[data-drawer-open] body {
+    background: #000;
+  }
+
+  html[data-drawer-open] #root {
+    @apply bg-paper;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
   * {
     -webkit-tap-highlight-color: transparent;
   }
 
   button {
     touch-action: manipulation;
+  }
+
+  /* The native clear button is blue on WebKit. Search fields carry their own. */
+  input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   :focus-visible {
@@ -219,6 +235,26 @@
   .animate-reveal {
     animation: reveal 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
+  /* CharacterGlyph sets each stroke's dash, duration and delay inline. */
+  .glyph-stroke {
+    animation-name: glyph-stroke;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    animation-fill-mode: forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glyph-stroke {
+      animation: none;
+      stroke-dashoffset: 0 !important;
+    }
+  }
+}
+
+@keyframes glyph-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes stamp {
@@ -293,6 +329,17 @@
 
   .no-scrollbar {
     scrollbar-width: none;
+  }
+
+  /* Phones scroll by touch. A painted track only takes width from the list. */
+  @media (max-width: 640px) {
+    * {
+      scrollbar-width: none;
+    }
+
+    *::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

@@ -1,0 +1,15 @@
+{
+  "source": "https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/wordlists/exclusive/old/1.json",
+  "retrieved": "2026-11-01",
+  "description": "Selected forms copied from HSK 2.0 level 1 to check neutral tones and alternate readings.",
+  "forms": [
+    ["爸爸", "爸爸", "bà ba"],
+    ["东西", "東西", "dōng xi"],
+    ["对不起", "對不起", "duì bu qǐ"],
+    ["多少", "多少", "duō shao"],
+    ["妈妈", "媽媽", "mā ma"],
+    ["朋友", "朋友", "péng you"],
+    ["谢谢", "謝謝", "xiè xie"],
+    ["学生", "學生", "xué sheng"]
+  ]
+}

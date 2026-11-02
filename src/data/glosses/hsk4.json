@@ -1,0 +1,3554 @@
+{
+  "按": {
+    "gloss": "presionar; según",
+    "example": {
+      "word": "按照",
+      "pinyin": "àn zhào",
+      "es": "según"
+    }
+  },
+  "案": {
+    "gloss": "caso; mesa",
+    "example": {
+      "word": "案件",
+      "pinyin": "àn jiàn",
+      "es": "caso"
+    }
+  },
+  "傲": {
+    "gloss": "orgulloso; altivo",
+    "example": {
+      "word": "骄傲",
+      "pinyin": "jiāo ào",
+      "es": "orgullo"
+    }
+  },
+  "败": {
+    "gloss": "fracasar; derrotar",
+    "example": {
+      "word": "失败",
+      "pinyin": "shī bài",
+      "es": "fracaso"
+    }
+  },
+  "拜": {
+    "gloss": "venerar; visitar",
+    "example": {
+      "word": "拜访",
+      "pinyin": "bài fǎng",
+      "es": "visitar"
+    }
+  },
+  "扮": {
+    "gloss": "disfrazarse",
+    "example": {
+      "word": "扮演",
+      "pinyin": "bàn yǎn",
+      "es": "interpretar"
+    }
+  },
+  "棒": {
+    "gloss": "palo; genial",
+    "example": {
+      "word": "棒球",
+      "pinyin": "bàng qiú",
+      "es": "béisbol"
+    }
+  },
+  "保": {
+    "gloss": "proteger; garantizar",
+    "example": {
+      "word": "保护",
+      "pinyin": "bǎo hù",
+      "es": "proteger"
+    }
+  },
+  "抱": {
+    "gloss": "abrazar",
+    "example": {
+      "word": "拥抱",
+      "pinyin": "yōng bào",
+      "es": "abrazo"
+    }
+  },
+  "倍": {
+    "gloss": "veces; doble",
+    "example": {
+      "word": "加倍",
+      "pinyin": "jiā bèi",
+      "es": "duplicar"
+    }
+  },
+  "笨": {
+    "gloss": "tonto; torpe",
+    "example": {
+      "word": "笨拙",
+      "pinyin": "bèn zhuō",
+      "es": "torpe"
+    }
+  },
+  "毕": {
+    "gloss": "terminar; concluir",
+    "example": {
+      "word": "毕业",
+      "pinyin": "bì yè",
+      "es": "graduarse"
+    }
+  },
+  "遍": {
+    "gloss": "vez; por todas partes",
+    "example": {
+      "word": "遍地",
+      "pinyin": "biàn dì",
+      "es": "por todas partes"
+    }
+  },
+  "标": {
+    "gloss": "marca; estándar",
+    "example": {
+      "word": "标准",
+      "pinyin": "biāo zhǔn",
+      "es": "estándar"
+    }
+  },
+  "饼": {
+    "gloss": "torta; galleta",
+    "example": {
+      "word": "饼干",
+      "pinyin": "bǐng gān",
+      "es": "galleta"
+    }
+  },
+  "并": {
+    "gloss": "y; además; juntos",
+    "example": {
+      "word": "并且",
+      "pinyin": "bìng qiě",
+      "es": "y además"
+    }
+  },
+  "播": {
+    "gloss": "sembrar; emitir",
+    "example": {
+      "word": "播放",
+      "pinyin": "bō fàng",
+      "es": "reproducir"
+    }
+  },
+  "博": {
+    "gloss": "amplio; apostar",
+    "example": {
+      "word": "博士",
+      "pinyin": "bó shì",
+      "es": "doctorado"
+    }
+  },
+  "膊": {
+    "gloss": "brazo",
+    "example": {
+      "word": "胳膊",
+      "pinyin": "gē bo",
+      "es": "brazo"
+    }
+  },
+  "部": {
+    "gloss": "parte; departamento",
+    "example": {
+      "word": "部分",
+      "pinyin": "bù fen",
+      "es": "parte"
+    }
+  },
+  "擦": {
+    "gloss": "fregar; limpiar",
+    "example": {
+      "word": "擦拭",
+      "pinyin": "cā shì",
+      "es": "frotar"
+    }
+  },
+  "猜": {
+    "gloss": "adivinar",
+    "example": {
+      "word": "猜测",
+      "pinyin": "cāi cè",
+      "es": "suponer"
+    }
+  },
+  "材": {
+    "gloss": "material; talento",
+    "example": {
+      "word": "材料",
+      "pinyin": "cái liào",
+      "es": "material"
+    }
+  },
+  "彩": {
+    "gloss": "color; suerte",
+    "example": {
+      "word": "彩色",
+      "pinyin": "cǎi sè",
+      "es": "a color"
+    }
+  },
+  "餐": {
+    "gloss": "comida; comer",
+    "example": {
+      "word": "餐厅",
+      "pinyin": "cān tīng",
+      "es": "restaurante"
+    }
+  },
+  "厕": {
+    "gloss": "váter; aseo",
+    "example": {
+      "word": "厕所",
+      "pinyin": "cè suǒ",
+      "es": "aseo"
+    }
+  },
+  "察": {
+    "gloss": "examinar; observar",
+    "example": {
+      "word": "观察",
+      "pinyin": "guān chá",
+      "es": "observar"
+    }
+  },
+  "尝": {
+    "gloss": "probar; experimentar",
+    "example": {
+      "word": "尝试",
+      "pinyin": "cháng shì",
+      "es": "intentar"
+    }
+  },
+  "诚": {
+    "gloss": "sincero; honesto",
+    "example": {
+      "word": "诚实",
+      "pinyin": "chéng shí",
+      "es": "honesto"
+    }
+  },
+  "乘": {
+    "gloss": "montar; multiplicar",
+    "example": {
+      "word": "乘坐",
+      "pinyin": "chéng zuò",
+      "es": "montar en"
+    }
+  },
+  "程": {
+    "gloss": "trayecto; proceso",
+    "example": {
+      "word": "过程",
+      "pinyin": "guò chéng",
+      "es": "proceso"
+    }
+  },
+  "持": {
+    "gloss": "sostener; mantener",
+    "example": {
+      "word": "坚持",
+      "pinyin": "jiān chí",
+      "es": "persistir"
+    }
+  },
+  "抽": {
+    "gloss": "sacar; fumar",
+    "example": {
+      "word": "抽奖",
+      "pinyin": "chōu jiǎng",
+      "es": "sorteo"
+    }
+  },
+  "厨": {
+    "gloss": "cocina",
+    "example": {
+      "word": "厨房",
+      "pinyin": "chú fáng",
+      "es": "cocina"
+    }
+  },
+  "础": {
+    "gloss": "cimiento; base",
+    "example": {
+      "word": "基础",
+      "pinyin": "jī chǔ",
+      "es": "base"
+    }
+  },
+  "处": {
+    "gloss": "lugar; tratar",
+    "example": {
+      "word": "处理",
+      "pinyin": "chǔ lǐ",
+      "es": "gestionar"
+    }
+  },
+  "传": {
+    "gloss": "transmitir; biografía",
+    "example": {
+      "word": "传统",
+      "pinyin": "chuán tǒng",
+      "es": "tradición"
+    }
+  },
+  "窗": {
+    "gloss": "ventana",
+    "example": {
+      "word": "窗户",
+      "pinyin": "chuāng hu",
+      "es": "ventana"
+    }
+  },
+  "此": {
+    "gloss": "este; aquí",
+    "example": {
+      "word": "此外",
+      "pinyin": "cǐ wài",
+      "es": "además"
+    }
+  },
+  "粗": {
+    "gloss": "grueso; tosco",
+    "example": {
+      "word": "粗心",
+      "pinyin": "cū xīn",
+      "es": "descuidado"
+    }
+  },
+  "存": {
+    "gloss": "existir; guardar",
+    "example": {
+      "word": "存在",
+      "pinyin": "cún zài",
+      "es": "existencia"
+    }
+  },
+  "袋": {
+    "gloss": "bolsa; saco",
+    "example": {
+      "word": "口袋",
+      "pinyin": "kǒu dài",
+      "es": "bolsillo"
+    }
+  },
+  "戴": {
+    "gloss": "ponerse; llevar",
+    "example": {
+      "word": "戴上",
+      "pinyin": "dài shàng",
+      "es": "ponerse"
+    }
+  },
+  "弹": {
+    "gloss": "bala; tocar; elástico",
+    "example": {
+      "word": "子弹",
+      "pinyin": "zǐ dàn",
+      "es": "bala"
+    }
+  },
+  "刀": {
+    "gloss": "cuchillo",
+    "example": {
+      "word": "刀子",
+      "pinyin": "dāo zi",
+      "es": "cuchillo"
+    }
+  },
+  "导": {
+    "gloss": "guiar; conducir",
+    "example": {
+      "word": "导游",
+      "pinyin": "dǎo yóu",
+      "es": "guía"
+    }
+  },
+  "倒": {
+    "gloss": "caer; invertido",
+    "example": {
+      "word": "倒闭",
+      "pinyin": "dǎo bì",
+      "es": "quebrar"
+    }
+  },
+  "登": {
+    "gloss": "subir; publicar",
+    "example": {
+      "word": "登记",
+      "pinyin": "dēng jì",
+      "es": "registrarse"
+    }
+  },
+  "低": {
+    "gloss": "bajo; bajar",
+    "example": {
+      "word": "降低",
+      "pinyin": "jiàng dī",
+      "es": "bajar"
+    }
+  },
+  "底": {
+    "gloss": "fondo; base",
+    "example": {
+      "word": "到底",
+      "pinyin": "dào dǐ",
+      "es": "al fin y al cabo"
+    }
+  },
+  "掉": {
+    "gloss": "caer; perder",
+    "example": {
+      "word": "丢掉",
+      "pinyin": "diū diào",
+      "es": "tirar"
+    }
+  },
+  "丢": {
+    "gloss": "perder; tirar",
+    "example": {
+      "word": "丢失",
+      "pinyin": "diū shī",
+      "es": "perder"
+    }
+  },
+  "堵": {
+    "gloss": "atascar; tapar",
+    "example": {
+      "word": "堵车",
+      "pinyin": "dǔ chē",
+      "es": "atasco"
+    }
+  },
+  "肚": {
+    "gloss": "vientre",
+    "example": {
+      "word": "肚子",
+      "pinyin": "dù zi",
+      "es": "barriga"
+    }
+  },
+  "度": {
+    "gloss": "grado; vez",
+    "example": {
+      "word": "程度",
+      "pinyin": "chéng dù",
+      "es": "grado"
+    }
+  },
+  "断": {
+    "gloss": "cortar; interrumpir",
+    "example": {
+      "word": "判断",
+      "pinyin": "pàn duàn",
+      "es": "juzgar"
+    }
+  },
+  "队": {
+    "gloss": "equipo; fila",
+    "example": {
+      "word": "队伍",
+      "pinyin": "duì wu",
+      "es": "fila"
+    }
+  },
+  "尔": {
+    "gloss": "tú; eso (formal)",
+    "example": {
+      "word": "尔后",
+      "pinyin": "ěr hòu",
+      "es": "después"
+    }
+  },
+  "翻": {
+    "gloss": "voltear; traducir",
+    "example": {
+      "word": "翻译",
+      "pinyin": "fān yì",
+      "es": "traducir"
+    }
+  },
+  "烦": {
+    "gloss": "molestar; aburrido",
+    "example": {
+      "word": "麻烦",
+      "pinyin": "má fan",
+      "es": "molestia"
+    }
+  },
+  "反": {
+    "gloss": "opuesto; en contra",
+    "example": {
+      "word": "反对",
+      "pinyin": "fǎn duì",
+      "es": "oponerse"
+    }
+  },
+  "肥": {
+    "gloss": "gordo; fértil",
+    "example": {
+      "word": "减肥",
+      "pinyin": "jiǎn féi",
+      "es": "adelgazar"
+    }
+  },
+  "费": {
+    "gloss": "gasto; costar",
+    "example": {
+      "word": "费用",
+      "pinyin": "fèi yòng",
+      "es": "gastos"
+    }
+  },
+  "份": {
+    "gloss": "porción; parte",
+    "example": {
+      "word": "身份",
+      "pinyin": "shēn fèn",
+      "es": "identidad"
+    }
+  },
+  "奋": {
+    "gloss": "esforzarse",
+    "example": {
+      "word": "奋斗",
+      "pinyin": "fèn dòu",
+      "es": "luchar"
+    }
+  },
+  "丰": {
+    "gloss": "abundante",
+    "example": {
+      "word": "丰富",
+      "pinyin": "fēng fù",
+      "es": "rico"
+    }
+  },
+  "封": {
+    "gloss": "sellar; sobre",
+    "example": {
+      "word": "信封",
+      "pinyin": "xìn fēng",
+      "es": "sobre"
+    }
+  },
+  "否": {
+    "gloss": "no; negar",
+    "example": {
+      "word": "否认",
+      "pinyin": "fǒu rèn",
+      "es": "negar"
+    }
+  },
+  "肤": {
+    "gloss": "piel",
+    "example": {
+      "word": "皮肤",
+      "pinyin": "pí fū",
+      "es": "piel"
+    }
+  },
+  "符": {
+    "gloss": "símbolo; coincidir",
+    "example": {
+      "word": "符合",
+      "pinyin": "fú hé",
+      "es": "coincidir"
+    }
+  },
+  "福": {
+    "gloss": "felicidad; suerte",
+    "example": {
+      "word": "幸福",
+      "pinyin": "xìng fú",
+      "es": "felicidad"
+    }
+  },
+  "父": {
+    "gloss": "padre",
+    "example": {
+      "word": "父亲",
+      "pinyin": "fù qin",
+      "es": "padre"
+    }
+  },
+  "付": {
+    "gloss": "pagar; entregar",
+    "example": {
+      "word": "付款",
+      "pinyin": "fù kuǎn",
+      "es": "pagar"
+    }
+  },
+  "负": {
+    "gloss": "cargar; negativo",
+    "example": {
+      "word": "负责",
+      "pinyin": "fù zé",
+      "es": "responsabilizarse"
+    }
+  },
+  "傅": {
+    "gloss": "maestro; apellido",
+    "example": {
+      "word": "师傅",
+      "pinyin": "shī fu",
+      "es": "maestro"
+    }
+  },
+  "富": {
+    "gloss": "rico; abundante",
+    "example": {
+      "word": "富裕",
+      "pinyin": "fù yù",
+      "es": "rico"
+    }
+  },
+  "改": {
+    "gloss": "cambiar; corregir",
+    "example": {
+      "word": "改变",
+      "pinyin": "gǎi biàn",
+      "es": "cambiar"
+    }
+  },
+  "概": {
+    "gloss": "en general; resumen",
+    "example": {
+      "word": "大概",
+      "pinyin": "dà gài",
+      "es": "aproximadamente"
+    }
+  },
+  "赶": {
+    "gloss": "alcanzar; apresurarse",
+    "example": {
+      "word": "赶快",
+      "pinyin": "gǎn kuài",
+      "es": "deprisa"
+    }
+  },
+  "敢": {
+    "gloss": "atreverse",
+    "example": {
+      "word": "勇敢",
+      "pinyin": "yǒng gǎn",
+      "es": "valiente"
+    }
+  },
+  "钢": {
+    "gloss": "acero",
+    "example": {
+      "word": "钢铁",
+      "pinyin": "gāng tiě",
+      "es": "acero"
+    }
+  },
+  "膏": {
+    "gloss": "ungüento; pasta",
+    "example": {
+      "word": "牙膏",
+      "pinyin": "yá gāo",
+      "es": "pasta de dientes"
+    }
+  },
+  "胳": {
+    "gloss": "brazo; axila",
+    "example": {
+      "word": "胳膊",
+      "pinyin": "gē bo",
+      "es": "brazo"
+    }
+  },
+  "格": {
+    "gloss": "formato; estilo",
+    "example": {
+      "word": "性格",
+      "pinyin": "xìng gé",
+      "es": "carácter"
+    }
+  },
+  "各": {
+    "gloss": "cada; respectivo",
+    "example": {
+      "word": "各种",
+      "pinyin": "gè zhǒng",
+      "es": "todo tipo"
+    }
+  },
+  "功": {
+    "gloss": "mérito; logro",
+    "example": {
+      "word": "成功",
+      "pinyin": "chéng gōng",
+      "es": "éxito"
+    }
+  },
+  "供": {
+    "gloss": "suministrar; confesar",
+    "example": {
+      "word": "提供",
+      "pinyin": "tí gōng",
+      "es": "proporcionar"
+    }
+  },
+  "购": {
+    "gloss": "comprar",
+    "example": {
+      "word": "购买",
+      "pinyin": "gòu mǎi",
+      "es": "comprar"
+    }
+  },
+  "够": {
+    "gloss": "suficiente",
+    "example": {
+      "word": "足够",
+      "pinyin": "zú gòu",
+      "es": "bastante"
+    }
+  },
+  "估": {
+    "gloss": "estimar",
+    "example": {
+      "word": "估计",
+      "pinyin": "gū jì",
+      "es": "estimar"
+    }
+  },
+  "鼓": {
+    "gloss": "tambor; animar",
+    "example": {
+      "word": "鼓励",
+      "pinyin": "gǔ lì",
+      "es": "animar"
+    }
+  },
+  "挂": {
+    "gloss": "colgar",
+    "example": {
+      "word": "挂念",
+      "pinyin": "guà niàn",
+      "es": "preocuparse"
+    }
+  },
+  "观": {
+    "gloss": "observar; vista",
+    "example": {
+      "word": "观察",
+      "pinyin": "guān chá",
+      "es": "observar"
+    }
+  },
+  "管": {
+    "gloss": "tubo; gestionar",
+    "example": {
+      "word": "管理",
+      "pinyin": "guǎn lǐ",
+      "es": "gestionar"
+    }
+  },
+  "光": {
+    "gloss": "luz; solo",
+    "example": {
+      "word": "光明",
+      "pinyin": "guāng míng",
+      "es": "luminoso"
+    }
+  },
+  "广": {
+    "gloss": "amplio",
+    "example": {
+      "word": "广大",
+      "pinyin": "guǎng dà",
+      "es": "vasto"
+    }
+  },
+  "逛": {
+    "gloss": "pasear",
+    "example": {
+      "word": "逛街",
+      "pinyin": "guàng jiē",
+      "es": "ir de tiendas"
+    }
+  },
+  "规": {
+    "gloss": "regla; norma",
+    "example": {
+      "word": "规则",
+      "pinyin": "guī zé",
+      "es": "regla"
+    }
+  },
+  "咳": {
+    "gloss": "toser",
+    "example": {
+      "word": "咳嗽",
+      "pinyin": "ké sou",
+      "es": "tos"
+    }
+  },
+  "海": {
+    "gloss": "mar; océano",
+    "example": {
+      "word": "海洋",
+      "pinyin": "hǎi yáng",
+      "es": "océano"
+    }
+  },
+  "寒": {
+    "gloss": "frío; pobre",
+    "example": {
+      "word": "寒冷",
+      "pinyin": "hán lěng",
+      "es": "frío"
+    }
+  },
+  "汗": {
+    "gloss": "sudor",
+    "example": {
+      "word": "出汗",
+      "pinyin": "chū hàn",
+      "es": "sudar"
+    }
+  },
+  "航": {
+    "gloss": "navegar; aviación",
+    "example": {
+      "word": "航班",
+      "pinyin": "háng bān",
+      "es": "vuelo"
+    }
+  },
+  "合": {
+    "gloss": "unir; adecuado",
+    "example": {
+      "word": "合适",
+      "pinyin": "hé shì",
+      "es": "adecuado"
+    }
+  },
+  "何": {
+    "gloss": "qué; cómo",
+    "example": {
+      "word": "何必",
+      "pinyin": "hé bì",
+      "es": "para qué"
+    }
+  },
+  "盒": {
+    "gloss": "caja",
+    "example": {
+      "word": "盒子",
+      "pinyin": "hé zi",
+      "es": "caja"
+    }
+  },
+  "贺": {
+    "gloss": "felicitar",
+    "example": {
+      "word": "祝贺",
+      "pinyin": "zhù hè",
+      "es": "felicitar"
+    }
+  },
+  "厚": {
+    "gloss": "grueso; generoso",
+    "example": {
+      "word": "厚度",
+      "pinyin": "hòu dù",
+      "es": "grosor"
+    }
+  },
+  "呼": {
+    "gloss": "llamar; respirar",
+    "example": {
+      "word": "呼吸",
+      "pinyin": "hū xī",
+      "es": "respirar"
+    }
+  },
+  "虎": {
+    "gloss": "tigre",
+    "example": {
+      "word": "老虎",
+      "pinyin": "lǎo hǔ",
+      "es": "tigre"
+    }
+  },
+  "互": {
+    "gloss": "mutuamente",
+    "example": {
+      "word": "互相",
+      "pinyin": "hù xiāng",
+      "es": "mutuamente"
+    }
+  },
+  "户": {
+    "gloss": "puerta; hogar",
+    "example": {
+      "word": "户口",
+      "pinyin": "hù kǒu",
+      "es": "empadronamiento"
+    }
+  },
+  "划": {
+    "gloss": "remar; planificar",
+    "example": {
+      "word": "计划",
+      "pinyin": "jì huà",
+      "es": "plan"
+    }
+  },
+  "怀": {
+    "gloss": "seno; albergar",
+    "example": {
+      "word": "怀疑",
+      "pinyin": "huái yí",
+      "es": "sospechar"
+    }
+  },
+  "悔": {
+    "gloss": "arrepentirse",
+    "example": {
+      "word": "后悔",
+      "pinyin": "hòu huǐ",
+      "es": "arrepentirse"
+    }
+  },
+  "活": {
+    "gloss": "vivir; activo",
+    "example": {
+      "word": "生活",
+      "pinyin": "shēng huó",
+      "es": "vida"
+    }
+  },
+  "伙": {
+    "gloss": "compañero; grupo",
+    "example": {
+      "word": "伙伴",
+      "pinyin": "huǒ bàn",
+      "es": "compañero"
+    }
+  },
+  "货": {
+    "gloss": "mercancía",
+    "example": {
+      "word": "货物",
+      "pinyin": "huò wù",
+      "es": "mercancías"
+    }
+  },
+  "获": {
+    "gloss": "obtener",
+    "example": {
+      "word": "获得",
+      "pinyin": "huò dé",
+      "es": "obtener"
+    }
+  },
+  "圾": {
+    "gloss": "basura",
+    "example": {
+      "word": "垃圾",
+      "pinyin": "lā jī",
+      "es": "basura"
+    }
+  },
+  "积": {
+    "gloss": "acumular",
+    "example": {
+      "word": "积累",
+      "pinyin": "jī lěi",
+      "es": "acumular"
+    }
+  },
+  "基": {
+    "gloss": "base; fundamento",
+    "example": {
+      "word": "基础",
+      "pinyin": "jī chǔ",
+      "es": "base"
+    }
+  },
+  "激": {
+    "gloss": "excitar; intenso",
+    "example": {
+      "word": "激动",
+      "pinyin": "jī dòng",
+      "es": "emocionado"
+    }
+  },
+  "及": {
+    "gloss": "alcanzar; y",
+    "example": {
+      "word": "及时",
+      "pinyin": "jí shí",
+      "es": "a tiempo"
+    }
+  },
+  "即": {
+    "gloss": "inmediato; o sea",
+    "example": {
+      "word": "即使",
+      "pinyin": "jí shǐ",
+      "es": "aunque"
+    }
+  },
+  "籍": {
+    "gloss": "registro; origen",
+    "example": {
+      "word": "国籍",
+      "pinyin": "guó jí",
+      "es": "nacionalidad"
+    }
+  },
+  "计": {
+    "gloss": "plan; calcular",
+    "example": {
+      "word": "计划",
+      "pinyin": "jì huà",
+      "es": "plan"
+    }
+  },
+  "纪": {
+    "gloss": "disciplina; era",
+    "example": {
+      "word": "纪念",
+      "pinyin": "jì niàn",
+      "es": "conmemorar"
+    }
+  },
+  "技": {
+    "gloss": "técnica; habilidad",
+    "example": {
+      "word": "技术",
+      "pinyin": "jì shù",
+      "es": "tecnología"
+    }
+  },
+  "际": {
+    "gloss": "límite; entre",
+    "example": {
+      "word": "国际",
+      "pinyin": "guó jì",
+      "es": "internacional"
+    }
+  },
+  "既": {
+    "gloss": "ya que; ambos",
+    "example": {
+      "word": "既然",
+      "pinyin": "jì rán",
+      "es": "ya que"
+    }
+  },
+  "济": {
+    "gloss": "ayudar; cruzar",
+    "example": {
+      "word": "经济",
+      "pinyin": "jīng jì",
+      "es": "economía"
+    }
+  },
+  "继": {
+    "gloss": "continuar; heredar",
+    "example": {
+      "word": "继续",
+      "pinyin": "jì xù",
+      "es": "continuar"
+    }
+  },
+  "寄": {
+    "gloss": "enviar; confiar",
+    "example": {
+      "word": "寄信",
+      "pinyin": "jì xìn",
+      "es": "enviar carta"
+    }
+  },
+  "价": {
+    "gloss": "precio",
+    "example": {
+      "word": "价格",
+      "pinyin": "jià gé",
+      "es": "precio"
+    }
+  },
+  "坚": {
+    "gloss": "firme; duro",
+    "example": {
+      "word": "坚持",
+      "pinyin": "jiān chí",
+      "es": "persistir"
+    }
+  },
+  "减": {
+    "gloss": "reducir; restar",
+    "example": {
+      "word": "减少",
+      "pinyin": "jiǎn shǎo",
+      "es": "reducir"
+    }
+  },
+  "建": {
+    "gloss": "construir; fundar",
+    "example": {
+      "word": "建议",
+      "pinyin": "jiàn yì",
+      "es": "sugerir"
+    }
+  },
+  "键": {
+    "gloss": "tecla; clave",
+    "example": {
+      "word": "关键",
+      "pinyin": "guān jiàn",
+      "es": "clave"
+    }
+  },
+  "江": {
+    "gloss": "río grande",
+    "example": {
+      "word": "长江",
+      "pinyin": "Cháng Jiāng",
+      "es": "Yangtsé"
+    }
+  },
+  "将": {
+    "gloss": "futuro; general",
+    "example": {
+      "word": "将来",
+      "pinyin": "jiāng lái",
+      "es": "futuro"
+    }
+  },
+  "奖": {
+    "gloss": "premio",
+    "example": {
+      "word": "奖励",
+      "pinyin": "jiǎng lì",
+      "es": "recompensa"
+    }
+  },
+  "降": {
+    "gloss": "bajar; rendirse",
+    "example": {
+      "word": "降低",
+      "pinyin": "jiàng dī",
+      "es": "bajar"
+    }
+  },
+  "交": {
+    "gloss": "entregar; cruzar",
+    "example": {
+      "word": "交流",
+      "pinyin": "jiāo liú",
+      "es": "intercambiar"
+    }
+  },
+  "郊": {
+    "gloss": "afueras",
+    "example": {
+      "word": "郊区",
+      "pinyin": "jiāo qū",
+      "es": "suburbio"
+    }
+  },
+  "骄": {
+    "gloss": "arrogante",
+    "example": {
+      "word": "骄傲",
+      "pinyin": "jiāo ào",
+      "es": "orgullo"
+    }
+  },
+  "饺": {
+    "gloss": "dumpling",
+    "example": {
+      "word": "饺子",
+      "pinyin": "jiǎo zi",
+      "es": "dumpling"
+    }
+  },
+  "巾": {
+    "gloss": "pañuelo; toalla",
+    "example": {
+      "word": "毛巾",
+      "pinyin": "máo jīn",
+      "es": "toalla"
+    }
+  },
+  "金": {
+    "gloss": "oro; dinero",
+    "example": {
+      "word": "金属",
+      "pinyin": "jīn shǔ",
+      "es": "metal"
+    }
+  },
+  "仅": {
+    "gloss": "solo; meramente",
+    "example": {
+      "word": "仅仅",
+      "pinyin": "jǐn jǐn",
+      "es": "tan solo"
+    }
+  },
+  "尽": {
+    "gloss": "agotar; todo",
+    "example": {
+      "word": "尽量",
+      "pinyin": "jǐn liàng",
+      "es": "en lo posible"
+    }
+  },
+  "紧": {
+    "gloss": "tenso; apretado",
+    "example": {
+      "word": "紧张",
+      "pinyin": "jǐn zhāng",
+      "es": "nervioso"
+    }
+  },
+  "禁": {
+    "gloss": "prohibir",
+    "example": {
+      "word": "禁止",
+      "pinyin": "jìn zhǐ",
+      "es": "prohibir"
+    }
+  },
+  "惊": {
+    "gloss": "asustar; sorpresa",
+    "example": {
+      "word": "惊讶",
+      "pinyin": "jīng yà",
+      "es": "sorpresa"
+    }
+  },
+  "精": {
+    "gloss": "esencia; preciso",
+    "example": {
+      "word": "精神",
+      "pinyin": "jīng shén",
+      "es": "espíritu"
+    }
+  },
+  "景": {
+    "gloss": "paisaje; escena",
+    "example": {
+      "word": "风景",
+      "pinyin": "fēng jǐng",
+      "es": "paisaje"
+    }
+  },
+  "警": {
+    "gloss": "alerta; policía",
+    "example": {
+      "word": "警察",
+      "pinyin": "jǐng chá",
+      "es": "policía"
+    }
+  },
+  "竞": {
+    "gloss": "competir",
+    "example": {
+      "word": "竞争",
+      "pinyin": "jìng zhēng",
+      "es": "competencia"
+    }
+  },
+  "竟": {
+    "gloss": "al fin; incluso",
+    "example": {
+      "word": "竟然",
+      "pinyin": "jìng rán",
+      "es": "contra lo esperado"
+    }
+  },
+  "镜": {
+    "gloss": "espejo; lente",
+    "example": {
+      "word": "镜子",
+      "pinyin": "jìng zi",
+      "es": "espejo"
+    }
+  },
+  "究": {
+    "gloss": "investigar",
+    "example": {
+      "word": "研究",
+      "pinyin": "yán jiū",
+      "es": "investigar"
+    }
+  },
+  "局": {
+    "gloss": "oficina; situación",
+    "example": {
+      "word": "局面",
+      "pinyin": "jú miàn",
+      "es": "situación"
+    }
+  },
+  "举": {
+    "gloss": "levantar; ejemplo",
+    "example": {
+      "word": "举行",
+      "pinyin": "jǔ xíng",
+      "es": "celebrar"
+    }
+  },
+  "拒": {
+    "gloss": "rechazar",
+    "example": {
+      "word": "拒绝",
+      "pinyin": "jù jué",
+      "es": "rechazar"
+    }
+  },
+  "具": {
+    "gloss": "herramienta; tener",
+    "example": {
+      "word": "具体",
+      "pinyin": "jù tǐ",
+      "es": "concreto"
+    }
+  },
+  "剧": {
+    "gloss": "drama; intenso",
+    "example": {
+      "word": "剧院",
+      "pinyin": "jù yuàn",
+      "es": "teatro"
+    }
+  },
+  "距": {
+    "gloss": "distancia",
+    "example": {
+      "word": "距离",
+      "pinyin": "jù lí",
+      "es": "distancia"
+    }
+  },
+  "聚": {
+    "gloss": "reunir",
+    "example": {
+      "word": "聚会",
+      "pinyin": "jù huì",
+      "es": "reunión"
+    }
+  },
+  "绝": {
+    "gloss": "cortar; absoluto",
+    "example": {
+      "word": "绝对",
+      "pinyin": "jué duì",
+      "es": "absoluto"
+    }
+  },
+  "烤": {
+    "gloss": "asar; hornear",
+    "example": {
+      "word": "烧烤",
+      "pinyin": "shāo kǎo",
+      "es": "barbacoa"
+    }
+  },
+  "科": {
+    "gloss": "rama; ciencia",
+    "example": {
+      "word": "科学",
+      "pinyin": "kē xué",
+      "es": "ciencia"
+    }
+  },
+  "棵": {
+    "gloss": "clasif. (árboles)",
+    "example": {
+      "word": "一棵树",
+      "pinyin": "yì kē shù",
+      "es": "un árbol"
+    }
+  },
+  "克": {
+    "gloss": "gramo; superar",
+    "example": {
+      "word": "克服",
+      "pinyin": "kè fú",
+      "es": "superar"
+    }
+  },
+  "肯": {
+    "gloss": "consentir; sí",
+    "example": {
+      "word": "肯定",
+      "pinyin": "kěn dìng",
+      "es": "afirmar"
+    }
+  },
+  "恐": {
+    "gloss": "temer",
+    "example": {
+      "word": "恐怕",
+      "pinyin": "kǒng pà",
+      "es": "temo que"
+    }
+  },
+  "苦": {
+    "gloss": "amargo; duro",
+    "example": {
+      "word": "辛苦",
+      "pinyin": "xīn kǔ",
+      "es": "duro"
+    }
+  },
+  "款": {
+    "gloss": "fondos; estilo",
+    "example": {
+      "word": "贷款",
+      "pinyin": "dài kuǎn",
+      "es": "préstamo"
+    }
+  },
+  "况": {
+    "gloss": "situación",
+    "example": {
+      "word": "情况",
+      "pinyin": "qíng kuàng",
+      "es": "situación"
+    }
+  },
+  "矿": {
+    "gloss": "mina; mineral",
+    "example": {
+      "word": "矿山",
+      "pinyin": "kuàng shān",
+      "es": "mina"
+    }
+  },
+  "困": {
+    "gloss": "dificultad; cansar",
+    "example": {
+      "word": "困难",
+      "pinyin": "kùn nan",
+      "es": "dificultad"
+    }
+  },
+  "垃": {
+    "gloss": "basura",
+    "example": {
+      "word": "垃圾",
+      "pinyin": "lā jī",
+      "es": "basura"
+    }
+  },
+  "拉": {
+    "gloss": "tirar; arrastrar",
+    "example": {
+      "word": "拉开",
+      "pinyin": "lā kāi",
+      "es": "abrir tirando"
+    }
+  },
+  "辣": {
+    "gloss": "picante",
+    "example": {
+      "word": "辣椒",
+      "pinyin": "là jiāo",
+      "es": "chile"
+    }
+  },
+  "懒": {
+    "gloss": "perezoso",
+    "example": {
+      "word": "懒惰",
+      "pinyin": "lǎn duò",
+      "es": "pereza"
+    }
+  },
+  "浪": {
+    "gloss": "ola; derroche",
+    "example": {
+      "word": "浪费",
+      "pinyin": "làng fèi",
+      "es": "desperdiciar"
+    }
+  },
+  "厉": {
+    "gloss": "severo; afilado",
+    "example": {
+      "word": "厉害",
+      "pinyin": "lì hai",
+      "es": "formidable"
+    }
+  },
+  "丽": {
+    "gloss": "hermoso",
+    "example": {
+      "word": "美丽",
+      "pinyin": "měi lì",
+      "es": "hermoso"
+    }
+  },
+  "利": {
+    "gloss": "beneficio; afilado",
+    "example": {
+      "word": "利益",
+      "pinyin": "lì yì",
+      "es": "interés"
+    }
+  },
+  "励": {
+    "gloss": "animar",
+    "example": {
+      "word": "鼓励",
+      "pinyin": "gǔ lì",
+      "es": "animar"
+    }
+  },
+  "例": {
+    "gloss": "ejemplo; caso",
+    "example": {
+      "word": "例如",
+      "pinyin": "lì rú",
+      "es": "por ejemplo"
+    }
+  },
+  "俩": {
+    "gloss": "dos (personas)",
+    "example": {
+      "word": "咱俩",
+      "pinyin": "zán liǎ",
+      "es": "nosotros dos"
+    }
+  },
+  "连": {
+    "gloss": "conectar; incluso",
+    "example": {
+      "word": "连续",
+      "pinyin": "lián xù",
+      "es": "continuo"
+    }
+  },
+  "怜": {
+    "gloss": "compadecer",
+    "example": {
+      "word": "可怜",
+      "pinyin": "kě lián",
+      "es": "pobre"
+    }
+  },
+  "联": {
+    "gloss": "unir; asociar",
+    "example": {
+      "word": "联系",
+      "pinyin": "lián xì",
+      "es": "contactar"
+    }
+  },
+  "凉": {
+    "gloss": "fresco; frío",
+    "example": {
+      "word": "凉快",
+      "pinyin": "liáng kuai",
+      "es": "fresquito"
+    }
+  },
+  "谅": {
+    "gloss": "perdonar",
+    "example": {
+      "word": "原谅",
+      "pinyin": "yuán liàng",
+      "es": "perdonar"
+    }
+  },
+  "量": {
+    "gloss": "cantidad; medir",
+    "example": {
+      "word": "数量",
+      "pinyin": "shù liàng",
+      "es": "cantidad"
+    }
+  },
+  "列": {
+    "gloss": "fila; enumerar",
+    "example": {
+      "word": "列入",
+      "pinyin": "liè rù",
+      "es": "incluir"
+    }
+  },
+  "林": {
+    "gloss": "bosque",
+    "example": {
+      "word": "森林",
+      "pinyin": "sēn lín",
+      "es": "bosque"
+    }
+  },
+  "龄": {
+    "gloss": "edad",
+    "example": {
+      "word": "年龄",
+      "pinyin": "nián líng",
+      "es": "edad"
+    }
+  },
+  "另": {
+    "gloss": "otro; además",
+    "example": {
+      "word": "另外",
+      "pinyin": "lìng wài",
+      "es": "además"
+    }
+  },
+  "流": {
+    "gloss": "fluir; corriente",
+    "example": {
+      "word": "流行",
+      "pinyin": "liú xíng",
+      "es": "de moda"
+    }
+  },
+  "律": {
+    "gloss": "ley; ritmo",
+    "example": {
+      "word": "法律",
+      "pinyin": "fǎ lǜ",
+      "es": "ley"
+    }
+  },
+  "虑": {
+    "gloss": "preocuparse",
+    "example": {
+      "word": "考虑",
+      "pinyin": "kǎo lǜ",
+      "es": "considerar"
+    }
+  },
+  "乱": {
+    "gloss": "caos; desorden",
+    "example": {
+      "word": "混乱",
+      "pinyin": "hùn luàn",
+      "es": "caos"
+    }
+  },
+  "论": {
+    "gloss": "discutir; teoría",
+    "example": {
+      "word": "讨论",
+      "pinyin": "tǎo lùn",
+      "es": "discutir"
+    }
+  },
+  "落": {
+    "gloss": "caer; quedar",
+    "example": {
+      "word": "落后",
+      "pinyin": "luò hòu",
+      "es": "quedarse atrás"
+    }
+  },
+  "麻": {
+    "gloss": "cáñamo; entumecido",
+    "example": {
+      "word": "麻烦",
+      "pinyin": "má fan",
+      "es": "molestia"
+    }
+  },
+  "码": {
+    "gloss": "código; yarda",
+    "example": {
+      "word": "号码",
+      "pinyin": "hào mǎ",
+      "es": "número"
+    }
+  },
+  "漫": {
+    "gloss": "desbordar; libre",
+    "example": {
+      "word": "漫画",
+      "pinyin": "màn huà",
+      "es": "cómic"
+    }
+  },
+  "毛": {
+    "gloss": "pelo; rough",
+    "example": {
+      "word": "毛衣",
+      "pinyin": "máo yī",
+      "es": "jersey"
+    }
+  },
+  "貌": {
+    "gloss": "aspecto",
+    "example": {
+      "word": "礼貌",
+      "pinyin": "lǐ mào",
+      "es": "cortesía"
+    }
+  },
+  "美": {
+    "gloss": "hermoso; América",
+    "example": {
+      "word": "美丽",
+      "pinyin": "měi lì",
+      "es": "hermoso"
+    }
+  },
+  "梦": {
+    "gloss": "sueño",
+    "example": {
+      "word": "梦想",
+      "pinyin": "mèng xiǎng",
+      "es": "sueño"
+    }
+  },
+  "迷": {
+    "gloss": "perderse; fan",
+    "example": {
+      "word": "迷路",
+      "pinyin": "mí lù",
+      "es": "perderse"
+    }
+  },
+  "密": {
+    "gloss": "denso; secreto",
+    "example": {
+      "word": "秘密",
+      "pinyin": "mì mì",
+      "es": "secreto"
+    }
+  },
+  "免": {
+    "gloss": "evitar; eximir",
+    "example": {
+      "word": "免费",
+      "pinyin": "miǎn fèi",
+      "es": "gratis"
+    }
+  },
+  "秒": {
+    "gloss": "segundo",
+    "example": {
+      "word": "秒表",
+      "pinyin": "miǎo biǎo",
+      "es": "cronómetro"
+    }
+  },
+  "民": {
+    "gloss": "pueblo; ciudadano",
+    "example": {
+      "word": "人民",
+      "pinyin": "rén mín",
+      "es": "pueblo"
+    }
+  },
+  "命": {
+    "gloss": "vida; orden",
+    "example": {
+      "word": "生命",
+      "pinyin": "shēng mìng",
+      "es": "vida"
+    }
+  },
+  "默": {
+    "gloss": "silencio",
+    "example": {
+      "word": "沉默",
+      "pinyin": "chén mò",
+      "es": "silencio"
+    }
+  },
+  "母": {
+    "gloss": "madre",
+    "example": {
+      "word": "母亲",
+      "pinyin": "mǔ qin",
+      "es": "madre"
+    }
+  },
+  "慕": {
+    "gloss": "admirar; anhelar",
+    "example": {
+      "word": "羡慕",
+      "pinyin": "xiàn mù",
+      "es": "envidiar"
+    }
+  },
+  "耐": {
+    "gloss": "soportar; paciente",
+    "example": {
+      "word": "耐心",
+      "pinyin": "nài xīn",
+      "es": "paciencia"
+    }
+  },
+  "恼": {
+    "gloss": "enfadarse",
+    "example": {
+      "word": "烦恼",
+      "pinyin": "fán nǎo",
+      "es": "preocupación"
+    }
+  },
+  "闹": {
+    "gloss": "alborotar; ruidoso",
+    "example": {
+      "word": "热闹",
+      "pinyin": "rè nao",
+      "es": "animado"
+    }
+  },
+  "内": {
+    "gloss": "dentro; interior",
+    "example": {
+      "word": "内容",
+      "pinyin": "nèi róng",
+      "es": "contenido"
+    }
+  },
+  "弄": {
+    "gloss": "hacer; jugar",
+    "example": {
+      "word": "弄好",
+      "pinyin": "nòng hǎo",
+      "es": "arreglar"
+    }
+  },
+  "暖": {
+    "gloss": "cálido",
+    "example": {
+      "word": "温暖",
+      "pinyin": "wēn nuǎn",
+      "es": "cálido"
+    }
+  },
+  "偶": {
+    "gloss": "casual; pareja",
+    "example": {
+      "word": "偶然",
+      "pinyin": "ǒu rán",
+      "es": "por casualidad"
+    }
+  },
+  "排": {
+    "gloss": "fila; ordenar",
+    "example": {
+      "word": "安排",
+      "pinyin": "ān pái",
+      "es": "organizar"
+    }
+  },
+  "牌": {
+    "gloss": "letrero; carta",
+    "example": {
+      "word": "牌子",
+      "pinyin": "pái zi",
+      "es": "marca"
+    }
+  },
+  "判": {
+    "gloss": "juzgar; sentencia",
+    "example": {
+      "word": "判断",
+      "pinyin": "pàn duàn",
+      "es": "juzgar"
+    }
+  },
+  "乓": {
+    "gloss": "onomatopeya (ping)",
+    "example": {
+      "word": "乒乓",
+      "pinyin": "pīng pāng",
+      "es": "ping-pong"
+    }
+  },
+  "陪": {
+    "gloss": "acompañar",
+    "example": {
+      "word": "陪同",
+      "pinyin": "péi tóng",
+      "es": "acompañar"
+    }
+  },
+  "批": {
+    "gloss": "criticar; lote",
+    "example": {
+      "word": "批评",
+      "pinyin": "pī píng",
+      "es": "criticar"
+    }
+  },
+  "脾": {
+    "gloss": "bazo; temperamento",
+    "example": {
+      "word": "脾气",
+      "pinyin": "pí qi",
+      "es": "genio"
+    }
+  },
+  "篇": {
+    "gloss": "artículo; clasif.",
+    "example": {
+      "word": "文章",
+      "pinyin": "wén zhāng",
+      "es": "artículo"
+    }
+  },
+  "骗": {
+    "gloss": "engañar",
+    "example": {
+      "word": "骗子",
+      "pinyin": "piàn zi",
+      "es": "estafador"
+    }
+  },
+  "聘": {
+    "gloss": "contratar; prometida",
+    "example": {
+      "word": "招聘",
+      "pinyin": "zhāo pìn",
+      "es": "contratar"
+    }
+  },
+  "乒": {
+    "gloss": "onomatopeya (ping)",
+    "example": {
+      "word": "乒乓",
+      "pinyin": "pīng pāng",
+      "es": "ping-pong"
+    }
+  },
+  "评": {
+    "gloss": "valorar; comentar",
+    "example": {
+      "word": "评价",
+      "pinyin": "píng jià",
+      "es": "valorar"
+    }
+  },
+  "泼": {
+    "gloss": "echar; salpicar",
+    "example": {
+      "word": "活泼",
+      "pinyin": "huó po",
+      "es": "vivaz"
+    }
+  },
+  "破": {
+    "gloss": "romper; derrotar",
+    "example": {
+      "word": "破坏",
+      "pinyin": "pò huài",
+      "es": "destruir"
+    }
+  },
+  "葡": {
+    "gloss": "uva; Portugal",
+    "example": {
+      "word": "葡萄",
+      "pinyin": "pú tao",
+      "es": "uva"
+    }
+  },
+  "普": {
+    "gloss": "universal; general",
+    "example": {
+      "word": "普通",
+      "pinyin": "pǔ tōng",
+      "es": "ordinario"
+    }
+  },
+  "戚": {
+    "gloss": "pariente; triste",
+    "example": {
+      "word": "亲戚",
+      "pinyin": "qīn qi",
+      "es": "pariente"
+    }
+  },
+  "弃": {
+    "gloss": "abandonar",
+    "example": {
+      "word": "放弃",
+      "pinyin": "fàng qì",
+      "es": "renunciar"
+    }
+  },
+  "签": {
+    "gloss": "firmar; etiqueta",
+    "example": {
+      "word": "签名",
+      "pinyin": "qiān míng",
+      "es": "firma"
+    }
+  },
+  "歉": {
+    "gloss": "disculpa; escaso",
+    "example": {
+      "word": "抱歉",
+      "pinyin": "bào qiàn",
+      "es": "perdón"
+    }
+  },
+  "敲": {
+    "gloss": "golpear; llamar",
+    "example": {
+      "word": "敲门",
+      "pinyin": "qiāo mén",
+      "es": "llamar a la puerta"
+    }
+  },
+  "桥": {
+    "gloss": "puente",
+    "example": {
+      "word": "桥梁",
+      "pinyin": "qiáo liáng",
+      "es": "puente"
+    }
+  },
+  "巧": {
+    "gloss": "hábil; oportuno",
+    "example": {
+      "word": "巧妙",
+      "pinyin": "qiǎo miào",
+      "es": "ingenioso"
+    }
+  },
+  "切": {
+    "gloss": "cortar; urgente",
+    "example": {
+      "word": "一切",
+      "pinyin": "yí qiè",
+      "es": "todo"
+    }
+  },
+  "亲": {
+    "gloss": "pariente; íntimo",
+    "example": {
+      "word": "亲自",
+      "pinyin": "qīn zì",
+      "es": "en persona"
+    }
+  },
+  "琴": {
+    "gloss": "instrumento de cuerda",
+    "example": {
+      "word": "钢琴",
+      "pinyin": "gāng qín",
+      "es": "piano"
+    }
+  },
+  "穷": {
+    "gloss": "pobre; extremo",
+    "example": {
+      "word": "穷人",
+      "pinyin": "qióng rén",
+      "es": "pobre"
+    }
+  },
+  "区": {
+    "gloss": "zona; distrito",
+    "example": {
+      "word": "地区",
+      "pinyin": "dì qū",
+      "es": "región"
+    }
+  },
+  "取": {
+    "gloss": "tomar; obtener",
+    "example": {
+      "word": "取得",
+      "pinyin": "qǔ dé",
+      "es": "obtener"
+    }
+  },
+  "全": {
+    "gloss": "todo; completo",
+    "example": {
+      "word": "全部",
+      "pinyin": "quán bù",
+      "es": "todo"
+    }
+  },
+  "泉": {
+    "gloss": "manantial",
+    "example": {
+      "word": "泉水",
+      "pinyin": "quán shuǐ",
+      "es": "agua de manantial"
+    }
+  },
+  "缺": {
+    "gloss": "faltar; carencia",
+    "example": {
+      "word": "缺少",
+      "pinyin": "quē shǎo",
+      "es": "faltar"
+    }
+  },
+  "却": {
+    "gloss": "sin embargo; retroceder",
+    "example": {
+      "word": "退却",
+      "pinyin": "tuì què",
+      "es": "retirarse"
+    }
+  },
+  "确": {
+    "gloss": "cierto; confirmar",
+    "example": {
+      "word": "确实",
+      "pinyin": "què shí",
+      "es": "efectivamente"
+    }
+  },
+  "染": {
+    "gloss": "teñir; contagiar",
+    "example": {
+      "word": "污染",
+      "pinyin": "wū rǎn",
+      "es": "contaminación"
+    }
+  },
+  "扰": {
+    "gloss": "molestar",
+    "example": {
+      "word": "打扰",
+      "pinyin": "dǎ rǎo",
+      "es": "molestar"
+    }
+  },
+  "任": {
+    "gloss": "cargo; dejar",
+    "example": {
+      "word": "任务",
+      "pinyin": "rèn wu",
+      "es": "tarea"
+    }
+  },
+  "扔": {
+    "gloss": "tirar; lanzar",
+    "example": {
+      "word": "扔掉",
+      "pinyin": "rēng diào",
+      "es": "tirar"
+    }
+  },
+  "仍": {
+    "gloss": "todavía; aún",
+    "example": {
+      "word": "仍然",
+      "pinyin": "réng rán",
+      "es": "todavía"
+    }
+  },
+  "入": {
+    "gloss": "entrar; unirse",
+    "example": {
+      "word": "进入",
+      "pinyin": "jìn rù",
+      "es": "entrar"
+    }
+  },
+  "散": {
+    "gloss": "dispersar; suelto",
+    "example": {
+      "word": "散步",
+      "pinyin": "sàn bù",
+      "es": "pasear"
+    }
+  },
+  "森": {
+    "gloss": "bosque; denso",
+    "example": {
+      "word": "森林",
+      "pinyin": "sēn lín",
+      "es": "bosque"
+    }
+  },
+  "沙": {
+    "gloss": "arena",
+    "example": {
+      "word": "沙滩",
+      "pinyin": "shā tān",
+      "es": "playa"
+    }
+  },
+  "伤": {
+    "gloss": "herida; dañar",
+    "example": {
+      "word": "受伤",
+      "pinyin": "shòu shāng",
+      "es": "herirse"
+    }
+  },
+  "稍": {
+    "gloss": "un poco",
+    "example": {
+      "word": "稍微",
+      "pinyin": "shāo wēi",
+      "es": "un poco"
+    }
+  },
+  "勺": {
+    "gloss": "cuchara",
+    "example": {
+      "word": "勺子",
+      "pinyin": "sháo zi",
+      "es": "cuchara"
+    }
+  },
+  "社": {
+    "gloss": "sociedad; grupo",
+    "example": {
+      "word": "社会",
+      "pinyin": "shè huì",
+      "es": "sociedad"
+    }
+  },
+  "申": {
+    "gloss": "declarar; Shen",
+    "example": {
+      "word": "申请",
+      "pinyin": "shēn qǐng",
+      "es": "solicitar"
+    }
+  },
+  "深": {
+    "gloss": "profundo; intenso",
+    "example": {
+      "word": "深刻",
+      "pinyin": "shēn kè",
+      "es": "profundo"
+    }
+  },
+  "甚": {
+    "gloss": "muy; incluso",
+    "example": {
+      "word": "甚至",
+      "pinyin": "shèn zhì",
+      "es": "incluso"
+    }
+  },
+  "省": {
+    "gloss": "provincia; ahorrar",
+    "example": {
+      "word": "节省",
+      "pinyin": "jié shěng",
+      "es": "ahorrar"
+    }
+  },
+  "剩": {
+    "gloss": "sobrar",
+    "example": {
+      "word": "剩下",
+      "pinyin": "shèng xià",
+      "es": "quedar"
+    }
+  },
+  "失": {
+    "gloss": "perder; fallar",
+    "example": {
+      "word": "失败",
+      "pinyin": "shī bài",
+      "es": "fracaso"
+    }
+  },
+  "拾": {
+    "gloss": "recoger; diez",
+    "example": {
+      "word": "收拾",
+      "pinyin": "shōu shi",
+      "es": "ordenar"
+    }
+  },
+  "使": {
+    "gloss": "hacer; enviar",
+    "example": {
+      "word": "使用",
+      "pinyin": "shǐ yòng",
+      "es": "usar"
+    }
+  },
+  "士": {
+    "gloss": "erudito; soldado",
+    "example": {
+      "word": "博士",
+      "pinyin": "bó shì",
+      "es": "doctor"
+    }
+  },
+  "示": {
+    "gloss": "mostrar; indicar",
+    "example": {
+      "word": "表示",
+      "pinyin": "biǎo shì",
+      "es": "indicar"
+    }
+  },
+  "式": {
+    "gloss": "estilo; fórmula",
+    "example": {
+      "word": "方式",
+      "pinyin": "fāng shì",
+      "es": "manera"
+    }
+  },
+  "柿": {
+    "gloss": "caqui",
+    "example": {
+      "word": "柿子",
+      "pinyin": "shì zi",
+      "es": "caqui"
+    }
+  },
+  "适": {
+    "gloss": "adecuado; justo",
+    "example": {
+      "word": "适合",
+      "pinyin": "shì hé",
+      "es": "convenir"
+    }
+  },
+  "释": {
+    "gloss": "explicar; liberar",
+    "example": {
+      "word": "解释",
+      "pinyin": "jiě shì",
+      "es": "explicar"
+    }
+  },
+  "收": {
+    "gloss": "recoger; recibir",
+    "example": {
+      "word": "收到",
+      "pinyin": "shōu dào",
+      "es": "recibir"
+    }
+  },
+  "首": {
+    "gloss": "cabeza; primero",
+    "example": {
+      "word": "首先",
+      "pinyin": "shǒu xiān",
+      "es": "en primer lugar"
+    }
+  },
+  "受": {
+    "gloss": "recibir; sufrir",
+    "example": {
+      "word": "接受",
+      "pinyin": "jiē shòu",
+      "es": "aceptar"
+    }
+  },
+  "售": {
+    "gloss": "vender",
+    "example": {
+      "word": "销售",
+      "pinyin": "xiāo shòu",
+      "es": "venta"
+    }
+  },
+  "授": {
+    "gloss": "otorgar; enseñar",
+    "example": {
+      "word": "教授",
+      "pinyin": "jiào shòu",
+      "es": "profesor"
+    }
+  },
+  "输": {
+    "gloss": "transportar; perder",
+    "example": {
+      "word": "运输",
+      "pinyin": "yùn shū",
+      "es": "transporte"
+    }
+  },
+  "熟": {
+    "gloss": "maduro; familiar",
+    "example": {
+      "word": "熟悉",
+      "pinyin": "shú xī",
+      "es": "conocer bien"
+    }
+  },
+  "暑": {
+    "gloss": "calor (verano)",
+    "example": {
+      "word": "暑假",
+      "pinyin": "shǔ jià",
+      "es": "verano"
+    }
+  },
+  "术": {
+    "gloss": "técnica; arte",
+    "example": {
+      "word": "技术",
+      "pinyin": "jì shù",
+      "es": "tecnología"
+    }
+  },
+  "帅": {
+    "gloss": "elegante; general",
+    "example": {
+      "word": "帅气",
+      "pinyin": "shuài qi",
+      "es": "guapo"
+    }
+  },
+  "顺": {
+    "gloss": "seguir; favorable",
+    "example": {
+      "word": "顺利",
+      "pinyin": "shùn lì",
+      "es": "sin problemas"
+    }
+  },
+  "硕": {
+    "gloss": "grande; erudito",
+    "example": {
+      "word": "硕士",
+      "pinyin": "shuò shì",
+      "es": "máster"
+    }
+  },
+  "死": {
+    "gloss": "morir; muerto",
+    "example": {
+      "word": "死亡",
+      "pinyin": "sǐ wáng",
+      "es": "muerte"
+    }
+  },
+  "松": {
+    "gloss": "pino; flojo",
+    "example": {
+      "word": "放松",
+      "pinyin": "fàng sōng",
+      "es": "relajarse"
+    }
+  },
+  "嗽": {
+    "gloss": "tos",
+    "example": {
+      "word": "咳嗽",
+      "pinyin": "ké sou",
+      "es": "tos"
+    }
+  },
+  "速": {
+    "gloss": "rápido; velocidad",
+    "example": {
+      "word": "速度",
+      "pinyin": "sù dù",
+      "es": "velocidad"
+    }
+  },
+  "塑": {
+    "gloss": "moldear; plástico",
+    "example": {
+      "word": "塑料",
+      "pinyin": "sù liào",
+      "es": "plástico"
+    }
+  },
+  "酸": {
+    "gloss": "ácido; agrio",
+    "example": {
+      "word": "酸奶",
+      "pinyin": "suān nǎi",
+      "es": "yogur"
+    }
+  },
+  "随": {
+    "gloss": "seguir; según",
+    "example": {
+      "word": "随便",
+      "pinyin": "suí biàn",
+      "es": "como quieras"
+    }
+  },
+  "孙": {
+    "gloss": "nieto",
+    "example": {
+      "word": "孙子",
+      "pinyin": "sūn zi",
+      "es": "nieto"
+    }
+  },
+  "台": {
+    "gloss": "plataforma; Taiwán",
+    "example": {
+      "word": "舞台",
+      "pinyin": "wǔ tái",
+      "es": "escenario"
+    }
+  },
+  "抬": {
+    "gloss": "levantar",
+    "example": {
+      "word": "抬头",
+      "pinyin": "tái tóu",
+      "es": "levantar la cabeza"
+    }
+  },
+  "态": {
+    "gloss": "actitud; estado",
+    "example": {
+      "word": "态度",
+      "pinyin": "tài du",
+      "es": "actitud"
+    }
+  },
+  "谈": {
+    "gloss": "hablar; conversar",
+    "example": {
+      "word": "谈话",
+      "pinyin": "tán huà",
+      "es": "charla"
+    }
+  },
+  "汤": {
+    "gloss": "sopa; caldo",
+    "example": {
+      "word": "汤水",
+      "pinyin": "tāng shuǐ",
+      "es": "caldo"
+    }
+  },
+  "糖": {
+    "gloss": "azúcar; dulce",
+    "example": {
+      "word": "糖果",
+      "pinyin": "táng guǒ",
+      "es": "caramelos"
+    }
+  },
+  "躺": {
+    "gloss": "acostarse",
+    "example": {
+      "word": "躺下",
+      "pinyin": "tǎng xià",
+      "es": "tumbarse"
+    }
+  },
+  "趟": {
+    "gloss": "vez (viaje)",
+    "example": {
+      "word": "一趟",
+      "pinyin": "yí tàng",
+      "es": "un viaje"
+    }
+  },
+  "萄": {
+    "gloss": "uva",
+    "example": {
+      "word": "葡萄",
+      "pinyin": "pú tao",
+      "es": "uva"
+    }
+  },
+  "讨": {
+    "gloss": "discutir; pedir",
+    "example": {
+      "word": "讨论",
+      "pinyin": "tǎo lùn",
+      "es": "discutir"
+    }
+  },
+  "填": {
+    "gloss": "rellenar",
+    "example": {
+      "word": "填写",
+      "pinyin": "tián xiě",
+      "es": "rellenar"
+    }
+  },
+  "厅": {
+    "gloss": "salón; hall",
+    "example": {
+      "word": "大厅",
+      "pinyin": "dà tīng",
+      "es": "vestíbulo"
+    }
+  },
+  "停": {
+    "gloss": "parar; detener",
+    "example": {
+      "word": "停止",
+      "pinyin": "tíng zhǐ",
+      "es": "cesar"
+    }
+  },
+  "挺": {
+    "gloss": "erecto; bastante",
+    "example": {
+      "word": "挺好",
+      "pinyin": "tǐng hǎo",
+      "es": "muy bien"
+    }
+  },
+  "通": {
+    "gloss": "pasar; comunicar",
+    "example": {
+      "word": "通过",
+      "pinyin": "tōng guò",
+      "es": "mediante"
+    }
+  },
+  "童": {
+    "gloss": "niño",
+    "example": {
+      "word": "儿童",
+      "pinyin": "ér tóng",
+      "es": "niños"
+    }
+  },
+  "桶": {
+    "gloss": "cubo; barril",
+    "example": {
+      "word": "水桶",
+      "pinyin": "shuǐ tǒng",
+      "es": "cubo"
+    }
+  },
+  "推": {
+    "gloss": "empujar; recomendar",
+    "example": {
+      "word": "推荐",
+      "pinyin": "tuī jiàn",
+      "es": "recomendar"
+    }
+  },
+  "脱": {
+    "gloss": "quitarse; escapar",
+    "example": {
+      "word": "脱离",
+      "pinyin": "tuō lí",
+      "es": "separarse"
+    }
+  },
+  "袜": {
+    "gloss": "calcetín",
+    "example": {
+      "word": "袜子",
+      "pinyin": "wà zi",
+      "es": "calcetines"
+    }
+  },
+  "危": {
+    "gloss": "peligro",
+    "example": {
+      "word": "危险",
+      "pinyin": "wēi xiǎn",
+      "es": "peligro"
+    }
+  },
+  "微": {
+    "gloss": "pequeño; micro",
+    "example": {
+      "word": "微小",
+      "pinyin": "wēi xiǎo",
+      "es": "minúsculo"
+    }
+  },
+  "围": {
+    "gloss": "rodear",
+    "example": {
+      "word": "周围",
+      "pinyin": "zhōu wéi",
+      "es": "alrededor"
+    }
+  },
+  "卫": {
+    "gloss": "proteger; higiene",
+    "example": {
+      "word": "卫生",
+      "pinyin": "wèi shēng",
+      "es": "higiene"
+    }
+  },
+  "味": {
+    "gloss": "sabor; olor",
+    "example": {
+      "word": "味道",
+      "pinyin": "wèi dao",
+      "es": "sabor"
+    }
+  },
+  "温": {
+    "gloss": "tibio; temperatura",
+    "example": {
+      "word": "温度",
+      "pinyin": "wēn dù",
+      "es": "temperatura"
+    }
+  },
+  "污": {
+    "gloss": "sucio; contaminar",
+    "example": {
+      "word": "污染",
+      "pinyin": "wū rǎn",
+      "es": "contaminación"
+    }
+  },
+  "无": {
+    "gloss": "no; sin",
+    "example": {
+      "word": "无法",
+      "pinyin": "wú fǎ",
+      "es": "imposible"
+    }
+  },
+  "误": {
+    "gloss": "error; retrasar",
+    "example": {
+      "word": "错误",
+      "pinyin": "cuò wù",
+      "es": "error"
+    }
+  },
+  "吸": {
+    "gloss": "aspirar; atraer",
+    "example": {
+      "word": "吸收",
+      "pinyin": "xī shōu",
+      "es": "absorber"
+    }
+  },
+  "悉": {
+    "gloss": "conocer; todo",
+    "example": {
+      "word": "熟悉",
+      "pinyin": "shú xī",
+      "es": "conocer"
+    }
+  },
+  "惜": {
+    "gloss": "apreciar; lástima",
+    "example": {
+      "word": "可惜",
+      "pinyin": "kě xī",
+      "es": "lástima"
+    }
+  },
+  "细": {
+    "gloss": "fino; detallado",
+    "example": {
+      "word": "仔细",
+      "pinyin": "zǐ xì",
+      "es": "cuidadoso"
+    }
+  },
+  "咸": {
+    "gloss": "salado; todos",
+    "example": {
+      "word": "咸味",
+      "pinyin": "xián wèi",
+      "es": "sabor salado"
+    }
+  },
+  "险": {
+    "gloss": "peligro; riesgo",
+    "example": {
+      "word": "危险",
+      "pinyin": "wēi xiǎn",
+      "es": "peligro"
+    }
+  },
+  "线": {
+    "gloss": "línea; hilo",
+    "example": {
+      "word": "路线",
+      "pinyin": "lù xiàn",
+      "es": "ruta"
+    }
+  },
+  "羡": {
+    "gloss": "envidiar",
+    "example": {
+      "word": "羡慕",
+      "pinyin": "xiàn mù",
+      "es": "envidiar"
+    }
+  },
+  "详": {
+    "gloss": "detallado",
+    "example": {
+      "word": "详细",
+      "pinyin": "xiáng xì",
+      "es": "detallado"
+    }
+  },
+  "象": {
+    "gloss": "elefante; imagen",
+    "example": {
+      "word": "好像",
+      "pinyin": "hǎo xiàng",
+      "es": "parecer"
+    }
+  },
+  "橡": {
+    "gloss": "roble; caucho",
+    "example": {
+      "word": "橡胶",
+      "pinyin": "xiàng jiāo",
+      "es": "caucho"
+    }
+  },
+  "消": {
+    "gloss": "desaparecer; consumir",
+    "example": {
+      "word": "消失",
+      "pinyin": "xiāo shī",
+      "es": "desaparecer"
+    }
+  },
+  "效": {
+    "gloss": "efecto; eficacia",
+    "example": {
+      "word": "效果",
+      "pinyin": "xiào guǒ",
+      "es": "efecto"
+    }
+  },
+  "辛": {
+    "gloss": "duro; picante",
+    "example": {
+      "word": "辛苦",
+      "pinyin": "xīn kǔ",
+      "es": "duro"
+    }
+  },
+  "醒": {
+    "gloss": "despertar",
+    "example": {
+      "word": "醒来",
+      "pinyin": "xǐng lái",
+      "es": "despertarse"
+    }
+  },
+  "幸": {
+    "gloss": "fortuna; por suerte",
+    "example": {
+      "word": "幸福",
+      "pinyin": "xìng fú",
+      "es": "felicidad"
+    }
+  },
+  "性": {
+    "gloss": "naturaleza; sexo",
+    "example": {
+      "word": "性格",
+      "pinyin": "xìng gé",
+      "es": "carácter"
+    }
+  },
+  "修": {
+    "gloss": "reparar; estudiar",
+    "example": {
+      "word": "修理",
+      "pinyin": "xiū lǐ",
+      "es": "arreglar"
+    }
+  },
+  "羞": {
+    "gloss": "vergüenza; tímido",
+    "example": {
+      "word": "害羞",
+      "pinyin": "hài xiū",
+      "es": "tímido"
+    }
+  },
+  "秀": {
+    "gloss": "elegante; show",
+    "example": {
+      "word": "优秀",
+      "pinyin": "yōu xiù",
+      "es": "excelente"
+    }
+  },
+  "许": {
+    "gloss": "permitir; quizás",
+    "example": {
+      "word": "许多",
+      "pinyin": "xǔ duō",
+      "es": "muchos"
+    }
+  },
+  "序": {
+    "gloss": "orden; secuencia",
+    "example": {
+      "word": "顺序",
+      "pinyin": "shùn xù",
+      "es": "orden"
+    }
+  },
+  "续": {
+    "gloss": "continuar",
+    "example": {
+      "word": "继续",
+      "pinyin": "jì xù",
+      "es": "continuar"
+    }
+  },
+  "压": {
+    "gloss": "presión; oprimir",
+    "example": {
+      "word": "压力",
+      "pinyin": "yā lì",
+      "es": "presión"
+    }
+  },
+  "鸭": {
+    "gloss": "pato",
+    "example": {
+      "word": "鸭子",
+      "pinyin": "yā zi",
+      "es": "pato"
+    }
+  },
+  "亚": {
+    "gloss": "Asia; segundo",
+    "example": {
+      "word": "亚洲",
+      "pinyin": "Yà zhōu",
+      "es": "Asia"
+    }
+  },
+  "烟": {
+    "gloss": "humo; tabaco",
+    "example": {
+      "word": "香烟",
+      "pinyin": "xiāng yān",
+      "es": "cigarrillo"
+    }
+  },
+  "严": {
+    "gloss": "estricto; severo",
+    "example": {
+      "word": "严格",
+      "pinyin": "yán gé",
+      "es": "estricto"
+    }
+  },
+  "言": {
+    "gloss": "palabra; decir",
+    "example": {
+      "word": "语言",
+      "pinyin": "yǔ yán",
+      "es": "idioma"
+    }
+  },
+  "研": {
+    "gloss": "estudiar; moler",
+    "example": {
+      "word": "研究",
+      "pinyin": "yán jiū",
+      "es": "investigar"
+    }
+  },
+  "盐": {
+    "gloss": "sal",
+    "example": {
+      "word": "食盐",
+      "pinyin": "shí yán",
+      "es": "sal"
+    }
+  },
+  "演": {
+    "gloss": "actuar; ejercer",
+    "example": {
+      "word": "表演",
+      "pinyin": "biǎo yǎn",
+      "es": "actuar"
+    }
+  },
+  "厌": {
+    "gloss": "aburrirse; detestar",
+    "example": {
+      "word": "讨厌",
+      "pinyin": "tǎo yàn",
+      "es": "detestar"
+    }
+  },
+  "验": {
+    "gloss": "examinar; verificar",
+    "example": {
+      "word": "经验",
+      "pinyin": "jīng yàn",
+      "es": "experiencia"
+    }
+  },
+  "扬": {
+    "gloss": "elevar; alabar",
+    "example": {
+      "word": "表扬",
+      "pinyin": "biǎo yáng",
+      "es": "elogiar"
+    }
+  },
+  "洋": {
+    "gloss": "océano; occidental",
+    "example": {
+      "word": "海洋",
+      "pinyin": "hǎi yáng",
+      "es": "océano"
+    }
+  },
+  "养": {
+    "gloss": "criar; mantener",
+    "example": {
+      "word": "培养",
+      "pinyin": "péi yǎng",
+      "es": "cultivar"
+    }
+  },
+  "邀": {
+    "gloss": "invitar",
+    "example": {
+      "word": "邀请",
+      "pinyin": "yāo qǐng",
+      "es": "invitar"
+    }
+  },
+  "钥": {
+    "gloss": "llave",
+    "example": {
+      "word": "钥匙",
+      "pinyin": "yào shi",
+      "es": "llave"
+    }
+  },
+  "叶": {
+    "gloss": "hoja",
+    "example": {
+      "word": "叶子",
+      "pinyin": "yè zi",
+      "es": "hoja"
+    }
+  },
+  "页": {
+    "gloss": "página",
+    "example": {
+      "word": "页面",
+      "pinyin": "yè miàn",
+      "es": "página"
+    }
+  },
+  "疑": {
+    "gloss": "dudar; sospecha",
+    "example": {
+      "word": "怀疑",
+      "pinyin": "huái yí",
+      "es": "sospechar"
+    }
+  },
+  "忆": {
+    "gloss": "recordar",
+    "example": {
+      "word": "记忆",
+      "pinyin": "jì yì",
+      "es": "memoria"
+    }
+  },
+  "艺": {
+    "gloss": "arte; habilidad",
+    "example": {
+      "word": "艺术",
+      "pinyin": "yì shù",
+      "es": "arte"
+    }
+  },
+  "译": {
+    "gloss": "traducir",
+    "example": {
+      "word": "翻译",
+      "pinyin": "fān yì",
+      "es": "traducir"
+    }
+  },
+  "谊": {
+    "gloss": "amistad",
+    "example": {
+      "word": "友谊",
+      "pinyin": "yǒu yì",
+      "es": "amistad"
+    }
+  },
+  "引": {
+    "gloss": "tirar; citar",
+    "example": {
+      "word": "引起",
+      "pinyin": "yǐn qǐ",
+      "es": "provocar"
+    }
+  },
+  "印": {
+    "gloss": "imprimir; sello",
+    "example": {
+      "word": "印刷",
+      "pinyin": "yìn shuā",
+      "es": "imprimir"
+    }
+  },
+  "赢": {
+    "gloss": "ganar",
+    "example": {
+      "word": "赢得",
+      "pinyin": "yíng dé",
+      "es": "ganar"
+    }
+  },
+  "永": {
+    "gloss": "siempre; eterno",
+    "example": {
+      "word": "永远",
+      "pinyin": "yǒng yuǎn",
+      "es": "para siempre"
+    }
+  },
+  "勇": {
+    "gloss": "valiente",
+    "example": {
+      "word": "勇敢",
+      "pinyin": "yǒng gǎn",
+      "es": "valiente"
+    }
+  },
+  "优": {
+    "gloss": "excelente",
+    "example": {
+      "word": "优秀",
+      "pinyin": "yōu xiù",
+      "es": "excelente"
+    }
+  },
+  "幽": {
+    "gloss": "tranquilo; oculto",
+    "example": {
+      "word": "幽默",
+      "pinyin": "yōu mò",
+      "es": "humor"
+    }
+  },
+  "尤": {
+    "gloss": "especialmente",
+    "example": {
+      "word": "尤其",
+      "pinyin": "yóu qí",
+      "es": "sobre todo"
+    }
+  },
+  "由": {
+    "gloss": "por; causa",
+    "example": {
+      "word": "由于",
+      "pinyin": "yóu yú",
+      "es": "debido a"
+    }
+  },
+  "油": {
+    "gloss": "aceite; grasa",
+    "example": {
+      "word": "汽油",
+      "pinyin": "qì yóu",
+      "es": "gasolina"
+    }
+  },
+  "愉": {
+    "gloss": "alegre",
+    "example": {
+      "word": "愉快",
+      "pinyin": "yú kuài",
+      "es": "agradable"
+    }
+  },
+  "与": {
+    "gloss": "y; con; dar",
+    "example": {
+      "word": "参加",
+      "pinyin": "cān jiā",
+      "es": "participar"
+    }
+  },
+  "羽": {
+    "gloss": "pluma; ala",
+    "example": {
+      "word": "羽毛",
+      "pinyin": "yǔ máo",
+      "es": "pluma"
+    }
+  },
+  "预": {
+    "gloss": "de antemano",
+    "example": {
+      "word": "准备",
+      "pinyin": "zhǔn bèi",
+      "es": "preparar"
+    }
+  },
+  "原": {
+    "gloss": "origen; original",
+    "example": {
+      "word": "原来",
+      "pinyin": "yuán lái",
+      "es": "resulta que"
+    }
+  },
+  "约": {
+    "gloss": "acuerdo; aproximadamente",
+    "example": {
+      "word": "约会",
+      "pinyin": "yuē huì",
+      "es": "cita"
+    }
+  },
+  "阅": {
+    "gloss": "leer; inspeccionar",
+    "example": {
+      "word": "阅读",
+      "pinyin": "yuè dú",
+      "es": "lectura"
+    }
+  },
+  "云": {
+    "gloss": "nube; decir",
+    "example": {
+      "word": "白云",
+      "pinyin": "bái yún",
+      "es": "nube blanca"
+    }
+  },
+  "允": {
+    "gloss": "permitir; consentir",
+    "example": {
+      "word": "允许",
+      "pinyin": "yǔn xǔ",
+      "es": "permitir"
+    }
+  },
+  "杂": {
+    "gloss": "mezclado; miscelánea",
+    "example": {
+      "word": "复杂",
+      "pinyin": "fù zá",
+      "es": "complejo"
+    }
+  },
+  "咱": {
+    "gloss": "nosotros",
+    "example": {
+      "word": "咱们",
+      "pinyin": "zán men",
+      "es": "nosotros"
+    }
+  },
+  "暂": {
+    "gloss": "temporal",
+    "example": {
+      "word": "暂时",
+      "pinyin": "zàn shí",
+      "es": "por ahora"
+    }
+  },
+  "脏": {
+    "gloss": "sucio; órgano",
+    "example": {
+      "word": "肮脏",
+      "pinyin": "āng zāng",
+      "es": "sucio"
+    }
+  },
+  "则": {
+    "gloss": "norma; entonces",
+    "example": {
+      "word": "原则",
+      "pinyin": "yuán zé",
+      "es": "principio"
+    }
+  },
+  "责": {
+    "gloss": "deber; culpar",
+    "example": {
+      "word": "责任",
+      "pinyin": "zé rèn",
+      "es": "responsabilidad"
+    }
+  },
+  "增": {
+    "gloss": "aumentar",
+    "example": {
+      "word": "增加",
+      "pinyin": "zēng jiā",
+      "es": "aumentar"
+    }
+  },
+  "展": {
+    "gloss": "desplegar; exposición",
+    "example": {
+      "word": "发展",
+      "pinyin": "fā zhǎn",
+      "es": "desarrollar"
+    }
+  },
+  "占": {
+    "gloss": "ocupar; constituir",
+    "example": {
+      "word": "占据",
+      "pinyin": "zhàn jù",
+      "es": "ocupar"
+    }
+  },
+  "章": {
+    "gloss": "capítulo; sello",
+    "example": {
+      "word": "文章",
+      "pinyin": "wén zhāng",
+      "es": "artículo"
+    }
+  },
+  "招": {
+    "gloss": "llamar; reclutar",
+    "example": {
+      "word": "招聘",
+      "pinyin": "zhāo pìn",
+      "es": "contratar"
+    }
+  },
+  "折": {
+    "gloss": "doblar; descuento",
+    "example": {
+      "word": "打折",
+      "pinyin": "dǎ zhé",
+      "es": "rebajar"
+    }
+  },
+  "针": {
+    "gloss": "aguja",
+    "example": {
+      "word": "打针",
+      "pinyin": "dǎ zhēn",
+      "es": "inyección"
+    }
+  },
+  "争": {
+    "gloss": "disputar; luchar",
+    "example": {
+      "word": "竞争",
+      "pinyin": "jìng zhēng",
+      "es": "competir"
+    }
+  },
+  "整": {
+    "gloss": "entero; ordenar",
+    "example": {
+      "word": "整理",
+      "pinyin": "zhěng lǐ",
+      "es": "ordenar"
+    }
+  },
+  "证": {
+    "gloss": "prueba; certificado",
+    "example": {
+      "word": "证明",
+      "pinyin": "zhèng míng",
+      "es": "demostrar"
+    }
+  },
+  "之": {
+    "gloss": "de (partícula)",
+    "example": {
+      "word": "之前",
+      "pinyin": "zhī qián",
+      "es": "antes"
+    }
+  },
+  "支": {
+    "gloss": "soportar; rama",
+    "example": {
+      "word": "支持",
+      "pinyin": "zhī chí",
+      "es": "apoyar"
+    }
+  },
+  "汁": {
+    "gloss": "jugo; caldo",
+    "example": {
+      "word": "果汁",
+      "pinyin": "guǒ zhī",
+      "es": "zumo"
+    }
+  },
+  "值": {
+    "gloss": "valor; valer",
+    "example": {
+      "word": "值得",
+      "pinyin": "zhí de",
+      "es": "valer la pena"
+    }
+  },
+  "职": {
+    "gloss": "cargo; oficio",
+    "example": {
+      "word": "职业",
+      "pinyin": "zhí yè",
+      "es": "profesión"
+    }
+  },
+  "植": {
+    "gloss": "plantar; vegetal",
+    "example": {
+      "word": "植物",
+      "pinyin": "zhí wù",
+      "es": "planta"
+    }
+  },
+  "止": {
+    "gloss": "parar; solo",
+    "example": {
+      "word": "停止",
+      "pinyin": "tíng zhǐ",
+      "es": "parar"
+    }
+  },
+  "址": {
+    "gloss": "dirección; sitio",
+    "example": {
+      "word": "地址",
+      "pinyin": "dì zhǐ",
+      "es": "dirección"
+    }
+  },
+  "指": {
+    "gloss": "dedo; señalar",
+    "example": {
+      "word": "指导",
+      "pinyin": "zhǐ dǎo",
+      "es": "guiar"
+    }
+  },
+  "至": {
+    "gloss": "hasta; llegar",
+    "example": {
+      "word": "至少",
+      "pinyin": "zhì shǎo",
+      "es": "al menos"
+    }
+  },
+  "志": {
+    "gloss": "voluntad; anales",
+    "example": {
+      "word": "志向",
+      "pinyin": "zhì xiàng",
+      "es": "aspiración"
+    }
+  },
+  "质": {
+    "gloss": "calidad; sustancia",
+    "example": {
+      "word": "质量",
+      "pinyin": "zhì liàng",
+      "es": "calidad"
+    }
+  },
+  "众": {
+    "gloss": "multitud; público",
+    "example": {
+      "word": "群众",
+      "pinyin": "qún zhòng",
+      "es": "masas"
+    }
+  },
+  "洲": {
+    "gloss": "continente",
+    "example": {
+      "word": "非洲",
+      "pinyin": "Fēi zhōu",
+      "es": "África"
+    }
+  },
+  "祝": {
+    "gloss": "desear; felicitar",
+    "example": {
+      "word": "祝福",
+      "pinyin": "zhù fú",
+      "es": "bendición"
+    }
+  },
+  "专": {
+    "gloss": "especializado; solo",
+    "example": {
+      "word": "专业",
+      "pinyin": "zhuān yè",
+      "es": "especialidad"
+    }
+  },
+  "转": {
+    "gloss": "girar; transferir",
+    "example": {
+      "word": "转变",
+      "pinyin": "zhuǎn biàn",
+      "es": "cambiar"
+    }
+  },
+  "赚": {
+    "gloss": "ganar (dinero)",
+    "example": {
+      "word": "赚钱",
+      "pinyin": "zhuàn qián",
+      "es": "ganar dinero"
+    }
+  },
+  "资": {
+    "gloss": "capital; recursos",
+    "example": {
+      "word": "资金",
+      "pinyin": "zī jīn",
+      "es": "fondos"
+    }
+  },
+  "仔": {
+    "gloss": "cría; joven",
+    "example": {
+      "word": "仔细",
+      "pinyin": "zǐ xì",
+      "es": "cuidadoso"
+    }
+  },
+  "族": {
+    "gloss": "clan; etnia",
+    "example": {
+      "word": "民族",
+      "pinyin": "mín zú",
+      "es": "etnia"
+    }
+  },
+  "尊": {
+    "gloss": "respetar; honor",
+    "example": {
+      "word": "尊重",
+      "pinyin": "zūn zhòng",
+      "es": "respetar"
+    }
+  },
+  "座": {
+    "gloss": "asiento; base",
+    "example": {
+      "word": "座位",
+      "pinyin": "zuò wèi",
+      "es": "asiento"
+    }
+  }
+}

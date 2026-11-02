@@ -1,8 +1,16 @@
 # 加油 HSK Flashcards
 
-A modern, interactive Progressive Web App (PWA) for learning Chinese characters using HSK (Hanyu Shuiping Kaoshi) standards in spanish.
+A progressive web app for learning Chinese vocabulary and characters with Spanish meanings.
 
 ## Features
+
+### Vocabulary pilot
+
+- The default home view offers 40 words from HSK 2.0 level 1. This is a partial selection, and word lists for levels 2 to 6 are not yet available.
+- Search by Chinese, pinyin or Spanish, filter by topic, and open each word's characters for stroke practice.
+- Word reviews and character reviews keep separate progress. Free practice covers the pilot without changing review dates. New words are taught before recall; missed words return in the session.
+- Word audio uses available recordings or a Chinese voice installed on the device. A device without a suitable voice may not play words with missing recordings.
+- Backup format version 3 includes both character and vocabulary progress. Import also accepts earlier supported backup versions.
 
 ### Today's review (spaced repetition)
 - Home shows what is due today, how many new characters you get, a daily goal ring and your streak
@@ -85,13 +93,14 @@ src/
 │   ├── characterStore.ts     # Character data (normalised across level files)
 │   └── progressStore.ts      # Spaced repetition, daily goal, streak
 ├── utils/                    # swipe, pinyin tones, speech, stroke data, shuffle, Pleco
-├── data/                     # hsk1.json, glosas y catálogo; HSK 2 y 3 están en public/packs
+├── data/                     # hsk1.json, searchIndex.json, glosas y catálogo; HSK 2 y 3 en public/packs
 └── index.css                 # Design tokens (light and dark)
 ```
 
 ## Stroke data and font
 
-- `npm run strokes` copies hanzi-writer stroke data for every HSK character into `public/strokes/`
+- `npm run strokes` copies hanzi-writer stroke data for **HSK 1** into `public/strokes/`
+- `npm run media-packs` builds per-level stroke and audio folders under `public/packs/hskN/` for lists 2–6
 - `public/fonts/wenkai-hsk.woff2` is LXGW WenKai Medium subset to the app's characters; see `scripts/hanzi-chars.mjs` for how to rebuild it after changing the data
 
 ## Licenses
@@ -101,7 +110,19 @@ src/
 
 ## Data
 
-The app includes HSK 1 (174 characters) from the start. HSK 2 (173) and HSK 3 (270) are lists the user saves on the device. HSK 4, 5 and 6 are named in the catalog and have no pack yet.
+HSK 1 ships in the app bundle. The user saves HSK 2 and 3 on the device (JSON packs with Spanish glosses and examples). HSK 4, 5 and 6 appear in the catalog; their **search index** is bundled for all 2650 characters, but installable study packs (and separate stroke/audio downloads) still stop at HSK 3 until those pipelines exist.
+
+[src/data/searchIndex.json](src/data/searchIndex.json) is built into the app: character, traditional, pinyin, gloss, radical, HSK level, and example when available. Buscar and topic gaps use it. Regenerate after list changes:
+
+```bash
+npm run search-index          # HSK 1–3 from existing JSON
+npm run fetch-hsk             # refresh HSK 4–6 from hanzidb.org (add --list-only to skip examples)
+npm run search-index          # merge into searchIndex.json
+```
+
+HSK 1–3 glosses are curated in Spanish. For HSK 4–6 run `npm run localize-hsk` (HanziDB examples + EN→ES). Re-run `npm run search-index` and `npm run media-packs` after.
+
+After changing HSK list files, run `npm run search-index` to refresh the search index.
 
 Each character includes:
 - Simplified Chinese character
