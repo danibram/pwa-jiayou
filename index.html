@@ -6,10 +6,22 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Aprende y repasa caracteres chinos HSK: tarjetas, repaso y orden de trazos" />
-    <meta name="theme-color" content="#f4efe6" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4efe6" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('jiayou-theme');
+          const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const dark = stored === 'dark' || ((stored !== 'light') && preferDark);
+          if (dark) document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', dark ? '#14110f' : '#f4efe6');
+        } catch (_) {}
+      })();
+    </script>
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="preload" href="/fonts/wenkai-hsk.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
