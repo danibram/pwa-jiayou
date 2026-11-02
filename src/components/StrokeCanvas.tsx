@@ -11,6 +11,7 @@ import {
   Show,
 } from 'solid-js';
 import { loadStrokeData, themeColor, themeMix } from '../utils/strokeData';
+import { isDark, onThemeChange } from '../utils/theme';
 import RiceGrid from './RiceGrid';
 
 export type StrokeMode = 'watch' | 'write';
@@ -226,7 +227,6 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     if (props.mode === 'write') startQuiz();
 
     // The writer bakes colours in at creation, so a theme switch must repaint them.
-    const scheme = window.matchMedia('(prefers-color-scheme: dark)');
     const repaint = () => {
       if (!writer) return;
       const next = themeColor('ink');
@@ -236,8 +236,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
       writer.updateColor('drawingColor', themeColor('ink', 0.75));
       writer.updateColor('highlightColor', themeColor('gold'));
     };
-    scheme.addEventListener('change', repaint);
-    onCleanup(() => scheme.removeEventListener('change', repaint));
+    onCleanup(onThemeChange(repaint));
 
     props.api?.({
       play,
@@ -632,7 +631,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
                       : themeMix(
                           'ink',
                           'surface',
-                          window.matchMedia('(prefers-color-scheme: dark)').matches
+                          isDark()
                           ? i() < frame().step
                             ? 0.29
                             : 0.13

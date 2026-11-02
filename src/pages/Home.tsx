@@ -2,6 +2,7 @@ import { glossHead } from '../utils/glossDisplay';
 import { Component, createMemo, createSignal, For, Show, untrack } from 'solid-js';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
+import ThemeToggle from '../components/ThemeToggle';
 import HomeProgress, { type ProgressSnapshot } from '../components/HomeProgress';
 import LevelChips from '../components/LevelChips';
 import { summarizeProgress, type ProgressSummary } from '../utils/progressSummary';
@@ -302,6 +303,7 @@ const Home: Component<HomeProps> = (props) => {
             <span class="text-ink">{streak()}</span>
           </div>
         </Show>
+        <ThemeToggle />
       </header>
       </div>
 
