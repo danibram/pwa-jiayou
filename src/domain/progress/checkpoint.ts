@@ -1,4 +1,5 @@
 import { isNonNegativeInteger, isRecord } from '../../utils/parse';
+import type { DayLog } from './activity';
 import { parseDaily, parseRecord } from './serialization';
 import type { CharProgress, DailyLog, ProgressState } from './types';
 
@@ -7,23 +8,23 @@ export type RecordKind = 'chars' | 'words';
 
 /**
  * What a session needs to undo itself: each record it changed, as it was before the first change
- * (null when it did not exist), plus the day counters. Records the session never touched are left
+ * (null when it did not exist), plus the day counters and this device's day log. Records the session never touched are left
  * out, so discarding it cannot undo a change made elsewhere, and a paused session stays small.
  */
 export interface ProgressCheckpoint {
   daily: DailyLog;
   wordDaily: DailyLog;
-  activity: Record<string, number>;
+  activity: DayLog;
   chars: Record<string, CharProgress | null>;
   words: Record<string, CharProgress | null>;
 }
 
 const has = (map: object, key: string) => Object.prototype.hasOwnProperty.call(map, key);
 
-export const openCheckpoint = (state: ProgressState): ProgressCheckpoint => ({
+export const openCheckpoint = (state: ProgressState, deviceId: string): ProgressCheckpoint => ({
   daily: { ...state.daily },
   wordDaily: { ...state.wordDaily },
-  activity: { ...state.activity },
+  activity: { ...state.activity[deviceId] },
   chars: {},
   words: {},
 });
@@ -42,13 +43,16 @@ const restoreRecords = (current: Record<string, CharProgress>, saved: Record<str
   return next;
 };
 
-/** `state` with the checkpoint's records and day counters put back, and every other record as it is. */
-export const restoreCheckpoint = (state: ProgressState, checkpoint: ProgressCheckpoint): ProgressState => ({
+/**
+ * `state` with the checkpoint's records, day counters and `deviceId`'s day log put back. Every other
+ * record, and other devices' logs, stay as they are.
+ */
+export const restoreCheckpoint = (state: ProgressState, checkpoint: ProgressCheckpoint, deviceId: string): ProgressState => ({
   chars: restoreRecords(state.chars, checkpoint.chars),
   words: restoreRecords(state.words, checkpoint.words),
   daily: checkpoint.daily,
   wordDaily: checkpoint.wordDaily,
-  activity: checkpoint.activity,
+  activity: { ...state.activity, [deviceId]: checkpoint.activity },
 });
 
 const UNSAFE = ['__proto__', 'constructor', 'prototype'];
