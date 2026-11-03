@@ -1,5 +1,6 @@
 import { BUNDLED_LEVEL, catalogLevels, characterLevel } from '../data/catalog';
-import { hskLevelsOf, wordsInLists, type ListId } from '../data/lists';
+import { hskLevelsOf, type ListId } from '../data/lists';
+import { wordsInLists } from '../stores/studyLists';
 import type { VocabularyEntry } from '../data/vocabulary';
 import { characterStore, parseCharacterList } from '../stores/characterStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
