@@ -16,6 +16,7 @@ import {
 } from '../domain/progress/queue';
 import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
 import { sumActivity } from '../domain/progress/activity';
+import { mergeProgress } from '../domain/sync/merge';
 import { openCheckpoint, restoreCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
 import { emptyProgress, emptyState, progressDocument, serialize, type ProgressDocument } from './progressState';
 import { vocabularyProgressStore } from './vocabularyProgressStore';
@@ -96,6 +97,19 @@ export const createProgressStore = (doc: ProgressDocument) => {
       // Write first so a failed import leaves both the current state and stored data intact.
       writeStored(imported);
       setState(reconcile(imported));
+      setLoadBlocked(false);
+      setStorageError(null);
+    },
+
+    /**
+     * Merges a backup into the current progress: of each character or word, the later copy stays,
+     * and the calendar keeps every device's days. Throws before changing anything if the file is bad.
+     */
+    mergeBackup(raw: string): void {
+      const merged = mergeProgress(unwrap(state), parseProgress(raw));
+      // Write first so a failed merge leaves both the current state and stored data intact.
+      writeStored(merged);
+      setState(reconcile(merged));
       setLoadBlocked(false);
       setStorageError(null);
     },
