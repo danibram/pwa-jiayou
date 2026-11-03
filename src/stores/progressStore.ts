@@ -1,132 +1,58 @@
-import { schedule } from '../domain/progress/schedule';
-import { createSignal } from 'solid-js';
-import { createStore, reconcile } from 'solid-js/store';
+import { afterAnswer, schedule } from '../domain/progress/schedule';
+import { reconcile } from 'solid-js/store';
 import { parseProgress } from '../domain/progress/serialization';
-import { KEYS } from '../persistence/keys';
-import { storage } from '../persistence/keyValue';
+import {
+  activityStreak,
+  buildCharQueue,
+  CHAR_NEW_PER_DAY,
+  CLEAN_TO_RECOVER,
+  currentDaily,
+  isDueProgress,
+  isNewProgress,
+  isWeakProgress,
+  MASTERED_INTERVAL,
+  newLeftToday,
+  WORD_NEW_PER_DAY,
+} from '../domain/progress/queue';
+import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+import {
+  emptyProgress,
+  emptyState,
+  isLoadBlocked,
+  logActivity,
+  missedBeforeEnrolment,
+  readStored,
+  save,
+  serialize,
+  setLoadBlocked,
+  setState,
+  setStorageError,
+  state,
+  storageError,
+  writeStored,
+} from './progressState';
+import { vocabularyProgressStore } from './vocabularyProgressStore';
 export { parseProgress } from '../domain/progress/serialization';
-import type { CharProgress, DailyLog, Grade, ProgressState } from '../domain/progress/types';
 export type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
 export { GRADES } from '../domain/progress/types';
+export {
+  activityStreak,
+  CHAR_NEW_PER_DAY,
+  CLEAN_TO_RECOVER,
+  isWeakProgress,
+  KNOWN_PER_SESSION,
+  NEW_PER_DAY,
+  SESSION_SIZE,
+  WORD_NEW_PER_DAY,
+} from '../domain/progress/queue';
 
 const DAY_MS = 86_400_000;
-const MASTERED_INTERVAL = 21;
 export const DAILY_GOAL = 20;
-export const NEW_PER_DAY = 10;
-/** New characters a day, shared by every way into a session. Each one is watched, traced and written. */
-export const CHAR_NEW_PER_DAY = 8;
-/** Characters already known from words, checked at the start of a session. They do not spend the cap. */
-export const KNOWN_PER_SESSION = 10;
-export const WORD_NEW_PER_DAY = 20;
 /** The daily cap in words, for Home and word detail to explain it. */
 export const DAILY_NEW_RULE_TEXT = `${WORD_NEW_PER_DAY} palabras y ${CHAR_NEW_PER_DAY} caracteres nuevos al día`;
-/**
- * Bien answers in a row that take an item off the weak list in ordinary sessions.
- * A Bien inside a Flojos session is enough on its own: that session exists to clear them.
- */
-export const CLEAN_TO_RECOVER = 2;
-export const SESSION_SIZE = 20;
-
-const today = () => new Date().toLocaleDateString('sv-SE');
-const yesterday = () => new Date(Date.now() - DAY_MS).toLocaleDateString('sv-SE');
-
-const emptyDaily = (): DailyLog => ({ day: today(), reviewed: 0, introduced: 0, streak: 0 });
-
-const empty = (): CharProgress => ({
-  right: 0,
-  wrong: 0,
-  reps: 0,
-  lapses: 0,
-  interval: 0,
-  ease: 2.5,
-  due: 0,
-  strokeRuns: 0,
-  strokeBest: null,
-  lastSeen: 0,
-  clean: 0,
-});
-
-/** Missed at some point and not yet answered Bien twice in a row since. */
-export const isWeakProgress = (p: CharProgress | undefined): boolean =>
-  !!p && p.wrong > 0 && p.clean < CLEAN_TO_RECOVER && p.interval < MASTERED_INTERVAL;
-
-const afterAnswer = (clean: number, grade: Grade) => (grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean);
-
-let loadBlocked = false;
-const [storageError, setStorageError] = createSignal<string | null>(null);
-const load = (): ProgressState => {
-  try {
-    const raw = storage.read(KEYS.progress);
-    return raw === null ? { chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} } : parseProgress(raw);
-  } catch {
-    loadBlocked = true;
-    setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
-    return { chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} };
-  }
-};
-
-const [state, setState] = createStore<ProgressState>(load());
-const serialize = (data: ProgressState) => JSON.stringify({ version: 3, chars: data.chars, daily: data.daily, words: data.words, wordDaily: data.wordDaily, activity: data.activity });
-
-const ACTIVITY_DAYS = 120;
-
-/** Counts one answer or first look today and drops days older than the calendar shows. */
-const logActivity = () => {
-  const day = today();
-  const next: Record<string, number> = { ...state.activity, [day]: (state.activity[day] ?? 0) + 1 };
-  const keep = Object.keys(next).sort().slice(-ACTIVITY_DAYS);
-  setState('activity', reconcile(Object.fromEntries(keep.map((key) => [key, next[key]]))));
-};
-
-/**
- * Days in a row with any practice, words or characters, ending today, or yesterday when today has
- * none yet. It reads the calendar's log, so the streak and the calendar always agree.
- */
-export const activityStreak = (activity: Record<string, number>, now = new Date()): number => {
-  const day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
-  const active = (d: Date) => (activity[d.toLocaleDateString('sv-SE')] ?? 0) > 0;
-  if (!active(day)) day.setDate(day.getDate() - 1);
-  let streak = 0;
-  while (active(day)) {
-    streak++;
-    day.setDate(day.getDate() - 1);
-  }
-  return streak;
-};
-
-/**
- * Words missed in a session before their first graded answer. A word is enrolled when its recall
- * card is graded, so a miss on an earlier pick card would otherwise leave no trace and the word
- * would not show as flojo on Home. Kept in memory: it only has to last until that recall.
- */
-const missedBeforeEnrolment = new Set<string>();
-
-const save = (): boolean => {
-  if (loadBlocked) return false;
-  try {
-    storage.write(KEYS.progress, serialize(state));
-    setStorageError(null);
-    return true;
-  } catch {
-    setStorageError('No se pudo guardar el progreso. Exporta una copia y vuelve a intentarlo.');
-    return false;
-  }
-};
 
 const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
-  setState('chars', char, fn(state.chars[char] ?? empty()));
-};
-
-/** Rolls the daily log over to today, keeping the streak if yesterday was active. */
-const currentDaily = (): DailyLog => {
-  const d = state.daily;
-  if (d.day === today()) return d;
-  return {
-    day: today(),
-    reviewed: 0,
-    introduced: 0,
-    streak: d.day === yesterday() && (d.reviewed > 0 || d.introduced > 0) ? d.streak : 0,
-  };
+  setState('chars', char, fn(state.chars[char] ?? emptyProgress()));
 };
 
 /** Everything a session can change, taken when it starts so "descartar" can undo it. */
@@ -159,18 +85,17 @@ export const progressStore = {
   importBackup(raw: string): void {
     const imported = parseProgress(raw);
     // Write first so a failed import leaves both the current state and stored data intact.
-    storage.write(KEYS.progress, serialize(imported));
+    writeStored(imported);
     setState(reconcile(imported));
-    loadBlocked = false;
+    setLoadBlocked(false);
     setStorageError(null);
   },
 
   retrySave(): boolean {
-    if (loadBlocked) {
+    if (isLoadBlocked()) {
       try {
-        const raw = storage.read(KEYS.progress);
-        if (raw !== null) {
-          const recovered = parseProgress(raw);
+        const recovered = readStored();
+        if (recovered !== null) {
           // Do not discard progress made in memory while storage was unavailable.
           if (Object.keys(state.chars).length > 0 || Object.keys(state.words).length > 0) {
             setStorageError('El progreso actual y el guardado difieren. Exporta el actual antes de restaurar el guardado.');
@@ -178,7 +103,7 @@ export const progressStore = {
           }
           setState(reconcile(recovered));
         }
-        loadBlocked = false;
+        setLoadBlocked(false);
       } catch {
         setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
         return false;
@@ -189,14 +114,13 @@ export const progressStore = {
 
   recoverStoredProgress(): boolean {
     try {
-      const raw = storage.read(KEYS.progress);
-      if (raw === null) {
+      const recovered = readStored();
+      if (recovered === null) {
         setStorageError('No se encontró progreso guardado para recuperar.');
         return false;
       }
-      const recovered = parseProgress(raw);
       setState(reconcile(recovered));
-      loadBlocked = false;
+      setLoadBlocked(false);
       setStorageError(null);
       return true;
     } catch {
@@ -213,7 +137,7 @@ export const progressStore = {
     const now = Date.now();
     const isNew = !state.chars[char] || state.chars[char].right + state.chars[char].wrong === 0;
     update(char, (p) => ({ ...schedule(p, grade, now), lastSeen: now }));
-    const daily = currentDaily();
+    const daily = currentDaily(state.daily);
     setState('daily', {
       ...daily,
       reviewed: daily.reviewed + 1,
@@ -237,7 +161,7 @@ export const progressStore = {
       due: now + DAY_MS,
       lastSeen: now,
     }));
-    const daily = currentDaily();
+    const daily = currentDaily(state.daily);
     setState('daily', {
       ...daily,
       introduced: daily.introduced + (options.free ? 0 : 1),
@@ -280,14 +204,11 @@ export const progressStore = {
   },
 
   isNew(char: string): boolean {
-    const p = state.chars[char];
-    // A first look sets a due date and still has no answers, so it is no longer new.
-    return !p || (p.right + p.wrong === 0 && p.due === 0);
+    return isNewProgress(state.chars[char]);
   },
 
   isDue(char: string, now = Date.now()): boolean {
-    const p = state.chars[char];
-    return !!p && !this.isNew(char) && p.due <= now;
+    return isDueProgress(state.chars[char], now);
   },
 
   /** Recognised reliably enough to be asked to write it from memory. */
@@ -318,31 +239,17 @@ export const progressStore = {
 
   /** New characters the daily cap still allows today. */
   newLeftToday(): number {
-    return Math.max(0, CHAR_NEW_PER_DAY - this.daily.introduced);
+    return newLeftToday(CHAR_NEW_PER_DAY, state.daily);
   },
 
-  /**
-   * Today's session: due cards first (most overdue first), then unseen ones in frequency order.
-   * A character missed earlier today is not due again today: the session already asked it twice.
-   */
+  /** Today's session. The rules live in `buildCharQueue`. */
   buildQueue<T extends { character: string }>(
     chars: T[],
     extraNew = 0,
     /** Unseen characters the learner already met in a word. They go in `known`, outside the cap. */
     prefer: (char: string) => boolean = () => false,
   ): { due: T[]; fresh: T[]; known: T[] } {
-    const now = Date.now();
-    const startOfDay = new Date(now).setHours(0, 0, 0, 0);
-    const due = chars
-      .filter((c) => this.isDue(c.character, now) && !(state.chars[c.character].interval === 0 && state.chars[c.character].due >= startOfDay))
-      .sort((a, b) => state.chars[a.character].due - state.chars[b.character].due)
-      .slice(0, SESSION_SIZE);
-    const left = this.newLeftToday();
-    const unseen = chars.filter((c) => this.isNew(c.character));
-    const known = unseen.filter((c) => prefer(c.character)).slice(0, KNOWN_PER_SESSION);
-    const budget = extraNew ? Math.min(extraNew, left) : Math.max(0, Math.min(left, SESSION_SIZE - due.length));
-    const fresh = unseen.filter((c) => !prefer(c.character)).slice(0, budget);
-    return { due, fresh, known };
+    return buildCharQueue(chars, state.chars, state.daily, extraNew, prefer);
   },
 
   /** Days in a row with any practice. The same number for words and characters. */
@@ -351,90 +258,14 @@ export const progressStore = {
   },
 
   get daily(): DailyLog {
-    return { ...currentDaily(), streak: activityStreak(state.activity) };
+    return { ...currentDaily(state.daily), streak: activityStreak(state.activity) };
   },
 
   clear() {
     missedBeforeEnrolment.clear();
-    setState({ chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} });
+    setState(emptyState());
     save();
   },
-};
-
-
-const currentWordDaily = (): DailyLog => {
-  const d = state.wordDaily;
-  if (d.day === today()) return d;
-  return { day: today(), reviewed: 0, introduced: 0, streak: d.day === yesterday() && (d.reviewed > 0 || d.introduced > 0) ? d.streak : 0 };
-};
-
-export const vocabularyProgressStore = {
-  storageError,
-  get(id: string): CharProgress | undefined { return state.words[id]; },
-  isNew(id: string): boolean {
-    const p = state.words[id];
-    return !p || (p.right + p.wrong === 0 && p.due === 0);
-  },
-  isDue(id: string, now = Date.now()): boolean {
-    const p = state.words[id];
-    return !!p && !this.isNew(id) && p.due <= now;
-  },
-  isMastered(id: string): boolean { return (state.words[id]?.interval ?? 0) >= MASTERED_INTERVAL; },
-  isWeak(id: string): boolean { return isWeakProgress(state.words[id]); },
-  /** A Bien in a Flojos session: the word leaves the weak list now. Returns whether it was weak. */
-  recoverWeak(id: string): boolean {
-    const p = state.words[id];
-    if (!isWeakProgress(p)) return false;
-    setState('words', id, { ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) });
-    save();
-    return true;
-  },
-  /** Whether a review answer moves this word's schedule: it is due, or it is weak. */
-  schedules(id: string): boolean { return this.isDue(id) || this.isWeak(id); },
-  /** New words the daily cap still allows today. */
-  newLeftToday(): number { return Math.max(0, WORD_NEW_PER_DAY - this.daily.introduced); },
-  introduce(id: string): void {
-    if (!this.isNew(id)) return;
-    const now = Date.now();
-    setState('words', id, { ...empty(), interval: 1, due: now + DAY_MS, lastSeen: now });
-    const daily = currentWordDaily();
-    setState('wordDaily', { ...daily, introduced: daily.introduced + 1, streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
-    logActivity();
-    save();
-  },
-  grade(id: string, grade: Grade): void {
-    const now = Date.now();
-    const isNew = this.isNew(id);
-    const scheduled = schedule(state.words[id] ?? empty(), grade, now);
-    // Missed earlier in this session, before it was enrolled: it starts out flojo.
-    const missed = missedBeforeEnrolment.delete(id) && grade !== 'again';
-    setState('words', id, { ...scheduled, ...(missed ? { wrong: scheduled.wrong + 1, clean: 0 } : {}), lastSeen: now });
-    const daily = currentWordDaily();
-    setState('wordDaily', { ...daily, reviewed: daily.reviewed + 1, introduced: daily.introduced + (isNew ? 1 : 0), streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
-    logActivity();
-    save();
-  },
-  practice(id: string, grade: Grade, scheduleDue = true): void {
-    if (scheduleDue && this.schedules(id)) return this.grade(id, grade);
-    if (this.isNew(id)) {
-      if (grade === 'again') missedBeforeEnrolment.add(id);
-      return;
-    }
-    const p = state.words[id];
-    setState('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), lastSeen: Date.now() });
-    // Practice counts on the calendar, the same as for characters.
-    logActivity();
-    save();
-  },
-  buildQueue<T extends { id: string }>(entries: T[], extraNew = 0): { due: T[]; fresh: T[] } {
-    const now = Date.now();
-    const due = entries.filter((entry) => this.isDue(entry.id, now)).sort((a, b) => state.words[a.id].due - state.words[b.id].due).slice(0, SESSION_SIZE);
-    // The daily session teaches ten. "Aprender más" reaches the rest of the cap.
-    const left = this.newLeftToday();
-    const budget = extraNew ? Math.min(extraNew, left) : Math.max(0, Math.min(NEW_PER_DAY - this.daily.introduced, left, SESSION_SIZE - due.length));
-    return { due, fresh: entries.filter((entry) => this.isNew(entry.id)).slice(0, budget) };
-  },
-  get daily(): DailyLog { return { ...currentWordDaily(), streak: activityStreak(state.activity) }; },
 };
 
 /** Whether today's cap still allows a new word or character. */
