@@ -20,6 +20,8 @@ import { prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
 import type { HskLevel } from '../types';
 import { discardVocabularySession, hasStoredVocabularySession, loadVocabularySession } from '../utils/vocabularySession';
+import { homeLastKey, PRACTICE_SESSION_PREFIX } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
@@ -85,10 +87,9 @@ const CapNote: Component<{ limit: number; kind: NounKind }> = (props) => {
 type HomeMode = 'vocabulary' | 'characters';
 
 /** What Home showed last time, per mode and level set. Read once per visit, then replaced, so each gain is named once. */
-const lastKey = (mode: HomeMode) => `jiayou-home-last-${mode}`;
 const readLast = (mode: HomeMode, scope: string): ProgressSnapshot | null => {
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(lastKey(mode)) ?? 'null');
+    const value: unknown = JSON.parse(storage.read(homeLastKey(mode)) ?? 'null');
     if (!value || typeof value !== 'object') return null;
     const { mastered, learning, scope: saved } = value as Record<string, unknown>;
     // Different levels mean different totals; comparing them would invent gains.
@@ -100,19 +101,16 @@ const readLast = (mode: HomeMode, scope: string): ProgressSnapshot | null => {
 };
 const rememberLast = (mode: HomeMode, scope: string, summary: ProgressSummary) => {
   try {
-    localStorage.setItem(lastKey(mode), JSON.stringify({ scope, mastered: summary.mastered, learning: summary.learning }));
+    storage.write(homeLastKey(mode), JSON.stringify({ scope, mastered: summary.mastered, learning: summary.learning }));
   } catch { /* The gain line is a nicety; storage may be full or blocked. */ }
 };
 
 /** Word sessions Home can start, saved under vocabularySession's practice keys. A single word's practice is not one. */
-const PRACTICE_PREFIX = 'jiayou-vocabulary-session-v1:practice:';
 const HOME_PRACTICE = /^(__more__|__weak__|__all__|topic:.+)$/;
 const findPausedPractice = (): { id: string; title: string } | null => {
   try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key?.startsWith(PRACTICE_PREFIX)) continue;
-      const id = key.slice(PRACTICE_PREFIX.length);
+    for (const key of storage.keys(PRACTICE_SESSION_PREFIX)) {
+      const id = key.slice(PRACTICE_SESSION_PREFIX.length);
       if (!HOME_PRACTICE.test(id)) continue;
       const snapshot = loadVocabularySession(allWords(), id);
       if (snapshot) return { id, title: snapshot.heading };

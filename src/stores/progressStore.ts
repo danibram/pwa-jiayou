@@ -2,6 +2,8 @@ import { schedule } from '../domain/progress/schedule';
 import { createSignal } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
 import { parseProgress } from '../domain/progress/serialization';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 export { parseProgress } from '../domain/progress/serialization';
 import type { CharProgress, DailyLog, ProgressState } from '../domain/progress/types';
 export type { CharProgress, DailyLog } from '../domain/progress/types';
@@ -9,7 +11,6 @@ export type { CharProgress, DailyLog } from '../domain/progress/types';
 export type Grade = 'again' | 'hard' | 'good';
 export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
 
-const STORAGE_KEY = 'hsk-flashcards-stats';
 const DAY_MS = 86_400_000;
 const MASTERED_INTERVAL = 21;
 export const DAILY_GOAL = 20;
@@ -57,7 +58,7 @@ let loadBlocked = false;
 const [storageError, setStorageError] = createSignal<string | null>(null);
 const load = (): ProgressState => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = storage.read(KEYS.progress);
     return raw === null ? { chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} } : parseProgress(raw);
   } catch {
     loadBlocked = true;
@@ -105,7 +106,7 @@ const missedBeforeEnrolment = new Set<string>();
 const save = (): boolean => {
   if (loadBlocked) return false;
   try {
-    localStorage.setItem(STORAGE_KEY, serialize(state));
+    storage.write(KEYS.progress, serialize(state));
     setStorageError(null);
     return true;
   } catch {
@@ -160,7 +161,7 @@ export const progressStore = {
   importBackup(raw: string): void {
     const imported = parseProgress(raw);
     // Write first so a failed import leaves both the current state and stored data intact.
-    localStorage.setItem(STORAGE_KEY, serialize(imported));
+    storage.write(KEYS.progress, serialize(imported));
     setState(reconcile(imported));
     loadBlocked = false;
     setStorageError(null);
@@ -169,7 +170,7 @@ export const progressStore = {
   retrySave(): boolean {
     if (loadBlocked) {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = storage.read(KEYS.progress);
         if (raw !== null) {
           const recovered = parseProgress(raw);
           // Do not discard progress made in memory while storage was unavailable.
@@ -190,7 +191,7 @@ export const progressStore = {
 
   recoverStoredProgress(): boolean {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = storage.read(KEYS.progress);
       if (raw === null) {
         setStorageError('No se encontró progreso guardado para recuperar.');
         return false;
