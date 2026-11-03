@@ -1,8 +1,6 @@
 import { isNonNegativeInteger, isRecord } from '../../utils/parse';
 import type { CharProgress, DailyLog, ProgressState } from './types';
 
-const emptyDaily = (): DailyLog => ({ day: new Date().toLocaleDateString('sv-SE'), reviewed: 0, introduced: 0, streak: 0 });
-
 const invalidCharacter = () => new Error('Hay datos de caracteres no válidos.');
 
 const countField = (value: Record<string, unknown>, key: string): number => {
@@ -26,6 +24,12 @@ const strokeBestField = (value: Record<string, unknown>): number | null => {
   return field;
 };
 
+const deviceIdField = (value: Record<string, unknown>): string => {
+  if (!('deviceId' in value) || value.deviceId === undefined) return '';
+  if (typeof value.deviceId !== 'string') throw invalidCharacter();
+  return value.deviceId;
+};
+
 /** One character or word record. Throws when a field is not valid. */
 export const parseRecord = (value: Record<string, unknown>): CharProgress => ({
   right: countField(value, 'right'),
@@ -38,8 +42,11 @@ export const parseRecord = (value: Record<string, unknown>): CharProgress => ({
   strokeRuns: countField(value, 'strokeRuns'),
   strokeBest: strokeBestField(value),
   lastSeen: countField(value, 'lastSeen'),
-  // Older saves have no counter. Successful reviews since the last lapse are the same idea.
+  // A record with no counter: successful reviews since the last lapse are the same idea.
   clean: 'clean' in value && value.clean !== undefined ? countField(value, 'clean') : countField(value, 'reps'),
+  // A record with no stamp loses to any stamped copy of it when two copies are merged.
+  updatedAt: countField(value, 'updatedAt'),
+  deviceId: deviceIdField(value),
 });
 
 export const parseDaily = (value: unknown): DailyLog => {
@@ -57,39 +64,31 @@ export const parseDaily = (value: unknown): DailyLog => {
   return { day: value.day, reviewed, introduced, streak };
 };
 
-/** Accepts legacy character maps and the current versioned backup format. */
+const UNSAFE = ['__proto__', 'constructor', 'prototype'];
+
+const parseRecords = (value: unknown, validId: (id: string) => boolean): Record<string, CharProgress> => {
+  if (!isRecord(value)) throw new Error('La copia está incompleta.');
+  const out: Record<string, CharProgress> = {};
+  for (const [id, record] of Object.entries(value)) {
+    if (!id || UNSAFE.includes(id) || !validId(id) || !isRecord(record)) throw invalidCharacter();
+    out[id] = parseRecord(record);
+  }
+  return out;
+};
+
+/** The saved document and backup file, `version: 4`. Earlier versions had no users and are not read. */
 export const parseProgress = (raw: string): ProgressState => {
   const saved: unknown = JSON.parse(raw);
   if (!isRecord(saved)) throw new Error('El archivo no contiene datos de progreso válidos.');
-  if ('version' in saved && saved.version !== 2 && saved.version !== 3) throw new Error('Esta versión de la copia no es compatible.');
-  const chars = 'chars' in saved ? saved.chars : saved;
-  if (!isRecord(chars)) throw new Error('La lista de caracteres no es válida.');
-  const migrated: Record<string, CharProgress> = {};
-  for (const [char, value] of Object.entries(chars)) {
-    if (!('chars' in saved) && char === 'daily') continue;
-    if (!char || !isRecord(value) || [...char].length !== 1 || ['__proto__', 'constructor', 'prototype'].includes(char)) {
-      throw invalidCharacter();
-    }
-    migrated[char] = parseRecord(value);
-  }
-  const daily = 'daily' in saved ? parseDaily(saved.daily) : emptyDaily();
-  if (saved.version === 2 && (!('chars' in saved) || !('daily' in saved))) throw new Error('La copia está incompleta.');
-  const words: Record<string, CharProgress> = {};
-  if (saved.version === 3) {
-    if (!isRecord(saved.words) || !('wordDaily' in saved) || !('chars' in saved) || !('daily' in saved)) throw new Error('La copia está incompleta.');
-    for (const [id, value] of Object.entries(saved.words)) {
-      if (!id || ['__proto__', 'constructor', 'prototype'].includes(id) || !isRecord(value)) throw invalidCharacter();
-      words[id] = parseRecord(value);
-    }
-  }
-  const wordDaily = saved.version === 3 ? parseDaily(saved.wordDaily) : emptyDaily();
-  // Optional: saves from before the calendar have none.
+  if (saved.version !== 4) throw new Error('Esta versión de la copia no es compatible.');
+  if (!('chars' in saved) || !('daily' in saved) || !('words' in saved) || !('wordDaily' in saved)) throw new Error('La copia está incompleta.');
+  const chars = parseRecords(saved.chars, (char) => [...char].length === 1);
+  const words = parseRecords(saved.words, () => true);
   const activity: Record<string, number> = {};
   if (isRecord(saved.activity)) {
     for (const [day, count] of Object.entries(saved.activity)) {
       if (/^\d{4}-\d{2}-\d{2}$/.test(day) && isNonNegativeInteger(count)) activity[day] = count;
     }
   }
-  return { chars: migrated, daily, words, wordDaily, activity };
+  return { chars, daily: parseDaily(saved.daily), words, wordDaily: parseDaily(saved.wordDaily), activity };
 };
-

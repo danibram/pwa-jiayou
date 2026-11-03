@@ -5,6 +5,7 @@ import { dayKey, emptyDaily } from '../domain/progress/queue';
 import { parseProgress } from '../domain/progress/serialization';
 import type { CharProgress, ProgressState } from '../domain/progress/types';
 import { KEYS } from '../persistence/keys';
+import { deviceIdIn } from '../persistence/deviceId';
 import { storage, type KeyValueStore } from '../persistence/keyValue';
 
 /**
@@ -24,16 +25,21 @@ export const emptyProgress = (): CharProgress => ({
   strokeBest: null,
   lastSeen: 0,
   clean: 0,
+  updatedAt: 0,
+  deviceId: '',
 });
 
 export const emptyState = (): ProgressState => ({ chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} });
 
-export const serialize = (data: ProgressState) => JSON.stringify({ version: 3, chars: data.chars, daily: data.daily, words: data.words, wordDaily: data.wordDaily, activity: data.activity });
+export const serialize = (data: ProgressState) => JSON.stringify({ version: 4, chars: data.chars, daily: data.daily, words: data.words, wordDaily: data.wordDaily, activity: data.activity });
 
 const ACTIVITY_DAYS = 120;
 
-/** Loads the document from `repo` right away, as the app needs it before the first render. */
-export const createProgressState = (repo: KeyValueStore) => {
+/**
+ * Loads the document from `repo` right away, as the app needs it before the first render.
+ * `deviceId` defaults to the one saved in `repo`; tests pass their own to act as two devices.
+ */
+export const createProgressState = (repo: KeyValueStore, options: { deviceId?: string } = {}) => {
   let loadBlocked = false;
   const [storageError, setStorageError] = createSignal<string | null>(null);
 
@@ -54,14 +60,19 @@ export const createProgressState = (repo: KeyValueStore) => {
   };
 
   const [state, setState] = createStore<ProgressState>(load());
+  // Read after the document, so a failing first read is the document's and blocks overwriting it.
+  const deviceId = options.deviceId ?? deviceIdIn(repo);
 
   /** Checkpoints of the session on screen. Each keeps the first value of every record written while it is open. */
   const openCheckpoints = new Set<ProgressCheckpoint>();
 
-  /** The one way to change a character or word record, so an open checkpoint sees every change. */
+  /**
+   * The one way to change a character or word record: an open checkpoint sees every change, and
+   * every write is stamped with when and where it happened, for merging copies later.
+   */
   const writeRecord = (kind: RecordKind, id: string, next: CharProgress) => {
     for (const checkpoint of openCheckpoints) noteBefore(checkpoint, kind, id, state[kind][id]);
-    setState(kind, id, next);
+    setState(kind, id, { ...next, updatedAt: Date.now(), deviceId });
   };
 
   /** Writes `data` to storage. Throws when storage does, so callers decide what a failure means. */
@@ -88,6 +99,7 @@ export const createProgressState = (repo: KeyValueStore) => {
   };
 
   return {
+    deviceId,
     state,
     setState,
     storageError,
