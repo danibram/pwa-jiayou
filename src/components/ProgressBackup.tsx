@@ -3,7 +3,6 @@ import { parseProgress, progressStore } from '../stores/progressStore';
 import { myWordsStore } from '../stores/myWordsStore';
 import { notifyProgressReset } from '../utils/progressReset';
 import { isRecord } from '../utils/parse';
-import { discardSession } from '../utils/sessionStore';
 import { discardAllVocabularySessions } from '../utils/vocabularySession';
 
 /** The progress file, with the learner's own word list alongside. Older files have no `myWords`. */
@@ -19,7 +18,6 @@ const downloadBackup = () => {
 };
 
 const signalProgressReplaced = () => {
-  discardSession();
   discardAllVocabularySessions();
   notifyProgressReset();
 };
