@@ -10,10 +10,14 @@ import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
 import { pinyinParts, syllableKey } from './pinyin';
 import { createSignal } from 'solid-js';
+import { CDN_CACHE, LEGACY_CACHE_PREFIX, packCacheName, packCachePrefix } from '../domain/content/caches';
+import { usablePacks, type PackEntry } from '../domain/content/manifest';
 import clips from '../data/syllable-clips.json';
 import cmnClips from '../data/syllable-clips-cmn.json';
 
-export const CACHE_NAME = typeof __MEDIA_CACHE__ === 'string' ? __MEDIA_CACHE__ : 'hsk-packs-test';
+/** Built from the files by vite.config.ts. A run without it (none today) has no downloadable packs. */
+const content = usablePacks(typeof __CONTENT__ === 'object' ? __CONTENT__ : { packs: [] });
+const packEntry = (level: HskLevel) => content.get(`hsk${level}`);
 const bundledClips = new Set(clips);
 const mainlandClips = new Set(cmnClips);
 type DownloadState = { state: 'idle' | 'downloading' | 'ready' | 'error'; done: number; total: number };
@@ -34,9 +38,10 @@ export const packHasClip = (level: HskLevel, key: string) => packSyllables.get(l
 const base = () => import.meta.env.BASE_URL;
 
 const downloadable = (level: HskLevel) =>
-  level !== BUNDLED_LEVEL && catalogLevels.some((row) => row.level === level && row.available);
+  level !== BUNDLED_LEVEL && !!packEntry(level) && catalogLevels.some((row) => row.level === level && row.available);
 
-export const packPath = (level: HskLevel) => `${base()}packs/hsk${level}.json`;
+/** The pack's list, at a URL that changes with its content so no HTTP cache hands back an old one. */
+export const packPath = (level: HskLevel) => `${base()}packs/hsk${level}.json?v=${packEntry(level)?.hash ?? '0'}`;
 
 export const packMediaRoot = (level: HskLevel) => `${base()}packs/hsk${level}/`;
 
@@ -91,19 +96,41 @@ export const hasUsedApp = (): boolean => {
   }
 };
 
-const openCache = async (): Promise<Cache | null> => {
+/** The pack a same-origin media URL belongs to: a level's pack, the bundled audio, or none. */
+const packOf = (url: string): PackEntry | undefined => {
+  const path = url.startsWith('http') ? new URL(url).pathname : url;
+  const level = /^\/packs\/hsk(\d)[./]/.exec(path.slice(base().length - 1))?.[1];
+  if (level) return content.get(`hsk${level}`);
+  return path.startsWith(`${base()}audio/`) ? content.get('audio') : undefined;
+};
+
+/** The cache a file is saved in: its pack's current version, or the CDN cache for anything else. */
+export const cacheNameFor = (url: string) => {
+  const pack = packOf(url);
+  return pack ? packCacheName(pack) : CDN_CACHE;
+};
+
+export const openCacheFor = async (url: string): Promise<Cache | null> => {
   try {
     if (!('caches' in globalThis)) return null;
-    return await caches.open(CACHE_NAME);
+    return await caches.open(cacheNameFor(url));
   } catch {
     return null;
   }
 };
 
+/**
+ * The same file from an earlier version of its pack, marked stale and copied into the current
+ * one. A pack update that cannot download yet still leaves the old file to study with offline.
+ */
 const previousCopy = async (url: string, cache: Cache | null): Promise<Response | undefined> => {
-  if (!cache || typeof caches.keys !== 'function') return undefined;
-  for (const name of (await caches.keys()).filter((item) => item.startsWith('hsk-packs-') && item !== CACHE_NAME).reverse()) {
-    const hit = await (await caches.open(name)).match(url);
+  const pack = packOf(url);
+  if (!cache || !pack || typeof caches.keys !== 'function') return undefined;
+  const current = packCacheName(pack);
+  const lookup = url.split('?')[0];
+  for (const name of (await caches.keys()).filter((item) => item.startsWith(packCachePrefix(pack.id)) && item !== current).reverse()) {
+    const old = await caches.open(name);
+    const hit = await old.match(url) ?? await old.match(lookup, { ignoreSearch: true });
     if (hit) {
       const headers = new Headers(hit.headers);
       headers.set('x-jiayou-stale', '1');
@@ -129,8 +156,13 @@ const isCacheableMedia = (url: string, response: Response) => {
 
 /** Save `urls` that are not cached yet, a few at a time. A missing stroke or clip does not stop the rest. */
 const cacheUrls = async (urls: string[], onProgress?: PackProgress) => {
-  const cache = await openCache();
-  if (!cache) throw new Error('El navegador no permite guardar archivos sin conexión.');
+  if (!('caches' in globalThis)) throw new Error('El navegador no permite guardar archivos sin conexión.');
+  const opened = new Map<string, Promise<Cache>>();
+  const cacheOf = (url: string) => {
+    const name = cacheNameFor(url);
+    if (!opened.has(name)) opened.set(name, caches.open(name));
+    return opened.get(name)!;
+  };
   let next = 0;
   let done = 0;
   let failed = 0;
@@ -138,7 +170,9 @@ const cacheUrls = async (urls: string[], onProgress?: PackProgress) => {
   const worker = async () => {
     while (next < urls.length) {
       const url = urls[next++];
+      let cache: Cache | null = null;
       try {
+        cache = await cacheOf(url);
         const hit = await cache.match(url);
         if (!hit || hit.headers.get('x-jiayou-stale')) {
           const response = await fetch(url);
@@ -160,7 +194,7 @@ const registerSyllables = async (level: HskLevel) => {
   if (packSyllables.has(level)) return;
   const url = `${packMediaRoot(level)}syllables.json`;
   try {
-    const cache = await openCache();
+    const cache = await openCacheFor(url);
     let response = cache ? await cache.match(url) : undefined;
     if (!response || response.headers.get('x-jiayou-stale')) {
       const stale = response;
@@ -235,7 +269,7 @@ const wordMediaUrls = (words: readonly VocabularyEntry[]): string[] => {
 
 const readPack = async (level: HskLevel) => {
   const path = packPath(level);
-  const cache = await openCache();
+  const cache = await openCacheFor(path);
   const hit = cache ? await cache.match(path) : undefined;
   if (hit && !hit.headers.get('x-jiayou-stale')) return parseCharacterList(await hit.json(), level);
   let response: Response;
@@ -253,19 +287,31 @@ const readPack = async (level: HskLevel) => {
   return rows;
 };
 
-/** Drop a pack's list and every stroke or clip saved from it. */
+/** Deletes the caches whose names `drop` picks. A browser without Cache Storage has none. */
+const deleteCaches = async (drop: (name: string) => boolean) => {
+  try {
+    if (!('caches' in globalThis) || typeof caches.keys !== 'function') return;
+    await Promise.all((await caches.keys()).filter(drop).map((name) => caches.delete(name)));
+  } catch {
+    // Old copies only take space; the next complete download tries again.
+  }
+};
+
+/** Drop a pack's list and every stroke or clip saved from it, in every version. */
 export const forgetPack = async (level: HskLevel) => {
   packSyllables.delete(level);
-  const cache = await openCache();
-  if (!cache) return;
-  try {
-    const root = new URL(packMediaRoot(level), location.href).href;
-    const keys = await cache.keys();
-    await Promise.all(keys.filter((request) => request.url.startsWith(root)).map((request) => cache.delete(request)));
-    await cache.delete(packPath(level));
-  } catch {
-    // The list is already gone from the deck.
-  }
+  await deleteCaches((name) => name.startsWith(packCachePrefix(`hsk${level}`)));
+};
+
+/**
+ * Once the current version of these packs is saved, earlier versions are no longer needed: every
+ * file the lists use is now in the current cache, fresh or copied over as stale.
+ */
+const dropOlderVersions = async (levels: readonly HskLevel[]) => {
+  const current = new Set([...levels.map(packEntry), content.get('audio')].filter((pack): pack is PackEntry => !!pack).map(packCacheName));
+  const ids = [...levels.map((level) => `hsk${level}`), 'audio'];
+  await deleteCaches((name) => name.startsWith(LEGACY_CACHE_PREFIX)
+    || ids.some((id) => name.startsWith(packCachePrefix(id)) && !current.has(name)));
 };
 
 /** Put pack lists back in memory at start-up, from the cache. Media is topped up later by `saveStudyMedia`. */
@@ -293,6 +339,7 @@ export const prepareListMedia = async (lists: readonly ListId[], onProgress?: Pa
   writeInstalledLevels([...(readInstalledLevels() ?? []), ...installed]);
   for (const level of installed) await registerSyllables(level);
   await cacheUrls(wordMediaUrls(words), onProgress);
+  await dropOlderVersions(installed);
   return installed;
 };
 

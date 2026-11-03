@@ -3,29 +3,40 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore } from '../src/stores/characterStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { wordsInLists } from '../src/stores/studyLists';
-import { applyListChoice, downloadState, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
+import { applyListChoice, downloadState, loadInstalledPacks, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
 
 const body = (level: number) => readFileSync(`public/packs/hsk${level}.json`, 'utf8');
 const strokeJson = '{"strokes":["M0 0"],"medians":[[[0,0],[1,1]]]}';
 
 describe('level packs', () => {
-  const stored = new Map<string, Response>();
+  /** Cache Storage by cache name. `stored` is every file in any of them. */
+  const caches = new Map<string, Map<string, Response>>();
+  const stored = { keys: () => [...caches.values()].flatMap((cache) => [...cache.keys()]) };
+  const keyOf = (key: string | Request) => (typeof key === 'string' ? key : new URL(key.url).pathname + new URL(key.url).search);
 
   beforeEach(() => {
     localStorage.clear();
     characterStore.removeLevel(2);
     characterStore.removeLevel(3);
     characterStore.reset();
-    stored.clear();
+    caches.clear();
     vi.stubGlobal('caches', {
-      open: async () => ({
-        match: async (key: string) => stored.get(key),
-        put: async (key: string, response: Response) => {
-          stored.set(key, response.clone());
-        },
-        delete: async (key: string | Request) => stored.delete(typeof key === 'string' ? key : new URL(key.url).pathname),
-        keys: async () => [...stored.keys()].map((key) => new Request(new URL(key, location.href).href)),
-      }),
+      open: async (name: string) => {
+        if (!caches.has(name)) caches.set(name, new Map());
+        const cache = caches.get(name)!;
+        return {
+          // A fresh copy each time, as Cache Storage gives.
+          match: async (key: string | Request, options?: { ignoreSearch?: boolean }) =>
+            (cache.get(keyOf(key)) ?? (options?.ignoreSearch ? [...cache].find(([stored]) => stored.split('?')[0] === keyOf(key).split('?')[0])?.[1] : undefined))?.clone(),
+          put: async (key: string, response: Response) => {
+            cache.set(keyOf(key), response.clone());
+          },
+          delete: async (key: string | Request) => cache.delete(keyOf(key)),
+          keys: async () => [...cache.keys()].map((key) => new Request(new URL(key, location.href).href)),
+        };
+      },
+      keys: async () => [...caches.keys()],
+      delete: async (name: string) => caches.delete(name),
     });
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       const url = String(input);
@@ -92,5 +103,35 @@ describe('level packs', () => {
     await saveStudyMedia();
     expect(downloadState().state).toBe('ready');
     expect([...stored.keys()].some((key) => key.startsWith('/audio/'))).toBe(true);
+  });
+
+  it('updates one pack without touching the others, and studies offline with the old copy until it downloads', async () => {
+    await applyListChoice(['hsk-1', 'hsk-2']);
+    const names = [...caches.keys()];
+    const hsk2 = names.find((name) => name.startsWith('jiayou-pack-hsk2-'))!;
+    const hsk3 = names.find((name) => name.startsWith('jiayou-pack-hsk3-'))!;
+    const hsk3Files = [...caches.get(hsk3)!.keys()];
+    // The build changed HSK 2 only: what the device holds is now an older version of that pack.
+    caches.set('jiayou-pack-hsk2-000000000000', caches.get(hsk2)!);
+    caches.delete(hsk2);
+    characterStore.removeLevel(2);
+    const online = globalThis.fetch;
+    vi.stubGlobal('fetch', async () => { throw new TypeError('offline'); });
+
+    await loadInstalledPacks([2, 3]);
+    expect(characterStore.hasLevel(2)).toBe(true);
+    await saveStudyMedia();
+    expect(downloadState().state).toBe('ready');
+    // Every file HSK 2 words need came over from the old version, marked stale; HSK 3 was not touched.
+    const copied = [...caches.get(hsk2)!.values()];
+    expect(copied.length).toBeGreaterThan(0);
+    expect(copied.every((response) => response.headers.get('x-jiayou-stale') === '1')).toBe(true);
+    expect([...caches.get(hsk3)!.keys()]).toEqual(hsk3Files);
+    expect(caches.has('jiayou-pack-hsk2-000000000000')).toBe(false);
+
+    // Back online, the stale copies are fetched again.
+    vi.stubGlobal('fetch', online);
+    await saveStudyMedia();
+    expect([...caches.get(hsk2)!.values()].some((response) => response.headers.get('x-jiayou-stale'))).toBe(false);
   });
 });
