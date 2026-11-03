@@ -15,6 +15,7 @@ import {
   WORD_NEW_PER_DAY,
 } from '../domain/progress/queue';
 import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+import { sumActivity } from '../domain/progress/activity';
 import { openCheckpoint, restoreCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
 import { emptyProgress, emptyState, progressDocument, serialize, type ProgressDocument } from './progressState';
 import { vocabularyProgressStore } from './vocabularyProgressStore';
@@ -41,7 +42,7 @@ export type { ProgressCheckpoint } from '../domain/progress/checkpoint';
 
 /** The character store over `doc`. Tests pass a document of their own to start from clean progress. */
 export const createProgressStore = (doc: ProgressDocument) => {
-  const { state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, openCheckpoints, logActivity, missedBeforeEnrolment, save } = doc;
+  const { deviceId, state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, openCheckpoints, logActivity, missedBeforeEnrolment, save } = doc;
   const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
     writeRecord('chars', char, fn(state.chars[char] ?? emptyProgress()));
   };
@@ -54,7 +55,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
      * one document, so one checkpoint covers both. Close it when the session leaves the screen.
      */
     checkpoint(): ProgressCheckpoint {
-      return this.resumeCheckpoint(openCheckpoint(state));
+      return this.resumeCheckpoint(openCheckpoint(state, deviceId));
     },
 
     /** Keeps noting changes into a checkpoint saved with a paused session. */
@@ -67,9 +68,12 @@ export const createProgressStore = (doc: ProgressDocument) => {
       openCheckpoints.delete(checkpoint);
     },
 
-    /** Answers and first looks per local day ("2026-11-01" → 34), oldest first, at most 120 days. */
+    /**
+     * Answers and first looks per local day ("2026-11-01" → 34), every device's added up. Each
+     * device keeps at most 120 days.
+     */
     activity(): Record<string, number> {
-      return state.activity;
+      return sumActivity(state.activity);
     },
 
     /**
@@ -79,7 +83,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
     rollback(checkpoint: ProgressCheckpoint): void {
       openCheckpoints.delete(checkpoint);
       missedBeforeEnrolment.clear();
-      setState(reconcile(restoreCheckpoint(unwrap(state), checkpoint)));
+      setState(reconcile(restoreCheckpoint(unwrap(state), checkpoint, deviceId)));
       save();
     },
 
@@ -259,11 +263,11 @@ export const createProgressStore = (doc: ProgressDocument) => {
 
     /** Days in a row with any practice. The same number for words and characters. */
     streak(): number {
-      return activityStreak(state.activity);
+      return activityStreak(this.activity());
     },
 
     get daily(): DailyLog {
-      return { ...currentDaily(state.daily), streak: activityStreak(state.activity) };
+      return { ...currentDaily(state.daily), streak: activityStreak(sumActivity(state.activity)) };
     },
 
     clear() {
