@@ -23,11 +23,4 @@ export interface ExampleWord {
   es: string;
 }
 
-export interface TrainingResult {
-  correct: number;
-  incorrect: number;
-  total: number;
-  percentage: number;
-}
-
 export type SwipeDirection = 'left' | 'right' | null;
