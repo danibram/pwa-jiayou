@@ -1,24 +1,25 @@
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 import { VitePWA } from 'vite-plugin-pwa';
-import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { contentManifest } from './scripts/content-manifest.ts';
+import { packCacheName } from './src/domain/content/caches.ts';
 
-const mediaHash = createHash('sha256');
-const hashDirectory = (directory: string) => {
-  for (const entry of readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-    const path = join(directory, entry.name);
-    if (entry.isDirectory()) hashDirectory(path);
-    else { mediaHash.update(path); mediaHash.update(readFileSync(path)); }
-  }
-};
-hashDirectory('public/packs');
-hashDirectory('public/audio');
-const mediaCache = `hsk-packs-${mediaHash.digest('hex').slice(0, 12)}`;
+// Hashed from the files themselves, so a pack changed without rebuilding content.json still gets a
+// new cache. Only that pack's cache changes; the others keep what the learner already downloaded.
+const content = contentManifest(process.cwd());
+
+/**
+ * The worker serves clips from the same per-pack cache the app saves them into. Workbox copies a
+ * RegExp into the worker as is, but not a function's closure. It tests the whole URL and, for
+ * another origin, only a match at its start, so these never match a CDN file.
+ */
+const audioRoutes = content.packs.map((pack) => ({
+  urlPattern: pack.level ? new RegExp(`/packs/hsk${pack.level}/audio/`) : /\/\/[^/]+\/audio\//,
+  cacheName: packCacheName(pack),
+}));
 
 export default defineConfig({
-  define: { __MEDIA_CACHE__: JSON.stringify(mediaCache) },
+  define: { __CONTENT__: JSON.stringify(content) },
   build: {
     rollupOptions: {
       output: {
@@ -65,18 +66,18 @@ export default defineConfig({
         // Optional HSK lists are fetched into their own cache after the user asks for them.
         globIgnores: ['**/packs/**', '**/audio/**'],
         runtimeCaching: [
-          {
-            // The app saves pack clips into this cache itself; <audio> requests only see it through the worker.
-            // Strokes and lists are read with caches.match and stay off this route.
-            urlPattern: ({ url }) => url.origin === self.location.origin && (/^\/packs\/hsk\d\/audio\//.test(url.pathname) || /^\/audio\//.test(url.pathname)),
-            handler: 'CacheFirst',
+          // The app saves pack clips into these caches itself; <audio> requests only see them through the worker.
+          // Strokes and lists are read with caches.match and stay off these routes.
+          ...audioRoutes.map(({ urlPattern, cacheName }) => ({
+            urlPattern,
+            handler: 'CacheFirst' as const,
             options: {
-              cacheName: mediaCache,
+              cacheName,
               rangeRequests: true,
               // A missing clip comes back as the HTML shell with status 200; never store that as audio.
               cacheableResponse: { statuses: [200], headers: { 'content-type': 'audio/mpeg' } },
             },
-          },
+          })),
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'StaleWhileRevalidate',
