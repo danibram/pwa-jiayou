@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { loadVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import VocabularyReview from '../src/pages/VocabularyReview';
 
