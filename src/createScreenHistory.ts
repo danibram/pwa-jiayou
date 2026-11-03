@@ -1,12 +1,34 @@
 import { createEffect, onCleanup, onMount, type Accessor, type Setter } from 'solid-js';
 import { allWords, findWord } from './stores/myWordsStore';
 import { loadVocabularySession } from './utils/vocabularySession';
+import { screenToUrl, urlToScreen } from './navigation';
 import { homeScreen, parseScreen, type Screen } from './screen';
 
-/** Keeps the browser history in step with the screen. Call it from the app setup. */
+/** A review only exists while its session is saved. Without one, show its word or Home instead. */
+const reviewOrFallback = (screen: Screen): Screen => {
+  if (screen.page !== 'vocabulary-review') return screen;
+  if (loadVocabularySession(allWords(), screen.practiceId)) return { ...screen, resume: true };
+  return screen.practiceId && findWord(screen.practiceId)
+    ? { page: 'vocabulario', wordId: screen.practiceId }
+    : homeScreen;
+};
+
+/**
+ * A reload keeps history.state and the URL, so the saved screen wins when both agree: it still knows
+ * `from` and `returnTo`. A typed or shared URL arrives without state and is read from the path alone.
+ */
+const startScreen = (): Screen => {
+  const fromUrl = urlToScreen(location.href);
+  const saved = history.state?.jiayou ? parseScreen(history.state.screen) : undefined;
+  const screen = saved && fromUrl && screenToUrl(saved) === screenToUrl(fromUrl) ? saved : fromUrl ?? homeScreen;
+  return reviewOrFallback(screen);
+};
+
+/** Keeps the browser history and URL in step with the screen. Call it from the app setup. */
 export function createScreenHistory(screen: Accessor<Screen>, setScreen: Setter<Screen>) {
   let restoringHistory = false;
   let historyReady = false;
+  setScreen(startScreen());
   let lastScreen = screen();
 
   const showFromHistory = (next: Screen) => {
@@ -20,24 +42,17 @@ export function createScreenHistory(screen: Accessor<Screen>, setScreen: Setter<
   };
 
   onMount(() => {
-    history.replaceState({ jiayou: true, screen: screen() }, '');
+    history.replaceState({ jiayou: true, screen: screen() }, '', screenToUrl(screen()));
     historyReady = true;
     const onPopState = (event: PopStateEvent) => {
-      const savedScreen = event.state?.jiayou ? parseScreen(event.state.screen) : undefined;
-      if (savedScreen?.page === 'vocabulary-review') {
-        const session = loadVocabularySession(allWords(), savedScreen.practiceId);
-        if (session) {
-          showFromHistory({ ...savedScreen, resume: true });
-          return;
-        }
-        const fallback: Screen = savedScreen.practiceId && findWord(savedScreen.practiceId)
-          ? { page: 'vocabulario', wordId: savedScreen.practiceId }
-          : homeScreen;
-        history.replaceState({ jiayou: true, screen: fallback }, '');
-        showFromHistory(fallback);
+      const savedScreen = event.state?.jiayou ? parseScreen(event.state.screen) : urlToScreen(location.href);
+      if (!savedScreen) {
+        showFromHistory(homeScreen);
         return;
       }
-      showFromHistory(savedScreen ?? homeScreen);
+      const next = reviewOrFallback(savedScreen);
+      if (next.page !== savedScreen.page) history.replaceState({ jiayou: true, screen: next }, '', screenToUrl(next));
+      showFromHistory(next);
     };
     window.addEventListener('popstate', onPopState);
     onCleanup(() => window.removeEventListener('popstate', onPopState));
@@ -49,7 +64,7 @@ export function createScreenHistory(screen: Accessor<Screen>, setScreen: Setter<
     if (restoringHistory) { restoringHistory = false; lastScreen = value; return; }
     if (value === lastScreen) return;
     lastScreen = value;
-    history.pushState({ jiayou: true, screen: value }, '');
+    history.pushState({ jiayou: true, screen: value }, '', screenToUrl(value));
   });
 
   const goHome = () => setScreen(homeScreen);

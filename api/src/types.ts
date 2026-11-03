@@ -1,24 +1,5 @@
-export type HskLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
-export interface ExampleWord {
-  word: string;
-  pinyin: string;
-  es: string;
-}
-
-export interface HSKCharacter {
-  character: string;
-  traditional: string;
-  pinyin: string;
-  definition: string;
-  radical: string;
-  stroke_count: number;
-  hsk_level: HskLevel;
-  general_standard: number;
-  frequency_rank: number;
-  gloss?: string;
-  example?: ExampleWord;
-}
+import type { ExampleWord, HSKCharacter } from '../../shared/contracts/content.ts';
+export type { ExampleWord, HSKCharacter, HskLevel } from '../../shared/contracts/content.ts';
 
 export type FieldSource = 'base' | 'draft' | 'override';
 
