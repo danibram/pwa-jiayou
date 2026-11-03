@@ -4,6 +4,7 @@ import { topics } from '../data/topics';
 import { vocabulary, type CatalogEntry, type VocabularyEntry } from '../data/vocabulary';
 import { isRecord, isString } from '../utils/parse';
 import { KEYS } from '../persistence/keys';
+import { mergeRecords } from '../domain/sync/merge';
 import { deviceIdIn } from '../persistence/deviceId';
 import { storage, type KeyValueStore } from '../persistence/keyValue';
 import { markTones, syllableKey, withToneSandhi, wordId } from '../utils/pinyin';
@@ -332,6 +333,14 @@ export const createMyWordsStore = (repo: KeyValueStore, options: { deviceId?: st
     /** Replaces the list with a backup's. Throws before changing anything if the data is invalid. */
     importData(value: unknown) {
       const data = parseData(value, true);
+      repo.write(KEYS.myWords, JSON.stringify(data));
+      setStore(reconcile(data));
+      setStorageError(false);
+    },
+
+    /** Merges a backup's list into this one, word by word: the later write of each word stays. */
+    mergeData(value: unknown) {
+      const data: MyWordsData = { version: 2, words: mergeRecords(unwrap(store).words, parseData(value, true).words) };
       repo.write(KEYS.myWords, JSON.stringify(data));
       setStore(reconcile(data));
       setStorageError(false);
