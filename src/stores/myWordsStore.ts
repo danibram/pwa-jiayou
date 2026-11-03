@@ -1,9 +1,10 @@
-import { createStore, produce } from 'solid-js/store';
+import { createStore, reconcile, unwrap } from 'solid-js/store';
 import { createSignal } from 'solid-js';
 import { topics } from '../data/topics';
 import { vocabulary, type CatalogEntry, type VocabularyEntry } from '../data/vocabulary';
 import { isRecord, isString } from '../utils/parse';
 import { KEYS } from '../persistence/keys';
+import { deviceIdIn } from '../persistence/deviceId';
 import { storage, type KeyValueStore } from '../persistence/keyValue';
 import { markTones, syllableKey, withToneSandhi, wordId } from '../utils/pinyin';
 
@@ -20,14 +21,32 @@ export interface MyWordInput {
 }
 
 /**
- * The "Mis palabras" list. `ids` is the list, in the order words were added.
- * A catalog word listed as-is is only referenced. A changed reading or meaning lives in `own`
- * under the catalog id (a correction), so progress stays with that word.
+ * One word of "Mis palabras". A catalog word listed as-is is only referenced. A changed reading or
+ * meaning lives in `own` under the catalog id (a correction), so progress stays with that word.
+ * Taking a word off the list leaves a tombstone (`removedAt`), so merging two copies of the list
+ * can tell a removal apart from a word the other copy never had.
  */
-export interface MyWordsData {
-  ids: string[];
-  own: Record<string, Required<MyWordInput>>;
+export interface MyWordRecord {
+  /** Epoch ms when the word was put on the list. The list shows words in this order. */
+  addedAt: number;
+  removedAt: number | null;
+  own?: Required<MyWordInput>;
+  /** Epoch ms of the last write. Of two copies of a record, the later one wins. */
+  updatedAt: number;
+  deviceId: string;
 }
+
+/** The list as saved and in a backup: one record per word, by id. */
+export interface MyWordsData {
+  version: 2;
+  words: Record<string, MyWordRecord>;
+}
+
+/** Listed ids, in the order they were added. */
+export const listedIds = (words: Record<string, MyWordRecord>): string[] =>
+  Object.keys(words)
+    .filter((id) => words[id].removedAt === null)
+    .sort((a, b) => words[a].addedAt - words[b].addedAt || (a < b ? -1 : a > b ? 1 : 0));
 
 const HAN = /^\p{Script=Han}+$/u;
 const UNSAFE = ['__proto__', 'constructor', 'prototype'];
@@ -89,59 +108,99 @@ export const normalizeMyWord = (input: MyWordInput): Required<MyWordInput> => {
   return { simplified, traditional, pinyin, meaning, topicIds };
 };
 
+const isStamp = (value: unknown): value is number => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+
+const invalidList = () => new Error('La lista «Mis palabras» no es válida.');
+
+const parseRecord = (id: string, raw: unknown): MyWordRecord => {
+  if (UNSAFE.includes(id) || !isRecord(raw) || !isStamp(raw.addedAt) || !isStamp(raw.updatedAt) || !isString(raw.deviceId)
+    || (raw.removedAt !== null && !isStamp(raw.removedAt))) {
+    throw invalidList();
+  }
+  const record: MyWordRecord = { addedAt: raw.addedAt, removedAt: raw.removedAt, updatedAt: raw.updatedAt, deviceId: raw.deviceId };
+  if (raw.own !== undefined) {
+    const own = raw.own;
+    if (!isRecord(own) || !isString(own.simplified) || !isString(own.pinyin) || !isString(own.meaning)) throw invalidList();
+    const topicIds = Array.isArray(own.topicIds) && own.topicIds.every(isString) ? own.topicIds : [];
+    // The id is kept as saved: fixing a typo later must not cost the word its progress.
+    record.own = normalizeMyWord({
+      simplified: own.simplified,
+      pinyin: own.pinyin,
+      meaning: own.meaning,
+      traditional: isString(own.traditional) ? own.traditional : undefined,
+      topicIds,
+    });
+  }
+  // A listed word must resolve to something: the catalog, or its own fields.
+  if (record.removedAt === null && !record.own && !catalogById.has(id)) throw invalidList();
+  return record;
+};
+
 /** `strict`: a backup is all or nothing; saved data drops a bad word and keeps the rest. */
 const parseData = (value: unknown, strict: boolean): MyWordsData => {
-  if (!isRecord(value) || !Array.isArray(value.ids) || !value.ids.every(isString) || !isRecord(value.own)) {
-    throw new Error('La lista «Mis palabras» no es válida.');
-  }
-  const own: MyWordsData['own'] = {};
-  for (const [id, raw] of Object.entries(value.own)) {
+  if (!isRecord(value) || value.version !== 2 || !isRecord(value.words)) throw invalidList();
+  const words: MyWordsData['words'] = {};
+  for (const [id, raw] of Object.entries(value.words)) {
     try {
-      if (UNSAFE.includes(id) || !isRecord(raw) || !isString(raw.simplified) || !isString(raw.pinyin) || !isString(raw.meaning)) {
-        throw new Error('La lista «Mis palabras» no es válida.');
-      }
-      const topicIds = Array.isArray(raw.topicIds) && raw.topicIds.every(isString) ? raw.topicIds : [];
-      // The id is kept as saved: fixing a typo later must not cost the word its progress.
-      own[id] = normalizeMyWord({
-        simplified: raw.simplified,
-        pinyin: raw.pinyin,
-        meaning: raw.meaning,
-        traditional: isString(raw.traditional) ? raw.traditional : undefined,
-        topicIds,
-      });
+      words[id] = parseRecord(id, raw);
     } catch (error) {
       if (strict) throw error;
     }
   }
-  const ids = [...new Set(value.ids)].filter((id) => catalogById.has(id) || id in own);
-  return { ids, own };
+  return { version: 2, words };
 };
 
-/** The Mis palabras store over `repo`. Tests pass a repo of their own to start from an empty list. */
-export const createMyWordsStore = (repo: KeyValueStore) => {
+/**
+ * The Mis palabras store over `repo`. Tests pass a repo of their own to start from an empty list,
+ * and a `deviceId` to act as another device.
+ */
+export const createMyWordsStore = (repo: KeyValueStore, options: { deviceId?: string } = {}) => {
+  const ownOf = (id: string): Required<MyWordInput> | undefined => store.words[id]?.own;
+
   /** Resolve an id to what the app should show: a correction, then the catalog, then a pure own word. */
   const resolve = (id: string): VocabularyEntry | undefined => {
-    const own = store.own[id];
+    const own = ownOf(id);
     const catalog = catalogById.get(id);
     if (own) return toEntry(id, own, catalog);
     return catalog;
   };
 
+  const empty = (): MyWordsData => ({ version: 2, words: {} });
+
   const load = (): MyWordsData => {
     try {
       const raw = repo.read(KEYS.myWords);
-      return raw ? parseData(JSON.parse(raw), false) : { ids: [], own: {} };
+      return raw ? parseData(JSON.parse(raw), false) : empty();
     } catch {
-      return { ids: [], own: {} };
+      return empty();
     }
   };
 
   const [store, setStore] = createStore<MyWordsData>(load());
+  const deviceId = options.deviceId ?? deviceIdIn(repo);
+
+  // Strictly increasing, so words added in the same millisecond keep the order they were added in.
+  let lastStamp = 0;
+  const stamp = () => {
+    lastStamp = Math.max(Date.now(), lastStamp + 1);
+    return lastStamp;
+  };
+
+  const isListed = (id: string) => store.words[id]?.removedAt === null;
+
+  /** Writes one word's record. `own` undefined drops the override; `listed` false leaves a tombstone. */
+  const writeWord = (id: string, own: Required<MyWordInput> | undefined, listed = true) => {
+    const now = stamp();
+    const before = store.words[id];
+    const addedAt = before && before.removedAt === null ? before.addedAt : now;
+    const record: MyWordRecord = { addedAt, removedAt: listed ? null : now, updatedAt: now, deviceId, ...(own && listed ? { own } : {}) };
+    setStore('words', id, reconcile(record));
+  };
 
   const [storageError, setStorageError] = createSignal(false);
   const save = () => {
     try {
-      repo.write(KEYS.myWords, JSON.stringify({ ids: store.ids, own: store.own }));
+      repo.write(KEYS.myWords, JSON.stringify(unwrap(store)));
       setStorageError(false);
     } catch {
       setStorageError(true);
@@ -152,37 +211,40 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
     storageError,
     retrySave: save,
     get ids(): readonly string[] {
-      return store.ids;
+      return listedIds(store.words);
     },
 
     has(id: string): boolean {
-      return store.ids.includes(id);
+      return isListed(id);
     },
 
-    /** True when this catalog id has a learner override in `own`. Reads `own[id]` so the UI tracks it. */
+    /** True when this catalog id has a learner override in `own`. Reads the record so the UI tracks it. */
     isCorrection(id: string): boolean {
-      return !!catalogById.get(id) && store.own[id] !== undefined;
+      return !!catalogById.get(id) && ownOf(id) !== undefined;
     },
 
     /** The list's words, catalog words included, in the order they were added. */
     words(): VocabularyEntry[] {
-      return store.ids.flatMap((id) => {
+      return listedIds(store.words).flatMap((id) => {
         const word = resolve(id);
         return word ? [word] : [];
       });
     },
 
     /**
-     * Rows stored in `own`: words outside HSK, and corrections of catalog words.
+     * Words with fields of their own: words outside HSK, and corrections of catalog words.
      * Catalog references with no override are not here.
      */
     ownWords(): VocabularyEntry[] {
-      return Object.entries(store.own).map(([id, word]) => toEntry(id, word, catalogById.get(id)));
+      return listedIds(store.words).flatMap((id) => {
+        const own = ownOf(id);
+        return own ? [toEntry(id, own, catalogById.get(id))] : [];
+      });
     },
 
     /** Dictionary fields of an own or corrected word. Undefined for an untouched catalog reference. */
     own(id: string): Required<MyWordInput> | undefined {
-      const word = store.own[id];
+      const word = ownOf(id);
       return word ? { ...word, topicIds: [...word.topicIds] } : undefined;
     },
 
@@ -204,7 +266,10 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
       const word = normalizeMyWord(input);
       const derived = wordId(word.simplified, word.pinyin);
       // An own word whose reading was fixed keeps its first id; adding it again must find that one.
-      const existingOwn = Object.keys(store.own).find((key) => wordId(store.own[key].simplified, store.own[key].pinyin) === derived);
+      const existingOwn = listedIds(store.words).find((key) => {
+        const own = ownOf(key);
+        return !!own && wordId(own.simplified, own.pinyin) === derived;
+      });
       const catalog = (catalogId ? catalogById.get(catalogId) : undefined)
         ?? catalogById.get(derived)
         ?? (existingOwn ? catalogById.get(existingOwn) : undefined);
@@ -212,14 +277,10 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
       if (catalogId && catalog && catalog.simplified !== word.simplified) {
         throw new Error('La corrección debe ser de la misma palabra.');
       }
-      const alreadyListed = store.ids.includes(id);
+      const alreadyListed = isListed(id);
       const matches = catalog ? sameAsCatalog(catalog, word) : false;
       const corrected = !!catalog && !matches;
-      setStore(produce((draft) => {
-        if (matches) delete draft.own[id];
-        else draft.own[id] = word;
-        if (!alreadyListed) draft.ids.push(id);
-      }));
+      writeWord(id, matches ? undefined : word);
       save();
       return { word: resolve(id)!, inCatalog: !!catalog, alreadyListed, corrected };
     },
@@ -228,12 +289,12 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
     addCatalog(id: string): { word: VocabularyEntry; inCatalog: boolean; alreadyListed: boolean; corrected: boolean } {
       const word = catalogById.get(id);
       if (!word) throw new Error('Esa palabra no está en HSK.');
-      const alreadyListed = store.ids.includes(id);
+      const alreadyListed = isListed(id);
       if (!alreadyListed) {
-        setStore('ids', (ids) => [...ids, id]);
+        writeWord(id, undefined);
         save();
       }
-      return { word: resolve(id)!, inCatalog: true, alreadyListed, corrected: id in store.own };
+      return { word: resolve(id)!, inCatalog: true, alreadyListed, corrected: ownOf(id) !== undefined };
     },
 
     /**
@@ -241,31 +302,26 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
      * correction in `own`; clearing the override when fields match the catalog again.
      */
     update(id: string, input: MyWordInput) {
-      if (!store.ids.includes(id) && !(id in store.own)) return;
+      if (!isListed(id)) return;
       const word = normalizeMyWord(input);
       const catalog = catalogById.get(id);
       if (catalog && catalog.simplified !== word.simplified) {
         throw new Error('La corrección debe ser de la misma palabra.');
       }
-      setStore(produce((draft) => {
-        if (!draft.ids.includes(id)) draft.ids.push(id);
-        if (catalog && sameAsCatalog(catalog, word)) delete draft.own[id];
-        else draft.own[id] = word;
-      }));
+      writeWord(id, catalog && sameAsCatalog(catalog, word) ? undefined : word);
       save();
     },
 
     /** Takes a word off the list. Its progress stays, in case it comes back. */
     remove(id: string) {
-      setStore(produce((draft) => {
-        draft.ids = draft.ids.filter((item) => item !== id);
-        delete draft.own[id];
-      }));
+      if (!isListed(id)) return;
+      writeWord(id, undefined, false);
       save();
     },
 
+    /** Every record, tombstones included, so a merge elsewhere learns about removals. */
     exportData(): MyWordsData {
-      return { ids: [...store.ids], own: { ...store.own } };
+      return JSON.parse(JSON.stringify(unwrap(store))) as MyWordsData;
     },
 
     /** A backup's list, checked. Throws if any of it is invalid. */
@@ -277,18 +333,18 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
     importData(value: unknown) {
       const data = parseData(value, true);
       repo.write(KEYS.myWords, JSON.stringify(data));
-      setStore({ ids: data.ids, own: data.own });
+      setStore(reconcile(data));
       setStorageError(false);
     },
 
     reset() {
-      setStore({ ids: [], own: {} });
+      setStore(reconcile(empty()));
       try { repo.remove(KEYS.myWords); } catch { /* Storage may be unavailable. */ }
     },
 
     /** Form seed from a catalog or own word (shown pinyin is fine; normalize turns it back to marks). */
     inputFromWord(word: VocabularyEntry): MyWordInput {
-      const own = store.own[word.id];
+      const own = ownOf(word.id);
       return {
         simplified: word.simplified,
         traditional: word.traditional,
@@ -300,11 +356,11 @@ export const createMyWordsStore = (repo: KeyValueStore) => {
 
     /** Every word the app knows: HSK (with corrections applied) plus words only the learner added. */
     allWords(): VocabularyEntry[] {
-      const extras = Object.entries(store.own)
-        .filter(([id]) => !catalogById.has(id))
-        .map(([id, word]) => toEntry(id, word));
+      const extras = listedIds(store.words)
+        .filter((id) => !catalogById.has(id) && ownOf(id))
+        .map((id) => toEntry(id, ownOf(id)!));
       return [
-        ...vocabulary.map((word) => (word.id in store.own ? resolve(word.id)! : word)),
+        ...vocabulary.map((word) => (ownOf(word.id) ? resolve(word.id)! : word)),
         ...extras,
       ];
     },
