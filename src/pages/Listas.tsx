@@ -2,7 +2,8 @@ import { Component, createSignal, For, Show } from 'solid-js';
 import Icon from '../components/Icon';
 import TopBar from '../components/TopBar';
 import { BUNDLED_LEVEL, catalogLevel } from '../data/catalog';
-import { DEFAULT_LIST, listLabel, studyList, studyLists, type ListId } from '../data/lists';
+import { DEFAULT_LIST, listLabel, type ListId } from '../data/lists';
+import { studyList, studyLists } from '../stores/studyLists';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { applyListChoice, hasUsedApp, readInstalledLevels } from '../utils/levelPacks';
 

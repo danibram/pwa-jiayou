@@ -1,5 +1,6 @@
 import { vocabulary, type VocabularyEntry } from '../data/vocabulary';
-import { MY_WORDS_LIST, wordsInLists, type ListId } from '../data/lists';
+import { MY_WORDS_LIST, type ListId } from '../data/lists';
+import { wordsInLists } from '../stores/studyLists';
 import { myWordsStore } from '../stores/myWordsStore';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
