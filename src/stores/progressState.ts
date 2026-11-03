@@ -1,5 +1,6 @@
 import { createSignal } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
+import { noteBefore, type ProgressCheckpoint, type RecordKind } from '../domain/progress/checkpoint';
 import { dayKey, emptyDaily } from '../domain/progress/queue';
 import { parseProgress } from '../domain/progress/serialization';
 import type { CharProgress, ProgressState } from '../domain/progress/types';
@@ -54,6 +55,15 @@ export const createProgressState = (repo: KeyValueStore) => {
 
   const [state, setState] = createStore<ProgressState>(load());
 
+  /** Checkpoints of the session on screen. Each keeps the first value of every record written while it is open. */
+  const openCheckpoints = new Set<ProgressCheckpoint>();
+
+  /** The one way to change a character or word record, so an open checkpoint sees every change. */
+  const writeRecord = (kind: RecordKind, id: string, next: CharProgress) => {
+    for (const checkpoint of openCheckpoints) noteBefore(checkpoint, kind, id, state[kind][id]);
+    setState(kind, id, next);
+  };
+
   /** Writes `data` to storage. Throws when storage does, so callers decide what a failure means. */
   const writeStored = (data: ProgressState) => repo.write(KEYS.progress, serialize(data));
 
@@ -87,6 +97,8 @@ export const createProgressState = (repo: KeyValueStore) => {
     setLoadBlocked: (blocked: boolean) => { loadBlocked = blocked; },
     readStored,
     writeStored,
+    writeRecord,
+    openCheckpoints,
     logActivity,
     /**
      * Words missed in a session before their first graded answer. A word is enrolled when its recall
