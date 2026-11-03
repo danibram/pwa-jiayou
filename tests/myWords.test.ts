@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { listLabel, wordsInLists } from '../src/data/lists';
+import { listLabel } from '../src/data/lists';
+import { wordsInLists } from '../src/stores/studyLists';
 import { allWords, charactersOfOwnTopicWords, findWord, myWordsStore } from '../src/stores/myWordsStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { markTones } from '../src/utils/pinyin';
