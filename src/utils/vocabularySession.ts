@@ -1,5 +1,5 @@
 import type { VocabularyEntry } from '../data/vocabulary';
-import { GRADES, type Grade } from '../stores/progressStore';
+import { GRADES, type Grade } from '../domain/progress/types';
 import { isNonNegativeInteger, isOneOf, isRecord } from './parse';
 import { KEYS, PRACTICE_SESSION_PREFIX, practiceSessionKey } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
