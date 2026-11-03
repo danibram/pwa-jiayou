@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore } from '../src/stores/characterStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
-import { wordsInLists } from '../src/data/lists';
+import { wordsInLists } from '../src/stores/studyLists';
 import { applyListChoice, downloadState, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
 
 const body = (level: number) => readFileSync(`public/packs/hsk${level}.json`, 'utf8');

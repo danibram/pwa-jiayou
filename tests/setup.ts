@@ -49,7 +49,11 @@ if (typeof HTMLMediaElement !== 'undefined') {
   HTMLMediaElement.prototype.pause = function pause() {};
 }
 
-beforeEach(() => localStorage.clear());
+// The app reads its first screen from the URL, so every test starts at Home.
+beforeEach(() => {
+  localStorage.clear();
+  history.replaceState(null, '', '/');
+});
 
 // jsdom's fetch has no base URL, so stroke data under /strokes/ is read from public/ instead.
 const realFetch = globalThis.fetch;

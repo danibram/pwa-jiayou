@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ProgressBackup from '../src/components/ProgressBackup';
-import { progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { hasStoredVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import { progressReset } from '../src/utils/progressReset';
 

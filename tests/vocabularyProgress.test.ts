@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const stores = async () => {
   vi.resetModules();
-  const { progressStore, vocabularyProgressStore } = await import('../src/stores/progressStore');
+  const { progressStore } = await import('../src/stores/progressStore');
+  const { vocabularyProgressStore } = await import('../src/stores/vocabularyProgressStore');
   return { chars: progressStore, words: vocabularyProgressStore };
 };
 

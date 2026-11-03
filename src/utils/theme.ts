@@ -1,9 +1,10 @@
 import { createSignal } from 'solid-js';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 /** Preference: follow the OS, or lock light / dark. */
 export type ThemePreference = 'system' | 'dark' | 'light';
 
-const STORAGE_KEY = 'jiayou-theme';
 const ORDER: ThemePreference[] = ['system', 'dark', 'light'];
 
 const THEME_COLOR = { light: '#f4efe6', dark: '#14110f' } as const;
@@ -13,7 +14,7 @@ const isPreference = (value: unknown): value is ThemePreference =>
 
 const readPreference = (): ThemePreference => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = storage.read(KEYS.theme);
     if (isPreference(stored)) return stored;
   } catch {
     // Private mode can block storage.
@@ -54,7 +55,7 @@ export const setThemePreference = (next: ThemePreference): void => {
   setPreferenceSignal(next);
   syncDocument(next);
   try {
-    localStorage.setItem(STORAGE_KEY, next);
+    storage.write(KEYS.theme, next);
   } catch {
     // The choice still holds for this visit.
   }
