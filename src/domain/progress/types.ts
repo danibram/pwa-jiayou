@@ -1,3 +1,5 @@
+import type { ActivityByDevice } from './activity';
+
 /** How an answer went: Otra vez, Difícil or Bien. */
 export type Grade = 'again' | 'hard' | 'good';
 export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
@@ -39,7 +41,7 @@ export interface ProgressState {
   daily: DailyLog;
   words: Record<string, CharProgress>;
   wordDaily: DailyLog;
-  /** Answers and first looks per local day (words and characters), for the progress calendar. */
-  activity: Record<string, number>;
+  /** Answers and first looks per local day (words and characters), per device, for the calendar and streak. */
+  activity: ActivityByDevice;
 }
 

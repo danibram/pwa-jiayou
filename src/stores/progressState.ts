@@ -78,12 +78,16 @@ export const createProgressState = (repo: KeyValueStore, options: { deviceId?: s
   /** Writes `data` to storage. Throws when storage does, so callers decide what a failure means. */
   const writeStored = (data: ProgressState) => repo.write(KEYS.progress, serialize(data));
 
-  /** Counts one answer or first look today and drops days older than the calendar shows. */
+  /**
+   * Counts one answer or first look today in this device's log and drops days older than the
+   * calendar shows. Other devices' logs are theirs to count.
+   */
   const logActivity = () => {
     const day = dayKey();
-    const next: Record<string, number> = { ...state.activity, [day]: (state.activity[day] ?? 0) + 1 };
+    const own = state.activity[deviceId] ?? {};
+    const next: Record<string, number> = { ...own, [day]: (own[day] ?? 0) + 1 };
     const keep = Object.keys(next).sort().slice(-ACTIVITY_DAYS);
-    setState('activity', reconcile(Object.fromEntries(keep.map((key) => [key, next[key]]))));
+    setState('activity', deviceId, reconcile(Object.fromEntries(keep.map((key) => [key, next[key]]))));
   };
 
   const save = (): boolean => {
