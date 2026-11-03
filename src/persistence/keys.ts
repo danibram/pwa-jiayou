@@ -12,6 +12,8 @@ export const KEYS = {
   installedLevels: 'hsk-installed-levels',
   /** Today's word session. Practice sessions append `:practice:<id>`. */
   wordSession: 'jiayou-vocabulary-session-v1',
+  /** This device's random id, made once. Stamps every progress write so two devices can be told apart. */
+  deviceId: 'jiayou-device-id',
   theme: 'jiayou-theme',
   voiceMode: 'hsk-voice-mode',
   /** Older builds stored a single speaker id here. Read once, then removed. */

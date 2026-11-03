@@ -5,7 +5,7 @@ import type { CharProgress } from '../src/domain/progress/types';
 const DAY = 86_400_000;
 const now = new Date(2026, 10, 3, 12).getTime();
 const seen = (due: number, interval = 3): CharProgress => ({
-  right: 1, wrong: 0, reps: 1, lapses: 0, interval, ease: 2.5, due, strokeRuns: 0, strokeBest: null, lastSeen: 0, clean: 1,
+  right: 1, wrong: 0, reps: 1, lapses: 0, interval, ease: 2.5, due, strokeRuns: 0, strokeBest: null, lastSeen: 0, clean: 1, updatedAt: 0, deviceId: "",
 });
 
 describe('queue rules without a store', () => {

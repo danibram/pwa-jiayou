@@ -21,8 +21,8 @@ describe('weak items', () => {
     expect(progressStore.isWeak('一')).toBe(true);
   });
 
-  it('reads older saves without the counter from successful reviews', () => {
-    const saved = parseProgress(JSON.stringify({ version: 3, chars: { 一: { right: 3, wrong: 1, reps: 2, interval: 3, due: 1 } }, daily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 }, words: {}, wordDaily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 } }));
+  it('reads a record without the counter from successful reviews', () => {
+    const saved = parseProgress(JSON.stringify({ version: 4, chars: { 一: { right: 3, wrong: 1, reps: 2, interval: 3, due: 1 } }, daily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 }, words: {}, wordDaily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 } }));
     expect(saved.chars['一'].clean).toBe(2);
   });
 });
@@ -59,7 +59,7 @@ describe('activity calendar', () => {
   });
 
   it('reads saves without a calendar', () => {
-    const saved = parseProgress(JSON.stringify({ version: 3, chars: {}, daily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 }, words: {}, wordDaily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 } }));
+    const saved = parseProgress(JSON.stringify({ version: 4, chars: {}, daily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 }, words: {}, wordDaily: { day: '2026-01-01', reviewed: 0, introduced: 0, streak: 0 } }));
     expect(saved.activity).toEqual({});
   });
 });
