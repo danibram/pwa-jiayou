@@ -1,3 +1,7 @@
+/** How an answer went: Otra vez, Difícil or Bien. */
+export type Grade = 'again' | 'hard' | 'good';
+export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
+
 /** Per-character learning history, kept across sessions. */
 export interface CharProgress {
   right: number;

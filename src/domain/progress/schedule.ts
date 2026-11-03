@@ -1,5 +1,4 @@
-import type { Grade } from '../../stores/progressStore';
-import type { CharProgress } from './types';
+import type { CharProgress, Grade } from './types';
 
 const DAY_MS = 86_400_000;
 const afterAnswer = (clean: number, grade: Grade) => grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean;

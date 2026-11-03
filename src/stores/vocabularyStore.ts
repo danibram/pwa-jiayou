@@ -1,6 +1,7 @@
 import { createStore } from 'solid-js/store';
 import { vocabulary, vocabularyByLevel, type VocabularyEntry } from '../data/vocabulary';
-import { DEFAULT_LIST, knownLists, listLabel, studyList, studyLists, wordsInLists, type ListId } from '../data/lists';
+import { DEFAULT_LIST, knownLists, listLabel, type ListId } from '../data/lists';
+import { studyList, studyLists, wordsInLists } from './studyLists';
 import { dayNumber } from './characterStore';
 import { isRecord } from '../utils/parse';
 import { KEYS } from '../persistence/keys';
