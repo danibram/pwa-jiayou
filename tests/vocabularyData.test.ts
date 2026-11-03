@@ -12,6 +12,7 @@ import hsk3 from '../src/data/vocabulary/hsk3.json';
 import hsk4 from '../src/data/vocabulary/hsk4.json';
 import hsk5 from '../src/data/vocabulary/hsk5.json';
 import hsk6 from '../src/data/vocabulary/hsk6.json';
+import publishedIds from '../src/data/vocabulary/published-ids.json';
 import { wordId } from '../src/utils/pinyin';
 import { topics } from '../src/data/topics';
 
@@ -101,5 +102,29 @@ describe('HSK 2.0 vocabulary', () => {
     expect(vocabulary.find((entry) => entry.simplified === '朋友')?.meaning).toBe('amigo; amiga');
     expect(vocabulary.find((entry) => entry.simplified === '谢谢')?.meaning).toBe('gracias');
     expect(vocabulary.find((entry) => entry.simplified === '北京')?.meaning).toBe('Pekín');
+  });
+});
+
+describe('published word ids', () => {
+  const catalogIds = new Set(rawWords.map((word) => word.id));
+
+  it('keeps every published id in the catalog', () => {
+    const gone = publishedIds.filter((id) => !catalogIds.has(id));
+    expect(
+      gone,
+      'Saved progress points at these ids and would be orphaned. Restore the entry or its reading in ' +
+        'src/data/vocabulary/hsk*.json; a corrected reading needs a migration of saved progress first. ' +
+        'Do not edit published-ids.json to make this pass.',
+    ).toEqual([]);
+  });
+
+  it('lists every catalog id as published', () => {
+    const published = new Set(publishedIds);
+    const unlisted = [...catalogIds].filter((id) => !published.has(id));
+    expect(
+      unlisted,
+      'Ids not published yet. For new vocabulary run `npm run published-ids` and commit published-ids.json. ' +
+        'If one replaces a published id, fix that failure first.',
+    ).toEqual([]);
   });
 });
