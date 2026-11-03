@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { WORD_NEW_PER_DAY, parseProgress, progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { WORD_NEW_PER_DAY, parseProgress, progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 
 beforeEach(() => { localStorage.clear(); progressStore.clear(); });
 

@@ -1,7 +1,8 @@
 import type { CharProgress, Grade } from './types';
 
 const DAY_MS = 86_400_000;
-const afterAnswer = (clean: number, grade: Grade) => grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean;
+/** Bien answers in a row after this one. A Difícil keeps the run, an Otra vez ends it. */
+export const afterAnswer = (clean: number, grade: Grade) => grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean;
 
 export const schedule = (p: CharProgress, grade: Grade, now: number): CharProgress => {
   if (grade === 'again') {
