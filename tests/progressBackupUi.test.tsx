@@ -7,9 +7,11 @@ import { hasStoredVocabularySession, saveVocabularySession } from '../src/utils/
 import { progressReset } from '../src/utils/progressReset';
 
 const backup = (right: number) => JSON.stringify({
-  version: 2,
-  chars: { 好: { right, wrong: 0, reps: right, lapses: 0, interval: 1, ease: 2.5, due: 1, strokeRuns: 0, strokeBest: null, lastSeen: 1 } },
+  version: 4,
+  chars: { 好: { right, wrong: 0, reps: right, lapses: 0, interval: 1, ease: 2.5, due: 1, strokeRuns: 0, strokeBest: null, lastSeen: 1, updatedAt: 1, deviceId: 'other' } },
   daily: { day: '2026-10-31', reviewed: right, introduced: 0, streak: 1 },
+  words: {},
+  wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 },
 });
 
 describe('progress backup UI', () => {

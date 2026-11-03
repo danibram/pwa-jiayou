@@ -86,11 +86,15 @@ describe('progressStore', () => {
     expect(progressStore.get('我')).toMatchObject({ strokeRuns: 3, strokeBest: 1 });
   });
 
-  it('migrates the old flat storage format', async () => {
+  it('loads a saved document, filling fields a record leaves out', async () => {
     localStorage.setItem(
       'hsk-flashcards-stats',
       JSON.stringify({
-        的: { right: 1, wrong: 2, streak: 0, strokeRuns: 0, strokeBest: null, lastSeen: 1 },
+        version: 4,
+        chars: { 的: { right: 1, wrong: 2, strokeRuns: 0, strokeBest: null, lastSeen: 1 } },
+        daily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 },
+        words: {},
+        wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 },
       })
     );
     vi.resetModules();
