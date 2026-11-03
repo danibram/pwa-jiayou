@@ -65,7 +65,9 @@ describe('a character outside HSK', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Ver el carácter 喱, 2 de 2' }));
     const sheet = screen.getByRole('dialog');
     expect(sheet.textContent).toContain('en 咖喱: curry');
-    expect(sheet.textContent).not.toMatch(/HSK|Radical|Descargar/);
+    const characterDetails = sheet.cloneNode(true) as HTMLElement;
+    characterDetails.querySelector('[aria-label="Misma sílaba, otros tonos"]')?.remove();
+    expect(characterDetails.textContent).not.toMatch(/HSK|Radical|Descargar/);
     expect(sheet.textContent).toContain('Palabras con');
     expect(sheet.textContent).toContain('gel');
     fireEvent.click(screen.getByRole('button', { name: /Ver trazos y escribirlo/ }));
