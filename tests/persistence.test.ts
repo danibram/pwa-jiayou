@@ -11,6 +11,7 @@ describe('storage keys', () => {
       characterDeck: 'hsk-flashcards-progress',
       installedLevels: 'hsk-installed-levels',
       wordSession: 'jiayou-vocabulary-session-v1',
+      deviceId: 'jiayou-device-id',
       theme: 'jiayou-theme',
       voiceMode: 'hsk-voice-mode',
       legacyVoice: 'hsk-voice',
