@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { listLabel } from '../src/data/lists';
 import { wordsInLists } from '../src/stores/studyLists';
-import { allWords, charactersOfOwnTopicWords, findWord, myWordsStore } from '../src/stores/myWordsStore';
+import { vocabulary } from '../src/data/vocabulary';
+import { createMemoryKeyValue, storage } from '../src/persistence/keyValue';
+import { allWords, charactersOfOwnTopicWords, createMyWordsStore, findWord, listedIds, myWordsStore } from '../src/stores/myWordsStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { markTones } from '../src/utils/pinyin';
 
@@ -120,15 +122,45 @@ describe('Mis palabras', () => {
   });
 
   it('survives a reload and drops only the bad entries of saved data', () => {
-    localStorage.setItem('jiayou-my-words', JSON.stringify({
-      ids: ['word-5976-8336-nai3-cha2', 'word-bad', 'word-670b-53cb-peng2-you5'],
-      own: {
-        'word-5976-8336-nai3-cha2': { simplified: '奶茶', traditional: '奶茶', pinyin: 'nǎi chá', meaning: 'té con leche' },
-        'word-bad': { simplified: 'x', pinyin: 'x', meaning: 'x' },
+    const stamp = { updatedAt: 1, deviceId: 'phone', removedAt: null };
+    const saved = {
+      version: 2,
+      words: {
+        'word-5976-8336-nai3-cha2': { ...stamp, addedAt: 1, own: { simplified: '奶茶', traditional: '奶茶', pinyin: 'nǎi chá', meaning: 'té con leche' } },
+        'word-bad': { ...stamp, addedAt: 2, own: { simplified: 'x', pinyin: 'x', meaning: 'x' } },
+        'word-670b-53cb-peng2-you5': { ...stamp, addedAt: 3 },
       },
-    }));
-    const restored = myWordsStore.checkData(JSON.parse(localStorage.getItem('jiayou-my-words')!.replace(',"word-bad":{"simplified":"x","pinyin":"x","meaning":"x"}', '')));
-    expect(restored.ids).toEqual(['word-5976-8336-nai3-cha2', 'word-670b-53cb-peng2-you5']);
-    expect(() => myWordsStore.checkData(JSON.parse(localStorage.getItem('jiayou-my-words')!))).toThrow();
+    };
+    localStorage.setItem('jiayou-my-words', JSON.stringify(saved));
+    expect(createMyWordsStore(storage).ids).toEqual(['word-5976-8336-nai3-cha2', 'word-670b-53cb-peng2-you5']);
+    const { 'word-bad': _bad, ...good } = saved.words;
+    expect(listedIds(myWordsStore.checkData({ ...saved, words: good }).words)).toEqual(['word-5976-8336-nai3-cha2', 'word-670b-53cb-peng2-you5']);
+    expect(() => myWordsStore.checkData(saved)).toThrow();
+  });
+
+  it('keeps one record per word, with a tombstone once it is taken off', () => {
+    const repo = createMemoryKeyValue();
+    const mine = createMyWordsStore(repo, { deviceId: 'phone' });
+    mine.addCatalog('word-670b-53cb-peng2-you5');
+    mine.add({ simplified: '奶茶', pinyin: 'nai3 cha2', meaning: 'té con leche' });
+    mine.remove('word-670b-53cb-peng2-you5');
+    const { words } = JSON.parse(repo.read('jiayou-my-words')!);
+    expect(words['word-670b-53cb-peng2-you5']).toMatchObject({ removedAt: expect.any(Number), deviceId: 'phone' });
+    expect(words['word-670b-53cb-peng2-you5'].own).toBeUndefined();
+    expect(words['word-5976-8336-nai3-cha2']).toMatchObject({ removedAt: null, own: { meaning: 'té con leche' }, deviceId: 'phone' });
+    expect(mine.ids).toEqual(['word-5976-8336-nai3-cha2']);
+    // Back on the list, it goes to the end, as a word added now.
+    mine.addCatalog('word-670b-53cb-peng2-you5');
+    expect(mine.ids).toEqual(['word-5976-8336-nai3-cha2', 'word-670b-53cb-peng2-you5']);
+  });
+
+  it('keeps the order of words added in the same millisecond', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(5_000);
+    const mine = createMyWordsStore(createMemoryKeyValue());
+    const ids = vocabulary.slice(0, 5).map((word) => word.id).reverse();
+    for (const id of ids) mine.addCatalog(id);
+    expect(mine.ids).toEqual(ids);
+    vi.useRealTimers();
   });
 });
