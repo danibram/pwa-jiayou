@@ -3,16 +3,16 @@ import { vocabulary, vocabularyByLevel, type VocabularyEntry } from '../data/voc
 import { DEFAULT_LIST, knownLists, listLabel, studyList, studyLists, wordsInLists, type ListId } from '../data/lists';
 import { dayNumber } from './characterStore';
 import { isRecord } from '../utils/parse';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 interface VocabularyStoreState {
   selectedLists: ListId[];
 }
 
-const STORAGE_KEY = 'jiayou-study-lists';
-
 const loadSelection = (): ListId[] => {
   try {
-    const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
+    const saved: unknown = JSON.parse(storage.read(KEYS.studyLists) ?? 'null');
     const ids = isRecord(saved) && Array.isArray(saved.selectedLists) ? knownLists(saved.selectedLists.filter((id): id is string => typeof id === 'string')) : [];
     return ids.length > 0 ? ids : [DEFAULT_LIST];
   } catch {
@@ -26,7 +26,7 @@ const [store, setStore] = createStore<VocabularyStoreState>({
 
 const save = () => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ selectedLists: store.selectedLists }));
+    storage.write(KEYS.studyLists, JSON.stringify({ selectedLists: store.selectedLists }));
   } catch {
     // Selection still works in memory if storage is blocked.
   }
@@ -77,6 +77,6 @@ export const vocabularyStore = {
 
   reset() {
     setStore('selectedLists', [DEFAULT_LIST]);
-    localStorage.removeItem(STORAGE_KEY);
+    storage.remove(KEYS.studyLists);
   },
 };

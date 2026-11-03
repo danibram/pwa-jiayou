@@ -5,19 +5,20 @@ import { characterStore, parseCharacterList } from '../stores/characterStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import type { HskLevel } from '../types';
 import { isHskLevel } from './parse';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 import { pinyinParts, syllableKey } from './pinyin';
 import { createSignal } from 'solid-js';
 import clips from '../data/syllable-clips.json';
 import cmnClips from '../data/syllable-clips-cmn.json';
 
-const INSTALL_KEY = 'hsk-installed-levels';
 export const CACHE_NAME = typeof __MEDIA_CACHE__ === 'string' ? __MEDIA_CACHE__ : 'hsk-packs-test';
 const bundledClips = new Set(clips);
 const mainlandClips = new Set(cmnClips);
 type DownloadState = { state: 'idle' | 'downloading' | 'ready' | 'error'; done: number; total: number };
 const [downloadState, setDownloadState] = createSignal<DownloadState>({ state: 'idle', done: 0, total: 0 });
 export { downloadState };
-const USED_KEYS = ['hsk-flashcards-progress', 'hsk-flashcards-stats'];
+const USED_KEYS = [KEYS.characterDeck, KEYS.progress];
 const VOICES = ['f', 'm', 'c'] as const;
 /** Parallel media requests. Thousands at once stall a phone on a slow connection. */
 const PARALLEL = 6;
@@ -58,7 +59,7 @@ export const packsForWords = (words: readonly VocabularyEntry[]): HskLevel[] => 
 
 export const readInstalledLevels = (): HskLevel[] | null => {
   try {
-    const raw = localStorage.getItem(INSTALL_KEY);
+    const raw = storage.read(KEYS.installedLevels);
     if (raw === null) return null;
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return null;
@@ -77,13 +78,13 @@ export const writeInstalledLevels = (levels: readonly HskLevel[]) => {
     .filter((level) => level === BUNDLED_LEVEL || downloadable(level))
     .sort((a, b) => a - b);
   if (!next.includes(BUNDLED_LEVEL)) next.unshift(BUNDLED_LEVEL);
-  localStorage.setItem(INSTALL_KEY, JSON.stringify(next));
+  storage.write(KEYS.installedLevels, JSON.stringify(next));
 };
 
 /** Someone already studied here, before lists were optional. */
 export const hasUsedApp = (): boolean => {
   try {
-    return USED_KEYS.some((key) => localStorage.getItem(key) !== null);
+    return USED_KEYS.some((key) => storage.read(key) !== null);
   } catch {
     return false;
   }

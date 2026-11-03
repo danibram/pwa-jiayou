@@ -5,6 +5,8 @@ import cmnClips from '../data/syllable-clips-cmn.json';
 import { characterStore } from '../stores/characterStore';
 import { packHasClip, packMediaRoot } from './levelPacks';
 import { pinyinParts, syllableKey } from './pinyin';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 const CLIP = new Set(clips);
 const CMN = new Set(cmnClips);
@@ -15,9 +17,6 @@ type TtsGender = 'f' | 'm';
 /** Three listen modes: one mainland clip, Taiwan clips that alternate, or device TTS. */
 export type VoiceMode = 'mainland' | 'taiwan' | 'tts';
 
-const MODE_KEY = 'hsk-voice-mode';
-/** Older builds stored a single speaker id. */
-const LEGACY_VOICE_KEY = 'hsk-voice';
 /** Before Chen Wang led, the index pointed into woman, man, Chen Wang. */
 const LEGACY_INDEX_KEY = 'hsk-voice-index';
 const LEGACY_ORDER: Speaker[] = ['f', 'm', 'c'];
@@ -51,13 +50,13 @@ export const voices: VoiceOption[] = [
 /** The choice lives in localStorage. Older builds kept a speaker per tab. */
 const readMode = (): VoiceMode => {
   try {
-    const stored = localStorage.getItem(MODE_KEY);
+    const stored = storage.read(KEYS.voiceMode);
     if (isMode(stored)) return stored;
   } catch {
     // Fall through.
   }
   try {
-    const stored = localStorage.getItem(LEGACY_VOICE_KEY) ?? sessionStorage.getItem(LEGACY_VOICE_KEY);
+    const stored = storage.read(KEYS.legacyVoice) ?? sessionStorage.getItem(KEYS.legacyVoice);
     if (isSpeaker(stored)) return speakerToMode(stored);
     const legacy = sessionStorage.getItem(LEGACY_INDEX_KEY);
     const n = Number(legacy);
@@ -80,9 +79,9 @@ export const setVoiceMode = (next: VoiceMode): void => {
   setModeSignal(next);
   turn = 0;
   try {
-    localStorage.setItem(MODE_KEY, next);
-    localStorage.removeItem(LEGACY_VOICE_KEY);
-    sessionStorage.removeItem(LEGACY_VOICE_KEY);
+    storage.write(KEYS.voiceMode, next);
+    storage.remove(KEYS.legacyVoice);
+    sessionStorage.removeItem(KEYS.legacyVoice);
     sessionStorage.removeItem(LEGACY_INDEX_KEY);
   } catch {
     // The choice still holds for this visit.
