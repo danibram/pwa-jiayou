@@ -150,8 +150,10 @@ const VocabularyReview: Component<Props> = (props) => {
     queue.due.map((entry) => ({ entry, kind: 'review' as const })),
     queue.fresh,
   )));
-  /** Progress before this session's first answer. "Descartar" puts it back. */
-  const checkpoint = saved?.checkpoint ?? charProgress.checkpoint();
+  /** What this session's answers changed, as it was before. "Descartar" puts it back. */
+  const checkpoint = saved?.checkpoint ? charProgress.resumeCheckpoint(saved.checkpoint) : charProgress.checkpoint();
+  // Changes made on other screens while the session is paused are not the session's to undo.
+  onCleanup(() => charProgress.closeCheckpoint(checkpoint));
   const [deck, setDeck] = createSignal<DeckCard[]>(initialDeck);
   const [position, setPosition] = createSignal(saved?.position ?? 0);
   const [revealed, setRevealed] = createSignal(skippedCurrent ? false : saved?.revealed ?? false);
@@ -352,7 +354,7 @@ const VocabularyReview: Component<Props> = (props) => {
     props.onBack();
   };
   const discardAndLeave = () => {
-    // Undo this session's answers, daily counts and streak included, then forget the session.
+    // Undo the records this session changed, daily counts and streak included, then forget the session.
     charProgress.rollback(checkpoint);
     if (!discardVocabularySession(props.practiceId)) { setError(true); setLeaving(false); return; }
     setFinished(true);

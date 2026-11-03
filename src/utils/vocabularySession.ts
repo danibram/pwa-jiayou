@@ -1,4 +1,5 @@
 import type { VocabularyEntry } from '../data/vocabulary';
+import { parseCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
 import { GRADES, type Grade } from '../domain/progress/types';
 import { isNonNegativeInteger, isOneOf, isRecord } from './parse';
 import { KEYS, PRACTICE_SESSION_PREFIX, practiceSessionKey } from '../persistence/keys';
@@ -23,8 +24,8 @@ export interface VocabularySessionSnapshot {
   results?: Record<string, Grade>;
   heading: string;
   mode?: 'today' | 'practice';
-  /** Progress as it was when the session began, so discarding can undo its answers. */
-  checkpoint?: string;
+  /** The records this session changed, as they were before it, so discarding can undo its answers. */
+  checkpoint?: ProgressCheckpoint;
 }
 
 export function hasStoredVocabularySession(practiceId?: string): boolean {
@@ -49,7 +50,7 @@ export function loadVocabularySession(entries: VocabularyEntry[], practiceId?: s
       if (!entry) throw new Error('Unavailable entry');
       deck.push({ entry, kind: card.kind, ...(card.prompt ? { prompt: card.prompt } : {}) });
     }
-    if (value.checkpoint !== undefined && typeof value.checkpoint !== 'string') throw new Error('Invalid checkpoint');
+    const checkpoint = value.checkpoint === undefined ? undefined : parseCheckpoint(value.checkpoint);
     if (!isNonNegativeInteger(value.position) || value.position >= deck.length || typeof value.revealed !== 'boolean' || !isOneOf(STEPS, value.step) || (value.feedback !== null && !isOneOf(GRADES, value.feedback)) || !isRecord(value.counts) || typeof value.heading !== 'string') throw new Error('Invalid session');
     const counts = { again: 0, hard: 0, good: 0 };
     for (const grade of GRADES) {
@@ -66,7 +67,7 @@ export function loadVocabularySession(entries: VocabularyEntry[], practiceId?: s
         results[id] = grade;
       }
     }
-    return { version: 1, deck, position: value.position, revealed: value.revealed, step: value.step, feedback: value.feedback, counts, ...(results ? { results } : {}), heading: value.heading, ...(value.mode ? { mode: value.mode } : {}), ...(typeof value.checkpoint === 'string' ? { checkpoint: value.checkpoint } : {}) };
+    return { version: 1, deck, position: value.position, revealed: value.revealed, step: value.step, feedback: value.feedback, counts, ...(results ? { results } : {}), heading: value.heading, ...(value.mode ? { mode: value.mode } : {}), ...(checkpoint ? { checkpoint } : {}) };
   } catch {
     try { storage.remove(sessionKey(practiceId)); } catch { /* Storage may be unavailable. */ }
     return null;
