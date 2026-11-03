@@ -18,7 +18,7 @@ const DAY_MS = 86_400_000;
 
 /** Word progress over `doc`, the same document progressStore uses for activity and checkpoints. */
 export const createVocabularyProgressStore = (doc: ProgressDocument) => {
-  const { state, setState, storageError, logActivity, missedBeforeEnrolment, save } = doc;
+  const { state, setState, storageError, writeRecord, logActivity, missedBeforeEnrolment, save } = doc;
   return {
     storageError,
     get(id: string): CharProgress | undefined { return state.words[id]; },
@@ -30,7 +30,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
     recoverWeak(id: string): boolean {
       const p = state.words[id];
       if (!isWeakProgress(p)) return false;
-      setState('words', id, { ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) });
+      writeRecord('words', id, { ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) });
       save();
       return true;
     },
@@ -41,7 +41,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
     introduce(id: string): void {
       if (!this.isNew(id)) return;
       const now = Date.now();
-      setState('words', id, { ...emptyProgress(), interval: 1, due: now + DAY_MS, lastSeen: now });
+      writeRecord('words', id, { ...emptyProgress(), interval: 1, due: now + DAY_MS, lastSeen: now });
       const daily = currentDaily(state.wordDaily);
       setState('wordDaily', { ...daily, introduced: daily.introduced + 1, streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
       logActivity();
@@ -53,7 +53,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
       const scheduled = schedule(state.words[id] ?? emptyProgress(), grade, now);
       // Missed earlier in this session, before it was enrolled: it starts out flojo.
       const missed = missedBeforeEnrolment.delete(id) && grade !== 'again';
-      setState('words', id, { ...scheduled, ...(missed ? { wrong: scheduled.wrong + 1, clean: 0 } : {}), lastSeen: now });
+      writeRecord('words', id, { ...scheduled, ...(missed ? { wrong: scheduled.wrong + 1, clean: 0 } : {}), lastSeen: now });
       const daily = currentDaily(state.wordDaily);
       setState('wordDaily', { ...daily, reviewed: daily.reviewed + 1, introduced: daily.introduced + (isNew ? 1 : 0), streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
       logActivity();
@@ -66,7 +66,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
         return;
       }
       const p = state.words[id];
-      setState('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), lastSeen: Date.now() });
+      writeRecord('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), lastSeen: Date.now() });
       // Practice counts on the calendar, the same as for characters.
       logActivity();
       save();

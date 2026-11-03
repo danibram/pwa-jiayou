@@ -213,4 +213,24 @@ describe('word review', () => {
     expect(vocabularyProgressStore.daily.reviewed).toBe(0);
     vi.useRealTimers();
   });
+
+  it('undoes answers given before a pause, and keeps a change made outside the session', () => {
+    vi.useFakeTimers();
+    vocabularyProgressStore.grade('word-other', 'good');
+    const view = render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    fireEvent.click(screen.getByRole('button', { name: '你好' }));
+    vi.advanceTimersByTime(1200);
+    view.unmount();
+    // Practice elsewhere while the session is paused.
+    vocabularyProgressStore.grade('word-other', 'again');
+    const outside = vocabularyProgressStore.get('word-other');
+    render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume />);
+    fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Descartar y salir' }));
+    expect(vocabularyProgressStore.isNew('word-one')).toBe(true);
+    expect(vocabularyProgressStore.get('word-other')).toEqual(outside);
+    vi.useRealTimers();
+  });
 });

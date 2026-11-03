@@ -1,5 +1,5 @@
 import { afterAnswer, schedule } from '../domain/progress/schedule';
-import { reconcile } from 'solid-js/store';
+import { reconcile, unwrap } from 'solid-js/store';
 import { parseProgress } from '../domain/progress/serialization';
 import {
   activityStreak,
@@ -15,6 +15,7 @@ import {
   WORD_NEW_PER_DAY,
 } from '../domain/progress/queue';
 import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+import { openCheckpoint, restoreCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
 import { emptyProgress, emptyState, progressDocument, serialize, type ProgressDocument } from './progressState';
 import { vocabularyProgressStore } from './vocabularyProgressStore';
 export { parseProgress } from '../domain/progress/serialization';
@@ -36,22 +37,34 @@ export const DAILY_GOAL = 20;
 /** The daily cap in words, for Home and word detail to explain it. */
 export const DAILY_NEW_RULE_TEXT = `${WORD_NEW_PER_DAY} palabras y ${CHAR_NEW_PER_DAY} caracteres nuevos al día`;
 
-/** Everything a session can change, taken when it starts so "descartar" can undo it. */
-export type ProgressCheckpoint = string;
+export type { ProgressCheckpoint } from '../domain/progress/checkpoint';
 
 /** The character store over `doc`. Tests pass a document of their own to start from clean progress. */
 export const createProgressStore = (doc: ProgressDocument) => {
-  const { state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, logActivity, missedBeforeEnrolment, save } = doc;
+  const { state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, openCheckpoints, logActivity, missedBeforeEnrolment, save } = doc;
   const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
-    setState('chars', char, fn(state.chars[char] ?? emptyProgress()));
+    writeRecord('chars', char, fn(state.chars[char] ?? emptyProgress()));
   };
 
   return {
     storageError,
 
-    /** Words and characters share one store, so one checkpoint covers both kinds of session. */
+    /**
+     * Starts noting what a session changes, so "descartar" can undo it. Words and characters share
+     * one document, so one checkpoint covers both. Close it when the session leaves the screen.
+     */
     checkpoint(): ProgressCheckpoint {
-      return serialize(state);
+      return this.resumeCheckpoint(openCheckpoint(state));
+    },
+
+    /** Keeps noting changes into a checkpoint saved with a paused session. */
+    resumeCheckpoint(checkpoint: ProgressCheckpoint): ProgressCheckpoint {
+      openCheckpoints.add(checkpoint);
+      return checkpoint;
+    },
+
+    closeCheckpoint(checkpoint: ProgressCheckpoint): void {
+      openCheckpoints.delete(checkpoint);
     },
 
     /** Answers and first looks per local day ("2026-11-01" → 34), oldest first, at most 120 days. */
@@ -59,10 +72,14 @@ export const createProgressStore = (doc: ProgressDocument) => {
       return state.activity;
     },
 
-    /** Puts progress, daily counts and streak back exactly as they were at `checkpoint()`. */
+    /**
+     * Puts the records the session changed, daily counts and the calendar back as they were at
+     * `checkpoint()`. Records it never touched keep whatever they hold now.
+     */
     rollback(checkpoint: ProgressCheckpoint): void {
+      openCheckpoints.delete(checkpoint);
       missedBeforeEnrolment.clear();
-      setState(reconcile(parseProgress(checkpoint)));
+      setState(reconcile(restoreCheckpoint(unwrap(state), checkpoint)));
       save();
     },
 
