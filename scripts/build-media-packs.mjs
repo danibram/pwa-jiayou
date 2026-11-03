@@ -14,6 +14,7 @@ import {
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { syllableKeysForRows } from './syllable-keys.mjs';
+import { contentManifest } from './content-manifest.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const strokeSource = join(root, 'node_modules/hanzi-writer-data');
@@ -101,3 +102,6 @@ const buildLevel = (level) => {
 
 mkdirSync(join(root, 'public/packs'), { recursive: true });
 for (const level of [2, 3, 4, 5, 6]) buildLevel(level);
+// Written last, over the files just built. Each pack's hash changes only when its own files do.
+writeFileSync(join(root, 'public/packs/content.json'), `${JSON.stringify(contentManifest(root), null, 2)}\n`, 'utf8');
+console.log('public/packs/content.json updated');

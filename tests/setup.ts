@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom';
+import { readFileSync } from 'node:fs';
 import { beforeEach } from 'vitest';
+
+// Vite writes the content manifest into the build; tests read the committed copy, which
+// tests/contentManifest.test.ts keeps equal to the files.
+Object.defineProperty(globalThis, '__CONTENT__', {
+  configurable: true,
+  value: JSON.parse(readFileSync(`${process.cwd()}/public/packs/content.json`, 'utf8')),
+});
 
 class MemoryStorage implements Storage {
   private items = new Map<string, string>();
