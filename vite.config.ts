@@ -1,8 +1,33 @@
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 import { VitePWA } from 'vite-plugin-pwa';
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const mediaHash = createHash('sha256');
+const hashDirectory = (directory: string) => {
+  for (const entry of readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) hashDirectory(path);
+    else { mediaHash.update(path); mediaHash.update(readFileSync(path)); }
+  }
+};
+hashDirectory('public/packs');
+hashDirectory('public/audio');
+const mediaCache = `hsk-packs-${mediaHash.digest('hex').slice(0, 12)}`;
 
 export default defineConfig({
+  define: { __MEDIA_CACHE__: JSON.stringify(mediaCache) },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/posthog-js/') || id.includes('/node_modules/@posthog/')) return 'posthog';
+        },
+      },
+    },
+  },
   plugins: [
     solid(),
     VitePWA({
@@ -38,15 +63,15 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,json,png,svg,ico,woff2,mp3}'],
         // Optional HSK lists are fetched into their own cache after the user asks for them.
-        globIgnores: ['**/packs/**'],
+        globIgnores: ['**/packs/**', '**/audio/**'],
         runtimeCaching: [
           {
             // The app saves pack clips into this cache itself; <audio> requests only see it through the worker.
             // Strokes and lists are read with caches.match and stay off this route.
-            urlPattern: ({ url }) => /^\/packs\/hsk\d\/audio\//.test(url.pathname),
+            urlPattern: ({ url }) => url.origin === self.location.origin && (/^\/packs\/hsk\d\/audio\//.test(url.pathname) || /^\/audio\//.test(url.pathname)),
             handler: 'CacheFirst',
             options: {
-              cacheName: 'hsk-packs-v2',
+              cacheName: mediaCache,
               rangeRequests: true,
               // A missing clip comes back as the HTML shell with status 200; never store that as audio.
               cacheableResponse: { statuses: [200], headers: { 'content-type': 'audio/mpeg' } },

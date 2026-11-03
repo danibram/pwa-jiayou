@@ -57,7 +57,7 @@ describe('clips for characters outside HSK', () => {
 });
 
 describe('offline media for own words', () => {
-  it('saves the strokes of a character outside HSK and leaves bundled clips to the app cache', async () => {
+  it('saves strokes and audio needed by an own word', async () => {
     const stored = new Map<string, Response>();
     vi.stubGlobal('caches', {
       open: async () => ({
@@ -68,6 +68,10 @@ describe('offline media for own words', () => {
     const fetched: string[] = [];
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       fetched.push(String(input));
+      const url = String(input);
+      if (/\/packs\/hsk\d\.json$/.test(url)) return new Response(readFileSync(`public${url}`, 'utf8'), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (url.endsWith('syllables.json')) return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (url.endsWith('.mp3')) return new Response('audio', { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
       return new Response('{"strokes":[],"medians":[]}', { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
     myWordsStore.add({ simplified: '咖喱', pinyin: 'ka1 li2', meaning: 'curry' });
@@ -75,7 +79,7 @@ describe('offline media for own words', () => {
     characterStore.reset();
     await prepareListMedia(['mine']);
     expect(fetched).toContain(remoteStrokeUrl('喱'));
-    expect(fetched.some((url) => url.includes('/audio/'))).toBe(false);
+    expect(fetched.some((url) => url.includes('/audio/'))).toBe(true);
     myWordsStore.reset();
   });
 });

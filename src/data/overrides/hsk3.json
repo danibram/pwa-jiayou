@@ -1,0 +1,1102 @@
+{
+  "只": {
+    "gloss": "solo; clasificador de animales",
+    "definition": "solo; únicamente; clasificador de animales, pájaros y objetos en pares",
+    "example": {
+      "word": "一只猫",
+      "pinyin": "yì zhī māo",
+      "es": "un gato"
+    }
+  },
+  "把": {
+    "gloss": "marca de objeto; clasificador con mango",
+    "definition": "marca de objeto (construcción 把); clasificador de objetos con mango o asa"
+  },
+  "张": {
+    "gloss": "clasificador de objetos planos",
+    "definition": "clasificador de objetos planos; estirar; extender",
+    "example": {
+      "word": "一张纸",
+      "pinyin": "yì zhāng zhǐ",
+      "es": "una hoja de papel"
+    }
+  },
+  "片": {
+    "gloss": "trozo; clasificador de láminas",
+    "definition": "trozo; clasificador de láminas"
+  },
+  "句": {
+    "gloss": "frase; clasificador de oraciones",
+    "definition": "frase; clasificador de oraciones"
+  },
+  "双": {
+    "gloss": "par; clasificador de pares",
+    "definition": "par; clasificador de pares",
+    "example": {
+      "word": "一双鞋",
+      "pinyin": "yì shuāng xié",
+      "es": "un par de zapatos"
+    }
+  },
+  "辆": {
+    "gloss": "clasificador de vehículos",
+    "definition": "clasificador de vehículos"
+  },
+  "朵": {
+    "gloss": "clasificador de flores",
+    "definition": "clasificador de flores"
+  },
+  "位": {
+    "gloss": "clasificador cortés; puesto",
+    "definition": "clasificador cortés; puesto"
+  },
+  "鸟": {
+    "definition": "pájaro",
+    "gloss": "pájaro"
+  },
+  "鼻": {
+    "definition": "nariz",
+    "gloss": "nariz"
+  },
+  "斤": {
+    "definition": "jin (medio kilo)",
+    "gloss": "jin (medio kilo)"
+  },
+  "根": {
+    "gloss": "raíz; clasificador de objetos alargados",
+    "definition": "raíz; clasificador de objetos alargados",
+    "example": {
+      "word": "一根",
+      "pinyin": "yì gēn",
+      "es": "una unidad (alargada)"
+    }
+  },
+  "地": {
+    "definition": "partícula adverbial; tierra; suelo",
+    "gloss": "(partícula adverbial)"
+  },
+  "而": {
+    "definition": "y; pero; sin embargo",
+    "gloss": "y; pero"
+  },
+  "于": {
+    "definition": "en; a; sobre",
+    "gloss": "en; a; sobre"
+  },
+  "自": {
+    "definition": "uno mismo; desde",
+    "gloss": "uno mismo; desde"
+  },
+  "发": {
+    "definition": "enviar; emitir; repartir",
+    "gloss": "enviar; emitir"
+  },
+  "用": {
+    "definition": "usar",
+    "gloss": "usar"
+  },
+  "行": {
+    "definition": "ir; vale, bien; capaz",
+    "gloss": "ir; vale, bien"
+  },
+  "种": {
+    "definition": "tipo; clase; clasificador de variedades; plantar",
+    "gloss": "tipo; clase; plantar"
+  },
+  "成": {
+    "definition": "convertirse; lograr; completar",
+    "gloss": "convertirse; lograr"
+  },
+  "方": {
+    "definition": "lado; lugar; cuadrado",
+    "gloss": "lado; lugar; cuadrado"
+  },
+  "法": {
+    "definition": "método; ley",
+    "gloss": "método; ley"
+  },
+  "如": {
+    "definition": "si; como",
+    "gloss": "si; como"
+  },
+  "当": {
+    "definition": "ser; cuando; ejercer de",
+    "gloss": "ser; cuando; ejercer"
+  },
+  "定": {
+    "definition": "fijar; decidir",
+    "gloss": "fijar; decidir"
+  },
+  "其": {
+    "definition": "su; ese",
+    "gloss": "su; ese"
+  },
+  "主": {
+    "definition": "principal; dueño",
+    "gloss": "principal; dueño"
+  },
+  "理": {
+    "definition": "razón; ordenar; gestionar",
+    "gloss": "razón; ordenar"
+  },
+  "心": {
+    "definition": "corazón; mente",
+    "gloss": "corazón; mente"
+  },
+  "实": {
+    "definition": "real; verdadero",
+    "gloss": "real; verdadero"
+  },
+  "者": {
+    "definition": "el que…; sufijo de agente",
+    "gloss": "(sufijo: el que hace)"
+  },
+  "力": {
+    "definition": "fuerza; poder",
+    "gloss": "fuerza; poder"
+  },
+  "又": {
+    "definition": "otra vez; y además",
+    "gloss": "otra vez; y además"
+  },
+  "业": {
+    "definition": "trabajo; estudios; profesión",
+    "gloss": "trabajo; estudios"
+  },
+  "重": {
+    "definition": "pesado; importante",
+    "gloss": "pesado; importante"
+  },
+  "物": {
+    "definition": "cosa; objeto",
+    "gloss": "cosa; ser"
+  },
+  "应": {
+    "definition": "deber; debería",
+    "gloss": "deber"
+  },
+  "向": {
+    "definition": "hacia; dirección",
+    "gloss": "hacia; dirección"
+  },
+  "头": {
+    "definition": "cabeza; extremo",
+    "gloss": "cabeza; extremo"
+  },
+  "文": {
+    "definition": "escritura; cultura",
+    "gloss": "escritura; cultura"
+  },
+  "相": {
+    "definition": "mutuamente; aspecto",
+    "gloss": "mutuamente"
+  },
+  "被": {
+    "definition": "voz pasiva; manta",
+    "gloss": "(voz pasiva); manta"
+  },
+  "或": {
+    "definition": "o; quizá",
+    "gloss": "o"
+  },
+  "己": {
+    "definition": "uno mismo",
+    "gloss": "uno mismo"
+  },
+  "加": {
+    "definition": "añadir; sumar",
+    "gloss": "añadir; sumar"
+  },
+  "特": {
+    "definition": "especial",
+    "gloss": "especial"
+  },
+  "信": {
+    "definition": "carta; creer; confiar",
+    "gloss": "carta; creer"
+  },
+  "化": {
+    "definition": "cambiar; -izar",
+    "gloss": "cambiar; -izar"
+  },
+  "世": {
+    "definition": "mundo; generación",
+    "gloss": "mundo; generación"
+  },
+  "声": {
+    "definition": "sonido; voz",
+    "gloss": "sonido; voz"
+  },
+  "提": {
+    "definition": "levantar; mencionar",
+    "gloss": "levantar; mencionar"
+  },
+  "解": {
+    "definition": "explicar; soltar",
+    "gloss": "explicar; soltar"
+  },
+  "口": {
+    "definition": "boca; entrada",
+    "gloss": "boca; entrada"
+  },
+  "平": {
+    "definition": "plano; tranquilo",
+    "gloss": "plano; tranquilo"
+  },
+  "更": {
+    "definition": "más; aún más",
+    "gloss": "más; aún más"
+  },
+  "变": {
+    "definition": "cambiar",
+    "gloss": "cambiar"
+  },
+  "总": {
+    "definition": "siempre; total",
+    "gloss": "siempre; total"
+  },
+  "数": {
+    "definition": "número; cifra",
+    "gloss": "número; cifra"
+  },
+  "安": {
+    "definition": "seguro; tranquilo",
+    "gloss": "seguro; tranquilo"
+  },
+  "才": {
+    "definition": "solo entonces; talento",
+    "gloss": "solo entonces; talento"
+  },
+  "结": {
+    "definition": "atar; terminar",
+    "gloss": "atar; terminar"
+  },
+  "目": {
+    "definition": "ojo; objetivo",
+    "gloss": "ojo; objetivo"
+  },
+  "感": {
+    "definition": "sentir",
+    "gloss": "sentir"
+  },
+  "接": {
+    "definition": "recibir; recoger",
+    "gloss": "recibir; recoger"
+  },
+  "必": {
+    "definition": "necesariamente; debe",
+    "gloss": "necesariamente"
+  },
+  "市": {
+    "definition": "ciudad; mercado",
+    "gloss": "ciudad; mercado"
+  },
+  "直": {
+    "definition": "recto; directo",
+    "gloss": "recto; directo"
+  },
+  "山": {
+    "definition": "montaña",
+    "gloss": "montaña"
+  },
+  "空": {
+    "definition": "vacío; aire; cielo",
+    "gloss": "vacío; aire; cielo"
+  },
+  "决": {
+    "definition": "decidir",
+    "gloss": "decidir"
+  },
+  "马": {
+    "definition": "caballo",
+    "gloss": "caballo"
+  },
+  "界": {
+    "definition": "límite; mundo",
+    "gloss": "límite; mundo"
+  },
+  "放": {
+    "definition": "poner; soltar",
+    "gloss": "poner; soltar"
+  },
+  "像": {
+    "definition": "parecerse; como",
+    "gloss": "parecerse; como"
+  },
+  "且": {
+    "definition": "además",
+    "gloss": "además"
+  },
+  "难": {
+    "definition": "difícil",
+    "gloss": "difícil"
+  },
+  "记": {
+    "definition": "recordar; anotar",
+    "gloss": "recordar; anotar"
+  },
+  "南": {
+    "definition": "sur",
+    "gloss": "sur"
+  },
+  "求": {
+    "definition": "pedir; buscar",
+    "gloss": "pedir; buscar"
+  },
+  "据": {
+    "definition": "según; basarse en",
+    "gloss": "según; basarse en"
+  },
+  "该": {
+    "definition": "deber; tocar a alguien",
+    "gloss": "deber; tocar a alguien"
+  },
+  "万": {
+    "definition": "diez mil",
+    "gloss": "diez mil"
+  },
+  "清": {
+    "definition": "claro; limpio",
+    "gloss": "claro; limpio"
+  },
+  "带": {
+    "definition": "llevar; traer; cinta; zona",
+    "gloss": "llevar; traer; cinta"
+  },
+  "风": {
+    "definition": "viento",
+    "gloss": "viento"
+  },
+  "干": {
+    "definition": "hacer; trabajar",
+    "gloss": "hacer; trabajar"
+  },
+  "极": {
+    "definition": "extremo; sumamente",
+    "gloss": "extremo; sumamente"
+  },
+  "办": {
+    "definition": "hacer; gestionar",
+    "gloss": "hacer; gestionar"
+  },
+  "议": {
+    "definition": "discutir; opinión",
+    "gloss": "discutir; opinión"
+  },
+  "元": {
+    "definition": "yuan; primero",
+    "gloss": "yuan; primero"
+  },
+  "单": {
+    "definition": "solo; lista",
+    "gloss": "solo; lista"
+  },
+  "调": {
+    "definition": "tono; trasladar",
+    "gloss": "tono; trasladar"
+  },
+  "算": {
+    "definition": "calcular; considerar",
+    "gloss": "calcular; considerar"
+  },
+  "需": {
+    "definition": "necesitar",
+    "gloss": "necesitar"
+  },
+  "花": {
+    "definition": "flor; gastar",
+    "gloss": "flor; gastar"
+  },
+  "城": {
+    "definition": "ciudad; muralla",
+    "gloss": "ciudad; muralla"
+  },
+  "级": {
+    "definition": "nivel; curso",
+    "gloss": "nivel; curso"
+  },
+  "复": {
+    "definition": "repetir; volver",
+    "gloss": "repetir; volver"
+  },
+  "满": {
+    "definition": "lleno; satisfecho",
+    "gloss": "lleno; satisfecho"
+  },
+  "越": {
+    "definition": "cuanto más; superar",
+    "gloss": "cuanto más; superar"
+  },
+  "容": {
+    "definition": "contener; aspecto",
+    "gloss": "contener; aspecto"
+  },
+  "照": {
+    "definition": "foto; alumbrar; según",
+    "gloss": "foto; alumbrar"
+  },
+  "须": {
+    "definition": "deber; barba",
+    "gloss": "deber; barba"
+  },
+  "包": {
+    "definition": "bolsa; envolver",
+    "gloss": "bolsa; envolver"
+  },
+  "史": {
+    "definition": "historia",
+    "gloss": "historia"
+  },
+  "乎": {
+    "definition": "partícula; en 几乎",
+    "gloss": "(partícula; en 几乎)"
+  },
+  "查": {
+    "definition": "revisar; investigar; buscar",
+    "gloss": "revisar; buscar"
+  },
+  "轻": {
+    "definition": "ligero; joven",
+    "gloss": "ligero; joven"
+  },
+  "易": {
+    "definition": "fácil; cambiar",
+    "gloss": "fácil; cambiar"
+  },
+  "除": {
+    "definition": "quitar; excepto",
+    "gloss": "quitar; excepto"
+  },
+  "阿": {
+    "definition": "prefijo familiar (阿哥, 阿姨)",
+    "gloss": "(prefijo familiar)"
+  },
+  "李": {
+    "definition": "ciruela; apellido Li",
+    "gloss": "ciruela; li (apellido)"
+  },
+  "图": {
+    "definition": "imagen; mapa",
+    "gloss": "imagen; mapa"
+  },
+  "历": {
+    "definition": "historia; pasar por",
+    "gloss": "historia; pasar por"
+  },
+  "突": {
+    "definition": "de repente",
+    "gloss": "de repente"
+  },
+  "周": {
+    "definition": "semana; alrededor",
+    "gloss": "semana; alrededor"
+  },
+  "较": {
+    "definition": "bastante; comparar",
+    "gloss": "bastante; comparar"
+  },
+  "注": {
+    "definition": "prestar atención; anotar",
+    "gloss": "prestar atención"
+  },
+  "选": {
+    "definition": "elegir",
+    "gloss": "elegir"
+  },
+  "响": {
+    "definition": "sonar; ruido",
+    "gloss": "sonar; ruidoso"
+  },
+  "参": {
+    "definition": "participar",
+    "gloss": "participar"
+  },
+  "半": {
+    "definition": "medio; mitad",
+    "gloss": "medio; mitad"
+  },
+  "节": {
+    "definition": "fiesta; sección; clasificador de tramos o clases",
+    "gloss": "fiesta; sección"
+  },
+  "护": {
+    "definition": "proteger",
+    "gloss": "proteger"
+  },
+  "音": {
+    "definition": "sonido",
+    "gloss": "sonido"
+  },
+  "跟": {
+    "definition": "con; seguir",
+    "gloss": "con; seguir"
+  },
+  "留": {
+    "definition": "quedarse; dejar",
+    "gloss": "quedarse; dejar"
+  },
+  "讲": {
+    "definition": "hablar; explicar",
+    "gloss": "hablar; explicar"
+  },
+  "料": {
+    "definition": "material",
+    "gloss": "material"
+  },
+  "终": {
+    "definition": "fin; final",
+    "gloss": "fin; final"
+  },
+  "答": {
+    "definition": "responder",
+    "gloss": "responder"
+  },
+  "黄": {
+    "definition": "amarillo",
+    "gloss": "amarillo"
+  },
+  "奇": {
+    "definition": "extraño",
+    "gloss": "extraño"
+  },
+  "段": {
+    "definition": "tramo; periodo",
+    "gloss": "tramo; periodo"
+  },
+  "故": {
+    "definition": "motivo; antiguo",
+    "gloss": "motivo; antiguo"
+  },
+  "河": {
+    "definition": "río",
+    "gloss": "río"
+  },
+  "害": {
+    "definition": "dañar",
+    "gloss": "dañar"
+  },
+  "境": {
+    "definition": "entorno; frontera",
+    "gloss": "entorno; frontera"
+  },
+  "愿": {
+    "definition": "desear; querer; estar dispuesto",
+    "gloss": "desear; querer"
+  },
+  "网": {
+    "definition": "red; internet",
+    "gloss": "red; internet"
+  },
+  "育": {
+    "definition": "educar; criar",
+    "gloss": "educar; criar"
+  },
+  "船": {
+    "definition": "barco",
+    "gloss": "barco"
+  },
+  "脸": {
+    "definition": "cara",
+    "gloss": "cara"
+  },
+  "刻": {
+    "definition": "cuarto de hora; tallar",
+    "gloss": "cuarto de hora; tallar"
+  },
+  "刚": {
+    "definition": "acabar de; justo",
+    "gloss": "acabar de; justo"
+  },
+  "般": {
+    "definition": "clase; manera",
+    "gloss": "clase; manera"
+  },
+  "怕": {
+    "definition": "temer",
+    "gloss": "temer"
+  },
+  "假": {
+    "definition": "falso",
+    "gloss": "falso"
+  },
+  "久": {
+    "definition": "mucho tiempo",
+    "gloss": "mucho tiempo"
+  },
+  "拿": {
+    "definition": "coger; llevar",
+    "gloss": "coger; llevar"
+  },
+  "阳": {
+    "definition": "sol; yang",
+    "gloss": "sol; yang"
+  },
+  "急": {
+    "definition": "urgente; ansioso",
+    "gloss": "urgente; ansioso"
+  },
+  "居": {
+    "definition": "vivir, residir",
+    "gloss": "vivir, residir"
+  },
+  "环": {
+    "definition": "anillo; rodear",
+    "gloss": "anillo; rodear"
+  },
+  "树": {
+    "definition": "árbol",
+    "gloss": "árbol"
+  },
+  "层": {
+    "definition": "piso; capa",
+    "gloss": "piso; capa"
+  },
+  "简": {
+    "definition": "simple",
+    "gloss": "simple"
+  },
+  "卡": {
+    "definition": "tarjeta",
+    "gloss": "tarjeta"
+  },
+  "担": {
+    "definition": "cargar; asumir",
+    "gloss": "cargar; asumir"
+  },
+  "静": {
+    "definition": "silencioso; tranquilo",
+    "gloss": "silencioso; tranquilo"
+  },
+  "检": {
+    "definition": "revisar; inspeccionar",
+    "gloss": "revisar"
+  },
+  "差": {
+    "definition": "malo; faltar; incorrecto",
+    "gloss": "faltar; malo"
+  },
+  "角": {
+    "definition": "ángulo; esquina",
+    "gloss": "ángulo; esquina"
+  },
+  "皮": {
+    "definition": "piel; cuero",
+    "gloss": "piel; cuero"
+  },
+  "啊": {
+    "definition": "partícula exclamativa",
+    "gloss": "(partícula exclamativa)"
+  },
+  "超": {
+    "definition": "superar",
+    "gloss": "superar"
+  },
+  "银": {
+    "definition": "plata",
+    "gloss": "plata"
+  },
+  "怪": {
+    "definition": "raro; culpar",
+    "gloss": "raro; culpar"
+  },
+  "香": {
+    "definition": "fragante; rico",
+    "gloss": "fragante; rico"
+  },
+  "铁": {
+    "definition": "hierro",
+    "gloss": "hierro"
+  },
+  "草": {
+    "definition": "hierba",
+    "gloss": "hierba"
+  },
+  "脚": {
+    "definition": "pie",
+    "gloss": "pie"
+  },
+  "酒": {
+    "definition": "alcohol; vino",
+    "gloss": "alcohol; vino"
+  },
+  "顾": {
+    "definition": "cuidar; mirar",
+    "gloss": "cuidar; mirar"
+  },
+  "换": {
+    "definition": "cambiar",
+    "gloss": "cambiar"
+  },
+  "闻": {
+    "definition": "oler; oír; noticia",
+    "gloss": "oler; oír"
+  },
+  "坏": {
+    "definition": "malo; roto",
+    "gloss": "malo; roto"
+  },
+  "楚": {
+    "definition": "claro (en 清楚); antiguo reino Chu",
+    "gloss": "claro (en 清楚)"
+  },
+  "楼": {
+    "definition": "edificio; planta",
+    "gloss": "edificio; planta"
+  },
+  "画": {
+    "definition": "dibujar; cuadro",
+    "gloss": "dibujar; cuadro"
+  },
+  "耳": {
+    "definition": "oreja",
+    "gloss": "oreja"
+  },
+  "短": {
+    "definition": "corto",
+    "gloss": "corto"
+  },
+  "遇": {
+    "definition": "encontrarse con",
+    "gloss": "encontrarse con"
+  },
+  "康": {
+    "definition": "salud; bienestar",
+    "gloss": "salud"
+  },
+  "旧": {
+    "definition": "viejo; usado",
+    "gloss": "viejo; usado"
+  },
+  "春": {
+    "definition": "primavera",
+    "gloss": "primavera"
+  },
+  "附": {
+    "definition": "cerca; adjuntar",
+    "gloss": "cerca; adjuntar"
+  },
+  "礼": {
+    "definition": "regalo; cortesía; ritual",
+    "gloss": "regalo; cortesía"
+  },
+  "板": {
+    "definition": "tabla; pizarra",
+    "gloss": "tabla; pizarra"
+  },
+  "婚": {
+    "definition": "boda; matrimonio",
+    "gloss": "boda; matrimonio"
+  },
+  "鲜": {
+    "definition": "fresco",
+    "gloss": "fresco"
+  },
+  "词": {
+    "definition": "palabra",
+    "gloss": "palabra"
+  },
+  "择": {
+    "definition": "elegir",
+    "gloss": "elegir"
+  },
+  "健": {
+    "definition": "sano; fuerte",
+    "gloss": "sano; fuerte"
+  },
+  "借": {
+    "definition": "prestar; pedir prestado",
+    "gloss": "prestar; pedir prestado"
+  },
+  "园": {
+    "definition": "jardín; parque",
+    "gloss": "jardín; parque"
+  },
+  "牙": {
+    "definition": "diente",
+    "gloss": "diente"
+  },
+  "束": {
+    "definition": "atar; ramo",
+    "gloss": "atar; ramo"
+  },
+  "练": {
+    "definition": "practicar",
+    "gloss": "practicar"
+  },
+  "爷": {
+    "definition": "abuelo",
+    "gloss": "abuelo"
+  },
+  "嘴": {
+    "definition": "boca",
+    "gloss": "boca"
+  },
+  "戏": {
+    "definition": "juego; teatro; obra",
+    "gloss": "juego; teatro"
+  },
+  "典": {
+    "definition": "clásico; norma",
+    "gloss": "clásico; norma"
+  },
+  "盘": {
+    "definition": "plato; bandeja",
+    "gloss": "plato; bandeja"
+  },
+  "忘": {
+    "definition": "olvidar",
+    "gloss": "olvidar"
+  },
+  "赛": {
+    "definition": "competición; competir",
+    "gloss": "competición"
+  },
+  "趣": {
+    "definition": "interés; gracia",
+    "gloss": "interés; gracia"
+  },
+  "迎": {
+    "definition": "recibir; dar bienvenida",
+    "gloss": "recibir; dar bienvenida"
+  },
+  "冰": {
+    "definition": "hielo",
+    "gloss": "hielo"
+  },
+  "努": {
+    "definition": "esforzarse",
+    "gloss": "esforzarse"
+  },
+  "绿": {
+    "definition": "verde",
+    "gloss": "verde"
+  },
+  "街": {
+    "definition": "calle",
+    "gloss": "calle"
+  },
+  "灯": {
+    "definition": "lámpara; luz",
+    "gloss": "lámpara; luz"
+  },
+  "夏": {
+    "definition": "verano",
+    "gloss": "verano"
+  },
+  "秋": {
+    "definition": "otoño",
+    "gloss": "otoño"
+  },
+  "末": {
+    "definition": "final",
+    "gloss": "final"
+  },
+  "蓝": {
+    "definition": "azul",
+    "gloss": "azul"
+  },
+  "烧": {
+    "definition": "quemar; cocinar",
+    "gloss": "quemar; cocinar"
+  },
+  "哭": {
+    "definition": "llorar",
+    "gloss": "llorar"
+  },
+  "冒": {
+    "definition": "emitir; arriesgarse; fingir",
+    "gloss": "emitir; arriesgarse"
+  },
+  "惯": {
+    "definition": "acostumbrarse; hábito",
+    "gloss": "acostumbrarse"
+  },
+  "季": {
+    "definition": "estación; temporada",
+    "gloss": "estación; temporada"
+  },
+  "腿": {
+    "definition": "pierna",
+    "gloss": "pierna"
+  },
+  "迟": {
+    "definition": "tarde; lento",
+    "gloss": "tarde; lento"
+  },
+  "净": {
+    "definition": "limpio",
+    "gloss": "limpio"
+  },
+  "冬": {
+    "definition": "invierno",
+    "gloss": "invierno"
+  },
+  "骑": {
+    "definition": "montar (bici, caballo)",
+    "gloss": "montar (bici, caballo)"
+  },
+  "叔": {
+    "definition": "tío",
+    "gloss": "tío"
+  },
+  "爬": {
+    "definition": "trepar; subir",
+    "gloss": "trepar; subir"
+  },
+  "扫": {
+    "definition": "barrer",
+    "gloss": "barrer"
+  },
+  "箱": {
+    "definition": "caja; maleta",
+    "gloss": "caja; maleta"
+  },
+  "舒": {
+    "definition": "cómodo; estirar",
+    "gloss": "cómodo; estirar"
+  },
+  "绩": {
+    "definition": "logro; resultado",
+    "gloss": "logro; resultado"
+  },
+  "饮": {
+    "definition": "beber",
+    "gloss": "beber"
+  },
+  "鞋": {
+    "definition": "zapato",
+    "gloss": "zapato"
+  },
+  "邮": {
+    "definition": "correo",
+    "gloss": "correo"
+  },
+  "邻": {
+    "definition": "vecino",
+    "gloss": "vecino"
+  },
+  "聪": {
+    "definition": "listo; oído fino",
+    "gloss": "listo; oído fino"
+  },
+  "梯": {
+    "definition": "escalera",
+    "gloss": "escalera"
+  },
+  "瓶": {
+    "definition": "botella",
+    "gloss": "botella"
+  },
+  "疼": {
+    "definition": "doler; querer mucho",
+    "gloss": "doler"
+  },
+  "熊": {
+    "definition": "oso",
+    "gloss": "oso"
+  },
+  "帽": {
+    "definition": "sombrero; gorra",
+    "gloss": "sombrero; gorra"
+  },
+  "炼": {
+    "definition": "refinar; forjar",
+    "gloss": "refinar; forjar"
+  },
+  "搬": {
+    "definition": "mover; mudarse",
+    "gloss": "mover; mudarse"
+  },
+  "刷": {
+    "definition": "cepillar; cepillo",
+    "gloss": "cepillar; cepillo"
+  },
+  "瘦": {
+    "definition": "delgado",
+    "gloss": "delgado"
+  },
+  "胖": {
+    "definition": "gordo",
+    "gloss": "gordo"
+  },
+  "饿": {
+    "definition": "hambriento",
+    "gloss": "hambriento"
+  },
+  "聊": {
+    "definition": "charlar",
+    "gloss": "charlar"
+  },
+  "碗": {
+    "definition": "cuenco",
+    "gloss": "cuenco"
+  },
+  "渴": {
+    "definition": "sediento",
+    "gloss": "sediento"
+  },
+  "饱": {
+    "definition": "lleno, saciado",
+    "gloss": "lleno, saciado"
+  },
+  "甜": {
+    "definition": "dulce",
+    "gloss": "dulce"
+  },
+  "矮": {
+    "definition": "bajo (de estatura)",
+    "gloss": "bajo (de estatura)"
+  },
+  "裤": {
+    "definition": "pantalón",
+    "gloss": "pantalón"
+  },
+  "衫": {
+    "definition": "camisa; prenda",
+    "gloss": "camisa; prenda"
+  },
+  "伞": {
+    "definition": "paraguas",
+    "gloss": "paraguas"
+  },
+  "姨": {
+    "definition": "tía materna",
+    "gloss": "tía (materna)"
+  },
+  "刮": {
+    "definition": "soplar (viento); afeitar; raspar",
+    "gloss": "soplar; afeitar"
+  },
+  "糕": {
+    "definition": "pastel",
+    "gloss": "pastel"
+  },
+  "裙": {
+    "definition": "falda",
+    "gloss": "falda"
+  },
+  "衬": {
+    "definition": "forro; camisa (en 衬衫)",
+    "gloss": "forro; de debajo"
+  },
+  "锻": {
+    "definition": "forjar",
+    "gloss": "forjar"
+  },
+  "澡": {
+    "definition": "bañarse",
+    "gloss": "bañarse"
+  },
+  "啤": {
+    "definition": "cerveza (en 啤酒)",
+    "gloss": "cerveza (en 啤酒)"
+  },
+  "蕉": {
+    "definition": "plátano (en 香蕉)",
+    "gloss": "plátano (en 香蕉)"
+  },
+  "筷": {
+    "definition": "palillos",
+    "gloss": "palillos"
+  }
+}

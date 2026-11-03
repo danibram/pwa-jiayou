@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "hanzi-writer": "^3.7.3",
+    "posthog-js": "^1.444.4",
     "solid-js": "^1.8.7"
   },
   "devDependencies": {

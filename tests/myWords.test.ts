@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { listLabel, wordsInLists } from '../src/data/lists';
 import { allWords, charactersOfOwnTopicWords, findWord, myWordsStore } from '../src/stores/myWordsStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
@@ -20,6 +20,15 @@ describe('markTones', () => {
 });
 
 describe('Mis palabras', () => {
+  it('warns when saving fails and clears the warning after retry', () => {
+    const write = vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new Error('full'); });
+    myWordsStore.add({ simplified: '奶茶', pinyin: 'nai3 cha2', meaning: 'té con leche' });
+    expect(myWordsStore.storageError()).toBe(true);
+    write.mockRestore();
+    myWordsStore.retrySave();
+    expect(myWordsStore.storageError()).toBe(false);
+    expect(localStorage.getItem('jiayou-my-words')).toContain('奶茶');
+  });
   it('stores a word outside HSK and finds it everywhere', () => {
     const { word, inCatalog } = myWordsStore.add({ simplified: '奶茶', pinyin: 'nai3 cha2', meaning: 'té con leche' });
     expect(inCatalog).toBe(false);

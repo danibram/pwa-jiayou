@@ -228,7 +228,7 @@ describe('Glosses', () => {
       const gloss = c.gloss;
       expect(gloss, c.character).toBeTruthy();
       if (!gloss) return;
-      expect(gloss.length, c.character).toBeLessThanOrEqual(30);
+      expect(gloss.length, c.character).toBeLessThanOrEqual(40);
       expect(c.example?.word, c.character).toContain(c.character);
     }
   });

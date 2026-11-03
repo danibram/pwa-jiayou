@@ -6,10 +6,17 @@ import { vocabularyStore } from '../stores/vocabularyStore';
 import type { HskLevel } from '../types';
 import { isHskLevel } from './parse';
 import { pinyinParts, syllableKey } from './pinyin';
+import { createSignal } from 'solid-js';
+import clips from '../data/syllable-clips.json';
+import cmnClips from '../data/syllable-clips-cmn.json';
 
 const INSTALL_KEY = 'hsk-installed-levels';
-/** Bump when cached pack URLs may hold bad bodies (e.g. HTML for missing mp3). The service worker reads this cache too. */
-export const CACHE_NAME = 'hsk-packs-v2';
+export const CACHE_NAME = typeof __MEDIA_CACHE__ === 'string' ? __MEDIA_CACHE__ : 'hsk-packs-test';
+const bundledClips = new Set(clips);
+const mainlandClips = new Set(cmnClips);
+type DownloadState = { state: 'idle' | 'downloading' | 'ready' | 'error'; done: number; total: number };
+const [downloadState, setDownloadState] = createSignal<DownloadState>({ state: 'idle', done: 0, total: 0 });
+export { downloadState };
 const USED_KEYS = ['hsk-flashcards-progress', 'hsk-flashcards-stats', 'jiayou-session-v1'];
 const VOICES = ['f', 'm', 'c'] as const;
 /** Parallel media requests. Thousands at once stall a phone on a slow connection. */
@@ -91,6 +98,21 @@ const openCache = async (): Promise<Cache | null> => {
   }
 };
 
+const previousCopy = async (url: string, cache: Cache | null): Promise<Response | undefined> => {
+  if (!cache || typeof caches.keys !== 'function') return undefined;
+  for (const name of (await caches.keys()).filter((item) => item.startsWith('hsk-packs-') && item !== CACHE_NAME).reverse()) {
+    const hit = await (await caches.open(name)).match(url);
+    if (hit) {
+      const headers = new Headers(hit.headers);
+      headers.set('x-jiayou-stale', '1');
+      const stale = new Response(await hit.arrayBuffer(), { status: hit.status, statusText: hit.statusText, headers });
+      await cache.put(url, stale.clone());
+      return stale;
+    }
+  }
+  return undefined;
+};
+
 const isCacheableMedia = (url: string, response: Response) => {
   if (!response.ok) return false;
   const type = response.headers.get('content-type') ?? '';
@@ -106,25 +128,29 @@ const isCacheableMedia = (url: string, response: Response) => {
 /** Save `urls` that are not cached yet, a few at a time. A missing stroke or clip does not stop the rest. */
 const cacheUrls = async (urls: string[], onProgress?: PackProgress) => {
   const cache = await openCache();
-  if (!cache) return;
+  if (!cache) throw new Error('El navegador no permite guardar archivos sin conexión.');
   let next = 0;
   let done = 0;
+  let failed = 0;
   onProgress?.(0, urls.length);
   const worker = async () => {
     while (next < urls.length) {
       const url = urls[next++];
       try {
-        if (!(await cache.match(url))) {
+        const hit = await cache.match(url);
+        if (!hit || hit.headers.get('x-jiayou-stale')) {
           const response = await fetch(url);
-          if (isCacheableMedia(url, response)) await cache.put(url, response.clone());
+          if (!isCacheableMedia(url, response)) throw new Error('Archivo no disponible');
+          await cache.put(url, response.clone());
         }
       } catch {
-        // Offline or missing: the word still works with the browser voice.
+        try { if (!(await previousCopy(url, cache))) failed++; } catch { failed++; }
       }
       onProgress?.(++done, urls.length);
     }
   };
   await Promise.all(Array.from({ length: Math.min(PARALLEL, urls.length) }, worker));
+  if (failed) throw new Error(`No se pudieron guardar ${failed} archivos.`);
 };
 
 /** The clip list of a pack, from the cache first so audio still resolves offline. */
@@ -134,16 +160,22 @@ const registerSyllables = async (level: HskLevel) => {
   try {
     const cache = await openCache();
     let response = cache ? await cache.match(url) : undefined;
-    if (!response) {
-      const fetched = await fetch(url);
-      if (!fetched.ok) return;
+    if (!response || response.headers.get('x-jiayou-stale')) {
+      const stale = response;
+      let fetched: Response;
+      try { fetched = await fetch(url); } catch {
+        const old = await previousCopy(url, cache);
+        if (!old && !stale) throw new Error('Índice de audio no disponible');
+        fetched = (old ?? stale)!;
+      }
+      if (!fetched.ok) throw new Error('Índice de audio no disponible');
       if (cache && isCacheableMedia(url, fetched)) await cache.put(url, fetched.clone());
       response = fetched;
     }
     const keys: unknown = await response.json();
     if (Array.isArray(keys)) packSyllables.set(level, new Set(keys.filter((key): key is string => typeof key === 'string')));
   } catch {
-    // Offline before the list was ever saved: those words use the browser voice.
+    throw new Error(`No se pudo preparar el audio de HSK ${level}.`);
   }
 };
 
@@ -174,15 +206,25 @@ const wordMediaUrls = (words: readonly VocabularyEntry[]): string[] => {
     const aligned = parts.length === word.characters.length;
     word.characters.forEach((char, index) => {
       const level = characterLevel(char);
+      const keys = [aligned ? syllableKey(parts[index].syllable) : null, citationKey(char)];
+      for (const key of new Set(keys)) {
+        if (!key || !bundledClips.has(key)) continue;
+        for (const voice of VOICES) {
+          const actualVoice = voice === 'c' && !mainlandClips.has(key) ? 'f' : voice;
+          urls.add(`${base()}audio/${actualVoice}/${key}.mp3`);
+        }
+      }
       // Outside HSK: no pack and no clip, but the strokes can still be saved for offline use.
       if (!level) urls.add(remoteStrokeUrl(char));
       if (!level || !downloadable(level)) return;
       const root = packMediaRoot(level);
       urls.add(`${root}strokes/${encodeURIComponent(char)}.json`);
-      const keys = [aligned ? syllableKey(parts[index].syllable) : null, citationKey(char)];
       for (const key of new Set(keys)) {
-        if (!key || !packHasClip(level, key)) continue;
-        for (const voice of VOICES) urls.add(`${root}audio/${voice}/${key}.mp3`);
+        if (!key || bundledClips.has(key) || !packHasClip(level, key)) continue;
+        for (const voice of VOICES) {
+          const actualVoice = voice === 'c' && !mainlandClips.has(key) ? 'f' : voice;
+          urls.add(`${root}audio/${actualVoice}/${key}.mp3`);
+        }
       }
     });
   }
@@ -193,11 +235,20 @@ const readPack = async (level: HskLevel) => {
   const path = packPath(level);
   const cache = await openCache();
   const hit = cache ? await cache.match(path) : undefined;
-  if (hit) return parseCharacterList(await hit.json(), level);
-  const response = await fetch(path);
+  if (hit && !hit.headers.get('x-jiayou-stale')) return parseCharacterList(await hit.json(), level);
+  let response: Response;
+  try {
+    response = await fetch(path);
+    if (!response.ok) throw new Error('Paquete no disponible');
+  } catch {
+    const old = await previousCopy(path, cache);
+    if (!old && !hit) throw new Error(`No se pudo guardar HSK ${level}.`);
+    response = (old ?? hit)!;
+  }
   if (!response.ok) throw new Error(`No se pudo guardar HSK ${level}.`);
-  if (cache) await cache.put(path, response.clone());
-  return parseCharacterList(await response.json(), level);
+  const rows = parseCharacterList(await response.clone().json(), level);
+  if (cache) await cache.put(path, response);
+  return rows;
 };
 
 /** Drop a pack's list and every stroke or clip saved from it. */
@@ -231,22 +282,10 @@ export const loadInstalledPacks = async (levels: readonly HskLevel[]) => {
  */
 export const prepareListMedia = async (lists: readonly ListId[], onProgress?: PackProgress): Promise<HskLevel[]> => {
   const words = wordsInLists(lists);
-  const levels = hskLevelsOf(lists);
   const needed = packsForWords(words);
-  const added: HskLevel[] = [];
-  try {
-    for (const level of needed) {
-      if (characterStore.hasLevel(level)) continue;
-      try {
-        characterStore.installCharacters(await readPack(level));
-        added.push(level);
-      } catch (error) {
-        if (levels.includes(level)) throw error;
-      }
-    }
-  } catch (error) {
-    for (const level of added) characterStore.removeLevel(level);
-    throw error;
+  packSyllables.clear();
+  for (const level of needed) {
+    characterStore.installCharacters(await readPack(level));
   }
   const installed = needed.filter((level) => characterStore.hasLevel(level));
   writeInstalledLevels([...(readInstalledLevels() ?? []), ...installed]);
@@ -256,23 +295,51 @@ export const prepareListMedia = async (lists: readonly ListId[], onProgress?: Pa
 };
 
 /** Top up media for the lists being studied, in the background. Missing files fetch live until then. */
-export const saveStudyMedia = () => prepareListMedia(vocabularyStore.state.selectedLists).catch(() => []);
+let pendingMedia: Promise<unknown> = Promise.resolve();
+
+export const saveStudyMedia = () => {
+  const run = pendingMedia.catch(() => {}).then(() => downloadLists(vocabularyStore.state.selectedLists)).catch(() => []);
+  pendingMedia = run;
+  return run;
+};
+
+const downloadLists = async (lists: readonly ListId[], onProgress?: PackProgress) => {
+  setDownloadState({ state: 'downloading', done: 0, total: 0 });
+  try {
+    const installed = await prepareListMedia(lists, (done, total) => {
+      setDownloadState({ state: 'downloading', done, total });
+      onProgress?.(done, total);
+    });
+    setDownloadState((state) => ({ ...state, state: 'ready' }));
+    return installed;
+  } catch (error) {
+    setDownloadState((state) => ({ ...state, state: 'error' }));
+    throw error;
+  }
+};
 
 /**
  * Study exactly `wanted`, and keep only the packs their words use. Characters follow the HSK lists among them.
- * A failed download leaves the previous packs in place.
+ * The selection takes effect immediately while its media downloads.
  */
 export const applyListChoice = async (wanted: readonly ListId[], onProgress?: PackProgress) => {
-  const previous = readInstalledLevels() ?? [BUNDLED_LEVEL];
-  const installed = await prepareListMedia(wanted, onProgress);
-  for (const level of previous) {
-    if (!downloadable(level) || installed.includes(level)) continue;
-    characterStore.removeLevel(level);
-    await forgetPack(level);
-  }
-  writeInstalledLevels(installed);
   if (wanted.length === 0) return;
   vocabularyStore.selectLists(wanted);
+  if (readInstalledLevels() === null) writeInstalledLevels([BUNDLED_LEVEL]);
   const levels = hskLevelsOf(wanted);
   if (levels.length > 0) characterStore.selectLevels(levels);
+  const selection = [...wanted];
+  const run = pendingMedia.catch(() => {}).then(async () => {
+    const previous = readInstalledLevels() ?? [BUNDLED_LEVEL];
+    const installed = await downloadLists(selection, onProgress);
+    if (vocabularyStore.state.selectedLists.join('|') !== selection.join('|')) return;
+    for (const level of previous) {
+      if (!downloadable(level) || installed.includes(level)) continue;
+      characterStore.removeLevel(level);
+      await forgetPack(level);
+    }
+    writeInstalledLevels(installed);
+  });
+  pendingMedia = run;
+  return run;
 };
