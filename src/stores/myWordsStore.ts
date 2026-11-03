@@ -1,4 +1,5 @@
 import { createStore, produce } from 'solid-js/store';
+import { createSignal } from 'solid-js';
 import { topics } from '../data/topics';
 import { vocabulary, type CatalogEntry, type VocabularyEntry } from '../data/vocabulary';
 import { isRecord, isString } from '../utils/parse';
@@ -146,15 +147,19 @@ const load = (): MyWordsData => {
 
 const [store, setStore] = createStore<MyWordsData>(load());
 
+const [storageError, setStorageError] = createSignal(false);
 const save = () => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ids: store.ids, own: store.own }));
+    setStorageError(false);
   } catch {
-    // The list still works in memory if storage is blocked.
+    setStorageError(true);
   }
 };
 
 export const myWordsStore = {
+  storageError,
+  retrySave: save,
   get ids(): readonly string[] {
     return store.ids;
   },
@@ -280,8 +285,9 @@ export const myWordsStore = {
   /** Replaces the list with a backup's. Throws before changing anything if the data is invalid. */
   importData(value: unknown) {
     const data = parseData(value, true);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     setStore({ ids: data.ids, own: data.own });
-    save();
+    setStorageError(false);
   },
 
   reset() {

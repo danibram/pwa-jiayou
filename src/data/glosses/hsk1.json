@@ -88,7 +88,7 @@
     }
   },
   "个": {
-    "gloss": "(clasificador general)",
+    "gloss": "clasificador general",
     "example": {
       "word": "一个",
       "pinyin": "yí ge",
@@ -96,7 +96,7 @@
     }
   },
   "们": {
-    "gloss": "(sufijo plural)",
+    "gloss": "sufijo de plural",
     "example": {
       "word": "你们",
       "pinyin": "nǐ men",
@@ -192,7 +192,7 @@
     }
   },
   "对": {
-    "gloss": "correcto; hacia",
+    "gloss": "correcto; hacia; clasificador de pares",
     "example": {
       "word": "对不起",
       "pinyin": "duì bu qǐ",
@@ -216,7 +216,7 @@
     }
   },
   "子": {
-    "gloss": "(sufijo de sustantivo)",
+    "gloss": "sufijo nominal; hijo",
     "example": {
       "word": "孩子",
       "pinyin": "hái zi",
@@ -264,7 +264,7 @@
     }
   },
   "里": {
-    "gloss": "dentro",
+    "gloss": "dentro; interior",
     "example": {
       "word": "这里",
       "pinyin": "zhè lǐ",
@@ -288,7 +288,7 @@
     }
   },
   "么": {
-    "gloss": "(sufijo interrogativo)",
+    "gloss": "sufijo interrogativo",
     "example": {
       "word": "什么",
       "pinyin": "shén me",
@@ -304,7 +304,7 @@
     }
   },
   "学": {
-    "gloss": "estudiar; aprender",
+    "gloss": "aprender; estudiar",
     "example": {
       "word": "学生",
       "pinyin": "xué sheng",
@@ -424,7 +424,7 @@
     }
   },
   "本": {
-    "gloss": "(clas. libros); origen",
+    "gloss": "clasificador de libros; origen",
     "example": {
       "word": "本子",
       "pinyin": "běn zi",
@@ -456,7 +456,7 @@
     }
   },
   "机": {
-    "gloss": "máquina",
+    "gloss": "máquina; oportunidad",
     "example": {
       "word": "手机",
       "pinyin": "shǒu jī",
@@ -784,7 +784,7 @@
     }
   },
   "觉": {
-    "gloss": "sentir; notar",
+    "gloss": "sentir; (en 睡觉) sueño",
     "example": {
       "word": "觉得",
       "pinyin": "jué de",
@@ -864,7 +864,7 @@
     }
   },
   "呢": {
-    "gloss": "(partícula) ¿y...?",
+    "gloss": "partícula ¿y…?",
     "example": {
       "word": "你呢",
       "pinyin": "nǐ ne",
@@ -952,7 +952,7 @@
     }
   },
   "吗": {
-    "gloss": "(partícula interrogativa)",
+    "gloss": "partícula interrogativa",
     "example": {
       "word": "你好吗",
       "pinyin": "nǐ hǎo ma",
@@ -1184,7 +1184,7 @@
     }
   },
   "岁": {
-    "gloss": "años (de edad)",
+    "gloss": "años de edad",
     "example": {
       "word": "几岁",
       "pinyin": "jǐ suì",
@@ -1192,7 +1192,7 @@
     }
   },
   "块": {
-    "gloss": "yuan (coloquial); trozo",
+    "gloss": "trozo; yuan (coloquial)",
     "example": {
       "word": "三块钱",
       "pinyin": "sān kuài qián",
@@ -1328,7 +1328,7 @@
     }
   },
   "杯": {
-    "gloss": "vaso; taza",
+    "gloss": "taza; clasificador de bebidas",
     "example": {
       "word": "杯子",
       "pinyin": "bēi zi",
@@ -1376,7 +1376,7 @@
     }
   },
   "喂": {
-    "gloss": "¡oye!; ¿diga? (teléfono)",
+    "gloss": "¡oye!; ¿diga?",
     "example": {
       "word": "喂，你好",
       "pinyin": "wèi, nǐ hǎo",

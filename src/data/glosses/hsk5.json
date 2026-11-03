@@ -448,7 +448,7 @@
     }
   },
   "彻": {
-    "gloss": "a fondo; penetrar",
+    "gloss": "a fondo; penetrante",
     "example": {
       "word": "彻底",
       "pinyin": "chè dǐ",
@@ -976,7 +976,7 @@
     }
   },
   "顿": {
-    "gloss": "pausa; vez (comida)",
+    "gloss": "vez (comida); pausa",
     "example": {
       "word": "顿时",
       "pinyin": "dùn shí",
@@ -1144,7 +1144,7 @@
     }
   },
   "幅": {
-    "gloss": "ancho; clasif.",
+    "gloss": "ancho; clasificador de cuadros",
     "example": {
       "word": "幅度",
       "pinyin": "fú dù",
@@ -1688,7 +1688,7 @@
     }
   },
   "架": {
-    "gloss": "estante; pelear",
+    "gloss": "estante; clasificador de aparatos",
     "example": {
       "word": "架子",
       "pinyin": "jià zi",
@@ -1832,7 +1832,7 @@
     }
   },
   "届": {
-    "gloss": "sesión; clasif.",
+    "gloss": "sesión; clasificador de convocatorias",
     "example": {
       "word": "届时",
       "pinyin": "jiè shí",
@@ -1960,7 +1960,7 @@
     }
   },
   "颗": {
-    "gloss": "clasif. (granos)",
+    "gloss": "clasificador de granos y cosas redondas",
     "example": {
       "word": "一颗",
       "pinyin": "yì kē",
@@ -2744,7 +2744,7 @@
     }
   },
   "匹": {
-    "gloss": "clasif. (caballos)",
+    "gloss": "clasificador de caballos y telas",
     "example": {
       "word": "一匹马",
       "pinyin": "yì pǐ mǎ",
@@ -3128,11 +3128,11 @@
     }
   },
   "扇": {
-    "gloss": "abanico; abanicar",
+    "gloss": "abanico; clasificador de puertas",
     "example": {
-      "word": "扇子",
-      "pinyin": "shàn zi",
-      "es": "abanico"
+      "word": "一扇门",
+      "pinyin": "yì shàn mén",
+      "es": "una puerta"
     }
   },
   "善": {
@@ -3592,7 +3592,7 @@
     }
   },
   "套": {
-    "gloss": "funda; juego",
+    "gloss": "funda; juego; clasificador de conjuntos",
     "example": {
       "word": "外套",
       "pinyin": "wài tào",
@@ -4112,7 +4112,7 @@
     }
   },
   "胸": {
-    "gloss": "pecho; pecho",
+    "gloss": "pecho; seno",
     "example": {
       "word": "胸膛",
       "pinyin": "xiōng táng",

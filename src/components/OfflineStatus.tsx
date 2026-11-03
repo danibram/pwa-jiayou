@@ -1,4 +1,19 @@
 import { createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
+import { downloadState, saveStudyMedia } from '../utils/levelPacks';
+
+export function OfflineDownloadNotice() {
+  const [dismissed, setDismissed] = createSignal(false);
+  return <Show when={downloadState().state === 'error' && !dismissed()}>
+    <aside role="alert" class="sheet fixed inset-x-4 bottom-4 z-50 mx-auto max-w-md p-4 text-ink">
+      <p class="font-semibold">Descarga incompleta</p>
+      <p class="mt-1 text-sm text-ink-soft">Algunos archivos de tus listas necesitan conexión. Puedes volver a intentarlo en Opciones.</p>
+      <div class="mt-3 flex gap-2">
+        <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => { setDismissed(false); void saveStudyMedia(); }}>Reintentar</button>
+        <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setDismissed(true)}>Cerrar</button>
+      </div>
+    </aside>
+  </Show>;
+}
 
 async function inspectStorage() {
   try {
@@ -64,6 +79,12 @@ export default function OfflineStatus() {
   return (
     <section class="sheet mt-5 p-4">
       <h2 class="font-display text-lg font-semibold">Sin conexión</h2>
+      <Show when={downloadState().state === 'downloading'}><p role="status" class="mt-2 text-sm">Descargando archivos {downloadState().total ? `${downloadState().done} de ${downloadState().total}` : 'de las listas'}…</p></Show>
+      <Show when={downloadState().state === 'ready'}><p role="status" class="mt-2 text-sm">Las listas seleccionadas están preparadas sin conexión.</p></Show>
+      <Show when={downloadState().state === 'error'}>
+        <p role="alert" class="mt-2 text-sm text-seal">No se pudieron guardar todos los archivos. Algunas funciones necesitan conexión.</p>
+        <button type="button" class="btn-quiet mt-2 h-11 px-4 text-sm" onClick={() => void saveStudyMedia()}>Reintentar descarga</button>
+      </Show>
       <Show when={!status.loading} fallback={<p class="mt-1 text-sm text-ink-soft">Comprobando…</p>}>
         <Show when={status()} fallback={<p class="mt-1 text-sm text-ink-soft">Este navegador no deja ver qué hay guardado.</p>}>
           {(data) => <>

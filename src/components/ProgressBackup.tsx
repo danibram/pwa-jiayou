@@ -33,15 +33,15 @@ export function ProgressStorageNotice() {
     }
   };
   return (
-    <Show when={progressStore.storageError()}>
+    <Show when={progressStore.storageError() || myWordsStore.storageError()}>
       {(error) => (
         <aside role="alert" class="sheet fixed inset-x-4 top-4 z-50 mx-auto max-w-md p-4 text-ink">
           <p class="font-semibold">Problema al guardar el progreso</p>
-          <p class="mt-1 text-sm text-ink-soft">{error()}</p>
+          <p class="mt-1 text-sm text-ink-soft">{typeof error() === 'string' ? error() : 'No se pudieron guardar tus palabras. Exporta una copia antes de cerrar la app.'}</p>
           <div class="mt-3 flex flex-wrap gap-2">
-            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => progressStore.retrySave()}>Reintentar</button>
+            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => { if (progressStore.storageError()) progressStore.retrySave(); if (myWordsStore.storageError()) myWordsStore.retrySave(); }}>Reintentar</button>
             <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={downloadBackup}>Exportar copia</button>
-            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(true)}>Recuperar progreso guardado</button>
+            <Show when={progressStore.storageError()}><button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(true)}>Recuperar progreso guardado</button></Show>
           </div>
           <Show when={confirmRecovery()}>
             <div class="mt-3 border-t border-line pt-3">
