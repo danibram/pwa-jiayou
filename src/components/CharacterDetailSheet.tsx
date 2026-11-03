@@ -4,6 +4,7 @@ import Drawer from './Drawer';
 import SpeakButton from './SpeakButton';
 import Icon from './Icon';
 import Pinyin from './Pinyin';
+import ToneNeighbors from './ToneNeighbors';
 import { StatusTag, type StudyStatus } from './TopicProgress';
 import type { VocabularyEntry } from '../data/vocabulary';
 import { allWords } from '../stores/myWordsStore';
@@ -30,6 +31,7 @@ interface CharacterDetailSheetProps {
   onOpenCard?: () => void;
   /** Opens a word from the list of words with this character. */
   onOpenWord?: (wordId: string) => void;
+  onOpenCharacter?: (character: string) => void;
   /** The word page the sheet opened from, left out of its word list. */
   currentWordId?: string;
   /** Called after the drawer has slid away, however it was closed. */
@@ -203,6 +205,8 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
           </For>
         </ul>
       </Show>
+
+      <ToneNeighbors character={char().character} pinyin={char().pinyin} onOpenWord={props.onOpenWord} onOpenCharacter={props.onOpenCharacter} />
 
       <Show when={props.error}>
         <p role="alert" class="mt-3 text-sm text-seal">{props.error}</p>
