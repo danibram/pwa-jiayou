@@ -7,7 +7,7 @@ export type StrokeFocus =
 
 export type Screen =
   | { page: 'home' }
-  | { page: 'vocabulario'; topic?: boolean; wordId?: string }
+  | { page: 'vocabulario'; topic?: boolean; wordId?: string; returnTo?: 'home' | 'mis-palabras' }
   | { page: 'vocabulary-review'; resume: boolean; practiceId?: string }
   | { page: 'acerca' }
   | { page: 'opciones' }
@@ -50,7 +50,7 @@ export const parseScreen = (value: unknown): Screen | undefined => {
   if (value.page === 'home' || value.page === 'acerca' || value.page === 'opciones' || value.page === 'mis-palabras') {
     return { page: value.page };
   }
-  if (value.page === 'vocabulario') return { page: 'vocabulario', topic: value.topic === true, ...(typeof value.wordId === 'string' ? { wordId: value.wordId } : {}) };
+  if (value.page === 'vocabulario') return { page: 'vocabulario', topic: value.topic === true, ...(typeof value.wordId === 'string' ? { wordId: value.wordId } : {}), ...(value.returnTo === 'home' || value.returnTo === 'mis-palabras' ? { returnTo: value.returnTo } : {}) };
   if (value.page === 'vocabulary-review') return { page: 'vocabulary-review', resume: true, ...(typeof value.practiceId === 'string' ? { practiceId: value.practiceId } : {}) };
   if (value.page === 'trazos') {
     if (!isRecord(value.from) || value.from.page === 'trazos') return undefined;

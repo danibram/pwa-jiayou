@@ -4,8 +4,11 @@ import './index.css';
 import App from './App';
 import UpdateNotice from './components/UpdateNotice';
 import { ProgressStorageNotice } from './components/ProgressBackup';
+import { OfflineDownloadNotice } from './components/OfflineStatus';
 import { initTheme } from './utils/theme';
+import { initAnalytics } from './analytics';
 
+initAnalytics();
 initTheme();
 
 document.documentElement.addEventListener('pointerdown', () => {
@@ -23,4 +26,4 @@ if (!(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <><App /><UpdateNotice /><ProgressStorageNotice /></>, root);
+render(() => <><App /><UpdateNotice /><ProgressStorageNotice /><OfflineDownloadNotice /></>, root);
