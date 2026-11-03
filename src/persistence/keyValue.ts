@@ -20,3 +20,14 @@ export const storage: KeyValueStore = {
     Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index))
       .filter((key): key is string => key !== null && key.startsWith(prefix)),
 };
+
+/** A store that lives only in memory, for tests and for code that must not touch the device. */
+export const createMemoryKeyValue = (entries: Record<string, string> = {}): KeyValueStore => {
+  const items = new Map(Object.entries(entries));
+  return {
+    read: (key) => items.get(key) ?? null,
+    write: (key, value) => { items.set(key, value); },
+    remove: (key) => { items.delete(key); },
+    keys: (prefix) => [...items.keys()].filter((key) => key.startsWith(prefix)),
+  };
+};
