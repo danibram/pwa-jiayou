@@ -10,14 +10,16 @@ describe('progress backup', () => {
   beforeEach(() => localStorage.clear());
   afterEach(() => { vi.restoreAllMocks(); });
 
-  it('migrates legacy data and exports a versioned round trip', async () => {
-    localStorage.setItem(key, JSON.stringify({ 好: { right: 2, wrong: 1 } }));
+  it('exports a versioned round trip, each record stamped with its last write', async () => {
     const store = await freshStore();
+    store.grade('好', 'good');
+    store.grade('好', 'good');
+    store.grade('好', 'again');
     const backup = store.exportBackup();
-    expect(JSON.parse(backup)).toMatchObject({ version: 3, chars: { 好: { right: 2, wrong: 1 } } });
+    expect(JSON.parse(backup)).toMatchObject({ version: 4, chars: { 好: { right: 2, wrong: 1, deviceId: expect.any(String), updatedAt: expect.any(Number) } } });
     store.clear();
     store.importBackup(backup);
-    expect(store.get('好')).toMatchObject({ right: 2, wrong: 1, ease: 2.5 });
+    expect(store.get('好')).toEqual(JSON.parse(backup).chars.好);
   });
 
   it.each(['{', JSON.stringify({ version: 99, chars: {}, daily: {} }), JSON.stringify({ chars: { 好: { right: 'bad' } } })])(
@@ -33,8 +35,10 @@ describe('progress backup', () => {
   );
 
   it.each([
-    JSON.stringify({ version: 2, chars: { 好: { right: 1.5 } }, daily: { day: '2026-02-30', reviewed: 1, introduced: 0, streak: 1 } }),
-    '{"version":2,"chars":{"__proto__":{"right":1}},"daily":{"day":"2026-10-31","reviewed":1,"introduced":0,"streak":1}}',
+    JSON.stringify({ version: 4, chars: { 好: { right: 1.5 } }, daily: { day: '2026-02-30', reviewed: 1, introduced: 0, streak: 1 }, words: {}, wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 } }),
+    '{"version":4,"chars":{"__proto__":{"right":1}},"daily":{"day":"2026-10-31","reviewed":1,"introduced":0,"streak":1},"words":{},"wordDaily":{"day":"2026-10-31","reviewed":0,"introduced":0,"streak":0}}',
+    JSON.stringify({ version: 4, chars: { 好: { right: 1, deviceId: 7 } }, daily: { day: '2026-10-31', reviewed: 1, introduced: 0, streak: 1 }, words: {}, wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 } }),
+    JSON.stringify({ version: 3, chars: {}, daily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 }, words: {}, wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 } }),
   ])('rejects malformed fields and unsafe character IDs', async (raw) => {
     const store = await freshStore();
     expect(() => store.importBackup(raw)).toThrow();
@@ -54,7 +58,7 @@ describe('progress backup', () => {
   });
 
   it('can restore a valid stored copy after a temporary read failure and new in-memory reviews', async () => {
-    const stored = JSON.stringify({ version: 2, chars: { 好: { right: 2 } }, daily: { day: '2026-10-31', reviewed: 2, introduced: 1, streak: 1 } });
+    const stored = JSON.stringify({ version: 4, chars: { 好: { right: 2 } }, daily: { day: '2026-10-31', reviewed: 2, introduced: 1, streak: 1 }, words: {}, wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 } });
     localStorage.setItem(key, stored);
     const getItem = vi.spyOn(localStorage, 'getItem');
     getItem.mockImplementationOnce(() => { throw new Error('blocked temporarily'); });
