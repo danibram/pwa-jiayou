@@ -17,8 +17,9 @@
     "build-vocabulary": "node scripts/build-vocabulary.mjs",
     "localize-vocabulary": "node scripts/localize-vocabulary.mjs",
     "content-api": "cd api && bun --watch src/index.ts",
+    "test:api": "cd api && bun test",
     "typecheck": "tsc --noEmit",
-    "check": "npm run test -- --run && npm run build"
+    "check": "npm run test -- --run && npm run test:api && npm run build"
   },
   "dependencies": {
     "hanzi-writer": "^3.7.3",
