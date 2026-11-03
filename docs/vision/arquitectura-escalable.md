@@ -16,7 +16,7 @@ El objetivo es que el salto a una API con cuentas y sincronización entre dispos
 3. El bloqueo real para sincronizar es que varias operaciones sustituyen el progreso entero: `checkpoint` y `rollback` al descartar una sesión, importar copia, recuperar y borrar. Con dos dispositivos, un `rollback` borraría lo que llegó del otro.
 4. A cada registro de progreso le falta un `updatedAt`. `lastSeen` no sirve para eso.
 5. Para resolver conflictos recomiendo last-write-wins por registro (un carácter o una palabra), con un `deviceId` de desempate. CRDT y last-write-wins por campo cuestan más y, en el segundo caso, rompen la coherencia del repaso espaciado.
-6. Nueve módulos leen o escriben localStorage por su cuenta. Una capa de persistencia síncrona con claves centralizadas es la primera PR y no cambia comportamiento.
+6. Diez módulos leen o escriben localStorage por su cuenta. Una capa de persistencia síncrona con claves centralizadas es la primera PR y no cambia comportamiento.
 7. El contenido está empaquetado de forma desigual. Las seis listas de vocabulario y el índice de búsqueda van en el JS, los caracteres 2 a 6 van en packs. La caché de packs se invalida entera con cualquier cambio de audio.
 8. El `api/` en Bun es una herramienta editorial que escribe en el repo. Sirve para lo que hace y debe seguir separada de la futura API de usuarios, compartiendo tipos y `wordId`.
 9. La navegación sin router aguanta. Le falta traducir `Screen` a URL y de vuelta, algo que cabe junto a `parseScreen`.
@@ -333,7 +333,7 @@ Hay dos casos que no caben en una URL y no deben caber:
 - `trazos` lleva `from: Screen`, recursivo (`screen.ts:15`). Desde un enlace, `from` es Home.
 - Una sesión de repaso vive en localStorage. `/repaso` abre la sesión guardada si existe y, si no, cae a la palabra o a Home, como ya hace `createScreenHistory.ts:27-38` con el historial.
 
-Con rutas de ruta (no `#`), el alojamiento debe servir `index.html` para cualquier ruta; sin red lo resuelve el `navigateFallback` de Workbox. Si el alojamiento no lo permite, `#/palabra/...` funciona sin configuración a costa de URLs menos limpias.
+Con rutas reales en la URL (no `#`), el alojamiento debe servir `index.html` para cualquier ruta; sin red lo resuelve el `navigateFallback` que vite-plugin-pwa configura por defecto. Si el alojamiento no lo permite, `#/palabra/...` funciona sin configuración a costa de URLs menos limpias.
 
 Volver tras un login se reduce a guardar `screenToUrl(screen())` antes de redirigir y leerlo al volver.
 
