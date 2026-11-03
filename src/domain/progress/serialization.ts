@@ -1,4 +1,5 @@
 import { isNonNegativeInteger, isRecord } from '../../utils/parse';
+import type { ActivityByDevice, DayLog } from './activity';
 import type { CharProgress, DailyLog, ProgressState } from './types';
 
 const invalidCharacter = () => new Error('Hay datos de caracteres no válidos.');
@@ -84,11 +85,25 @@ export const parseProgress = (raw: string): ProgressState => {
   if (!('chars' in saved) || !('daily' in saved) || !('words' in saved) || !('wordDaily' in saved)) throw new Error('La copia está incompleta.');
   const chars = parseRecords(saved.chars, (char) => [...char].length === 1);
   const words = parseRecords(saved.words, () => true);
-  const activity: Record<string, number> = {};
-  if (isRecord(saved.activity)) {
-    for (const [day, count] of Object.entries(saved.activity)) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(day) && isNonNegativeInteger(count)) activity[day] = count;
-    }
+  return { chars, daily: parseDaily(saved.daily), words, wordDaily: parseDaily(saved.wordDaily), activity: parseActivity(saved.activity) };
+};
+
+/** A day log, keeping only well-formed days: the calendar is a convenience, not worth failing a copy over. */
+export const parseDayLog = (value: unknown): DayLog => {
+  const log: DayLog = {};
+  if (!isRecord(value)) return log;
+  for (const [day, count] of Object.entries(value)) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(day) && isNonNegativeInteger(count)) log[day] = count;
   }
-  return { chars, daily: parseDaily(saved.daily), words, wordDaily: parseDaily(saved.wordDaily), activity };
+  return log;
+};
+
+const parseActivity = (value: unknown): ActivityByDevice => {
+  const byDevice: ActivityByDevice = {};
+  if (!isRecord(value)) return byDevice;
+  for (const [device, log] of Object.entries(value)) {
+    if (UNSAFE.includes(device)) continue;
+    byDevice[device] = parseDayLog(log);
+  }
+  return byDevice;
 };
