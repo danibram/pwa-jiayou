@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore } from '../src/stores/characterStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { wordsInLists } from '../src/data/lists';
-import { applyListChoice, packsForWords, readInstalledLevels } from '../src/utils/levelPacks';
+import { applyListChoice, downloadState, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
 
 const body = (level: number) => readFileSync(`public/packs/hsk${level}.json`, 'utf8');
 const strokeJson = '{"strokes":["M0 0"],"medians":[[[0,0],[1,1]]]}';
@@ -29,8 +29,9 @@ describe('level packs', () => {
     });
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       const url = String(input);
-      if (url.includes('syllables.json')) return new Response('[]', { status: 200 });
-      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200 });
+      if (url.includes('syllables.json')) return new Response('[]', { status: 200, headers: { 'content-type': 'application/json' } });
+      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200, headers: { 'content-type': 'application/json' } });
+      if (url.endsWith('.mp3')) return new Response('audio', { status: 200, headers: { 'content-type': 'audio/mpeg' } });
       const level = url.includes('hsk3') ? 3 : url.includes('hsk2') ? 2 : 0;
       if (!level || url.includes('fail')) return new Response('', { status: 404 });
       return new Response(body(level), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -62,17 +63,34 @@ describe('level packs', () => {
     expect([...stored.keys()].some((key) => key.includes('hsk3'))).toBe(false);
   });
 
-  it('leaves the previous lists in place when a download fails', async () => {
+  it('keeps the selection when a download fails', async () => {
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       const url = String(input);
-      if (url.includes('syllables.json')) return new Response('[]', { status: 200 });
+      if (url.includes('syllables.json')) return new Response('[]', { status: 200, headers: { 'content-type': 'application/json' } });
       if (url.includes('hsk3')) return new Response('', { status: 404 });
-      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200 });
+      if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200, headers: { 'content-type': 'application/json' } });
       return new Response(body(2), { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
-    await expect(applyListChoice(['hsk-1', 'hsk-2', 'hsk-3'])).rejects.toThrow(/HSK 3/);
-    expect(characterStore.hasLevel(2)).toBe(false);
+    const download = applyListChoice(['hsk-1', 'hsk-2', 'hsk-3']);
+    expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1', 'hsk-2', 'hsk-3']);
+    expect(characterStore.state.selectedLevels).toEqual([1, 2, 3]);
+    await expect(download).rejects.toThrow(/HSK 3/);
+    expect(characterStore.hasLevel(2)).toBe(true);
     expect(characterStore.hasLevel(3)).toBe(false);
-    expect(readInstalledLevels()).toBeNull();
+    expect(readInstalledLevels()).toEqual([1]);
+  });
+
+  it('reports incomplete media and allows a retry', async () => {
+    const originalFetch = globalThis.fetch;
+    vi.stubGlobal('fetch', async (input: RequestInfo) => {
+      if (String(input).endsWith('.mp3')) return new Response('', { status: 503 });
+      return originalFetch(input);
+    });
+    await expect(applyListChoice(['hsk-1'])).rejects.toThrow();
+    expect(downloadState().state).toBe('error');
+    vi.stubGlobal('fetch', originalFetch);
+    await saveStudyMedia();
+    expect(downloadState().state).toBe('ready');
+    expect([...stored.keys()].some((key) => key.startsWith('/audio/'))).toBe(true);
   });
 });

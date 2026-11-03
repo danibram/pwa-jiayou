@@ -1,0 +1,47 @@
+{
+  "颗": {
+    "gloss": "clasificador de granos y cosas redondas",
+    "definition": "clasificador de granos y cosas pequeñas y redondas"
+  },
+  "幅": {
+    "gloss": "ancho; clasificador de cuadros",
+    "definition": "ancho; clasificador de cuadros y telas"
+  },
+  "匹": {
+    "gloss": "clasificador de caballos y telas",
+    "definition": "clasificador de caballos y de rollos de tela"
+  },
+  "扇": {
+    "gloss": "abanico; clasificador de puertas",
+    "definition": "abanico; abanicar; clasificador de puertas y ventanas",
+    "example": {
+      "word": "一扇门",
+      "pinyin": "yì shàn mén",
+      "es": "una puerta"
+    }
+  },
+  "架": {
+    "gloss": "estante; clasificador de aparatos",
+    "definition": "estante; pelear; clasificador de aviones y aparatos"
+  },
+  "套": {
+    "gloss": "funda; juego; clasificador de conjuntos",
+    "definition": "funda; juego; clasificador de conjuntos y trajes"
+  },
+  "顿": {
+    "gloss": "vez (comida); pausa",
+    "definition": "clasificador de comidas; pausa; vez"
+  },
+  "届": {
+    "gloss": "sesión; clasificador de convocatorias",
+    "definition": "sesión; promoción; clasificador de reuniones, elecciones o promociones"
+  },
+  "胸": {
+    "gloss": "pecho; seno",
+    "definition": "pecho; seno; tórax"
+  },
+  "彻": {
+    "gloss": "a fondo; penetrante",
+    "definition": "a fondo; penetrante (en compuestos)"
+  }
+}

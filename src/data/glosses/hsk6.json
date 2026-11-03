@@ -760,7 +760,7 @@
     }
   },
   "陈": {
-    "gloss": "exponer; apellido",
+    "gloss": "exponer; añejo; apellido Chen",
     "example": {
       "word": "陈述",
       "pinyin": "chén shù",
@@ -1400,7 +1400,7 @@
     }
   },
   "董": {
-    "gloss": "dirigir; apellido",
+    "gloss": "dirigir; apellido Dong",
     "example": {
       "word": "董事",
       "pinyin": "dǒng shì",
@@ -1464,7 +1464,7 @@
     }
   },
   "杜": {
-    "gloss": "impedir; apellido",
+    "gloss": "impedir; apellido Du",
     "example": {
       "word": "杜绝",
       "pinyin": "dù jué",
@@ -1792,7 +1792,7 @@
     }
   },
   "副": {
-    "gloss": "adjunto; clasif.",
+    "gloss": "adjunto; clasificador de pares",
     "example": {
       "word": "副手",
       "pinyin": "fù shǒu",
@@ -2464,7 +2464,7 @@
     }
   },
   "霍": {
-    "gloss": "súbito; apellido",
+    "gloss": "de repente; apellido Huo",
     "example": {
       "word": "霍然",
       "pinyin": "huò rán",
@@ -3296,7 +3296,7 @@
     }
   },
   "黎": {
-    "gloss": "numeroso; apellido",
+    "gloss": "numeroso; oscuro; apellido Li",
     "example": {
       "word": "黎明",
       "pinyin": "lí míng",
@@ -3552,7 +3552,7 @@
     }
   },
   "屡": {
-    "gloss": "a menudo",
+    "gloss": "reiteradamente; a menudo",
     "example": {
       "word": "屡次",
       "pinyin": "lǚ cì",
@@ -3696,7 +3696,7 @@
     }
   },
   "枚": {
-    "gloss": "clasif. (pequeños)",
+    "gloss": "clasificador de objetos pequeños",
     "example": {
       "word": "一枚",
       "pinyin": "yì méi",
@@ -4880,7 +4880,7 @@
     }
   },
   "桑": {
-    "gloss": "moral; apellido",
+    "gloss": "moral (árbol); mora",
     "example": {
       "word": "桑树",
       "pinyin": "sāng shù",
@@ -5280,7 +5280,7 @@
     }
   },
   "艘": {
-    "gloss": "clasif. (barcos)",
+    "gloss": "clasificador de barcos",
     "example": {
       "word": "一艘船",
       "pinyin": "yì sōu chuán",
@@ -5752,7 +5752,7 @@
     }
   },
   "伪": {
-    "gloss": "falso; falso",
+    "gloss": "falso; pseudo-",
     "example": {
       "word": "虚假",
       "pinyin": "xū jiǎ",
@@ -6504,7 +6504,7 @@
     }
   },
   "沿": {
-    "gloss": "a lo largo de",
+    "gloss": "a lo largo de; orilla",
     "example": {
       "word": "沿海",
       "pinyin": "yán hǎi",
@@ -7312,7 +7312,7 @@
     }
   },
   "郑": {
-    "gloss": "apellido; serio",
+    "gloss": "apellido Zheng; serio (en 郑重)",
     "example": {
       "word": "郑重",
       "pinyin": "zhèng zhòng",
@@ -7488,7 +7488,7 @@
     }
   },
   "株": {
-    "gloss": "planta; clasif.",
+    "gloss": "planta; clasificador de plantas",
     "example": {
       "word": "一株",
       "pinyin": "yì zhū",

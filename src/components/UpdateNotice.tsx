@@ -1,5 +1,6 @@
 import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { registerSW } from 'virtual:pwa-register';
+import { waitForActivation } from '../utils/serviceWorker';
 
 export default function UpdateNotice() {
   const [ready, setReady] = createSignal(false);
@@ -14,6 +15,20 @@ export default function UpdateNotice() {
 
   const check = () => {
     if (document.visibilityState === 'visible') registration?.update().catch(() => {});
+  };
+  const applyUpdate = async () => {
+    setFailed(false);
+    const hadController = !!navigator.serviceWorker.controller;
+    const waiting = registration?.waiting;
+    try {
+      await update(true);
+      if (!hadController) {
+        if (waiting) await waitForActivation(waiting);
+        window.location.reload();
+      }
+    } catch {
+      setFailed(true);
+    }
   };
   let timer: ReturnType<typeof setInterval> | undefined;
   onMount(() => {
@@ -35,7 +50,7 @@ export default function UpdateNotice() {
           <p class="mt-1 text-sm text-ink-soft">La app se reiniciará. Termina tu sesión antes de actualizar.</p>
           <Show when={failed()}><p class="mt-1 text-sm text-seal">No se pudo actualizar. Inténtalo de nuevo.</p></Show>
         </div>
-        <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => update(true).catch(() => setFailed(true))}>
+        <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => void applyUpdate()}>
           Actualizar
         </button>
         <button type="button" class="h-11 px-2 text-sm text-ink-soft" onClick={() => setDismissed(true)}>
