@@ -4,14 +4,14 @@ import { BUNDLED_LEVEL, catalogLevels } from '../data/catalog';
 import hsk1Data from '../data/hsk1.json';
 import { ExampleWord, HSKCharacter, HskLevel } from '../types';
 import { isHskLevel, isRecord, isString } from '../utils/parse';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 interface CharacterStore {
   characters: HSKCharacter[];
   selectedLevels: HskLevel[];
   currentIndex: number;
 }
-
-const STORAGE_KEY = 'hsk-flashcards-progress';
 
 /** Older saves stored one level as `selectedLevel`. */
 export const selectionFromSaved = (raw: unknown): HskLevel[] => {
@@ -29,7 +29,7 @@ const keptIndex = (index: unknown, count: number) =>
 const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'> => {
   const empty = { selectedLevels: [], currentIndex: 0 };
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = storage.read(KEYS.characterDeck);
     if (!saved) return empty;
     const parsed: unknown = JSON.parse(saved);
     if (!isRecord(parsed)) return empty;
@@ -132,14 +132,14 @@ const initialState: CharacterStore = {
 
 const [store, setStore] = createStore(initialState);
 
-// Save progress to localStorage
+// Save the deck place to storage
 const saveProgress = () => {
   try {
     const toSave = {
       selectedLevels: store.selectedLevels,
       currentIndex: store.currentIndex,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    storage.write(KEYS.characterDeck, JSON.stringify(toSave));
   } catch {
     // Storage can be full or blocked. The in-memory deck still works.
   }
@@ -267,6 +267,6 @@ export const characterStore = {
       selectedLevels: [],
       currentIndex: 0,
     });
-    localStorage.removeItem(STORAGE_KEY);
+    storage.remove(KEYS.characterDeck);
   },
 };

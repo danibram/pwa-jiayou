@@ -3,6 +3,8 @@ import { createSignal } from 'solid-js';
 import { topics } from '../data/topics';
 import { vocabulary, type CatalogEntry, type VocabularyEntry } from '../data/vocabulary';
 import { isRecord, isString } from '../utils/parse';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 import { markTones, syllableKey, withToneSandhi, wordId } from '../utils/pinyin';
 
 const TOPIC_IDS = new Set(topics.map((topic) => topic.id));
@@ -27,7 +29,6 @@ export interface MyWordsData {
   own: Record<string, Required<MyWordInput>>;
 }
 
-const STORAGE_KEY = 'jiayou-my-words';
 const HAN = /^\p{Script=Han}+$/u;
 const UNSAFE = ['__proto__', 'constructor', 'prototype'];
 
@@ -138,7 +139,7 @@ const parseData = (value: unknown, strict: boolean): MyWordsData => {
 
 const load = (): MyWordsData => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = storage.read(KEYS.myWords);
     return raw ? parseData(JSON.parse(raw), false) : { ids: [], own: {} };
   } catch {
     return { ids: [], own: {} };
@@ -150,7 +151,7 @@ const [store, setStore] = createStore<MyWordsData>(load());
 const [storageError, setStorageError] = createSignal(false);
 const save = () => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ids: store.ids, own: store.own }));
+    storage.write(KEYS.myWords, JSON.stringify({ ids: store.ids, own: store.own }));
     setStorageError(false);
   } catch {
     setStorageError(true);
@@ -285,14 +286,14 @@ export const myWordsStore = {
   /** Replaces the list with a backup's. Throws before changing anything if the data is invalid. */
   importData(value: unknown) {
     const data = parseData(value, true);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    storage.write(KEYS.myWords, JSON.stringify(data));
     setStore({ ids: data.ids, own: data.own });
     setStorageError(false);
   },
 
   reset() {
     setStore({ ids: [], own: {} });
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* Storage may be unavailable. */ }
+    try { storage.remove(KEYS.myWords); } catch { /* Storage may be unavailable. */ }
   },
 };
 
