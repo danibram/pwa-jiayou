@@ -13,6 +13,7 @@ import { rankBy, type Searchable } from '../utils/searchRank';
 import { characterRecord, searchCharacters } from '../utils/characterSearch';
 import { mainMeaning } from '../utils/meaning';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
+import ToneNeighbors from '../components/ToneNeighbors';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
 import { progressStore as charProgress } from '../stores/progressStore';
@@ -480,6 +481,9 @@ const Vocabulario: Component<Props> = (props) => {
                 }}</For>
               </ul>
             </div>
+            <Show when={[...word().simplified].length === 1}>
+              <ToneNeighbors character={word().simplified} pinyin={word().pinyin} onOpenWord={props.onSelect} onOpenCharacter={setCharOpen} />
+            </Show>
             <Show when={related(word()).length > 0}>
             <div class="mt-6 border-t border-line pt-5 text-left">
                 <p class="text-sm text-ink-soft">Otras palabras con {[...new Set(word().characters)].join(' o ')}</p>
@@ -508,6 +512,7 @@ const Vocabulario: Component<Props> = (props) => {
             character={record()}
             installed={charInstalled(record().character)}
             currentWordId={props.wordId}
+            onOpenCharacter={setCharOpen}
             status={charStatus(record().character)}
             onStrokes={() => {
               const char = record().character;
