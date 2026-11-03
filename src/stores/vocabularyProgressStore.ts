@@ -1,3 +1,4 @@
+import { sumActivity } from '../domain/progress/activity';
 import { afterAnswer, schedule } from '../domain/progress/schedule';
 import {
   activityStreak,
@@ -75,7 +76,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
     buildQueue<T extends { id: string }>(entries: T[], extraNew = 0): { due: T[]; fresh: T[] } {
       return buildWordQueue(entries, state.words, state.wordDaily, extraNew);
     },
-    get daily(): DailyLog { return { ...currentDaily(state.wordDaily), streak: activityStreak(state.activity) }; },
+    get daily(): DailyLog { return { ...currentDaily(state.wordDaily), streak: activityStreak(sumActivity(state.activity)) }; },
   };
 };
 
