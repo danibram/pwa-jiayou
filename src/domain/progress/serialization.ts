@@ -26,7 +26,8 @@ const strokeBestField = (value: Record<string, unknown>): number | null => {
   return field;
 };
 
-const parseCharacterProgress = (value: Record<string, unknown>): CharProgress => ({
+/** One character or word record. Throws when a field is not valid. */
+export const parseRecord = (value: Record<string, unknown>): CharProgress => ({
   right: countField(value, 'right'),
   wrong: countField(value, 'wrong'),
   reps: countField(value, 'reps'),
@@ -41,7 +42,7 @@ const parseCharacterProgress = (value: Record<string, unknown>): CharProgress =>
   clean: 'clean' in value && value.clean !== undefined ? countField(value, 'clean') : countField(value, 'reps'),
 });
 
-const parseDaily = (value: unknown): DailyLog => {
+export const parseDaily = (value: unknown): DailyLog => {
   if (!isRecord(value) || typeof value.day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value.day)) {
     throw new Error('El registro diario no es válido.');
   }
@@ -69,7 +70,7 @@ export const parseProgress = (raw: string): ProgressState => {
     if (!char || !isRecord(value) || [...char].length !== 1 || ['__proto__', 'constructor', 'prototype'].includes(char)) {
       throw invalidCharacter();
     }
-    migrated[char] = parseCharacterProgress(value);
+    migrated[char] = parseRecord(value);
   }
   const daily = 'daily' in saved ? parseDaily(saved.daily) : emptyDaily();
   if (saved.version === 2 && (!('chars' in saved) || !('daily' in saved))) throw new Error('La copia está incompleta.');
@@ -78,7 +79,7 @@ export const parseProgress = (raw: string): ProgressState => {
     if (!isRecord(saved.words) || !('wordDaily' in saved) || !('chars' in saved) || !('daily' in saved)) throw new Error('La copia está incompleta.');
     for (const [id, value] of Object.entries(saved.words)) {
       if (!id || ['__proto__', 'constructor', 'prototype'].includes(id) || !isRecord(value)) throw invalidCharacter();
-      words[id] = parseCharacterProgress(value);
+      words[id] = parseRecord(value);
     }
   }
   const wordDaily = saved.version === 3 ? parseDaily(saved.wordDaily) : emptyDaily();
