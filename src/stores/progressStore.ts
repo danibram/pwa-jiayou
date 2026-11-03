@@ -5,11 +5,9 @@ import { parseProgress } from '../domain/progress/serialization';
 import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
 export { parseProgress } from '../domain/progress/serialization';
-import type { CharProgress, DailyLog, ProgressState } from '../domain/progress/types';
-export type { CharProgress, DailyLog } from '../domain/progress/types';
-
-export type Grade = 'again' | 'hard' | 'good';
-export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
+import type { CharProgress, DailyLog, Grade, ProgressState } from '../domain/progress/types';
+export type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+export { GRADES } from '../domain/progress/types';
 
 const DAY_MS = 86_400_000;
 const MASTERED_INTERVAL = 21;
