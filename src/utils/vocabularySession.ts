@@ -97,3 +97,22 @@ export function discardAllVocabularySessions(): boolean {
     return keys.every((key) => storage.read(key) === null);
   } catch { return false; }
 }
+
+/**
+ * The first paused practice session that `accepts` lets through, in storage order. Unreadable ones
+ * are dropped on the way, as loading them does. `entries` is read only once a session is found.
+ */
+export function findPausedPractice(
+  entries: () => VocabularyEntry[],
+  accepts: (practiceId: string) => boolean,
+): { id: string; title: string } | null {
+  try {
+    for (const key of storage.keys(PRACTICE_SESSION_PREFIX)) {
+      const id = key.slice(PRACTICE_SESSION_PREFIX.length);
+      if (!accepts(id)) continue;
+      const snapshot = loadVocabularySession(entries(), id);
+      if (snapshot) return { id, title: snapshot.heading };
+    }
+  } catch { /* Storage unavailable: nothing to resume. */ }
+  return null;
+}
