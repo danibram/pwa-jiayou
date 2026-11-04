@@ -10,7 +10,8 @@ import {
   WORD_RELATION_LABELS,
   type WordRelationKind,
 } from '../../src/data/wordRelations';
-import { useEditor } from '../lib/store';
+import { exampleFor, useEditor } from '../lib/store';
+import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '../../src/data/wordSenses';
 import { Field, Hanzi, Pinyin } from './text';
 
 /** Keeps only Han characters, as the app's word form does. Latin left by an IME is dropped after composition. */
@@ -29,7 +30,7 @@ const syllableCount = (pinyin: string) => (pinyin.trim() ? pinyin.trim().split(/
  * hanzi input and topic chips follow the app's former word form.
  */
 const matchesWord = (word: VocabularyEntry, query: string) =>
-  `${word.simplified} ${word.traditional} ${word.pinyin} ${word.meaning}`.toLowerCase().includes(query.trim().toLowerCase());
+  `${word.simplified} ${word.traditional} ${word.pinyin} ${sensesText(word.senses)}`.toLowerCase().includes(query.trim().toLowerCase());
 
 const WordForm: Component<{ word: VocabularyEntry }> = (props) => {
   const editor = useEditor();
@@ -147,7 +148,7 @@ const WordForm: Component<{ word: VocabularyEntry }> = (props) => {
                 </div>
                 <dl class="dup-data">
                   <dt>Tradicional</dt><dd><Hanzi text={w.traditional} size="sm" /></dd>
-                  <dt>Traducción</dt><dd>{w.meaning}</dd>
+                  <dt>Significados</dt><dd>{sensesText(w.senses)}</dd>
                   <dt>Temas</dt><dd>{titles() || <span class="muted">ninguno</span>}</dd>
                 </dl>
                 <button type="button" class="btn btn-ink" onClick={() => { editor.removeWord(props.word.id); editor.setSelected(w.id); }}>Editar esta palabra</button>
@@ -174,29 +175,77 @@ const WordForm: Component<{ word: VocabularyEntry }> = (props) => {
         </Show>
       </div>
 
-      <Field label="Traducción" value={props.word.meaning} multiline placeholder="té con leche; otro sentido" onInput={(value) => editor.updateWord('meaning', value)} hint="Separa acepciones con punto y coma. La primera es la que enseña la tarjeta." />
+      <fieldset class="word-senses">
+        <legend>Significados</legend>
+        <p class="hint">Un uso por fila, con su categoría. El primero es el que enseñan las tarjetas de repaso. La nota dice cómo se usa y solo sale en la página de la palabra.</p>
+        <ol>
+          <For each={props.word.senses}>{(sense, index) => (
+            <li class="word-sense">
+              <label class="field">
+                <span>Categoría</span>
+                <select value={sense.pos ?? ''} onChange={(event) => editor.updateSense(index(), 'pos', event.currentTarget.value)}>
+                  <option value="">Sin categoría</option>
+                  <For each={WORD_POS}>{(pos) => <option value={pos}>{WORD_POS_LABELS[pos]}</option>}</For>
+                </select>
+              </label>
+              <Field label={index() === 0 ? 'Significado (el de la tarjeta)' : 'Significado'} value={sense.text} placeholder="comparar" onInput={(value) => editor.updateSense(index(), 'text', value)} />
+              <Field label="Nota de uso" value={sense.note ?? ''} placeholder="usado con 都/也" onInput={(value) => editor.updateSense(index(), 'note', value)} />
+              <div class="word-sense-actions">
+                <button type="button" class="btn btn-ghost" aria-label="Subir este uso" disabled={index() === 0} onClick={() => editor.moveSense(index(), -1)}>↑</button>
+                <button type="button" class="btn btn-ghost" aria-label="Bajar este uso" disabled={index() === props.word.senses.length - 1} onClick={() => editor.moveSense(index(), 1)}>↓</button>
+                <button type="button" class="btn btn-ghost" disabled={props.word.senses.length === 1} onClick={() => editor.removeSense(index())}>Quitar</button>
+              </div>
+            </li>
+          )}</For>
+        </ol>
+        <button type="button" class="btn btn-ghost" onClick={editor.addSense}>Añadir uso</button>
+      </fieldset>
+
+      <fieldset class="word-example">
+        <legend>Frase de ejemplo</legend>
+        <Field label="Frase en chino" value={exampleFor(props.word)?.chinese ?? ''} multiline lang="zh-Hans" onInput={(value) => editor.updateWordExample('chinese', value)} />
+        <Field label="Traducción de la frase" value={exampleFor(props.word)?.spanish ?? ''} multiline onInput={(value) => editor.updateWordExample('spanish', value)} />
+        <Show when={exampleFor(props.word)}><button type="button" class="btn btn-ghost" onClick={editor.removeWordExample}>Quitar frase</button></Show>
+      </fieldset>
 
       <div class="field">
-        <span id="word-topics" class="label">Temas</span>
-        <div class="flex flex-wrap gap-2" role="group" aria-labelledby="word-topics">
-          <For each={editor.snapshot().topics}>{(topic) => {
-            const on = () => props.word.topicIds.includes(topic.id);
-            return (
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked={on()}
-                class="flex min-h-10 items-center gap-1.5 rounded-tile border-2 px-3 text-sm transition-colors"
-                classList={{ 'border-ink bg-ink text-paper': on(), 'border-line bg-surface text-ink-soft hover:text-ink': !on() }}
-                onClick={() => editor.toggleWordTopic(props.word.id, topic.id, !on())}
-              >
-                <span class="font-hanzi text-base" lang="zh-Hans" aria-hidden="true">{topic.glyph || '·'}</span>
-                {topic.title || 'Tema nuevo'}
-              </button>
-            );
-          }}</For>
-        </div>
-        <p class="hint">Los temas agrupan por asunto. Abajo van enlaces concretos entre palabras (sinónimos, antónimos…).</p>
+        <span id="word-topics" class="label">Temas y etiquetas</span>
+        <For each={['theme', 'tag'] as const}>{(kind) => {
+          const roots = () => editor.snapshot().topics.filter((topic) => topic.kind === kind);
+          return (
+            <Show when={roots().length}>
+              <p class="hint" style={{ 'margin-bottom': '0.35rem' }}>{kind === 'theme' ? 'Temas y subtemas' : 'Etiquetas (se combinan con cualquier tema)'}</p>
+              <div class="flex flex-wrap gap-2" role="group" aria-labelledby="word-topics" style={{ 'margin-bottom': '0.75rem' }}>
+                <For each={roots()}>{(topic) => {
+                  const children = () => editor.snapshot().topics.filter((row) => row.parentId === topic.id);
+                  const chip = (row: typeof topic, nested = false) => {
+                    const on = () => props.word.topicIds.includes(row.id);
+                    return (
+                      <button
+                        type="button"
+                        role="checkbox"
+                        aria-checked={on()}
+                        class="flex min-h-10 items-center gap-1.5 rounded-tile border-2 px-3 text-sm transition-colors"
+                        classList={{ 'border-ink bg-ink text-paper': on(), 'border-line bg-surface text-ink-soft hover:text-ink': !on(), 'opacity-90': nested }}
+                        onClick={() => editor.toggleWordTopic(props.word.id, row.id, !on())}
+                      >
+                        <span class="font-hanzi text-base" lang="zh-Hans" aria-hidden="true">{row.glyph || '·'}</span>
+                        {nested ? `↳ ${row.title || row.id}` : row.title || 'Tema nuevo'}
+                      </button>
+                    );
+                  };
+                  return (
+                    <>
+                      {chip(topic)}
+                      <For each={children()}>{(child) => chip(child, true)}</For>
+                    </>
+                  );
+                }}</For>
+              </div>
+            </Show>
+          );
+        }}</For>
+        <p class="hint">Una palabra puede estar en varios temas. Las etiquetas (verbos, preguntas…) se cruzan con ellos.</p>
       </div>
 
       <fieldset class="relations-field">
@@ -258,7 +307,7 @@ const WordForm: Component<{ word: VocabularyEntry }> = (props) => {
                     <Hanzi text={hit.simplified} size="sm" />
                     <span class="row-text">
                       <span class="row-title"><Pinyin text={hit.pinyin} /></span>
-                      <span class="row-sub">{hit.meaning.split(';')[0]}</span>
+                      <span class="row-sub">{leadSense(hit.senses)}</span>
                     </span>
                     <span class="tag">{hit.level ? `HSK ${hit.level}` : 'Extra'}</span>
                   </button>

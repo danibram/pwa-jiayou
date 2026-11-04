@@ -2,6 +2,7 @@ import type { HskLevel } from '../types';
 import { withToneSandhi } from '../utils/pinyin';
 import type { WordRelation } from './wordRelations';
 import { isWordRelationKind } from './wordRelations';
+import { parseSenses, type WordSense } from './wordSenses';
 import hsk1 from './vocabulary/hsk1.json';
 import hsk2 from './vocabulary/hsk2.json';
 import hsk3 from './vocabulary/hsk3.json';
@@ -16,15 +17,16 @@ export interface VocabularyExample {
   spanish: string;
 }
 
-export const vocabularyExample = (simplified: string): VocabularyExample | undefined =>
-  (examples as Record<string, VocabularyExample>)[simplified];
+export const vocabularyExample = (simplified: string, proposed?: VocabularyExample | null): VocabularyExample | undefined =>
+  proposed === undefined ? (examples as Record<string, VocabularyExample>)[simplified] : proposed ?? undefined;
 
 export interface VocabularyEntry {
   id: string;
   simplified: string;
   traditional: string;
   pinyin: string;
-  meaning: string;
+  /** Every use of the word, in order. The first one is what cards and lists show. */
+  senses: WordSense[];
   /** The HSK level of a catalog word. Words the learner adds have none. */
   level?: HskLevel;
   characters: string[];
@@ -32,9 +34,12 @@ export interface VocabularyEntry {
   sourceId: string;
   /** Editorial links to other catalog words (synonyms, antonyms, …). Omitted when empty. */
   relations?: WordRelation[];
+  /** Null removes a legacy example; undefined keeps the example from the sidecar. */
+  example?: VocabularyExample | null;
 }
 
 export type { WordRelation, WordRelationKind } from './wordRelations';
+export type { WordPos, WordSense } from './wordSenses';
 
 /** A word from the HSK lists that ship with the app. */
 export type CatalogEntry = VocabularyEntry & { level: HskLevel };
@@ -77,7 +82,6 @@ const parseEntry = (raw: unknown, allowExtra = false): CatalogEntry => {
   if (typeof row.simplified !== 'string' || !row.simplified) throw new Error('Palabra sin simplified.');
   if (typeof row.traditional !== 'string' || !row.traditional) throw new Error(`Sin traditional: ${row.simplified}`);
   if (typeof row.pinyin !== 'string' || !row.pinyin) throw new Error(`Sin pinyin: ${row.simplified}`);
-  if (typeof row.meaning !== 'string' || !row.meaning) throw new Error(`Sin meaning: ${row.simplified}`);
   if (!isHskLevel(row.level) && !(allowExtra && row.level === undefined)) throw new Error(`Nivel inválido: ${row.simplified}`);
   if (!Array.isArray(row.characters) || row.characters.some((c) => typeof c !== 'string')) {
     throw new Error(`Caracteres inválidos: ${row.simplified}`);
@@ -87,6 +91,11 @@ const parseEntry = (raw: unknown, allowExtra = false): CatalogEntry => {
   }
   if (typeof row.sourceId !== 'string' || !row.sourceId) throw new Error(`Sin sourceId: ${row.simplified}`);
   let relations: WordRelation[] | undefined;
+  if (row.example !== undefined && row.example !== null && (typeof row.example !== 'object' ||
+    typeof (row.example as VocabularyExample).chinese !== 'string' || !(row.example as VocabularyExample).chinese.trim() ||
+    typeof (row.example as VocabularyExample).spanish !== 'string' || !(row.example as VocabularyExample).spanish.trim())) {
+    throw new Error(`Frase inválida: ${row.simplified}`);
+  }
   if (row.relations !== undefined) {
     if (!Array.isArray(row.relations)) throw new Error(`Relaciones inválidas: ${row.simplified}`);
     relations = [];
@@ -110,12 +119,13 @@ const parseEntry = (raw: unknown, allowExtra = false): CatalogEntry => {
     traditional: row.traditional,
     // The lists write dictionary tones (yī dìng); cards show what learners hear (yí dìng).
     pinyin: withToneSandhi(row.simplified, row.pinyin),
-    meaning: row.meaning,
+    senses: parseSenses(row.senses, row.simplified),
     level: row.level as HskLevel,
     characters: row.characters as string[],
     topicIds: row.topicIds as string[],
     sourceId: row.sourceId,
     ...(relations ? { relations } : {}),
+    ...(row.example !== undefined ? { example: row.example as VocabularyExample | null } : {}),
   };
 };
 

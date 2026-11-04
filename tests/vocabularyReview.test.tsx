@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@solidjs/testing-library';
+import { sensesText } from '../src/data/wordSenses';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
@@ -7,8 +8,8 @@ import VocabularyReview from '../src/pages/VocabularyReview';
 
 vi.mock('../src/data/vocabulary', () => {
   const vocabulary = [
-    { id: 'word-one', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hola', level: 1, characters: ['你', '好'], topicIds: [], sourceId: 'test' },
-    { id: 'word-two', simplified: '谢谢', traditional: '謝謝', pinyin: 'xièxie', meaning: 'gracias', level: 1, characters: ['谢'], topicIds: [], sourceId: 'test' },
+    { id: 'word-one', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', senses: [{ text: 'hola' }], level: 1, characters: ['你', '好'], topicIds: [], sourceId: 'test' },
+    { id: 'word-two', simplified: '谢谢', traditional: '謝謝', pinyin: 'xièxie', senses: [{ text: 'gracias' }], level: 1, characters: ['谢'], topicIds: [], sourceId: 'test' },
   ];
   return {
     vocabulary,
@@ -74,7 +75,7 @@ describe('word review', () => {
     // Recognition is checked as well: the word, and its meaning to pick.
     for (let card = 0; card < 2; card++) {
       const saved = loadVocabularySession(vocabulary)!;
-      const meaning = saved.deck[saved.position].entry.meaning;
+      const meaning = sensesText(saved.deck[saved.position].entry.senses);
       fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${meaning}$`, 'i') }));
       vi.advanceTimersByTime(1200);
     }

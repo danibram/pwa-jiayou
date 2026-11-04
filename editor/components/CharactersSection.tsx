@@ -1,4 +1,5 @@
 import { Component, Show, createMemo, createSignal } from 'solid-js';
+import { leadSense } from '../../src/data/wordSenses';
 import { useEditor } from '../lib/store';
 import { EntryList } from './EntryList';
 import { Field, Hanzi, LevelTag, Pinyin } from './text';
@@ -66,7 +67,7 @@ const CharactersSection: Component = () => {
               <Show when={wordsWith().length}>
                 <section class="related">
                   <h3>Palabras con {c().character}</h3>
-                  <ul>{wordsWith().map((w) => <li><Hanzi text={w.simplified} size="sm" /> <Pinyin text={w.pinyin} /> <span class="muted">{w.meaning}</span></li>)}</ul>
+                  <ul>{wordsWith().map((w) => <li><Hanzi text={w.simplified} size="sm" /> <Pinyin text={w.pinyin} /> <span class="muted">{leadSense(w.senses)}</span></li>)}</ul>
                 </section>
               </Show>
             </>

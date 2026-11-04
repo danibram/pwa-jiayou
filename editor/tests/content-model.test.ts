@@ -3,13 +3,26 @@ import { validateDraft, validateSnapshot, type ContentSnapshot } from '../lib/mo
 
 const base: ContentSnapshot = {
   schemaVersion: 1,
-  vocabulary: [{ id: 'one', simplified: '一', traditional: '一', pinyin: 'yī', meaning: 'uno', level: 1, characters: ['一'], topicIds: ['numbers'], sourceId: 'hsk-2-0' }],
+  vocabulary: [{ id: 'one', simplified: '一', traditional: '一', pinyin: 'yī', senses: [{ text: 'uno' }], level: 1, characters: ['一'], topicIds: ['numbers'], sourceId: 'hsk-2-0' }],
   characters: ['一', '二', '三', '四', '五'].map((character, index) => ({ character, traditional: character, pinyin: 'yī', definition: 'número', radical: '一', stroke_count: index + 1, hsk_level: 1 as const, general_standard: index + 1, frequency_rank: index + 1 })),
-  topics: [{ id: 'numbers', title: 'Números', glyph: '一', characters: ['一', '二', '三', '四', '五'] }],
+  topics: [{ id: 'numbers', title: 'Números', glyph: '一', kind: 'tag', characters: ['一', '二', '三', '四', '五'] }],
 };
 const copy = () => structuredClone(base);
 
 describe('content validation', () => {
+  it('validates authored examples and rejects malformed or unsafe references', () => {
+    const snapshot = copy();
+    snapshot.vocabulary[0].example = { chinese: '我有一个。', spanish: '' };
+    expect(() => validateSnapshot(snapshot)).toThrow(/Frase incompleta/);
+    snapshot.vocabulary[0].example.spanish = 'Tengo uno.';
+    expect(() => validateSnapshot(snapshot)).not.toThrow();
+    snapshot.vocabulary[0].example = null;
+    expect(() => validateSnapshot(snapshot)).not.toThrow();
+    const draft = { schemaVersion: 1, baseRevision: 'same', snapshot, references: { one: { url: 'javascript:alert(1)', retrieved: 'today', examples: [] } } };
+    expect(() => validateDraft(draft, base, 'same')).toThrow(/Referencia inválida/);
+    draft.references.one.url = 'https://www.tongtong.app/es/dictionary/一-yi';
+    expect(() => validateDraft(draft, base, 'same')).not.toThrow();
+  });
   it('accepts corrected dictionary pinyin and words without a level', () => {
     const next = copy();
     next.vocabulary[0].pinyin = 'yí';
@@ -30,7 +43,7 @@ describe('content validation', () => {
     small.topics[0].characters = ['一', '二'];
     expect(() => validateSnapshot(small)).toThrow(/al menos 5/);
     const sameTitle = copy();
-    sameTitle.topics.push({ id: 'numeros', title: 'números', glyph: '一', characters: ['一', '二', '三', '四', '五'] });
+    sameTitle.topics.push({ id: 'numeros', title: 'números', glyph: '一', kind: 'tag', characters: ['一', '二', '三', '四', '五'] });
     expect(() => validateSnapshot(sameTitle)).toThrow(/Título de tema duplicado/);
   });
   it('rejects inconsistent characters, duplicate topic tags and HSK membership changes', () => {
@@ -65,7 +78,7 @@ describe('content validation', () => {
       simplified: '二',
       traditional: '二',
       pinyin: 'èr',
-      meaning: 'dos',
+      senses: [{ text: 'dos' }],
       characters: ['二'],
       relations: [{ kind: 'antonym', id: 'one' }],
     });
