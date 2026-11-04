@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { loadVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import VocabularyReview from '../src/pages/VocabularyReview';
 
@@ -228,6 +229,26 @@ describe('word review', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Descartar y salir' }));
     expect(vocabularyProgressStore.isNew('word-one')).toBe(true);
     expect(vocabularyProgressStore.daily.reviewed).toBe(0);
+    vi.useRealTimers();
+  });
+
+  it('undoes answers given before a pause, and keeps a change made outside the session', () => {
+    vi.useFakeTimers();
+    vocabularyProgressStore.grade('word-other', 'good');
+    const view = render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    fireEvent.click(screen.getByRole('button', { name: '你好' }));
+    vi.advanceTimersByTime(1200);
+    view.unmount();
+    // Practice elsewhere while the session is paused.
+    vocabularyProgressStore.grade('word-other', 'again');
+    const outside = vocabularyProgressStore.get('word-other');
+    render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume />);
+    fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Descartar y salir' }));
+    expect(vocabularyProgressStore.isNew('word-one')).toBe(true);
+    expect(vocabularyProgressStore.get('word-other')).toEqual(outside);
     vi.useRealTimers();
   });
 });

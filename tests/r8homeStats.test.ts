@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { activityStreak, progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { activityStreak, progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { nextReviewsLabel, summarizeProgress, type ProgressSummary } from '../src/utils/progressSummary';
 
 const day = (offset: number) => {

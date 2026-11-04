@@ -1,9 +1,11 @@
 import type { VocabularyEntry } from '../data/vocabulary';
-import { GRADES, type Grade } from '../stores/progressStore';
+import { parseCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
+import { GRADES, type Grade } from '../domain/progress/types';
 import { isNonNegativeInteger, isOneOf, isRecord } from './parse';
+import { KEYS, PRACTICE_SESSION_PREFIX, practiceSessionKey } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
-const KEY = 'jiayou-vocabulary-session-v1';
-const sessionKey = (practiceId?: string) => practiceId ? `${KEY}:practice:${practiceId}` : KEY;
+const sessionKey = (practiceId?: string) => practiceId ? practiceSessionKey(practiceId) : KEYS.wordSession;
 const KINDS = ['learn', 'review', 'recall'] as const;
 const STEPS = ['learn', 'seen', 'ask', 'check'] as const;
 /**
@@ -26,17 +28,17 @@ export interface VocabularySessionSnapshot {
   results?: Record<string, Grade>;
   heading: string;
   mode?: 'today' | 'practice';
-  /** Progress as it was when the session began, so discarding can undo its answers. */
-  checkpoint?: string;
+  /** The records this session changed, as they were before it, so discarding can undo its answers. */
+  checkpoint?: ProgressCheckpoint;
 }
 
 export function hasStoredVocabularySession(practiceId?: string): boolean {
-  try { return localStorage.getItem(sessionKey(practiceId)) !== null; } catch { return false; }
+  try { return storage.read(sessionKey(practiceId)) !== null; } catch { return false; }
 }
 
 export function loadVocabularySession(entries: VocabularyEntry[], practiceId?: string): VocabularySessionSnapshot | null {
   try {
-    const raw = localStorage.getItem(sessionKey(practiceId));
+    const raw = storage.read(sessionKey(practiceId));
     if (!raw) return null;
     const value: unknown = JSON.parse(raw);
     if (!isRecord(value)) throw new Error('Invalid session');
@@ -52,7 +54,7 @@ export function loadVocabularySession(entries: VocabularyEntry[], practiceId?: s
       if (!entry) throw new Error('Unavailable entry');
       deck.push({ entry, kind: card.kind, ...(card.prompt ? { prompt: card.prompt } : {}) });
     }
-    if (value.checkpoint !== undefined && typeof value.checkpoint !== 'string') throw new Error('Invalid checkpoint');
+    const checkpoint = value.checkpoint === undefined ? undefined : parseCheckpoint(value.checkpoint);
     if (!isNonNegativeInteger(value.position) || value.position >= deck.length || typeof value.revealed !== 'boolean' || !isOneOf(STEPS, value.step) || (value.feedback !== null && !isOneOf(GRADES, value.feedback)) || !isRecord(value.counts) || typeof value.heading !== 'string') throw new Error('Invalid session');
     const counts = { again: 0, hard: 0, good: 0 };
     for (const grade of GRADES) {
@@ -69,34 +71,53 @@ export function loadVocabularySession(entries: VocabularyEntry[], practiceId?: s
         results[id] = grade;
       }
     }
-    return { version: 1, deck, position: value.position, revealed: value.revealed, step: value.step, feedback: value.feedback, counts, ...(results ? { results } : {}), heading: value.heading, ...(value.mode ? { mode: value.mode } : {}), ...(typeof value.checkpoint === 'string' ? { checkpoint: value.checkpoint } : {}) };
+    return { version: 1, deck, position: value.position, revealed: value.revealed, step: value.step, feedback: value.feedback, counts, ...(results ? { results } : {}), heading: value.heading, ...(value.mode ? { mode: value.mode } : {}), ...(checkpoint ? { checkpoint } : {}) };
   } catch {
-    try { localStorage.removeItem(sessionKey(practiceId)); } catch { /* Storage may be unavailable. */ }
+    try { storage.remove(sessionKey(practiceId)); } catch { /* Storage may be unavailable. */ }
     return null;
   }
 }
 
 export function saveVocabularySession(snapshot: VocabularySessionSnapshot, practiceId?: string): boolean {
   try {
-    const raw = localStorage.getItem(sessionKey(practiceId));
+    const raw = storage.read(sessionKey(practiceId));
     if (raw) {
       const existing: unknown = JSON.parse(raw);
       if (!isRecord(existing) || existing.version !== 1) return false;
     }
-    localStorage.setItem(sessionKey(practiceId), JSON.stringify({ ...snapshot, deck: snapshot.deck.map(({ entry, kind, prompt }) => ({ id: entry.id, kind, ...(prompt ? { prompt } : {}) })) }));
+    storage.write(sessionKey(practiceId), JSON.stringify({ ...snapshot, deck: snapshot.deck.map(({ entry, kind, prompt }) => ({ id: entry.id, kind, ...(prompt ? { prompt } : {}) })) }));
     return true;
   } catch { return false; }
 }
 
 export function discardVocabularySession(practiceId?: string): boolean {
-  try { localStorage.removeItem(sessionKey(practiceId)); return localStorage.getItem(sessionKey(practiceId)) === null; } catch { return false; }
+  try { storage.remove(sessionKey(practiceId)); return storage.read(sessionKey(practiceId)) === null; } catch { return false; }
 }
 
 export function discardAllVocabularySessions(): boolean {
   try {
-    const keys = Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index))
-      .filter((key): key is string => key !== null && (key === KEY || key.startsWith(`${KEY}:practice:`)));
-    for (const key of keys) localStorage.removeItem(key);
-    return keys.every((key) => localStorage.getItem(key) === null);
+    const keys = storage.keys(KEYS.wordSession)
+      .filter((key) => key === KEYS.wordSession || key.startsWith(PRACTICE_SESSION_PREFIX));
+    for (const key of keys) storage.remove(key);
+    return keys.every((key) => storage.read(key) === null);
   } catch { return false; }
+}
+
+/**
+ * The first paused practice session that `accepts` lets through, in storage order. Unreadable ones
+ * are dropped on the way, as loading them does. `entries` is read only once a session is found.
+ */
+export function findPausedPractice(
+  entries: () => VocabularyEntry[],
+  accepts: (practiceId: string) => boolean,
+): { id: string; title: string } | null {
+  try {
+    for (const key of storage.keys(PRACTICE_SESSION_PREFIX)) {
+      const id = key.slice(PRACTICE_SESSION_PREFIX.length);
+      if (!accepts(id)) continue;
+      const snapshot = loadVocabularySession(entries(), id);
+      if (snapshot) return { id, title: snapshot.heading };
+    }
+  } catch { /* Storage unavailable: nothing to resume. */ }
+  return null;
 }
