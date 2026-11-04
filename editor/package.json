@@ -1,0 +1,17 @@
+{
+  "name": "jiayou-content-editor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "node ../scripts/content-publish.mjs generate",
+    "export": "node ../scripts/content-publish.mjs import",
+    "promote": "node ../scripts/content-publish.mjs promote",
+    "predev": "npm run data",
+    "dev": "vite --config vite.config.ts",
+    "prebuild": "npm run data",
+    "build": "tsc --noEmit -p tsconfig.json && vite build --config vite.config.ts",
+    "preview": "vite preview --config vite.config.ts --host 127.0.0.1 --port 4318",
+    "pretest": "npm run data",
+    "test": "vitest run --config vitest.config.ts"
+  }
+}

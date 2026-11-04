@@ -1134,19 +1134,6 @@
     "sourceId": "hsk-2-0"
   },
   {
-    "id": "word-7b49-deng3",
-    "simplified": "等",
-    "traditional": "等",
-    "pinyin": "děng",
-    "meaning": "esperar; etcétera",
-    "level": 4,
-    "characters": [
-      "等"
-    ],
-    "topicIds": [],
-    "sourceId": "hsk-2-0"
-  },
-  {
     "id": "word-5e95-de5",
     "simplified": "底",
     "traditional": "底",
@@ -1250,19 +1237,6 @@
     "level": 4,
     "characters": [
       "断"
-    ],
-    "topicIds": [],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-5bf9-dui4",
-    "simplified": "对",
-    "traditional": "對",
-    "pinyin": "duì",
-    "meaning": "correcto; hacia",
-    "level": 4,
-    "characters": [
-      "对"
     ],
     "topicIds": [],
     "sourceId": "hsk-2-0"
@@ -2196,19 +2170,6 @@
     "characters": [
       "果",
       "然"
-    ],
-    "topicIds": [],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-8fc7-guo4",
-    "simplified": "过",
-    "traditional": "過",
-    "pinyin": "guò",
-    "meaning": "pasar; (marca de experiencia)",
-    "level": 4,
-    "characters": [
-      "过"
     ],
     "topicIds": [],
     "sourceId": "hsk-2-0"
