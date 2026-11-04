@@ -14,7 +14,6 @@ describe('screen urls', () => {
     { page: 'vocabulary-review', resume: true, practiceId: '__all__' },
     { page: 'acerca' },
     { page: 'opciones' },
-    { page: 'mis-palabras' },
     { page: 'trazos', focus: { kind: 'level' }, from: homeScreen },
     { page: 'trazos', focus: { kind: 'character', char: '爱' }, from: homeScreen },
     { page: 'trazos', focus: { kind: 'topic', char: '吃', topicId: 'food' }, from: homeScreen },
@@ -27,7 +26,6 @@ describe('screen urls', () => {
   it('uses readable paths', () => {
     expect(screenToUrl(homeScreen)).toBe('/');
     expect(screenToUrl({ page: 'vocabulario', wordId: 'word-7231-ai4' })).toBe('/palabras/word-7231-ai4');
-    expect(screenToUrl({ page: 'mis-palabras' })).toBe('/mis-palabras');
     expect(screenToUrl({ page: 'trazos', focus: { kind: 'character', char: '爱' }, from: homeScreen })).toBe('/trazos/%E7%88%B1');
   });
 
@@ -35,7 +33,7 @@ describe('screen urls', () => {
     const from: Screen = { page: 'vocabulario', wordId: 'word-7231-ai4' };
     expect(urlToScreen(screenToUrl({ page: 'trazos', focus: { kind: 'character', char: '爱' }, from })))
       .toEqual({ page: 'trazos', focus: { kind: 'character', char: '爱' }, from: homeScreen });
-    expect(urlToScreen(screenToUrl({ page: 'vocabulario', wordId: 'w', returnTo: 'mis-palabras', topic: true })))
+    expect(urlToScreen(screenToUrl({ page: 'vocabulario', wordId: 'w', topic: true })))
       .toEqual({ page: 'vocabulario', wordId: 'w' });
     expect(urlToScreen(screenToUrl({ page: 'vocabulary-review', resume: false, practiceId: 'w' })))
       .toEqual({ page: 'vocabulary-review', resume: true, practiceId: 'w' });

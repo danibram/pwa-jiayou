@@ -37,7 +37,7 @@ describe('screen from the url', () => {
 
   it('keeps the saved screen on reload, including where to go back', () => {
     const word = vocabulary[0];
-    const saved = { page: 'vocabulario', topic: false, wordId: word.id, returnTo: 'mis-palabras' };
+    const saved = { page: 'vocabulario', topic: false, wordId: word.id, returnTo: 'home' };
     history.replaceState({ jiayou: true, screen: saved }, '', `/palabras/${word.id}`);
     render(() => <App />);
     expect(history.state.screen).toEqual(saved);

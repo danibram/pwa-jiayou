@@ -1,5 +1,5 @@
 import { createEffect, onCleanup, onMount, type Accessor, type Setter } from 'solid-js';
-import { allWords, findWord } from './stores/myWordsStore';
+import { allWords, findWord } from './data/vocabulary';
 import { loadVocabularySession } from './utils/vocabularySession';
 import { screenToUrl, urlToScreen } from './navigation';
 import { homeScreen, parseScreen, type Screen } from './screen';

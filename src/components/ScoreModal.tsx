@@ -41,6 +41,10 @@ interface ScoreModalProps {
   weakChange?: { before: number; after: number; recovered?: number };
   /** Weak items in the learner's levels after this session: the number Home shows, which can differ from the misses. */
   weakNow?: number;
+  /** Words taught in this session, listed rather than graded: their answers came seconds after the lesson. */
+  learned?: (SummaryItem & { meaning: string; struggled?: boolean })[];
+  /** Reviews due by the end of tomorrow, so the summary names the next step in numbers. */
+  tomorrow?: number;
 }
 
 /**
@@ -77,11 +81,13 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
   const lesson = () => summary().total === 0;
   const verdict = () => {
     if (lesson()) {
-      const n = props.practised.length;
+      const n = props.learned?.length || props.practised.length;
       return {
         title: '明天见',
         pinyin: 'míng tiān jiàn',
-        subtitle: `Has visto ${countNoun(n, kind())}. Mañana te ${pronoun(n, kind())} pregunto.`,
+        subtitle: props.learned?.length
+          ? `Hoy has conocido ${countNoun(n, kind())}. Mañana te ${pronoun(n, kind())} pregunto.`
+          : `Has visto ${countNoun(n, kind())}. Mañana te ${pronoun(n, kind())} pregunto.`,
       };
     }
     const p = summary().percentage;
@@ -126,7 +132,8 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
           <Show when={!lesson()}>
             <div class="mt-6">
               <div class="eyebrow mb-2 text-center">
-                {countNoun(summary().total, kind())} en esta sesión
+                {/* With new words listed below, the bar counts only the reviews. */}
+                {props.learned && props.learned.length > 0 ? (summary().total === 1 ? '1 repaso' : `${summary().total} repasos`) : `${countNoun(summary().total, kind())} en esta sesión`}
               </div>
               <div class="flex h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
                 <For each={ROWS}>
@@ -156,12 +163,35 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
             </div>
           </Show>
 
+          <Show when={props.learned && props.learned.length > 0}>
+            <div class="mt-6">
+              <div class="eyebrow mb-2">{props.learned!.length === 1 ? 'Palabra nueva' : `${props.learned!.length} palabras nuevas`}</div>
+              <ul class="divide-y divide-line/60 rounded-tile bg-ink/[0.03] px-3">
+                <For each={props.learned}>{(item) => (
+                  <li class="flex items-baseline gap-3 py-2">
+                    <span class="w-16 shrink-0 font-hanzi text-xl leading-none" lang="zh-CN">{item.character}</span>
+                    <Pinyin word text={item.pinyin} class="shrink-0 text-sm" />
+                    <span class="min-w-0 flex-1 truncate text-right text-sm text-ink-soft first-letter:uppercase">{item.meaning}</span>
+                    <Show when={item.struggled}><span class="shrink-0 rounded-full bg-seal/10 px-2 py-0.5 text-[0.6875rem] font-semibold text-seal">te costó</span></Show>
+                  </li>
+                )}</For>
+              </ul>
+            </div>
+          </Show>
+
           {/* One fact per row, so none runs into the next. */}
           <div class="mt-5 divide-y divide-line/70 border-y border-line/70 text-sm">
-            <Show when={props.returnNote}>
-              <div class="flex items-center justify-between gap-3 py-2.5">
-                <span class="shrink-0 text-ink-soft">Próximo repaso</span>
-                <span class="text-right text-ink">{props.returnNote}</span>
+            <Show when={props.tomorrow !== undefined && props.missed.length === 0} fallback={
+              <Show when={props.returnNote}>
+                <div class="flex items-center justify-between gap-3 py-2.5">
+                  <span class="shrink-0 text-ink-soft">Próximo repaso</span>
+                  <span class="text-right text-ink">{props.returnNote}</span>
+                </div>
+              </Show>
+            }>
+              <div class="flex items-center justify-between gap-3 py-2.5 tabular-nums">
+                <span class="shrink-0 text-ink-soft">Mañana</span>
+                <span class="text-right font-semibold text-ink">{props.tomorrow === 1 ? '1 repaso' : `${props.tomorrow} repasos`}</span>
               </div>
             </Show>
             <Show when={props.weakNow !== undefined && !props.weakChange && !lesson()}>
@@ -217,15 +247,21 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
             <Show
               when={props.missed.length > 0}
               fallback={
-                <Show when={props.practised.length > 0 && canOpen(props.practised[0])}>
-                  <button
-                    onClick={() => props.onOpenStrokes?.(props.practised[0].character)}
-                    class="btn-ink h-14 w-full text-[0.9375rem]"
-                  >
-                    <Icon name="brush" size={18} />
-                    Practicar su escritura
+                <>
+                  {/* Nothing missed: the day is done, so leaving is the main step and writing an extra. */}
+                  <button onClick={props.onGoHome} class="btn-ink h-14 w-full text-[0.9375rem]">
+                    {props.exitLabel ?? 'Volver al inicio'}
                   </button>
-                </Show>
+                  <Show when={props.practised.length > 0 && canOpen(props.practised[0])}>
+                    <button
+                      onClick={() => props.onOpenStrokes?.(props.practised[0].character)}
+                      class="btn-quiet h-12 w-full text-sm"
+                    >
+                      <Icon name="brush" size={16} />
+                      Practicar cómo se escriben
+                    </button>
+                  </Show>
+                </>
               }
             >
               <button onClick={props.onReviewMissed} class="btn-ink h-14 w-full text-[0.9375rem]">
@@ -234,10 +270,10 @@ const ScoreModal: Component<ScoreModalProps> = (props) => {
                   ? 'Repasar 1 fallo'
                   : `Repasar los ${props.missed.length} fallos`}
               </button>
+              <button onClick={props.onGoHome} class="btn-quiet h-12 w-full text-sm">
+                {props.exitLabel ?? 'Volver al inicio'}
+              </button>
             </Show>
-            <button onClick={props.onGoHome} class="btn-quiet h-12 w-full text-sm">
-              {props.exitLabel ?? 'Volver al inicio'}
-            </button>
           </div>
         </div>
       </div>

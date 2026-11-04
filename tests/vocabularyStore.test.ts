@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { vocabularyCoverage } from '../src/data/vocabulary';
+import { progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 
 afterEach(() => {
   vocabularyStore.reset();
+  progressStore.clear();
   localStorage.clear();
 });
 
@@ -33,5 +36,14 @@ describe('vocabularyStore', () => {
     expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1', 'hsk-3']);
     vocabularyStore.selectLists(['nope']);
     expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1']);
+  });
+
+  it('draws the word of the day from the studied lists, preferring a word being learned', () => {
+    vocabularyStore.selectLists(['hsk-2']);
+    const daily = vocabularyStore.getDailyWord();
+    expect(daily.level).toBe(2);
+    const word = vocabularyStore.getSelectedWords()[5];
+    vocabularyProgressStore.grade(word.id, 'good');
+    expect(vocabularyStore.getDailyWord().id).toBe(word.id);
   });
 });

@@ -8,8 +8,12 @@ import { storage } from '../persistence/keyValue';
 const sessionKey = (practiceId?: string) => practiceId ? practiceSessionKey(practiceId) : KEYS.wordSession;
 const KINDS = ['learn', 'review', 'recall'] as const;
 const STEPS = ['learn', 'seen', 'ask', 'check'] as const;
-/** What a card shows first: the word, its meaning, its sound, or the meaning with four words to pick from. */
-export const PROMPTS = ['meaning', 'reverse', 'listen', 'pick'] as const;
+/**
+ * What a card shows first: the word, its meaning, its sound, the meaning with words to pick from,
+ * the sound with words to pick from (`hear`), or the word with meanings to pick from (`recognize`).
+ * The last three are for words met only once or twice, so the answer is checked, not self-graded.
+ */
+export const PROMPTS = ['meaning', 'reverse', 'listen', 'pick', 'hear', 'recognize'] as const;
 export type Prompt = typeof PROMPTS[number];
 
 export interface VocabularySessionSnapshot {

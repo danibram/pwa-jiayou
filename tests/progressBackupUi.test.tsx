@@ -5,7 +5,6 @@ import { progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { hasStoredVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import { progressReset } from '../src/utils/progressReset';
-import { myWordsStore } from '../src/stores/myWordsStore';
 import { vocabulary } from '../src/data/vocabulary';
 
 const backup = (right: number) => JSON.stringify({
@@ -116,10 +115,9 @@ describe('progress backup UI', () => {
     expect(hasStoredVocabularySession()).toBe(false);
   });
 
-  it('combines a backup with current progress, keeping the later copy of each record and both word lists', async () => {
+  it('combines a backup with current progress, keeping the later copy of each record and ignoring legacy word lists', async () => {
     progressStore.grade('人', 'good');
     vocabularyProgressStore.grade('mine-here', 'good');
-    myWordsStore.addCatalog(vocabulary[0].id);
     const file = JSON.stringify({
       ...JSON.parse(backup(4)),
       // Older than this device's grade of 人, newer than nothing: 好 arrives, 人 stays.
@@ -138,10 +136,8 @@ describe('progress backup UI', () => {
     expect(progressStore.get('好')?.right).toBe(4);
     expect(vocabularyProgressStore.get('mine-here')?.right).toBe(1);
     expect(vocabularyProgressStore.get('from-there')?.right).toBe(3);
-    expect([...myWordsStore.ids].sort()).toEqual([vocabulary[0].id, vocabulary[1].id].sort());
     expect(screen.getByRole('status')).toHaveTextContent('Copia combinada con tu progreso.');
     expect(progressReset()).toBe(before + 1);
-    myWordsStore.reset();
   });
 
   it('keeps both histories and the word session if writing the import fails', async () => {

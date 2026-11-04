@@ -1,5 +1,5 @@
 import { Component, createMemo, For, Show } from 'solid-js';
-import { allWords } from '../stores/myWordsStore';
+import { allWords } from '../data/vocabulary';
 import { characterForHit, searchCharacters } from '../utils/characterSearch';
 import { foldPinyin, markTones, toneOf } from '../utils/pinyin';
 import Pinyin from './Pinyin';

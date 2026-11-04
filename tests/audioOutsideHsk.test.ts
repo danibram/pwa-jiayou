@@ -3,7 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import clips from '../src/data/syllable-clips.json';
 import { characterLevel } from '../src/data/catalog';
 import { characterStore } from '../src/stores/characterStore';
-import { myWordsStore } from '../src/stores/myWordsStore';
+
+vi.mock('../src/data/vocabulary/extra.json', async () => ({ default: (await import('./fixtures/extraWords')).extraWords }));
 
 class FakeAudio {
   static srcs: string[] = [];
@@ -56,8 +57,8 @@ describe('clips for characters outside HSK', () => {
   });
 });
 
-describe('offline media for own words', () => {
-  it('saves strokes and audio needed by an own word', async () => {
+describe('offline media for Extra words', () => {
+  it('saves strokes and audio needed by an Extra word', async () => {
     const stored = new Map<string, Response>();
     vi.stubGlobal('caches', {
       open: async () => ({
@@ -74,12 +75,10 @@ describe('offline media for own words', () => {
       if (url.endsWith('.mp3')) return new Response('audio', { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
       return new Response('{"strokes":[],"medians":[]}', { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
-    myWordsStore.add({ simplified: '咖喱', pinyin: 'ka1 li2', meaning: 'curry' });
     const { prepareListMedia, remoteStrokeUrl } = await import('../src/utils/levelPacks');
     characterStore.reset();
-    await prepareListMedia(['mine']);
+    await prepareListMedia(['extra']);
     expect(fetched).toContain(remoteStrokeUrl('喱'));
     expect(fetched.some((url) => url.includes('/audio/'))).toBe(true);
-    myWordsStore.reset();
   });
 });

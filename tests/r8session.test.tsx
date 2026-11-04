@@ -14,6 +14,11 @@ vi.mock('../src/data/vocabulary', () => {
     vocabularyByLevel: { 1: vocabulary, 2: [], 3: [], 4: [], 5: [], 6: [] },
     vocabularyCoverage: { edition: 'HSK 2.0', levels: [1, 2, 3, 4, 5, 6], complete: true, counts: { 1: 2, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 } },
     vocabularySources: {},
+    extraVocabulary: [],
+    isExtraWord: () => false,
+    allWords: () => vocabulary,
+    findWord: (id: string) => vocabulary.find((word) => word.id === id),
+    charactersOfExtraTopicWords: () => [],
   };
 });
 

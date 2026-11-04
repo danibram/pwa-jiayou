@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import GradeButtons from '../src/components/GradeButtons';
 import { vocabulary, type VocabularyEntry } from '../src/data/vocabulary';
 import { askGloss, askOrder, interleave, pickChoices } from '../src/pages/VocabularyReview';
+import { isFunctionWord } from '../src/domain/vocabulary/sessionDeck';
 
 const word = (simplified: string) => vocabulary.find((entry) => entry.simplified === simplified)!;
 
@@ -46,8 +47,13 @@ describe('learning order', () => {
       else runs.push(1);
     });
     expect(runs).toEqual([3, 4, 3]);
-    expect(deck.filter((card) => card.prompt === 'pick')).toHaveLength(10);
-    expect(deck.filter((card) => card.kind === 'recall' && !card.prompt)).toHaveLength(10);
+    // Particles and classifiers are recalled from the word, never picked from a Spanish they do not have.
+    const functionWords = ten.filter(isFunctionWord).length;
+    expect(functionWords).toBeGreaterThan(0);
+    expect(deck.filter((card) => card.prompt === 'pick')).toHaveLength(10 - functionWords);
+    // Recognition is checked too: the word, and its meaning to pick.
+    expect(deck.filter((card) => card.kind === 'recall' && card.prompt === 'recognize')).toHaveLength(10 + functionWords);
+    expect(deck.filter((card) => card.kind === 'recall' && !card.prompt)).toHaveLength(0);
   });
 
   it('never asks a group back in the order it was taught', () => {
@@ -75,5 +81,16 @@ describe('learning order', () => {
     const met = new Set(ten.filter((entry) => entry.id !== target.id).slice(0, 5).map((entry) => entry.id));
     const others = pickChoices(target, pool, (entry) => met.has(entry.id)).filter((entry) => entry.id !== target.id);
     expect(others.every((entry) => met.has(entry.id))).toBe(true);
+  });
+
+  it('offers only words already met when there are at least two, so a stranger is never the giveaway', () => {
+    const hsk1 = vocabulary.filter((entry) => entry.level === 1);
+    const target = hsk1.find((entry) => entry.simplified === '我')!;
+    const met = new Set(['你', '你好']);
+    for (let run = 0; run < 20; run++) {
+      const choices = pickChoices(target, hsk1, (entry) => met.has(entry.simplified));
+      expect(choices.map((entry) => entry.simplified).sort()).toEqual(['你', '你好', '我'].sort());
+    }
+    expect(pickChoices(target, hsk1)).toHaveLength(4);
   });
 });
