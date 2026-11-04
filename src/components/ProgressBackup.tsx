@@ -1,7 +1,6 @@
 import { createSignal, Show } from 'solid-js';
 import { parseProgress, progressStore } from '../stores/progressStore';
 import { notifyProgressReset } from '../utils/progressReset';
-import { discardSession } from '../utils/sessionStore';
 import { discardAllVocabularySessions } from '../utils/vocabularySession';
 
 /** The progress file. Files from before Extra may carry a `myWords` list, which import ignores. */
@@ -17,7 +16,6 @@ const downloadBackup = () => {
 };
 
 const signalProgressReplaced = () => {
-  discardSession();
   discardAllVocabularySessions();
   notifyProgressReset();
 };
@@ -82,13 +80,15 @@ export default function ProgressBackup() {
       setMessage('No se pudo leer la copia. Comprueba que sea un archivo de progreso válido.');
     }
   };
-  const restore = () => {
+  /** `merge`: keep the later copy of each word and character. Otherwise the file replaces everything. */
+  const restore = (merge: boolean) => {
     const raw = pending();
     if (!raw) return;
     try {
-      progressStore.importBackup(raw);
+      if (merge) progressStore.mergeBackup(raw);
+      else progressStore.importBackup(raw);
       signalProgressReplaced();
-      setMessage('Copia restaurada.');
+      setMessage(merge ? 'Copia combinada con tu progreso.' : 'Copia restaurada.');
       setPending(undefined);
     } catch {
       setMessage('No se pudo guardar la copia. Tu progreso actual sigue disponible.');
@@ -110,9 +110,10 @@ export default function ProgressBackup() {
       </div>
       <Show when={pending()}>
         <div class="mt-3">
-          <p class="text-sm text-ink-soft">La copia reemplazará el progreso actual. Contiene {backupCounts().chars} {backupCounts().chars === 1 ? 'registro' : 'registros'} de caracteres y {backupCounts().words} de palabras. Exporta el progreso actual primero si quieres conservarlo.</p>
-          <div class="mt-2 flex gap-2">
-            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={restore}>Reemplazar progreso</button>
+          <p class="text-sm text-ink-soft">La copia contiene {backupCounts().chars} {backupCounts().chars === 1 ? 'registro' : 'registros'} de caracteres y {backupCounts().words} de palabras. Combinarla conserva, de cada carácter y palabra, lo último que estudiaste en cualquiera de los dos. Reemplazar borra el progreso actual; expórtalo primero si quieres conservarlo.</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => restore(true)}>Combinar con mi progreso</button>
+            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => restore(false)}>Reemplazar progreso</button>
             <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setPending(undefined)}>Cancelar</button>
           </div>
         </div>

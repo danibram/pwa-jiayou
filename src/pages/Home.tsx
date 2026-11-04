@@ -3,9 +3,10 @@ import { Component, createMemo, createSignal, For, Show, untrack } from 'solid-j
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
 import ThemeToggle from '../components/ThemeToggle';
-import HomeProgress, { type ProgressSnapshot } from '../components/HomeProgress';
+import HomeProgress from '../components/HomeProgress';
 import LevelChips from '../components/LevelChips';
-import { summarizeProgress, type ProgressSummary } from '../utils/progressSummary';
+import { summarizeProgress } from '../utils/progressSummary';
+import { readHomeSnapshot, rememberHomeSnapshot } from '../utils/homeSnapshot';
 import { agree, countNoun, type NounKind } from '../utils/countNoun';
 import { canLearnNew, DAILY_NEW_RULE_TEXT, progressStore, SESSION_SIZE, WORD_NEW_PER_DAY } from '../stores/progressStore';
 import ActivityCalendar from '../components/ActivityCalendar';
@@ -19,7 +20,7 @@ import { vocabularyStore } from '../stores/vocabularyStore';
 import { prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
 import type { HskLevel } from '../types';
-import { discardVocabularySession, hasStoredVocabularySession, loadVocabularySession } from '../utils/vocabularySession';
+import { discardVocabularySession, findPausedPractice, hasStoredVocabularySession, loadVocabularySession } from '../utils/vocabularySession';
 
 interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
@@ -80,44 +81,8 @@ const CapNote: Component<{ limit: number; kind: NounKind }> = (props) => {
   );
 };
 
-type HomeMode = 'vocabulary' | 'characters';
-
-/** What Home showed last time, per mode and level set. Read once per visit, then replaced, so each gain is named once. */
-const lastKey = (mode: HomeMode) => `jiayou-home-last-${mode}`;
-const readLast = (mode: HomeMode, scope: string): ProgressSnapshot | null => {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(lastKey(mode)) ?? 'null');
-    if (!value || typeof value !== 'object') return null;
-    const { mastered, learning, scope: saved } = value as Record<string, unknown>;
-    // Different levels mean different totals; comparing them would invent gains.
-    if (saved !== scope || !Number.isInteger(mastered) || !Number.isInteger(learning)) return null;
-    return { mastered: mastered as number, learning: learning as number };
-  } catch {
-    return null;
-  }
-};
-const rememberLast = (mode: HomeMode, scope: string, summary: ProgressSummary) => {
-  try {
-    localStorage.setItem(lastKey(mode), JSON.stringify({ scope, mastered: summary.mastered, learning: summary.learning }));
-  } catch { /* The gain line is a nicety; storage may be full or blocked. */ }
-};
-
 /** Word sessions Home can start, saved under vocabularySession's practice keys. A single word's practice is not one. */
-const PRACTICE_PREFIX = 'jiayou-vocabulary-session-v1:practice:';
 const HOME_PRACTICE = /^(__more__|__weak__|__all__|topic:.+)$/;
-const findPausedPractice = (): { id: string; title: string } | null => {
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key?.startsWith(PRACTICE_PREFIX)) continue;
-      const id = key.slice(PRACTICE_PREFIX.length);
-      if (!HOME_PRACTICE.test(id)) continue;
-      const snapshot = loadVocabularySession(allWords(), id);
-      if (snapshot) return { id, title: snapshot.heading };
-    }
-  } catch { /* Storage unavailable: nothing to resume. */ }
-  return null;
-};
 
 const Home: Component<HomeProps> = (props) => {
   const words = createMemo(() => vocabularyStore.getSelectedWords());
@@ -137,11 +102,11 @@ const Home: Component<HomeProps> = (props) => {
   const streak = () => progressStore.streak();
   const wordSummary = createMemo(() => summarizeProgress(words().map((word) => word.id), vocabularyProgressStore));
   const wordScope = () => [...vocabularyStore.state.selectedLists].sort().join(',');
-  const previousWords = readLast('vocabulary', untrack(wordScope));
-  rememberLast('vocabulary', untrack(wordScope), untrack(wordSummary));
+  const previousWords = readHomeSnapshot('vocabulary', untrack(wordScope));
+  rememberHomeSnapshot('vocabulary', untrack(wordScope), untrack(wordSummary));
   const pausedWord = wordSession
     ? { id: undefined as string | undefined, title: wordSession.heading }
-    : findPausedPractice();
+    : findPausedPractice(allWords, (id) => HOME_PRACTICE.test(id));
   const wordClosed = () => !unreadableWordSession() && !pausedWord && wordPending() === 0;
 
   /** What the CTA offers once nothing is pending today. The daily cap decides whether "more" is possible. */
