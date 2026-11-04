@@ -1,6 +1,6 @@
 import type { CharacterJson } from 'hanzi-writer';
 import { characterLevel } from '../data/catalog';
-import { CACHE_NAME, packMediaRoot, remoteStrokeUrl } from './levelPacks';
+import { openCacheFor, packMediaRoot, remoteStrokeUrl } from './levelPacks';
 import { isFiniteNumber, isNonEmpty, isRecord, isString } from './parse';
 
 const cache = new Map<string, Promise<CharacterJson>>();
@@ -39,7 +39,7 @@ const strokeUrls = (char: string) => {
 
 /** `keep`: save a fetched copy. Bundled and pack files are cached when their list is saved; the CDN's are kept on first use. */
 const loadFrom = async (url: string, keep: boolean) => {
-  const cacheStorage = 'caches' in globalThis ? await caches.open(CACHE_NAME) : null;
+  const cacheStorage = await openCacheFor(url);
   const hit = cacheStorage ? await cacheStorage.match(url) : undefined;
   if (hit) return parseCharacterJson(await hit.json());
   const response = await fetch(url);

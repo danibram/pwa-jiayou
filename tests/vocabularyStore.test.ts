@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { vocabularyCoverage } from '../src/data/vocabulary';
-import { progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 
 afterEach(() => {

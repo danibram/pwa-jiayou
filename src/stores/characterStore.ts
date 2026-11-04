@@ -2,22 +2,16 @@ import { createStore } from 'solid-js/store';
 import { withToneSandhi } from '../utils/pinyin';
 import { BUNDLED_LEVEL, catalogLevels } from '../data/catalog';
 import hsk1Data from '../data/hsk1.json';
-import { ExampleWord, HSKCharacter, HskLevel, TrainingResult } from '../types';
+import { ExampleWord, HSKCharacter, HskLevel } from '../types';
 import { isHskLevel, isRecord, isString } from '../utils/parse';
-import { shuffle } from '../utils/shuffle';
+import { KEYS } from '../persistence/keys';
+import { storage } from '../persistence/keyValue';
 
 interface CharacterStore {
   characters: HSKCharacter[];
   selectedLevels: HskLevel[];
   currentIndex: number;
-  trainingMode: boolean;
-  trainingResults: {
-    correct: number;
-    incorrect: number;
-  };
 }
-
-const STORAGE_KEY = 'hsk-flashcards-progress';
 
 /** Older saves stored one level as `selectedLevel`. */
 export const selectionFromSaved = (raw: unknown): HskLevel[] => {
@@ -35,7 +29,7 @@ const keptIndex = (index: unknown, count: number) =>
 const loadProgress = (): Pick<CharacterStore, 'selectedLevels' | 'currentIndex'> => {
   const empty = { selectedLevels: [], currentIndex: 0 };
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = storage.read(KEYS.characterDeck);
     if (!saved) return empty;
     const parsed: unknown = JSON.parse(saved);
     if (!isRecord(parsed)) return empty;
@@ -134,23 +128,18 @@ let listRevision = 0;
 const initialState: CharacterStore = {
   characters: bundled,
   ...loadProgress(),
-  trainingMode: false,
-  trainingResults: {
-    correct: 0,
-    incorrect: 0,
-  },
 };
 
 const [store, setStore] = createStore(initialState);
 
-// Save progress to localStorage
+// Save the deck place to storage
 const saveProgress = () => {
   try {
     const toSave = {
       selectedLevels: store.selectedLevels,
       currentIndex: store.currentIndex,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    storage.write(KEYS.characterDeck, JSON.stringify(toSave));
   } catch {
     // Storage can be full or blocked. The in-memory deck still works.
   }
@@ -198,8 +187,6 @@ export const characterStore = {
     setStore({
       selectedLevels: [...new Set(levels)].sort((a, b) => a - b),
       currentIndex: 0,
-      trainingMode: false,
-      trainingResults: { correct: 0, incorrect: 0 },
     });
     saveProgress();
   },
@@ -231,11 +218,6 @@ export const characterStore = {
     if (store.selectedLevels.length === 0) return [];
     const selected = new Set(store.selectedLevels);
     return store.characters.filter((char) => selected.has(char.hsk_level));
-  },
-
-  // Get shuffled characters for training
-  getShuffledCharacters(): HSKCharacter[] {
-    return shuffle(this.getCharactersByLevel());
   },
 
   // Levels whose characters are on this device
@@ -279,50 +261,12 @@ export const characterStore = {
     saveProgress();
   },
 
-  // Training mode
-  startTraining() {
-    setStore({
-      trainingMode: true,
-      trainingResults: { correct: 0, incorrect: 0 },
-    });
-  },
-
-  recordAnswer(isCorrect: boolean) {
-    if (isCorrect) {
-      setStore('trainingResults', 'correct', (c) => c + 1);
-    } else {
-      setStore('trainingResults', 'incorrect', (c) => c + 1);
-    }
-  },
-
-  getTrainingResult(): TrainingResult {
-    const { correct, incorrect } = store.trainingResults;
-    const total = correct + incorrect;
-    const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
-
-    return {
-      correct,
-      incorrect,
-      total,
-      percentage,
-    };
-  },
-
-  resetTraining() {
-    setStore({
-      trainingMode: false,
-      trainingResults: { correct: 0, incorrect: 0 },
-    });
-  },
-
   // General reset
   reset() {
     setStore({
       selectedLevels: [],
       currentIndex: 0,
-      trainingMode: false,
-      trainingResults: { correct: 0, incorrect: 0 },
     });
-    localStorage.removeItem(STORAGE_KEY);
+    storage.remove(KEYS.characterDeck);
   },
 };
