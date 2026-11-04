@@ -1,4 +1,5 @@
 import { Component, For, Show, createMemo, createSignal } from 'solid-js';
+import { leadSense, sensesText } from '../../src/data/wordSenses';
 import { useEditor } from '../lib/store';
 import { Field, Hanzi, Pinyin } from './text';
 
@@ -18,7 +19,7 @@ const TopicsSection: Component = () => {
     const t = editor.topic();
     if (!t) return [];
     const q = wordQuery();
-    return (editor.snapshot().vocabulary ?? []).filter((w) => (!onlyAssigned() || w.topicIds.includes(t.id)) && matches(`${w.simplified} ${w.pinyin} ${w.meaning}`, q));
+    return (editor.snapshot().vocabulary ?? []).filter((w) => (!onlyAssigned() || w.topicIds.includes(t.id)) && matches(`${w.simplified} ${w.pinyin} ${sensesText(w.senses)}`, q));
   });
   const changed = createMemo(() => new Set(editor.changesDeferred().filter((change) => change.kind === 'topic').map((change) => change.id)));
   const unknownChars = () => editor.topic()?.characters.filter((char) => !known().has(char)) ?? [];
@@ -40,11 +41,11 @@ const TopicsSection: Component = () => {
         </div>
         <div class="list" aria-label="Lista de temas">
           <For each={topics()}>{(t) => (
-            <button type="button" class="row" aria-pressed={editor.selected() === t.id} onClick={() => { editor.setSelected(t.id); setWordQuery(''); setLimit(PAGE); }}>
+            <button type="button" class="row" classList={{ 'row-child': t.kind === 'subtopic' }} aria-pressed={editor.selected() === t.id} onClick={() => { editor.setSelected(t.id); setWordQuery(''); setLimit(PAGE); }}>
               <Hanzi text={t.glyph || '·'} size="md" class="row-glyph" />
               <span class="row-text">
-                <span class="row-title">{t.title || 'Tema nuevo'}</span>
-                <span class="row-sub">{t.characters.length} caracteres · {assignedCount(t.id)} palabras</span>
+                <span class="row-title">{t.kind === 'subtopic' ? `↳ ${t.title || 'Subtema'}` : t.title || 'Tema nuevo'}</span>
+                <span class="row-sub">{t.kind === 'tag' ? 'Etiqueta' : t.kind === 'subtopic' ? `Subtema de ${topics().find((p) => p.id === t.parentId)?.title ?? t.parentId}` : t.listed === false ? 'Tema oculto' : 'Tema'} · {t.characters.length} caracteres · {assignedCount(t.id)} palabras</span>
               </span>
               <span class="row-meta"><Show when={changed().has(t.id)}><span class="dot dot-changed" title="Modificado" /></Show></span>
             </button>
@@ -69,6 +70,42 @@ const TopicsSection: Component = () => {
               <div class="grid-2">
                 <Field label="Nombre" value={t().title} placeholder="Comida" onInput={(value) => editor.updateTopic('title', value)} hint={editor.isNewTopic(t().id) ? 'El identificador se deriva del nombre hasta que el tema se publica.' : undefined} />
                 <Field label="Carácter representativo" value={t().glyph} mono lang="zh-Hans" placeholder="吃" onInput={(value) => editor.updateTopic('glyph', Array.from(value).slice(-1).join(''))} />
+              </div>
+              <div class="grid-2">
+                <label class="field">
+                  <span class="label">Tipo</span>
+                  <select
+                    aria-label="Tipo de tema"
+                    value={t().kind}
+                    onChange={(event) => editor.updateTopic('kind', event.currentTarget.value)}
+                  >
+                    <option value="theme">Tema (situación)</option>
+                    <option value="subtopic">Subtema</option>
+                    <option value="tag">Etiqueta (combinable)</option>
+                  </select>
+                </label>
+                <Show when={t().kind === 'subtopic'} fallback={
+                  <Show when={t().kind === 'theme'}>
+                    <label class="check" style={{ 'align-self': 'end', 'margin-bottom': '0.4rem' }}>
+                      <input type="checkbox" checked={t().listed !== false} onChange={(event) => editor.updateTopic('listed', event.currentTarget.checked)} />
+                      Visible en Temas
+                    </label>
+                  </Show>
+                }>
+                  <label class="field">
+                    <span class="label">Tema padre</span>
+                    <select
+                      aria-label="Tema padre"
+                      value={t().parentId ?? ''}
+                      onChange={(event) => editor.updateTopic('parentId', event.currentTarget.value)}
+                    >
+                      <option value="">Elige un tema</option>
+                      <For each={topics().filter((row) => row.kind === 'theme' && row.id !== t().id)}>{(parent) => (
+                        <option value={parent.id}>{parent.title || parent.id}</option>
+                      )}</For>
+                    </select>
+                  </label>
+                </Show>
               </div>
               <fieldset class="chars-field">
                 <legend>Caracteres del tema <span class="muted">({t().characters.length}, mínimo 5)</span></legend>
@@ -105,7 +142,7 @@ const TopicsSection: Component = () => {
                     <label class="row check-row">
                       <input type="checkbox" checked={w.topicIds.includes(t().id)} onChange={(event) => editor.toggleWordTopic(w.id, t().id, event.currentTarget.checked)} />
                       <Hanzi text={w.simplified} size="sm" class="row-glyph" />
-                      <span class="row-text"><span class="row-title"><Pinyin text={w.pinyin} /></span><span class="row-sub">{w.meaning}</span></span>
+                      <span class="row-text"><span class="row-title"><Pinyin text={w.pinyin} /></span><span class="row-sub">{leadSense(w.senses)}</span></span>
                     </label>
                   )}</For>
                   <Show when={topicWords().length > limit()}>

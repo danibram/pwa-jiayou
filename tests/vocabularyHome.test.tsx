@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@solidjs/testing-library';
+import { fireEvent, render, screen, within } from '@solidjs/testing-library';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Home from '../src/pages/Home';
 import App from '../src/App';
@@ -45,12 +45,15 @@ describe('vocabulary home', () => {
     render(() => <App />);
     fireEvent.click(screen.getByRole('button', { name: /^Temas/ }));
     expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
-    fireEvent.click(screen.getByRole('button', { name: /^Familia,/ }));
+    // Familia is a subtopic of Personas y relaciones: the theme opens first, then its chip.
+    fireEvent.click(screen.getByRole('button', { name: /^Personas y relaciones,/ }));
+    fireEvent.click(within(screen.getByRole('group', { name: 'Subtemas' })).getByRole('button', { name: 'Familia' }));
     expect(screen.getByText('Familia', { selector: 'header div' })).toBeTruthy();
     expect(screen.getByRole('button', { name: /^Estudiar \d+ nuevas?/ })).toBeTruthy();
     fireEvent.click(screen.getByText('爸爸'));
     expect(screen.getByText('HSK 1')).toBeTruthy();
-    expect(screen.getByText('nueva')).toBeTruthy();
+    // A new word shows no status tag: the Aprender button already says it.
+    expect(screen.queryByText('nueva')).toBeNull();
     expect(screen.getByRole('button', { name: /^Escuchar$/ })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Aprender palabra' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ver el carácter 爸, 2 de 2' })).toBeTruthy();
@@ -62,6 +65,8 @@ describe('vocabulary home', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
     expect(screen.getByText('Familia', { selector: 'header div' })).toBeTruthy();
     expect(screen.getByText('爸爸')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
+    expect(screen.getByText('Personas y relaciones', { selector: 'header div' })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
     expect(screen.getByText('Temas', { selector: 'header div' })).toBeTruthy();
     expect(localStorage.getItem('jiayou-topics')).toBeNull();

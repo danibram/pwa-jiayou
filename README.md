@@ -104,6 +104,7 @@ node scripts/fix-traditional.mjs
 
 ### Characters
 
+
 ```bash
 npm run fetch-hsk             # HSK 4 to 6 rows from hanzidb.org
 npm run localize-hsk          # Spanish glosses and examples for HSK 4 to 6

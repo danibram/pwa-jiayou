@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@solidjs/testing-library';
+import { fireEvent, render, screen, within } from '@solidjs/testing-library';
+import { sensesText } from '../src/data/wordSenses';
 import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Vocabulario from '../src/pages/Vocabulario';
@@ -27,7 +28,7 @@ describe('vocabulary screens', () => {
     const [browse, setBrowse] = createSignal({ query: '', topic: '', scroll: 0, choosingTopic: false });
     render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} onSelect={onSelect} onPractice={() => {}} browse={browse()} onBrowse={setBrowse} />);
     const word = vocabulary.find((entry) => entry.characters.length > 1)!;
-    search(word.meaning);
+    search(sensesText(word.senses));
     fireEvent.click(screen.getByText(word.simplified));
     expect(onSelect).toHaveBeenCalledWith(word.id);
     vi.useRealTimers();
@@ -65,14 +66,20 @@ describe('vocabulary screens', () => {
     expect(screen.getByRole('dialog')).toBeTruthy();
   });
 
-  it('shows a sentence and one character link on a one-character word', () => {
+  it('shows a tappable sentence on a one-character word without repeating the character', () => {
     const word = vocabulary.find((entry) => entry.simplified === '喝')!;
     render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={word.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
-    expect(screen.getByText('我想喝水。')).toBeTruthy();
-    expect(screen.getByText('Quiero beber agua.')).toBeTruthy();
-    const rows = screen.getAllByRole('button', { name: /^Ver el carácter 喝, [a-zà-ü]/ });
-    expect(rows).toHaveLength(1);
-    fireEvent.click(rows[0]);
+    const sentence = screen.getByRole('region', { name: 'En una frase' });
+    expect(sentence.textContent).toContain('我想喝水。');
+    expect(sentence.querySelector('mark')?.textContent).toBe('喝');
+    // The mark is drawn on the buttons themselves: an underline on <mark> does not reach inline-block children.
+    expect(within(sentence).getByRole('button', { name: '喝 en la frase' }).className).toContain('border-b-2');
+    expect(within(sentence).getByText('Quiero beber agua.')).toBeTruthy();
+    // A one-character word is its own hero: the row below shows its radical and strokes instead of repeating it.
+    expect(screen.queryByRole('button', { name: /^Ver el carácter 喝, [a-zà-ü]/ })).toBeNull();
+    expect(screen.getByRole('button', { name: /^Ver el carácter 喝: radical 口 y trazos$/ })).toBeTruthy();
+    // Any character of the sentence opens its drawer.
+    fireEvent.click(within(sentence).getByRole('button', { name: '水 en la frase' }));
     expect(screen.getByRole('dialog')).toBeTruthy();
   });
 

@@ -23,6 +23,12 @@ Abre `http://127.0.0.1:4318`. El comando copia `content/snapshot.json`, `content
 
 ## Revisar y promover
 
+Revisar muestra una entrada cada vez con las columnas Publicado y Propuesta. Puedes filtrar por HSK 1 a 6 o Extra, elegir palabras, caracteres o temas, y buscar en el texto anterior y propuesto. El filtro usa el nivel del borrador. Anterior y Siguiente recorren las entradas visibles; Editar ficha abre la entrada seleccionada.
+
+La comparación incluye traducciones, frases propias y relaciones, como sinónimos y antónimos. Las frases y relaciones sin cambios aparecen en Se conserva. Un borrador puede incluir frases de referencia por palabra; el editor las muestra al revisar y no las publica.
+
+Promover publica el borrador completo, aunque la lista de revisión esté filtrada.
+
 "Revisar" muestra cada cambio campo a campo, los archivos del repo que se escribirán y la versión actual del contenido junto a la siguiente. Escribe qué cambia en esta versión y pulsa "Promover a la versión N". El servidor de desarrollo entonces:
 
 1. Valida el borrador contra `content/snapshot.json` (identificadores, niveles, temas, ejemplos).

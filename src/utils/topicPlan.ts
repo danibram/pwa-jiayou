@@ -1,13 +1,16 @@
 import { allWords, type VocabularyEntry } from '../data/vocabulary';
 import { wordsInLists, type ListId } from '../data/lists';
+import { topicScope } from '../data/topics';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { SESSION_SIZE } from '../stores/progressStore';
 
-/** The topic's words within the lists, the checked ones by default, or every word when none is checked. */
+/** The topic's words within the lists, the checked ones by default, or every word when none is checked.
+ *  A theme id also matches words tagged with any of its subtopics. */
 export const topicWords = (topicIds: string[], lists?: ListId[]): VocabularyEntry[] => {
   const pool = lists ? wordsInLists(lists) : vocabularyStore.getSelectedWords();
-  return (pool.length ? pool : allWords()).filter((entry) => topicIds.some((id) => entry.topicIds.includes(id)));
+  const scope = new Set(topicIds.flatMap((id) => topicScope(id)));
+  return (pool.length ? pool : allWords()).filter((entry) => entry.topicIds.some((id) => scope.has(id)));
 };
 
 export interface TopicPlan {

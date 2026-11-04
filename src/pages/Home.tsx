@@ -1,4 +1,4 @@
-import { glossHead } from '../utils/glossDisplay';
+import { leadSense } from '../data/wordSenses';
 import { Component, createMemo, createSignal, For, Show, untrack } from 'solid-js';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
@@ -342,7 +342,7 @@ const Home: Component<HomeProps> = (props) => {
           <div class="min-w-0 flex-1">
             <div class="text-sm text-ink-soft">Palabra del día</div>
             <div class="font-sans text-[1.15rem] font-semibold leading-snug first-letter:uppercase">
-              {glossHead(wordDaily().meaning)}
+              {leadSense(wordDaily().senses)}
             </div>
             <Pinyin text={wordDaily().pinyin} class="text-sm font-medium" />
           </div>
