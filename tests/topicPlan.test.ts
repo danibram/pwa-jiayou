@@ -1,15 +1,15 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { WORD_NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
-import { myWordsStore } from '../src/stores/myWordsStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { topicPlan, topicWords } from '../src/utils/topicPlan';
 import { vocabulary } from '../src/data/vocabulary';
 
+vi.mock('../src/data/vocabulary/extra.json', async () => ({ default: (await import('./fixtures/extraWords')).extraWords }));
+
 beforeEach(() => {
   localStorage.clear();
   progressStore.clear();
-  myWordsStore.reset();
   vocabularyStore.reset();
 });
 
@@ -32,9 +32,8 @@ describe('topic plan', () => {
     expect(topicPlan(['familia'], ['hsk-1', 'hsk-2']).review).toBe(1);
   });
 
-  it('includes own topic words when Mis palabras is not in the list ids', () => {
-    const { word } = myWordsStore.add({ simplified: '程序员', pinyin: 'cheng2 xu4 yuan2', meaning: 'programador', topicIds: ['trabajos'] });
-    const ids = topicWords(['trabajos'], ['hsk-1']).map((entry) => entry.id);
-    expect(ids).toContain(word.id);
+  it('includes Extra topic words when the Extra list is checked', () => {
+    expect(topicWords(['trabajos'], ['hsk-1']).map((entry) => entry.simplified)).not.toContain('程序员');
+    expect(topicWords(['trabajos'], ['hsk-1', 'extra']).map((entry) => entry.simplified)).toContain('程序员');
   });
 });

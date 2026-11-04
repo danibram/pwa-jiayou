@@ -1,5 +1,6 @@
 import { createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { downloadState, saveStudyMedia } from '../utils/levelPacks';
+import { contentVersionLabel } from '../data/contentVersion';
 
 export function OfflineDownloadNotice() {
   const [dismissed, setDismissed] = createSignal(false);
@@ -79,6 +80,7 @@ export default function OfflineStatus() {
   return (
     <section class="sheet mt-5 p-4">
       <h2 class="font-display text-lg font-semibold">Sin conexión</h2>
+      <p class="mt-1 text-sm text-ink-soft">{contentVersionLabel()}. Las correcciones de palabras, caracteres y temas llegan con cada versión de la app.</p>
       <Show when={downloadState().state === 'downloading'}><p role="status" class="mt-2 text-sm">Descargando archivos {downloadState().total ? `${downloadState().done} de ${downloadState().total}` : 'de las listas'}…</p></Show>
       <Show when={downloadState().state === 'ready'}><p role="status" class="mt-2 text-sm">Las listas seleccionadas están preparadas sin conexión.</p></Show>
       <Show when={downloadState().state === 'error'}>

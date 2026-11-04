@@ -7,7 +7,7 @@ interface ResultRowProps {
   hanzi: string;
   pinyin: string;
   meaning: string;
-  /** Words outside HSK show «Mía» instead of a level. */
+  /** Words outside HSK show «Extra» instead of a level. */
   level?: number;
   /** The level's list is not on this device yet. */
   notDownloaded?: boolean;
@@ -62,7 +62,7 @@ const ResultRow: Component<ResultRowProps> = (props) => (
         'border-dashed border-line/80 text-ink-faint': props.outsidePlan,
       }}
     >
-      {props.level ? `HSK ${props.level}` : 'Mía'}
+      {props.level ? `HSK ${props.level}` : 'Extra'}
       <Show when={props.notDownloaded}>
         <svg viewBox="0 0 12 12" class="h-2.5 w-2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Sin descargar">
           <path d="M6 1.5v6M3.5 5.5 6 8l2.5-2.5M2 10.5h8" />

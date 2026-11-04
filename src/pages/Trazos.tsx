@@ -14,7 +14,7 @@ import Pinyin from '../components/Pinyin';
 import StrokeCanvas, { StrokeCanvasApi } from '../components/StrokeCanvas';
 import { charactersInTopic } from '../data/topics';
 import { characterStore } from '../stores/characterStore';
-import { myWordsStore } from '../stores/myWordsStore';
+import { extraVocabulary } from '../data/vocabulary';
 import { Grade, progressStore } from '../stores/progressStore';
 import { spokenMeaning } from '../utils/meaning';
 import { canSpeak } from '../utils/speech';
@@ -55,9 +55,9 @@ const Trazos: Component<TrazosProps> = (props) => {
       case 'topic': {
         const base = charactersInTopic(focus.topicId, characterStore.state.characters);
         const seen = new Set(base.map((row) => row.character));
-        // Own words tagged with this topic add their characters after the catalog ones.
+        // Extra words tagged with this topic add their characters after the catalog ones.
         const extras: StrokeCharacter[] = [];
-        for (const word of myWordsStore.ownWords()) {
+        for (const word of extraVocabulary) {
           if (!word.topicIds.includes(focus.topicId)) continue;
           for (const char of word.characters) {
             if (seen.has(char)) continue;

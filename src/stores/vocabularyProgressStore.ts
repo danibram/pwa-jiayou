@@ -1,21 +1,22 @@
 import { sumActivity } from '../domain/progress/activity';
-import { afterAnswer, schedule } from '../domain/progress/schedule';
+import { afterAnswer, schedule, endOfDay, startOfDay } from '../domain/progress/schedule';
 import {
   activityStreak,
-  buildWordQueue,
   CLEAN_TO_RECOVER,
   currentDaily,
-  isDueProgress,
   isNewProgress,
   isWeakProgress,
   MASTERED_INTERVAL,
   newLeftToday,
   WORD_NEW_PER_DAY,
+  NEW_PER_DAY,
+  SESSION_SIZE,
 } from '../domain/progress/queue';
 import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
 import { emptyProgress, progressDocument, type ProgressDocument } from './progressState';
 
 const DAY_MS = 86_400_000;
+const TOMORROW_LOAD_LIMIT = 60;
 
 /** Word progress over `doc`, the same document progressStore uses for activity and checkpoints. */
 export const createVocabularyProgressStore = (doc: ProgressDocument) => {
@@ -24,7 +25,7 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
     storageError,
     get(id: string): CharProgress | undefined { return state.words[id]; },
     isNew(id: string): boolean { return isNewProgress(state.words[id]); },
-    isDue(id: string, now = Date.now()): boolean { return isDueProgress(state.words[id], now); },
+    isDue(id: string, now = Date.now()): boolean { const p = state.words[id]; return !!p && !this.isNew(id) && p.due < endOfDay(now); },
     isMastered(id: string): boolean { return (state.words[id]?.interval ?? 0) >= MASTERED_INTERVAL; },
     isWeak(id: string): boolean { return isWeakProgress(state.words[id]); },
     /** A Bien in a Flojos session: the word leaves the weak list now. Returns whether it was weak. */
@@ -51,7 +52,8 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
     grade(id: string, grade: Grade): void {
       const now = Date.now();
       const isNew = this.isNew(id);
-      const scheduled = schedule(state.words[id] ?? emptyProgress(), grade, now);
+      const lastReview = state.words[id]?.lastReview ?? 0;
+      const scheduled = schedule(state.words[id] ?? emptyProgress(), grade, now, { sameDay: isNew || lastReview >= startOfDay(now) });
       // Missed earlier in this session, before it was enrolled: it starts out flojo.
       const missed = missedBeforeEnrolment.delete(id) && grade !== 'again';
       writeRecord('words', id, { ...scheduled, ...(missed ? { wrong: scheduled.wrong + 1, clean: 0 } : {}), lastSeen: now });
@@ -67,14 +69,35 @@ export const createVocabularyProgressStore = (doc: ProgressDocument) => {
         return;
       }
       const p = state.words[id];
-      writeRecord('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), lastSeen: Date.now() });
+      const now = Date.now();
+      writeRecord('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), due: grade === 'again' ? Math.min(p.due, startOfDay(now + DAY_MS)) : p.due, lastSeen: now });
       // Practice counts on the calendar, the same as for characters.
       logActivity();
       save();
     },
     /** Today's session. The rules live in `buildWordQueue`. */
-    buildQueue<T extends { id: string }>(entries: T[], extraNew = 0): { due: T[]; fresh: T[] } {
-      return buildWordQueue(entries, state.words, state.wordDaily, extraNew);
+    buildQueue<T extends { id: string }>(entries: T[], extraNew = 0): { due: T[]; fresh: T[]; dueTotal: number } {
+      const now = Date.now();
+      const allDue = entries.filter((entry) => this.isDue(entry.id, now)).sort((a, b) => state.words[a.id].due - state.words[b.id].due);
+      const due = allDue.slice(0, SESSION_SIZE);
+      const left = this.newLeftToday();
+      const budget = extraNew ? (this.canLearnMore(entries) ? Math.min(extraNew, left) : 0) : Math.max(0, Math.min(NEW_PER_DAY - this.daily.introduced, left, SESSION_SIZE - due.length));
+      return { due, fresh: entries.filter((entry) => this.isNew(entry.id)).slice(0, budget), dueTotal: allDue.length };
+    },
+    dueByTomorrow(entries: readonly { id: string }[], now = Date.now()): number {
+      const limit = endOfDay(now + DAY_MS);
+      return entries.filter((entry) => { const p = state.words[entry.id]; return !!p && !this.isNew(entry.id) && p.due < limit; }).length;
+    },
+    canLearnMore(entries: readonly { id: string }[]): boolean {
+      const now = Date.now();
+      return !entries.some((entry) => this.isDue(entry.id, now)) && this.dueByTomorrow(entries, now) < TOMORROW_LOAD_LIMIT;
+    },
+    markKnown(id: string): void {
+      if (!this.isNew(id)) return;
+      const now = Date.now();
+      writeRecord('words', id, { ...emptyProgress(), right: 1, reps: 2, clean: 1, interval: 5, due: now + 5 * DAY_MS, lastSeen: now, lastReview: now });
+      logActivity();
+      save();
     },
     get daily(): DailyLog { return { ...currentDaily(state.wordDaily), streak: activityStreak(sumActivity(state.activity)) }; },
   };

@@ -25,6 +25,7 @@ export const emptyProgress = (): CharProgress => ({
   strokeBest: null,
   lastSeen: 0,
   clean: 0,
+  lastReview: 0,
   updatedAt: 0,
   deviceId: '',
 });

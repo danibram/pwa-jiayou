@@ -67,7 +67,6 @@ export const urlToScreen = (url: URL | string): Screen | undefined => {
         : topicId ? { kind: 'topic', char: id, topicId } : { kind: 'character', char: id };
       return { page: 'trazos', focus, from: homeScreen };
     }
-    case 'mis-palabras':
     case 'opciones':
     case 'acerca':
       return id ? undefined : { page };

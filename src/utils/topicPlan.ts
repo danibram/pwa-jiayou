@@ -1,7 +1,5 @@
-import { vocabulary, type VocabularyEntry } from '../data/vocabulary';
-import { MY_WORDS_LIST, type ListId } from '../data/lists';
-import { wordsInLists } from '../stores/studyLists';
-import { myWordsStore } from '../stores/myWordsStore';
+import { allWords, type VocabularyEntry } from '../data/vocabulary';
+import { wordsInLists, type ListId } from '../data/lists';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { SESSION_SIZE } from '../stores/progressStore';
@@ -9,15 +7,7 @@ import { SESSION_SIZE } from '../stores/progressStore';
 /** The topic's words within the lists, the checked ones by default, or every word when none is checked. */
 export const topicWords = (topicIds: string[], lists?: ListId[]): VocabularyEntry[] => {
   const pool = lists ? wordsInLists(lists) : vocabularyStore.getSelectedWords();
-  const fromLists = (pool.length ? pool : vocabulary).filter((entry) => topicIds.some((id) => entry.topicIds.includes(id)));
-  // Own words tagged for these topics show in Temas even when «Mis palabras» is not checked for daily study.
-  const mineChecked = lists ? lists.includes(MY_WORDS_LIST) : vocabularyStore.isSelected(MY_WORDS_LIST);
-  if (mineChecked) return fromLists;
-  const seen = new Set(fromLists.map((word) => word.id));
-  const extras = myWordsStore.words().filter(
-    (entry) => !seen.has(entry.id) && topicIds.some((id) => entry.topicIds.includes(id)),
-  );
-  return extras.length ? [...fromLists, ...extras] : fromLists;
+  return (pool.length ? pool : allWords()).filter((entry) => topicIds.some((id) => entry.topicIds.includes(id)));
 };
 
 export interface TopicPlan {
