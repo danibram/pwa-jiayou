@@ -4,7 +4,6 @@ import Acerca from './pages/Acerca';
 import Opciones from './pages/Opciones';
 import Home from './pages/Home';
 import Listas from './pages/Listas';
-import MisPalabras from './pages/MisPalabras';
 import Trazos from './pages/Trazos';
 import Vocabulario, { type VocabularyBrowseState } from './pages/Vocabulario';
 import VocabularyReview from './pages/VocabularyReview';
@@ -85,7 +84,7 @@ const App: Component = () => {
           <Vocabulario onBack={goHome} onStrokes={openStrokes} browse={browse()} onBrowse={setBrowse} wordId={(() => { const s = screen(); return s.page === 'vocabulario' ? s.wordId : undefined; })()} onSelect={(wordId) => {
             const current = screen();
             if (!wordId && current.page === 'vocabulario' && current.returnTo) {
-              setScreen(current.returnTo === 'home' ? homeScreen : { page: 'mis-palabras' });
+              setScreen(homeScreen);
               return;
             }
             setScreen({ page: 'vocabulario', wordId });
@@ -113,9 +112,6 @@ const App: Component = () => {
         </Match>
         <Match when={screen().page === 'opciones'}>
           <Opciones onBack={goHome} onManageLists={openLists} />
-        </Match>
-        <Match when={screen().page === 'mis-palabras'}>
-          <MisPalabras onBack={goHome} onOpenWord={(wordId) => setScreen({ page: 'vocabulario', wordId, returnTo: 'mis-palabras' })} />
         </Match>
         <Match when={trazosScreen(screen())} keyed>
           {(s) => (

@@ -16,6 +16,8 @@ export interface CharProgress {
   lastSeen: number;
   /** Bien answers in a row since the last miss, free practice included. */
   clean: number;
+  /** Epoch ms of the last graded answer. Free practice and stroke runs leave it alone. 0 in older saves. */
+  lastReview: number;
 }
 
 export interface DailyLog {

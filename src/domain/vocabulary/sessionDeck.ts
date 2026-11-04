@@ -27,6 +27,12 @@ export const askOrder = <T,>(words: T[]): T[] => {
  * Reviews and new words woven together: a few reviews, then three new words and their recall, and again.
  * Nothing is front-loaded, so a long session never opens with twenty introductions.
  */
+/**
+ * Particles and classifiers have no meaning to say on their own ("partícula posesiva"), so their
+ * first recall shows the word and asks what it does, instead of asking for it from the Spanish.
+ */
+export const isFunctionWord = (entry: VocabularyEntry): boolean => /part[ií]cula|clasificador/i.test(entry.meaning);
+
 export const interleave = (reviews: DeckCard[], fresh: VocabularyEntry[]): DeckCard[] => {
   const out: DeckCard[] = [];
   const groups = fresh.length ? groupsOf(fresh) : [];
@@ -38,12 +44,13 @@ export const interleave = (reviews: DeckCard[], fresh: VocabularyEntry[]): DeckC
     const group = groups[g] ?? [];
     out.push(...group.map((entry) => ({ entry, kind: 'learn' as const })));
     // The first recall is production: the Spanish, and the word to pick out of four.
-    out.push(...askOrder(group).map((entry) => ({ entry, kind: 'recall' as const, prompt: 'pick' as const })));
-    // The group before comes back as recognition once a new group has pushed it out of mind.
-    out.push(...askOrder(previous).map((entry) => ({ entry, kind: 'recall' as const })));
+    out.push(...askOrder(group).map((entry) => ({ entry, kind: 'recall' as const, prompt: isFunctionWord(entry) ? 'recognize' as const : 'pick' as const })));
+    // The group before comes back as recognition once a new group has pushed it out of mind:
+    // the word, and its meaning to pick, so a first-day answer is checked rather than self-graded.
+    out.push(...askOrder(previous).map((entry) => ({ entry, kind: 'recall' as const, prompt: 'recognize' as const })));
     previous = group;
   }
-  out.push(...askOrder(previous).map((entry) => ({ entry, kind: 'recall' as const })));
+  out.push(...askOrder(previous).map((entry) => ({ entry, kind: 'recall' as const, prompt: 'recognize' as const })));
   return out;
 };
 
@@ -84,8 +91,13 @@ export const pickChoices = (target: VocabularyEntry, pool: VocabularyEntry[], me
     (levelRank(entry) === levelRank(target) ? 1 : Math.abs(levelRank(entry) - levelRank(target)) === 1 ? 0.5 : 0);
   const ranked = shuffle(source.filter(fits)).map((entry) => ({ entry, score: closeness(entry) })).sort((a, b) => b.score - a.score);
   const picked = new Map<string, VocabularyEntry>();
+  // Early on, an unseen word is ruled out by its strangeness alone. With two met words to offer,
+  // three options beat four that include a stranger.
+  const metCount = new Set(ranked.filter(({ entry }) => met(entry)).map(({ entry }) => entry.simplified)).size;
+  const limit = metCount >= 2 ? Math.min(3, metCount) : 3;
   for (const { entry } of ranked) {
-    if (picked.size === 3) break;
+    if (picked.size === limit) break;
+    if (metCount >= 2 && !met(entry)) continue;
     if (!picked.has(entry.simplified)) picked.set(entry.simplified, entry);
   }
   return shuffle([target, ...picked.values()]);
