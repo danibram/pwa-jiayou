@@ -1,5 +1,5 @@
 // Turns a dictionary-style meaning ("(verbo) conectar; unir; (preposición) incluso (usado con 都)")
-// into word senses: { pos, text, note }. Used to migrate the catalog and to read TongTong proposals.
+// into word senses: { pos, text, note }. Used to migrate the catalog and to read translation proposals.
 export const WORD_POS = ['sustantivo', 'verbo', 'adjetivo', 'adverbio', 'clasificador', 'pronombre', 'numeral', 'preposición', 'conjunción', 'partícula', 'interjección', 'expresión'];
 
 const OPEN = /[(（]/;

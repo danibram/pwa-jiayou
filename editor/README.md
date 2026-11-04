@@ -25,7 +25,7 @@ Abre `http://127.0.0.1:4318`. El comando copia `content/snapshot.json`, `content
 
 Revisar muestra una entrada cada vez con las columnas Publicado y Propuesta. Puedes filtrar por HSK 1 a 6 o Extra, elegir palabras, caracteres o temas, y buscar en el texto anterior y propuesto. El filtro usa el nivel del borrador. Anterior y Siguiente recorren las entradas visibles; Editar ficha abre la entrada seleccionada.
 
-La comparación incluye traducciones, frases propias y relaciones, como sinónimos y antónimos. Las frases y relaciones sin cambios aparecen en Se conserva. Un borrador de TongTong puede incluir frases de referencia para redactar ejemplos propios. Esas referencias permanecen en el borrador y no se publican en la app. Las frases propias se editan en la ficha de la palabra y se publican junto a ella.
+La comparación incluye traducciones, frases propias y relaciones, como sinónimos y antónimos. Las frases y relaciones sin cambios aparecen en Se conserva. Un borrador puede incluir frases de referencia por palabra; el editor las muestra al revisar y no las publica.
 
 Promover publica el borrador completo, aunque la lista de revisión esté filtrada.
 
