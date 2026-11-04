@@ -37,6 +37,7 @@ const parseCharacterProgress = (value: Record<string, unknown>): CharProgress =>
   strokeRuns: countField(value, 'strokeRuns'),
   strokeBest: strokeBestField(value),
   lastSeen: countField(value, 'lastSeen'),
+  lastReview: countField(value, 'lastReview'),
   // Older saves have no counter. Successful reviews since the last lapse are the same idea.
   clean: 'clean' in value && value.clean !== undefined ? countField(value, 'clean') : countField(value, 'reps'),
 });

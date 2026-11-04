@@ -16,7 +16,6 @@
     "localize-hsk": "node scripts/localize-hsk456.mjs",
     "build-vocabulary": "node scripts/build-vocabulary.mjs",
     "localize-vocabulary": "node scripts/localize-vocabulary.mjs",
-    "content-api": "cd api && bun --watch src/index.ts",
     "typecheck": "tsc --noEmit",
     "check": "npm run test -- --run && npm run build"
   },

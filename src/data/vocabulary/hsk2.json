@@ -187,7 +187,7 @@
     "simplified": "次",
     "traditional": "次",
     "pinyin": "cì",
-    "meaning": "vez",
+    "meaning": "vez; ocasión",
     "level": 2,
     "characters": [
       "次"
@@ -203,7 +203,7 @@
     "simplified": "从",
     "traditional": "从",
     "pinyin": "cóng",
-    "meaning": "desde",
+    "meaning": "desde; a partir de",
     "level": 2,
     "characters": [
       "从"
@@ -371,7 +371,7 @@
     "simplified": "非常",
     "traditional": "非常",
     "pinyin": "fēi cháng",
-    "meaning": "muy",
+    "meaning": "muy; sumamente",
     "level": 2,
     "characters": [
       "非",
@@ -451,7 +451,7 @@
     "simplified": "给",
     "traditional": "給",
     "pinyin": "gěi",
-    "meaning": "dar; para",
+    "meaning": "dar; a; para",
     "level": 2,
     "characters": [
       "给"
@@ -533,7 +533,7 @@
     "simplified": "还",
     "traditional": "還",
     "pinyin": "hái",
-    "meaning": "todavía; también",
+    "meaning": "todavía; aún; también",
     "level": 2,
     "characters": [
       "还"
@@ -548,7 +548,7 @@
     "simplified": "孩子",
     "traditional": "孩子",
     "pinyin": "hái zi",
-    "meaning": "niño",
+    "meaning": "niño/a; hijo/a",
     "level": 2,
     "characters": [
       "孩",
@@ -573,21 +573,6 @@
     ],
     "topicIds": [
       "comida"
-    ],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-53f7-hao4",
-    "simplified": "号",
-    "traditional": "號",
-    "pinyin": "hào",
-    "meaning": "número; día del mes",
-    "level": 2,
-    "characters": [
-      "号"
-    ],
-    "topicIds": [
-      "numeros"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -691,7 +676,7 @@
     "simplified": "件",
     "traditional": "件",
     "pinyin": "jiàn",
-    "meaning": "clasificador de prendas y asuntos",
+    "meaning": "clasificador para prendas, objetos y asuntos",
     "level": 2,
     "characters": [
       "件"
@@ -724,7 +709,7 @@
     "simplified": "介绍",
     "traditional": "介紹",
     "pinyin": "jiè shào",
-    "meaning": "presentar",
+    "meaning": "presentar; introducir",
     "level": 2,
     "characters": [
       "介",
@@ -786,7 +771,7 @@
     "simplified": "就",
     "traditional": "就",
     "pinyin": "jiù",
-    "meaning": "justo; enseguida",
+    "meaning": "entonces; justo; enseguida",
     "level": 2,
     "characters": [
       "就"
@@ -913,7 +898,7 @@
     "simplified": "快",
     "traditional": "快",
     "pinyin": "kuài",
-    "meaning": "rápido; pronto",
+    "meaning": "rápido; pronto; deprisa",
     "level": 2,
     "characters": [
       "快"
@@ -957,7 +942,7 @@
     "simplified": "离",
     "traditional": "离",
     "pinyin": "lí",
-    "meaning": "distar de; dejar",
+    "meaning": "estar a distancia de; lejos de",
     "level": 2,
     "characters": [
       "离"
@@ -1266,7 +1251,7 @@
     "simplified": "晴",
     "traditional": "晴",
     "pinyin": "qíng",
-    "meaning": "despejado",
+    "meaning": "despejado; soleado",
     "level": 2,
     "characters": [
       "晴"
@@ -1298,7 +1283,7 @@
     "simplified": "让",
     "traditional": "讓",
     "pinyin": "ràng",
-    "meaning": "dejar; hacer que",
+    "meaning": "dejar; hacer que; permitir; ceder; invitar",
     "level": 2,
     "characters": [
       "让"
@@ -1439,7 +1424,7 @@
     "simplified": "送",
     "traditional": "送",
     "pinyin": "sòng",
-    "meaning": "regalar; acompañar; llevar",
+    "meaning": "regalar; enviar; acompañar; llevar",
     "level": 2,
     "characters": [
       "送"
@@ -1498,7 +1483,7 @@
     "simplified": "题",
     "traditional": "題",
     "pinyin": "tí",
-    "meaning": "pregunta; ejercicio",
+    "meaning": "tema; pregunta; problema",
     "level": 2,
     "characters": [
       "题"
@@ -1529,7 +1514,7 @@
     "simplified": "外",
     "traditional": "外",
     "pinyin": "wài",
-    "meaning": "fuera; extranjero",
+    "meaning": "fuera; exterior; extranjero",
     "level": 2,
     "characters": [
       "外"
@@ -1620,7 +1605,7 @@
     "simplified": "问题",
     "traditional": "問題",
     "pinyin": "wèn tí",
-    "meaning": "pregunta",
+    "meaning": "pregunta; cuestión; problema",
     "level": 2,
     "characters": [
       "问",
@@ -1807,7 +1792,7 @@
     "simplified": "眼睛",
     "traditional": "眼睛",
     "pinyin": "yǎn jing",
-    "meaning": "ojo",
+    "meaning": "ojos",
     "level": 2,
     "characters": [
       "眼",
@@ -1959,7 +1944,7 @@
     "simplified": "游泳",
     "traditional": "游泳",
     "pinyin": "yóu yǒng",
-    "meaning": "nadar",
+    "meaning": "nadar; natación",
     "level": 2,
     "characters": [
       "游",
@@ -2007,7 +1992,7 @@
     "simplified": "元",
     "traditional": "元",
     "pinyin": "yuán",
-    "meaning": "yuan; primero",
+    "meaning": "yuan; unidad monetaria china; primero",
     "level": 2,
     "characters": [
       "元"
@@ -2066,7 +2051,7 @@
     "simplified": "早上",
     "traditional": "早上",
     "pinyin": "zǎo shang",
-    "meaning": "mañana (temprano)",
+    "meaning": "por la mañana; mañana temprano",
     "level": 2,
     "characters": [
       "早",
@@ -2082,7 +2067,7 @@
     "simplified": "张",
     "traditional": "張",
     "pinyin": "zhāng",
-    "meaning": "clasificador de objetos planos",
+    "meaning": "clasificador para objetos planos",
     "level": 2,
     "characters": [
       "张"
@@ -2142,7 +2127,7 @@
     "simplified": "着",
     "traditional": "著",
     "pinyin": "zhe",
-    "meaning": "partícula de acción continua",
+    "meaning": "partícula que indica acción en curso",
     "level": 2,
     "characters": [
       "着"
@@ -2157,7 +2142,7 @@
     "simplified": "真",
     "traditional": "真",
     "pinyin": "zhēn",
-    "meaning": "verdadero; muy",
+    "meaning": "verdadero; realmente; muy",
     "level": 2,
     "characters": [
       "真"
@@ -2188,7 +2173,7 @@
     "simplified": "知道",
     "traditional": "知道",
     "pinyin": "zhī dào",
-    "meaning": "saber",
+    "meaning": "saber; conocer",
     "level": 2,
     "characters": [
       "知",
@@ -2237,7 +2222,7 @@
     "simplified": "走",
     "traditional": "走",
     "pinyin": "zǒu",
-    "meaning": "caminar; irse",
+    "meaning": "caminar; irse; marcharse",
     "level": 2,
     "characters": [
       "走"
@@ -2252,7 +2237,7 @@
     "simplified": "最",
     "traditional": "最",
     "pinyin": "zuì",
-    "meaning": "el más",
+    "meaning": "el más; lo más",
     "level": 2,
     "characters": [
       "最"
@@ -2267,7 +2252,7 @@
     "simplified": "左边",
     "traditional": "左邊",
     "pinyin": "zuǒ bian",
-    "meaning": "lado izquierdo",
+    "meaning": "lado izquierdo; a la izquierda",
     "level": 2,
     "characters": [
       "左",
@@ -2275,6 +2260,127 @@
     ],
     "topicIds": [
       "direcciones"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8e22-8db3-7403-ti-zu2-qiu2",
+    "simplified": "踢足球",
+    "traditional": "踢足球",
+    "pinyin": "tī zú qiú",
+    "meaning": "jugar al fútbol",
+    "level": 2,
+    "characters": [
+      "踢",
+      "足",
+      "球"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-8fd9-513f-zher4",
+    "simplified": "这儿",
+    "traditional": "這兒",
+    "pinyin": "zhèr",
+    "meaning": "aquí",
+    "level": 2,
+    "characters": [
+      "这",
+      "儿"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-7b49-deng3",
+    "simplified": "等",
+    "traditional": "等",
+    "pinyin": "děng",
+    "meaning": "esperar; etcétera",
+    "level": 2,
+    "characters": [
+      "等"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5bf9-dui4",
+    "simplified": "对",
+    "traditional": "對",
+    "pinyin": "duì",
+    "meaning": "correcto; hacia; par; pareja",
+    "level": 2,
+    "characters": [
+      "对"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8fc7-guo4",
+    "simplified": "过",
+    "traditional": "過",
+    "pinyin": "guò",
+    "meaning": "pasar; cruzar; partícula de experiencia",
+    "level": 2,
+    "characters": [
+      "过"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4e3a-4ec0-4e48-wei4-shen2-me5",
+    "simplified": "为什么",
+    "traditional": "為什麼",
+    "pinyin": "wèi shén me",
+    "meaning": "¿por qué?",
+    "level": 2,
+    "characters": [
+      "为",
+      "什",
+      "么"
+    ],
+    "topicIds": [
+      "preguntas"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7740-6025-zhao2-ji2",
+    "simplified": "着急",
+    "traditional": "著急",
+    "pinyin": "zháo jí",
+    "meaning": "preocuparse; estar preocupado",
+    "level": 2,
+    "characters": [
+      "着",
+      "急"
+    ],
+    "topicIds": [
+      "sentimientos"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-4f5c-4e1a-zuo4-ye4",
+    "simplified": "作业",
+    "traditional": "作業",
+    "pinyin": "zuò yè",
+    "meaning": "tarea escolar",
+    "level": 2,
+    "characters": [
+      "作",
+      "业"
+    ],
+    "topicIds": [
+      "escuela"
     ],
     "sourceId": "hsk-2-0"
   }

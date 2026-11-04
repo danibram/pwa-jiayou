@@ -44,7 +44,7 @@ describe('vocabulary quality', () => {
   it('starts a noun gloss with the noun, not an article', () => {
     // Fixed phrases where the article is part of the Spanish expression.
     const phrases = new Set([
-      '去年', '最', '一会儿', '稍微', '对方', '所谓', '一旦', '再三', '供不应求', '片刻', '群众', '人家', '四肢', '往事', '未免',
+      '去年', '最', '一会儿', '一点儿', '稍微', '对方', '所谓', '一旦', '再三', '供不应求', '片刻', '群众', '人家', '四肢', '往事', '未免',
     ]);
     const withArticle = vocabulary.filter(
       (entry) => !phrases.has(entry.simplified) && /^(un|una|el|la|los|las|unos|unas) /i.test(entry.meaning),

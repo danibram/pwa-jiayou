@@ -1,6 +1,12 @@
 # Vocabulary data
 
-The app ships the full HSK 2.0 exclusive word lists for levels 1–6 (150 / 147 / 298 / 598 / 1298 / 2500). Word levels come from that list and do not describe the level of each character.
+The app ships the HSK 2.0 word lists for levels 1–6. The original source has 150 / 147 / 298 / 598 / 1298 / 2500 words; editorial additions and level changes alter those counts. Word levels do not describe the level of each character.
+
+The lists also include words checked against the cumulative Asia Idiomas lists for [HSK 1](https://www.asiaidiomas.es/descargas/HSK1-VOCABULARIO.pdf), [HSK 2](https://www.asiaidiomas.es/descargas/HSK2-VOCABULARIO.pdf), and [HSK 3](https://www.asiaidiomas.es/descargas/HSK3-VOCABULARIO.pdf). These sources differ in some word forms and level assignments. Seven existing words were moved to lower levels while retaining their IDs. Selected HSK 1 example sentences appear in `src/data/vocabulary/examples.json`, with Spanish translations.
+
+To compare the HSK 3 PDF again, run `node scripts/compare-hsk3-pdf.mjs --pdf /path/to/HSK3-VOCABULARIO.pdf > /tmp/hsk3-report.json`. This needs `pdftotext` from Poppler. For text already extracted from the PDF, use `--text /path/to/file.txt`. When the text preserves the four columns, each result includes `sourceSpanish` beside the catalog's `entries[].meaning`. The report also lists missing words, words filed above level 3, missing characters, duplicates and fragments the parser could not resolve. A `found` status confirms the written form and level only, not the reading or translation. If the text has lost its columns, `sourceSpanish` is null and `source` keeps the unsplit row. Check `translationsExtracted`, duplicates, unresolved fragments and row totals before treating the report as complete. Run `node --test scripts/compare-hsk3-pdf.test.mjs` to check the parser.
+
+Add `--tsv` to produce a tab-separated table with the PDF and catalog meanings side by side, suitable for opening in a spreadsheet.
 
 The lists, traditional forms and readings were retrieved from [Complete HSK Vocabulary, exclusive old levels](https://github.com/drkameleon/complete-hsk-vocabulary/tree/main/wordlists/exclusive/old), by Yanis Zafirópulos. The project identifies `old-N` as HSK 2.0 level N and distributes the data under the MIT license. Each entry keeps one reading and one sense (the first form and first meaning in the source). Spanish meanings translate that sense. The source attributes its definitions to [CC-CEDICT](https://www.mdbg.net/chinese/dictionary?page=cc-cedict), licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The translated meanings are shared under the same license. The source includes more readings and senses than this selection.
 
