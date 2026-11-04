@@ -1,4 +1,5 @@
 import { Component, Show, createMemo, createSignal } from 'solid-js';
+import { leadSense, sensesText } from '../../src/data/wordSenses';
 import type { VocabularyEntry } from '../../src/data/vocabulary';
 import type { HskLevel } from '../../src/types';
 import { useEditor } from '../lib/store';
@@ -15,7 +16,7 @@ const WordsSection: Component = () => {
   const inLevel = (w: VocabularyEntry) => level() === 0 || (level() === -1 ? w.level === undefined : w.level === level());
   /** Words added in this draft come first, so a new entry is never lost at the end of 5000 rows. */
   const words = createMemo(() => {
-    const rows = editor.snapshot().vocabulary.filter((w) => inLevel(w) && matches(`${w.simplified} ${w.traditional} ${w.pinyin} ${w.meaning}`, query()));
+    const rows = editor.snapshot().vocabulary.filter((w) => inLevel(w) && matches(`${w.simplified} ${w.traditional} ${w.pinyin} ${sensesText(w.senses)}`, query()));
     const fresh = rows.filter((w) => editor.isNewWord(w.id));
     return fresh.length ? [...fresh, ...rows.filter((w) => !editor.isNewWord(w.id))] : rows;
   });
@@ -41,7 +42,7 @@ const WordsSection: Component = () => {
             <Hanzi text={w.simplified || '…'} size="md" class="row-glyph" />
             <span class="row-text">
               <span class="row-title"><Pinyin text={w.pinyin} /></span>
-              <span class="row-sub">{w.meaning || 'Sin traducción'}</span>
+              <span class="row-sub">{leadSense(w.senses) || 'Sin significado'}</span>
             </span>
             <span class="row-meta"><Show when={editor.isNewWord(w.id)}><span class="tag tag-next">Nueva</span></Show><Show when={changed().has(w.id)}><span class="dot dot-changed" title="Modificada" /></Show><LevelTag level={w.level} /></span>
           </>

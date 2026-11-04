@@ -1,4 +1,5 @@
 import { vocabulary, type VocabularyEntry } from '../../data/vocabulary';
+import { leadSense } from '../../data/wordSenses';
 import { levelRank } from '../../utils/wordOrder';
 import { shuffle } from '../../utils/shuffle';
 import type { Prompt } from '../../utils/vocabularySession';
@@ -31,7 +32,11 @@ export const askOrder = <T,>(words: T[]): T[] => {
  * Particles and classifiers have no meaning to say on their own ("partícula posesiva"), so their
  * first recall shows the word and asks what it does, instead of asking for it from the Spanish.
  */
-export const isFunctionWord = (entry: VocabularyEntry): boolean => /part[ií]cula|clasificador/i.test(entry.meaning);
+/** Judged on the first use: a particle or a classifier teaches grammar, not a meaning to recall. */
+export const isFunctionWord = (entry: VocabularyEntry): boolean => {
+  const [first] = entry.senses;
+  return first?.pos === 'partícula' || first?.pos === 'clasificador' || /part[ií]cula|clasificador/i.test(first?.text ?? '');
+};
 
 export const interleave = (reviews: DeckCard[], fresh: VocabularyEntry[]): DeckCard[] => {
   const out: DeckCard[] = [];
@@ -54,7 +59,7 @@ export const interleave = (reviews: DeckCard[], fresh: VocabularyEntry[]): DeckC
   return out;
 };
 
-const senses = (entry: VocabularyEntry) => entry.meaning.split(';').map((part) => part.trim()).filter(Boolean);
+const senses = (entry: VocabularyEntry) => entry.senses.map((sense) => sense.text);
 const firstSense = (entry: VocabularyEntry) => (senses(entry)[0] ?? '').toLowerCase();
 const sharesSense = (entry: VocabularyEntry, sense: string) => senses(entry).some((part) => part.toLowerCase() === sense);
 
@@ -64,7 +69,7 @@ const sharesSense = (entry: VocabularyEntry, sense: string) => senses(entry).som
  * so the learner knows which word is meant.
  */
 export const askGloss = (entry: VocabularyEntry): { text: string; hint?: string } => {
-  const [first = entry.meaning, second] = senses(entry);
+  const [first = leadSense(entry.senses), second] = senses(entry);
   const sense = first.toLowerCase();
   const clash = vocabulary.some((other) => other.simplified !== entry.simplified && other.level <= Math.max(levelRank(entry), 3) && sharesSense(other, sense));
   if (!clash) return { text: first };

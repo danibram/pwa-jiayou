@@ -41,7 +41,7 @@ describe('vocabulary progress', () => {
 
   it('saves word sessions by id and rejects missing entries', async () => {
     const { saveVocabularySession, loadVocabularySession, hasStoredVocabularySession } = await import('../src/utils/vocabularySession');
-    const entry = { id: 'hello', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hello', level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
+    const entry = { id: 'hello', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', senses: [{ text: 'hello' }], level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
     expect(saveVocabularySession({ version: 1, deck: [{ entry, kind: 'learn' }], position: 0, revealed: true, step: 'seen', feedback: null, counts: { again: 0, hard: 0, good: 0 }, heading: 'Words' })).toBe(true);
     expect(loadVocabularySession([entry])?.deck[0].entry).toEqual(entry);
     expect(loadVocabularySession([])).toBeNull();
@@ -49,7 +49,7 @@ describe('vocabulary progress', () => {
   });
   it('restores revealed and graded session state and preserves newer versions', async () => {
     const { saveVocabularySession, loadVocabularySession, hasStoredVocabularySession } = await import('../src/utils/vocabularySession');
-    const entry = { id: 'hello', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hello', level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
+    const entry = { id: 'hello', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', senses: [{ text: 'hello' }], level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
     const snapshot = { version: 1 as const, deck: [{ entry, kind: 'review' as const }], position: 0, revealed: true, step: 'check' as const, feedback: 'hard' as const, counts: { again: 1, hard: 2, good: 3 }, heading: 'Words' };
     expect(saveVocabularySession(snapshot)).toBe(true);
     expect(loadVocabularySession([entry])).toEqual(snapshot);

@@ -5,6 +5,8 @@ import type { HSKCharacter } from '../../src/types';
 /** Keep in sync with WORD_RELATION_KINDS in src/data/wordRelations.ts. Inlined so content-publish can load this file as a data URL. */
 const RELATION_KINDS = new Set(['synonym', 'antonym', 'related', 'classifier', 'confused']);
 const isWordRelationKind = (value: unknown): boolean => typeof value === 'string' && RELATION_KINDS.has(value);
+/** Keep in sync with WORD_POS in src/data/wordSenses.ts, inlined for the same reason. */
+const WORD_POS = new Set(['sustantivo', 'verbo', 'adjetivo', 'adverbio', 'clasificador', 'pronombre', 'numeral', 'preposición', 'conjunción', 'partícula', 'interjección', 'expresión']);
 
 export interface ContentSnapshot {
   schemaVersion: 1;
@@ -17,6 +19,7 @@ export interface ContentDraft {
   schemaVersion: 1;
   baseRevision: string;
   snapshot: ContentSnapshot;
+  references?: Record<string, { url: string; retrieved: string; examples: { chinese: string; pinyin: string; spanish: string }[] }>;
 }
 
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
@@ -36,21 +39,45 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot): assert
   const topics = value.topics as unknown[];
   const words = value.vocabulary as unknown[];
   const chars = value.characters as unknown[];
+  const kinds = new Set(['theme', 'subtopic', 'tag']);
   for (const topic of topics) {
     if (!object(topic) || !text(topic.id) || !/^[a-z]+$/.test(topic.id) || !text(topic.title) || !han(topic.glyph) || !Array.isArray(topic.characters) || !topic.characters.every(han)) fail('Tema inválido.');
+    // Published bases before the theme/subtopic split omit kind; treat them as themes.
+    if (topic.kind === undefined) topic.kind = 'theme';
+    if (!kinds.has(topic.kind as string)) fail(`Tipo de tema inválido en ${(topic as { title?: string }).title ?? topic.id}.`);
+    if (topic.listed !== undefined && typeof topic.listed !== 'boolean') fail('listed inválido.');
+    if (topic.parentId !== undefined && !text(topic.parentId)) fail('parentId inválido.');
   }
   const topicRows = topics as Topic[];
   unique(topicRows.map((row) => row.id), 'Tema');
   unique(topicRows.map((row) => row.title.trim().toLowerCase()), 'Título de tema');
+  const topicIds = new Set(topicRows.map((row) => row.id));
   for (const topic of topicRows) {
     // The app lists a topic as a practice set; fewer than five characters makes no session.
     if (topic.characters.length < 5) fail(`El tema ${topic.title} necesita al menos 5 caracteres.`);
     if (new Set(topic.characters).size !== topic.characters.length) fail(`Carácter repetido en el tema ${topic.title}.`);
+    if (topic.kind === 'subtopic') {
+      if (!topic.parentId || !topicIds.has(topic.parentId)) fail(`Subtema sin padre: ${topic.title}.`);
+      const parent = topicRows.find((row) => row.id === topic.parentId);
+      if (!parent || (parent.kind ?? 'theme') !== 'theme') fail(`El padre de ${topic.title} debe ser un tema.`);
+    } else if (topic.parentId) {
+      fail(`Solo un subtema puede tener padre (${topic.title}).`);
+    }
   }
-  const topicIds = new Set(topicRows.map((row) => row.id));
   for (const word of words) {
-    if (!object(word) || !text(word.id) || !text(word.simplified) || !text(word.traditional) || !text(word.pinyin) || !text(word.meaning) || !text(word.sourceId) || (word.level !== undefined && !level(word.level)) || !Array.isArray(word.characters) || !word.characters.every(han) || !strings(word.topicIds)) fail('Palabra inválida.');
+    if (!object(word) || !text(word.id) || !text(word.simplified) || !text(word.traditional) || !text(word.pinyin) || !(Array.isArray(word.senses) || (!base && text(word.meaning))) || !text(word.sourceId) || (word.level !== undefined && !level(word.level)) || !Array.isArray(word.characters) || !word.characters.every(han) || !strings(word.topicIds)) fail('Palabra inválida.');
     const row = word as unknown as VocabularyEntry;
+    if (row.example !== undefined && row.example !== null && (!object(row.example) || !text(row.example.chinese) || !text(row.example.spanish))) fail(`Frase incompleta en ${row.simplified}.`);
+    // Published bases before senses carry a single meaning string; a draft always has senses.
+    if (Array.isArray(row.senses)) {
+      if (!row.senses.length) fail(`${row.simplified} necesita al menos un significado.`);
+      for (const sense of row.senses as unknown[]) {
+        if (!object(sense) || !text(sense.text)) fail(`Significado vacío en ${row.simplified}.`);
+        const use = sense as Record<string, unknown>;
+        if (use.pos !== undefined && !WORD_POS.has(use.pos as string)) fail(`Categoría desconocida en ${row.simplified}.`);
+        if (use.note !== undefined && !text(use.note)) fail(`Nota vacía en ${row.simplified}.`);
+      }
+    }
     if (!row.characters.length || JSON.stringify(row.characters) !== JSON.stringify(Array.from(row.simplified))) fail(`Caracteres incorrectos en ${row.simplified}.`);
     if (new Set(row.topicIds).size !== row.topicIds.length) fail(`Tema duplicado en ${row.simplified}.`);
     if (row.topicIds.some((id) => !topicIds.has(id))) fail(`Tema desconocido en ${row.simplified}.`);
@@ -109,4 +136,14 @@ export function validateDraft(value: unknown, base: ContentSnapshot, revision: s
   if (!object(value) || value.schemaVersion !== 1 || typeof value.baseRevision !== 'string') return fail('Formato de borrador inválido.');
   if (value.baseRevision !== revision) fail('El borrador parte de una versión anterior.');
   validateSnapshot(value.snapshot, base);
+  if (value.references !== undefined) {
+    if (!object(value.references)) return fail('Referencias inválidas.');
+    const ids = new Set(value.snapshot.vocabulary.map((word) => word.id));
+    for (const [id, reference] of Object.entries(value.references)) {
+      if (!ids.has(id) || !object(reference) || !text(reference.url) || !/^https:\/\//.test(reference.url) || !text(reference.retrieved) || !Array.isArray(reference.examples)) return fail('Referencia inválida.');
+      for (const example of reference.examples) {
+        if (!object(example) || !text(example.chinese) || !text(example.pinyin) || !text(example.spanish)) fail('Frase de referencia inválida.');
+      }
+    }
+  }
 }

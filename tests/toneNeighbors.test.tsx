@@ -4,11 +4,16 @@ import ToneNeighbors from '../src/components/ToneNeighbors';
 import Vocabulario from '../src/pages/Vocabulario';
 import { vocabulary } from '../src/data/vocabulary';
 
-describe('palabras con otros tonos', () => {
-  it('compares neutral ma with other tones and opens a result', () => {
+const page = (simplified: string) => {
+  const word = vocabulary.find((entry) => entry.simplified === simplified)!;
+  return render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={word.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
+};
+
+describe('suena parecido', () => {
+  it('compares neutral ma with other tones in the character drawer and opens a result', () => {
     const open = vi.fn();
     render(() => <ToneNeighbors character="吗" pinyin="ma" onOpenWord={open} />);
-    const section = screen.getByRole('region', { name: 'Misma sílaba, otros tonos' });
+    const section = screen.getByRole('region', { name: 'Suena parecido' });
     const horse = within(section).getByText('马').closest('button')!;
     expect(within(horse).getByText('mǎ')).toBeTruthy();
     expect(within(horse).getByText('caballo')).toBeTruthy();
@@ -17,13 +22,20 @@ describe('palabras con otros tonos', () => {
     expect(open).toHaveBeenCalledWith(vocabulary.find((word) => word.simplified === '马')!.id);
   });
 
-  it('shows the comparison on one-character word pages only', () => {
-    const word = vocabulary.find((entry) => entry.simplified === '吗')!;
-    const view = render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={word.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
-    expect(within(screen.getByRole('region', { name: 'Misma sílaba, otros tonos' })).getByText('马')).toBeTruthy();
+  it('puts same-tone characters before other tones', () => {
+    render(() => <ToneNeighbors character="是" pinyin="shì" />);
+    const section = screen.getByRole('region', { name: 'Suena parecido' });
+    const labels = within(section).getAllByText(/^(Suena igual|Otro tono)$/).map((node) => node.textContent);
+    expect(labels).toEqual(['Suena igual', 'Otro tono']);
+  });
+
+  it('compares whole words on the word page, homophones of two syllables included', () => {
+    const view = page('时间');
+    const section = screen.getByRole('region', { name: 'Suena parecido' });
+    expect(within(section).getByText('实践')).toBeTruthy();
+    expect(within(section).getByText('事件')).toBeTruthy();
     view.unmount();
-    const multi = vocabulary.find((entry) => entry.simplified === '朋友')!;
-    render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={multi.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
-    expect(screen.queryByRole('region', { name: 'Misma sílaba, otros tonos' })).toBeNull();
+    page('朋友');
+    expect(screen.queryByRole('region', { name: 'Suena parecido' })).toBeNull();
   });
 });

@@ -5,8 +5,8 @@ import VocabularyReview from '../src/pages/VocabularyReview';
 
 vi.mock('../src/data/vocabulary', () => {
   const vocabulary = [
-    { id: 'word-one', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hola', level: 1, characters: ['你', '好'], topicIds: [], sourceId: 'test' },
-    { id: 'word-two', simplified: '谢谢', traditional: '謝謝', pinyin: 'xièxie', meaning: 'gracias', level: 1, characters: ['谢'], topicIds: [], sourceId: 'test' },
+    { id: 'word-one', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', senses: [{ text: 'hola' }], level: 1, characters: ['你', '好'], topicIds: [], sourceId: 'test' },
+    { id: 'word-two', simplified: '谢谢', traditional: '謝謝', pinyin: 'xièxie', senses: [{ text: 'gracias' }], level: 1, characters: ['谢'], topicIds: [], sourceId: 'test' },
   ];
   return {
     vocabulary,
