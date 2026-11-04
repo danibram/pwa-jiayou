@@ -58,16 +58,9 @@ const GROUPS: { title: string; credits: Credit[] }[] = [
       {
         kind: 'source',
         title: 'Vocabulario HSK 2.0',
-        body: 'Las listas exclusivas por nivel salen de Complete HSK Vocabulary. El español traduce sentidos de CC-CEDICT (CC BY-SA 4.0).',
+        body: 'Las listas exclusivas por nivel salen de Complete HSK Vocabulary. El español de todos los niveles traduce sentidos de CC-CEDICT (CC BY-SA 4.0). La división en usos, las categorías gramaticales, las notas, los subtemas y la redacción final son de este proyecto.',
         href: 'https://github.com/drkameleon/complete-hsk-vocabulary',
         source: 'Complete HSK Vocabulary',
-      },
-      {
-        kind: 'source',
-        title: 'Traducciones de HSK 4 a 6',
-        body: 'Combinan CC-CEDICT con definiciones de , que también ayudaron a agrupar los subtemas. La división en usos, las categorías gramaticales, las notas y la redacción final son de este proyecto.',
-        href: '',
-        source: '',
       },
     ],
   },

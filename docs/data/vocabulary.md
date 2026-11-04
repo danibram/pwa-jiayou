@@ -22,7 +22,7 @@ Authored sentences use the optional `VocabularyEntry.example` field. Draft refer
 
 ## Where the Spanish comes from
 
-The HSK 1 to 3 translations start from CC-CEDICT senses. The HSK 4 to 6 translations, and the HSK 4 to 6 character definitions, combine CC-CEDICT with definitions from [](). The split into uses, the parts of speech, the usage notes and the final wording are this project's. The subtopics were built with this project's own taxonomy, helped by 's thematic word lists. The licenses below describe the original vocabulary sources.
+The HSK translations and the HSK 4 to 6 character definitions start from CC-CEDICT senses. The split into uses, the parts of speech, the usage notes, the subtopics and the final wording are this project's. The licenses below describe the original vocabulary sources.
 
 ## Source license
 
