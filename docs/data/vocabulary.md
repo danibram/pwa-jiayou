@@ -18,6 +18,12 @@ The word 东西 uses `dōng xi` for "thing", 多少 uses `duō shao` for "how ma
 
 Word list JSON is bundled with the app. Stroke and syllable audio still come from the character packs (`public/strokes`, `public/audio`, `public/packs/hskN/`).
 
+Authored sentences use the optional `VocabularyEntry.example` field. Draft references (example sentences shown while reviewing in the editor) are not published.
+
+## Where the Spanish comes from
+
+The HSK 1 to 3 translations start from CC-CEDICT senses. The HSK 4 to 6 translations, and the HSK 4 to 6 character definitions, combine CC-CEDICT with definitions from [](). The split into uses, the parts of speech, the usage notes and the final wording are this project's. The subtopics were built with this project's own taxonomy, helped by 's thematic word lists. The licenses below describe the original vocabulary sources.
+
 ## Source license
 
 MIT License
@@ -41,3 +47,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Significados por uso
+
+Cada palabra guarda `senses`, una lista de usos `{ pos, text, note }`, en lugar de un texto con punto y coma. El modelo y sus ayudas están en `src/data/wordSenses.ts`; el editor valida la categoría contra la misma lista cerrada. La migración desde `meaning` está en `scripts/migrate-word-senses.mjs`: `split` analiza cada texto con `scripts/word-senses.mjs` y escribe lotes en `.cache/senses/`, y `apply` junta las categorías asignadas y escribe un borrador para `content-publish.mjs promote`. El texto lo separa el script; un modelo solo asignó la categoría de los 7563 usos que no la traían escrita. Los scripts antiguos `localize-vocabulary.mjs`, `fix-vocabulary-data.mjs` y `compare-hsk3-pdf.mjs` siguen leyendo `meaning` y solo sirven para las listas de origen.

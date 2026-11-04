@@ -1,17 +1,73 @@
-import { Component, For, Show, createResource, createSignal } from 'solid-js';
-import { message, useEditor, type Change } from '../lib/store';
-import { Hanzi } from './text';
+import { Component, For, Show, createMemo, createResource, createSignal } from 'solid-js';
+import { sensesText } from '../../src/data/wordSenses';
+import { exampleFor, message, useEditor, type Change } from '../lib/store';
+import { formatWordRelations } from '../../src/data/wordRelations';
+import { EntryList } from './EntryList';
+import { Hanzi, LevelTag } from './text';
 
 const KIND: Record<Change['kind'], string> = { word: 'Palabra', character: 'Carácter', topic: 'Tema', order: 'Orden' };
+const changeKey = (change: Change) => `${change.kind}:${change.id}`;
+const searchable = (value: string) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 const ReviewSection: Component = () => {
   const editor = useEditor();
   const [notes, setNotes] = createSignal('');
   const [busy, setBusy] = createSignal(false);
+  const [query, setQuery] = createSignal('');
+  const [level, setLevel] = createSignal(0);
+  const [kind, setKind] = createSignal('all');
+  const [selected, setSelected] = createSignal('');
+  const reviewEntries = createMemo(() => {
+    const changes = editor.changes();
+    const changed = new Set(changes.filter((change) => change.kind === 'word').map((change) => change.id));
+    const references = editor.references() ?? {};
+    return [...changes, ...editor.snapshot().vocabulary.filter((word) => references[word.id] && !changed.has(word.id)).map((word): Change => ({
+      kind: 'word', id: word.id, title: word.simplified, subtitle: `${word.pinyin} · ${sensesText(word.senses)}`, level: word.level, isNew: false, fields: [],
+    }))];
+  });
+  const filtered = createMemo(() => {
+    const terms = searchable(query()).trim().split(/\s+/).filter(Boolean);
+    return reviewEntries().filter((change) => {
+      if (kind() !== 'all' && change.kind !== kind()) return false;
+      if (level() === -1 && !(change.kind === 'word' && change.level === undefined)) return false;
+      if (level() > 0 && change.level !== level()) return false;
+      const content = searchable([change.title, change.subtitle, ...change.fields.flatMap((field) => [field.before, field.after])].join(' '));
+      return terms.every((term) => content.includes(term));
+    });
+  });
+  const current = createMemo(() => filtered().find((change) => changeKey(change) === selected()) ?? filtered()[0]);
+  const context = createMemo(() => {
+    const change = current();
+    if (!change || change.kind !== 'word') return [];
+    const word = editor.snapshot().vocabulary.find((word) => word.id === change.id);
+    if (!word) return [];
+    const fields: { name: string; value: string }[] = [];
+    const example = exampleFor(word);
+    if (example && !change.fields.some((field) => ['Frase en chino', 'Traducción de la frase'].includes(field.name))) {
+      fields.push({ name: 'Frase de ejemplo', value: `${example.chinese}\n${example.spanish}` });
+    }
+    if (!change.fields.some((field) => field.name === 'Relaciones')) {
+      const words = new Map(editor.snapshot().vocabulary.map((word) => [word.id, word.simplified]));
+      const relations = formatWordRelations(word.relations, (id) => words.get(id) ?? id);
+      if (relations) fields.push({ name: 'Relaciones', value: relations });
+    }
+    return fields;
+  });
+  const position = () => filtered().findIndex((change) => change === current());
+  const move = (offset: number) => {
+    const change = filtered()[position() + offset];
+    if (change) setSelected(changeKey(change));
+  };
+  const editCurrent = () => {
+    const change = current();
+    if (!change || change.kind === 'order') return;
+    editor.switchSection(change.kind === 'word' ? 'words' : change.kind === 'character' ? 'characters' : 'topics');
+    editor.setSelected(change.id);
+  };
   const [plan] = createResource(
-    () => (editor.server() === 'available' ? editor.changes().length : -1),
-    async (count) => {
-      if (count <= 0) return undefined;
+    () => (editor.server() === 'available' ? editor.changes() : undefined),
+    async (changes) => {
+      if (!changes.length) return undefined;
       try { return { ok: true as const, ...(await editor.plan()) }; }
       catch (err) { return { ok: false as const, error: message(err) }; }
     },
@@ -29,6 +85,37 @@ const ReviewSection: Component = () => {
 
   return (
     <div class="review">
+      <div class="review-browser">
+        <div class="review-kind">
+          <label for="review-kind">Tipo de entrada</label>
+          <select id="review-kind" value={kind()} onChange={(event) => setKind(event.currentTarget.value)}>
+            <option value="all">Todas las entradas</option>
+            <option value="word">Palabras</option>
+            <option value="character">Caracteres</option>
+            <option value="topic">Temas</option>
+            <option value="order">Orden de temas</option>
+          </select>
+        </div>
+        <EntryList
+          label="Cambios" items={filtered()} key={changeKey}
+          selected={current() ? changeKey(current()!) : ''} onSelect={setSelected}
+          query={query()} onQuery={setQuery} placeholder="Palabra, pinyin o traducción"
+          levels extra level={level()} onLevel={setLevel}
+          empty={reviewEntries().length ? 'No hay cambios con estos filtros.' : 'No hay cambios pendientes.'}
+          row={(change) => <>
+            <Show when={change.kind === 'word' || change.kind === 'character'} fallback={<span class="review-kind-label">{KIND[change.kind]}</span>}>
+              <Hanzi text={change.title} size="md" class="row-glyph" />
+            </Show>
+            <span class="row-text">
+              <span class="row-title">{change.kind === 'word' || change.kind === 'character' ? change.subtitle.split(' · ')[0] : change.title}</span>
+              <span class="row-sub">{KIND[change.kind]} · {change.fields.length ? change.fields.map((field) => field.name).join(', ') : 'Referencias para redactar'}</span>
+            </span>
+            <Show when={change.kind === 'word' || change.kind === 'character'}><LevelTag level={change.level} /></Show>
+          </>}
+        />
+        <p class="review-filter-hint">El filtro usa el nivel propuesto. Los temas aparecen en Todos.</p>
+      </div>
+      <div class="review-main">
       <section class="changes" aria-label="Cambios del borrador">
         <header class="section-head">
           <h2>Cambios respecto a la versión {editor.version().version || '?'}</h2>
@@ -40,33 +127,69 @@ const ReviewSection: Component = () => {
             <ul class="files"><For each={result().files}>{(file) => <li><code>{file}</code></li>}</For></ul>
           </div>
         )}</Show>
-        <ul class="change-list">
-          <For each={editor.changes()}>{(change) => (
-            <li class="change">
-              <div class="change-head">
-                <span class="tag">{KIND[change.kind]}{change.isNew ? ' nuevo' : ''}</span>
-                <Show when={change.kind !== 'order'} fallback={<strong>{change.title}</strong>}>
-                  <strong><Hanzi text={change.title} size="sm" /></strong>
-                  <span class="muted">{change.subtitle}</span>
-                </Show>
+        <Show when={current()} fallback={
+          <Show when={reviewEntries().length > 0}>
+            <p class="empty">No hay entradas para comparar. Cambia los filtros o la búsqueda.</p>
+            <button type="button" class="btn btn-quiet" onClick={() => { setLevel(0); setKind('all'); setQuery(''); }}>Limpiar filtros</button>
+          </Show>
+        }>{(change) => (
+          <article class="review-entry" aria-label={`Cambios de ${change().title}`}>
+            <nav class="review-navigation" aria-label="Recorrer cambios">
+              <p aria-live="polite">{position() + 1} de {filtered().length} entradas</p>
+              <div>
+                <button type="button" class="btn btn-quiet" disabled={position() <= 0} onClick={() => move(-1)}>Anterior</button>
+                <button type="button" class="btn btn-quiet" disabled={position() >= filtered().length - 1} onClick={() => move(1)}>Siguiente</button>
               </div>
-              <table class="diff">
-                <tbody>
-                  <For each={change.fields}>{(field) => (
-                    <tr>
-                      <th scope="row">{field.name}</th>
-                      <td class="before"><Show when={field.before} fallback={<span class="muted">vacío</span>}>{field.before}</Show></td>
-                      <td class="after"><Show when={field.after} fallback={<span class="muted">vacío</span>}>{field.after}</Show></td>
-                    </tr>
-                  )}</For>
-                </tbody>
-              </table>
-            </li>
-          )}</For>
-        </ul>
+            </nav>
+            <header class="review-entry-head">
+              <div>
+                <p class="eyebrow"><span>{KIND[change().kind]}{change().isNew ? ' nuevo' : ''}</span>
+                  <Show when={change().kind === 'word' || change().kind === 'character'}><LevelTag level={change().level} /></Show>
+                </p>
+                <h3><Show when={change().kind === 'word' || change().kind === 'character'} fallback={change().title}>
+                  <Hanzi text={change().title} size="lg" />
+                  <span class="review-reading">{change().subtitle.split(' · ')[0]}</span>
+                </Show></h3>
+              </div>
+              <Show when={change().kind !== 'order'}><button type="button" class="btn btn-quiet" onClick={editCurrent}>Editar ficha</button></Show>
+            </header>
+            <Show when={change().fields.length} fallback={<p class="muted">Esta entrada conserva el contenido publicado. Tiene referencias para preparar una propuesta.</p>}><table class="diff">
+              <caption>{change().fields.length} {change().fields.length === 1 ? 'campo modificado' : 'campos modificados'}</caption>
+              <thead><tr><th scope="col">Campo</th><th scope="col">Publicado</th><th scope="col">Propuesta</th></tr></thead>
+              <tbody>
+                <For each={change().fields}>{(field) => (
+                  <tr>
+                    <th scope="row">{field.name}</th>
+                    <td class="before" data-label="Publicado"><Show when={field.before} fallback={<span class="muted">Sin valor</span>}>{field.before}</Show></td>
+                    <td class="after" data-label="Propuesta"><Show when={field.after} fallback={<span class="muted">Sin valor</span>}>{field.after}</Show></td>
+                  </tr>
+                )}</For>
+              </tbody>
+            </table></Show>
+            <Show when={context().length}>
+              <section class="review-context" aria-label="Contenido que se conserva">
+                <h4>Se conserva</h4>
+                <dl><For each={context()}>{(field) => <div><dt>{field.name}</dt><dd>{field.value}</dd></div>}</For></dl>
+              </section>
+            </Show>
+            <Show when={change().kind === 'word' && editor.references()?.[change().id]}>{(reference) => (
+              <details class="review-references">
+                <summary>Frases de referencia · {reference().examples.length}</summary>
+                <p class="hint">Estas frases son de la fuente. No se publican con el borrador. Redacta un ejemplo propio en Editar ficha.</p>
+                <a href={reference().url} target="_blank" rel="noreferrer">Consultar la ficha de origen</a>
+                <ul><For each={reference().examples}>{(example) => <li>
+                  <p lang="zh-Hans" class="hanzi">{example.chinese}</p>
+                  <p lang="zh-Latn-pinyin" class="muted">{example.pinyin}</p>
+                  <p>{example.spanish}</p>
+                </li>}</For></ul>
+              </details>
+            )}</Show>
+          </article>
+        )}</Show>
       </section>
       <aside class="promote" aria-label="Promover">
         <h2>Siguiente versión</h2>
+        <p class="review-publish-scope">La publicación incluye el borrador completo, con {editor.changes().length} {editor.changes().length === 1 ? 'cambio' : 'cambios'}. Los filtros solo afectan a la revisión.</p>
         <p class="version-line"><span class="tag">v{editor.version().version || '?'}</span> <span aria-hidden="true">→</span> <span class="tag tag-next">v{next()}</span></p>
         <Show when={editor.server() === 'available'} fallback={
           <div class="offline-promote">
@@ -99,6 +222,7 @@ const ReviewSection: Component = () => {
           </details>
         </Show>
       </aside>
+      </div>
     </div>
   );
 };

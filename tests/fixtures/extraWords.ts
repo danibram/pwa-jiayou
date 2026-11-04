@@ -1,6 +1,6 @@
 /** Extra words for tests, as the content editor writes them to src/data/vocabulary/extra.json. */
 const word = (id: string, simplified: string, pinyin: string, meaning: string, topicIds: string[] = []) => ({
-  id, simplified, traditional: simplified, pinyin, meaning, characters: [...simplified], topicIds, sourceId: 'curated-extra',
+  id, simplified, traditional: simplified, pinyin, senses: meaning.split('; ').map((text) => ({ pos: 'sustantivo' as const, text })), characters: [...simplified], topicIds, sourceId: 'curated-extra',
 });
 
 export const extraWords = [

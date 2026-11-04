@@ -11,6 +11,7 @@ import { vocabulary, type VocabularyEntry } from '../data/vocabulary';
 import { allWords, findWord } from '../data/vocabulary';
 import { characterExample, characterGloss } from '../utils/wordParts';
 import { topicById } from '../data/topics';
+import { leadSense } from '../data/wordSenses';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { GRADES, SESSION_SIZE, WORD_NEW_PER_DAY, progressStore as charProgress, type Grade } from '../stores/progressStore';
@@ -79,10 +80,15 @@ const plain = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f\s]
  * "de (partícula posesiva)" under "de" reads as a stutter, so it becomes "Partícula posesiva".
  */
 const displayGloss = (entry: VocabularyEntry) => {
-  const head = entry.meaning.match(/^([^()]+?)\s*\((.+)\)$/);
-  const text = head && plain(head[1]) === plain(entry.pinyin) ? head[2] : entry.meaning;
+  const [first] = entry.senses;
+  const lead = leadSense(entry.senses);
+  // "de" with the note "partícula posesiva" under the syllable "de" reads as a stutter: the note says more.
+  const text = first?.note && plain(lead) === plain(entry.pinyin) ? first.note : lead;
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
+
+/** The uses after the first, for the quieter line under a revealed card. */
+const otherUses = (entry: VocabularyEntry) => entry.senses.slice(1).map((sense) => sense.text).join(' · ');
 
 const topicTitle = (topicIds: string[]) => {
   const titles = topicIds.map((id) => topicById(id)?.title).filter((title): title is string => !!title);
@@ -485,7 +491,7 @@ const VocabularyReview: Component<Props> = (props) => {
                         <span class="font-hanzi text-[1.75rem] leading-none" classList={{ 'text-ink-faint': wrongPicks().includes(choice.id) }} lang="zh-CN">{choice.simplified}</span>
                         {/* A wrong pick says what it was, so the mix-up teaches something. */}
                         <Show when={wrongPicks().includes(choice.id)}>
-                          <span class="mt-1 line-clamp-2 font-sans text-xs leading-tight text-seal">{displayGloss(choice).split(';')[0]}</span>
+                          <span class="mt-1 line-clamp-2 font-sans text-xs leading-tight text-seal">{displayGloss(choice)}</span>
                         </Show>
                       </button>
                     )}</For>
@@ -524,10 +530,10 @@ const VocabularyReview: Component<Props> = (props) => {
                         class="tile flex min-h-12 items-center justify-between gap-3 px-4 text-left transition active:scale-[0.98]"
                         classList={{ 'border-seal/60 bg-seal-soft': wrongPicks().includes(choice.id) }}
                         disabled={wrongPicks().includes(choice.id)}
-                        aria-label={displayGloss(choice).split(';')[0]}
+                        aria-label={displayGloss(choice)}
                         onClick={() => pick(choice)}
                       >
-                        <span class="text-base font-medium first-letter:uppercase" classList={{ 'text-ink-faint': wrongPicks().includes(choice.id) }}>{displayGloss(choice).split(';')[0]}</span>
+                        <span class="text-base font-medium first-letter:uppercase" classList={{ 'text-ink-faint': wrongPicks().includes(choice.id) }}>{displayGloss(choice)}</span>
                         {/* A wrong pick shows whose meaning it was. */}
                         <Show when={wrongPicks().includes(choice.id)}><span class="font-hanzi text-xl text-seal" lang="zh-CN">{choice.simplified}</span></Show>
                       </button>
@@ -537,7 +543,11 @@ const VocabularyReview: Component<Props> = (props) => {
                 </Show>
                 <Show when={revealed() || step() === 'learn'}>
                   <Pinyin word text={current().entry.pinyin} class="mt-3 text-2xl font-medium" />
-                  <p class="mt-2 text-2xl font-semibold leading-snug text-balance">{displayGloss(current().entry)}</p>
+                  {/* The first use teaches; the others stay small, so a word with many uses still reads as a card. */}
+                  <p class="mt-2 text-2xl font-semibold leading-snug text-balance first-letter:uppercase">{displayGloss(current().entry)}</p>
+                  <Show when={otherUses(current().entry)}>
+                    {(rest) => <p class="mt-1 line-clamp-2 max-w-[22rem] text-sm leading-snug text-ink-soft first-letter:uppercase">{rest()}</p>}
+                  </Show>
                   <Show when={current().entry.traditional !== current().entry.simplified}><p class="mt-2 text-sm text-ink-soft">Tradicional: {current().entry.traditional}</p></Show>
                   <SpeakButton word class="mt-2" pinyin={current().entry.pinyin} hanzi={current().entry.simplified} onUnavailable={() => setAudioError(true)} />
                   <Show when={relatedWord(current().entry)}>{(other) => (
@@ -547,7 +557,7 @@ const VocabularyReview: Component<Props> = (props) => {
                         <span class="font-hanzi text-[1.5rem] leading-none" lang="zh-CN">{other().simplified}</span>
                         <Pinyin word text={other().pinyin} class="text-base font-medium whitespace-nowrap" />
                       </p>
-                      <p class="mt-0.5 text-sm text-ink-soft">{other().meaning.split(';')[0]}</p>
+                      <p class="mt-0.5 text-sm text-ink-soft">{leadSense(other().senses)}</p>
                     </div>
                   )}</Show>
                   {/* A one-character word with no other word to show it in (的, 了) gets its curated example. */}
@@ -586,7 +596,7 @@ const VocabularyReview: Component<Props> = (props) => {
                   )}</Show>
                 }>{(wrong) => (
                   <p role="status" class="mt-3 max-w-[19rem] rounded-xl bg-seal-soft/60 px-4 py-2 text-sm leading-snug text-ink animate-pop">
-                    Tocaste <span class="font-hanzi text-base" lang="zh-CN">{wrong().simplified}</span> {wrong().pinyin}, «{displayGloss(wrong()).split(';')[0].toLowerCase()}». <span class="font-hanzi text-base" lang="zh-CN">{current().entry.simplified}</span> es «{displayGloss(current().entry).split(';')[0].toLowerCase()}».{feedback() === 'again' ? ' Vuelve en unas tarjetas.' : ''}
+                    Tocaste <span class="font-hanzi text-base" lang="zh-CN">{wrong().simplified}</span> {wrong().pinyin}, «{displayGloss(wrong()).toLowerCase()}». <span class="font-hanzi text-base" lang="zh-CN">{current().entry.simplified}</span> es «{displayGloss(current().entry).toLowerCase()}».{feedback() === 'again' ? ' Vuelve en unas tarjetas.' : ''}
                   </p>
                 )}</Show>
                 <Show when={!revealed() && step() !== 'learn' && prompt() === 'meaning'}><p class="mt-8 text-sm text-ink-soft">¿Qué significa esta palabra?</p></Show>
@@ -615,7 +625,7 @@ const VocabularyReview: Component<Props> = (props) => {
       <SessionLeaveSheet open={leaving()} answeredBeforePause={answeredBeforePause} onStay={() => setLeaving(false)} onPause={props.onBack} onDiscard={discardAndLeave} />
       <ScoreModal
         summary={finished() ? { ...reviewCounts(), total: reviewCounts().again + reviewCounts().hard + reviewCounts().good, percentage: (() => { const total = reviewCounts().again + reviewCounts().hard + reviewCounts().good; return total ? Math.round(((reviewCounts().good + reviewCounts().hard / 2) / total) * 100) : 0; })(), streak: Math.max(progress.daily.streak, charProgress.daily.streak) } : null}
-        learned={taught().filter((entry) => !progress.isNew(entry.id)).map((entry) => ({ character: entry.simplified, pinyin: entry.pinyin, meaning: displayGloss(entry).split(';')[0], struggled: !!results()[entry.id] && results()[entry.id] !== 'good' }))}
+        learned={taught().filter((entry) => !progress.isNew(entry.id)).map((entry) => ({ character: entry.simplified, pinyin: entry.pinyin, meaning: displayGloss(entry), struggled: !!results()[entry.id] && results()[entry.id] !== 'good' }))}
         tomorrow={finished() && mode !== 'practice' ? progress.dueByTomorrow(pool) : undefined}
         weakChange={weakPractice && finished() ? { before: weakBefore, after: pool.filter(isWeak).length, recovered: recovered() } : undefined}
         weakNow={finished() ? pool.filter(isWeak).length : undefined}

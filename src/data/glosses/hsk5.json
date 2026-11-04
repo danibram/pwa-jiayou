@@ -56,7 +56,7 @@
     }
   },
   "摆": {
-    "gloss": "colocar; balancear",
+    "gloss": "arreglar, colocar, exhibir",
     "example": {
       "word": "摆放",
       "pinyin": "bǎi fàng",
@@ -208,7 +208,7 @@
     }
   },
   "兵": {
-    "gloss": "soldado; ejército",
+    "gloss": "soldado",
     "example": {
       "word": "士兵",
       "pinyin": "shì bīng",
@@ -240,7 +240,7 @@
     }
   },
   "布": {
-    "gloss": "tela; difundir",
+    "gloss": "tela",
     "example": {
       "word": "衣服",
       "pinyin": "yī fu",
@@ -288,7 +288,7 @@
     }
   },
   "藏": {
-    "gloss": "ocultar; almacenar",
+    "gloss": "esconder, ocultar",
     "example": {
       "word": "隐藏",
       "pinyin": "yǐn cáng",
@@ -320,7 +320,7 @@
     }
   },
   "测": {
-    "gloss": "medir; estimar",
+    "gloss": "medir",
     "example": {
       "word": "测试",
       "pinyin": "cè shì",
@@ -328,7 +328,7 @@
     }
   },
   "曾": {
-    "gloss": "alguna vez",
+    "gloss": "una vez",
     "example": {
       "word": "曾经",
       "pinyin": "céng jīng",
@@ -344,7 +344,7 @@
     }
   },
   "插": {
-    "gloss": "insertar; meter",
+    "gloss": "insertar, meter dentro",
     "example": {
       "word": "插入",
       "pinyin": "chā rù",
@@ -368,7 +368,7 @@
     }
   },
   "产": {
-    "gloss": "producir; dar a luz",
+    "gloss": "producir, fabricar, dar",
     "example": {
       "word": "产品",
       "pinyin": "chǎn pǐn",
@@ -376,7 +376,7 @@
     }
   },
   "肠": {
-    "gloss": "intestino",
+    "gloss": "intestinos",
     "example": {
       "word": "香肠",
       "pinyin": "xiāng cháng",
@@ -408,7 +408,7 @@
     }
   },
   "抄": {
-    "gloss": "copiar; confiscar",
+    "gloss": "copiar, transcribir",
     "example": {
       "word": "抄写",
       "pinyin": "chāo xiě",
@@ -440,7 +440,7 @@
     }
   },
   "炒": {
-    "gloss": "saltear; especular",
+    "gloss": "sofreír",
     "example": {
       "word": "炒菜",
       "pinyin": "chǎo cài",
@@ -464,7 +464,7 @@
     }
   },
   "沉": {
-    "gloss": "hundirse; profundo",
+    "gloss": "hundir, sumergir",
     "example": {
       "word": "沉重",
       "pinyin": "chén zhòng",
@@ -496,7 +496,7 @@
     }
   },
   "池": {
-    "gloss": "estanque; piscina",
+    "gloss": "piscina, estanque",
     "example": {
       "word": "池塘",
       "pinyin": "chí táng",
@@ -536,7 +536,7 @@
     }
   },
   "冲": {
-    "gloss": "irrumpir; enjuagar",
+    "gloss": "enjuagar",
     "example": {
       "word": "冲突",
       "pinyin": "chōng tū",
@@ -576,7 +576,7 @@
     }
   },
   "丑": {
-    "gloss": "feo; payaso",
+    "gloss": "feo",
     "example": {
       "word": "丑陋",
       "pinyin": "chǒu lòu",
@@ -608,7 +608,7 @@
     }
   },
   "闯": {
-    "gloss": "irrumpir; aventura",
+    "gloss": "precipitarse",
     "example": {
       "word": "闯祸",
       "pinyin": "chuǎng huò",
@@ -672,7 +672,7 @@
     }
   },
   "醋": {
-    "gloss": "vinagre; celos",
+    "gloss": "vinagre",
     "example": {
       "word": "吃醋",
       "pinyin": "chī cù",
@@ -720,7 +720,7 @@
     }
   },
   "呆": {
-    "gloss": "atolondrado; tonto",
+    "gloss": "tonto, estúpido",
     "example": {
       "word": "发呆",
       "pinyin": "fā dāi",
@@ -784,7 +784,7 @@
     }
   },
   "挡": {
-    "gloss": "bloquear; marchas",
+    "gloss": "bloquear, obstruir",
     "example": {
       "word": "挡住",
       "pinyin": "dǎng zhù",
@@ -880,7 +880,7 @@
     }
   },
   "洞": {
-    "gloss": "cueva; agujero",
+    "gloss": "cueva",
     "example": {
       "word": "洞穴",
       "pinyin": "dòng xué",
@@ -984,7 +984,7 @@
     }
   },
   "躲": {
-    "gloss": "esconderse; evitar",
+    "gloss": "esconderse",
     "example": {
       "word": "躲避",
       "pinyin": "duǒ bì",
@@ -1008,7 +1008,7 @@
     }
   },
   "罚": {
-    "gloss": "castigar; multa",
+    "gloss": "castigar, penalizar",
     "example": {
       "word": "罚款",
       "pinyin": "fá kuǎn",
@@ -1048,7 +1048,7 @@
     }
   },
   "防": {
-    "gloss": "prevenir; defender",
+    "gloss": "prevenir",
     "example": {
       "word": "防止",
       "pinyin": "fáng zhǐ",
@@ -1136,7 +1136,7 @@
     }
   },
   "扶": {
-    "gloss": "sostener; ayudar",
+    "gloss": "sostener con la mano",
     "example": {
       "word": "扶手",
       "pinyin": "fú shǒu",
@@ -1312,7 +1312,7 @@
     }
   },
   "官": {
-    "gloss": "funcionario; oficial",
+    "gloss": "funcionario gubernamental",
     "example": {
       "word": "官员",
       "pinyin": "guān yuán",
@@ -1328,7 +1328,7 @@
     }
   },
   "归": {
-    "gloss": "volver; pertenecer",
+    "gloss": "regresar, volver",
     "example": {
       "word": "回来",
       "pinyin": "huí lái",
@@ -1352,7 +1352,7 @@
     }
   },
   "滚": {
-    "gloss": "rodar; hervir",
+    "gloss": "rodar",
     "example": {
       "word": "滚动",
       "pinyin": "gǔn dòng",
@@ -1360,7 +1360,7 @@
     }
   },
   "锅": {
-    "gloss": "olla; sartén",
+    "gloss": "olla",
     "example": {
       "word": "锅子",
       "pinyin": "guō zi",
@@ -1384,7 +1384,7 @@
     }
   },
   "含": {
-    "gloss": "contener; guardar",
+    "gloss": "tener en la boca",
     "example": {
       "word": "包含",
       "pinyin": "bāo hán",
@@ -1432,7 +1432,7 @@
     }
   },
   "恨": {
-    "gloss": "odiar; rencor",
+    "gloss": "odiar",
     "example": {
       "word": "仇恨",
       "pinyin": "chóu hèn",
@@ -1480,7 +1480,7 @@
     }
   },
   "壶": {
-    "gloss": "jarra; tetera",
+    "gloss": "tetera, jarra",
     "example": {
       "word": "水壶",
       "pinyin": "shuǐ hú",
@@ -1568,7 +1568,7 @@
     }
   },
   "挥": {
-    "gloss": "agitar; dirigir",
+    "gloss": "agitar, blandir",
     "example": {
       "word": "挥手",
       "pinyin": "huī shǒu",
@@ -1736,7 +1736,7 @@
     }
   },
   "剪": {
-    "gloss": "tijeras; cortar",
+    "gloss": "cortar con tijeras",
     "example": {
       "word": "剪刀",
       "pinyin": "jiǎn dāo",
@@ -1864,7 +1864,7 @@
     }
   },
   "救": {
-    "gloss": "salvar; socorrer",
+    "gloss": "salvar, rescatar",
     "example": {
       "word": "救命",
       "pinyin": "jiù mìng",
@@ -1904,7 +1904,7 @@
     }
   },
   "捐": {
-    "gloss": "donar; renunciar",
+    "gloss": "donar, contribuir",
     "example": {
       "word": "捐款",
       "pinyin": "juān kuǎn",
@@ -1952,7 +1952,7 @@
     }
   },
   "靠": {
-    "gloss": "apoyarse; depender",
+    "gloss": "apoyarse contra",
     "example": {
       "word": "靠近",
       "pinyin": "kào jìn",
@@ -1984,7 +1984,7 @@
     }
   },
   "库": {
-    "gloss": "almacén; tesoro",
+    "gloss": "almacén, depósito",
     "example": {
       "word": "库存",
       "pinyin": "kù cún",
@@ -1992,7 +1992,7 @@
     }
   },
   "夸": {
-    "gloss": "alabar; exagerar",
+    "gloss": "alabar, elogiar",
     "example": {
       "word": "夸奖",
       "pinyin": "kuā jiǎng",
@@ -2000,7 +2000,7 @@
     }
   },
   "宽": {
-    "gloss": "ancho; indulgente",
+    "gloss": "ancho",
     "example": {
       "word": "宽敞",
       "pinyin": "kuān chang",
@@ -2112,7 +2112,7 @@
     }
   },
   "泪": {
-    "gloss": "lágrima",
+    "gloss": "lágrimas",
     "example": {
       "word": "眼泪",
       "pinyin": "yǎn lèi",
@@ -2352,7 +2352,7 @@
     }
   },
   "骂": {
-    "gloss": "insultar; regañar",
+    "gloss": "regañar, maldecir, insultar",
     "example": {
       "word": "骂人",
       "pinyin": "mà rén",
@@ -2480,7 +2480,7 @@
     }
   },
   "妙": {
-    "gloss": "maravilloso; sutil",
+    "gloss": "ingenioso",
     "example": {
       "word": "奇妙",
       "pinyin": "qí miào",
@@ -2592,7 +2592,7 @@
     }
   },
   "念": {
-    "gloss": "pensar; estudiar",
+    "gloss": "leer en voz alta",
     "example": {
       "word": "想念",
       "pinyin": "xiǎng niàn",
@@ -2648,7 +2648,7 @@
     }
   },
   "派": {
-    "gloss": "enviar; escuela",
+    "gloss": "enviar, despachar, asignar",
     "example": {
       "word": "派遣",
       "pinyin": "pài qiǎn",
@@ -2696,7 +2696,7 @@
     }
   },
   "配": {
-    "gloss": "combinar; asignar",
+    "gloss": "combinar, encajar",
     "example": {
       "word": "配合",
       "pinyin": "pèi hé",
@@ -2704,7 +2704,7 @@
     }
   },
   "喷": {
-    "gloss": "rociar; chorrear",
+    "gloss": "rociar, chorrear, brotar",
     "example": {
       "word": "喷水",
       "pinyin": "pēn shuǐ",
@@ -2728,7 +2728,7 @@
     }
   },
   "披": {
-    "gloss": "ponerse; abrir",
+    "gloss": "echarse sobre los hombros",
     "example": {
       "word": "披风",
       "pinyin": "pī fēng",
@@ -2760,7 +2760,7 @@
     }
   },
   "拼": {
-    "gloss": "unir; esforzarse",
+    "gloss": "unir, juntar",
     "example": {
       "word": "拼命",
       "pinyin": "pīn mìng",
@@ -2976,7 +2976,7 @@
     }
   },
   "权": {
-    "gloss": "poder; derecho",
+    "gloss": "poder",
     "example": {
       "word": "权利",
       "pinyin": "quán lì",
@@ -2992,7 +2992,7 @@
     }
   },
   "劝": {
-    "gloss": "aconsejar; urgir",
+    "gloss": "instar, tratar de persuadir",
     "example": {
       "word": "劝告",
       "pinyin": "quàn gào",
@@ -3008,7 +3008,7 @@
     }
   },
   "绕": {
-    "gloss": "rodear; enrollar",
+    "gloss": "rodear",
     "example": {
       "word": "围绕",
       "pinyin": "wéi rào",
@@ -3016,7 +3016,7 @@
     }
   },
   "忍": {
-    "gloss": "soportar; aguantar",
+    "gloss": "soportar",
     "example": {
       "word": "忍受",
       "pinyin": "rěn shòu",
@@ -3088,7 +3088,7 @@
     }
   },
   "傻": {
-    "gloss": "tonto",
+    "gloss": "tonto, estúpido, bobo",
     "example": {
       "word": "傻瓜",
       "pinyin": "shǎ guā",
@@ -3112,7 +3112,7 @@
     }
   },
   "删": {
-    "gloss": "borrar; eliminar",
+    "gloss": "borrar",
     "example": {
       "word": "删除",
       "pinyin": "shān chú",
@@ -3200,7 +3200,7 @@
     }
   },
   "伸": {
-    "gloss": "extender; estirar",
+    "gloss": "estirar",
     "example": {
       "word": "伸展",
       "pinyin": "shēn zhǎn",
@@ -3240,7 +3240,7 @@
     }
   },
   "胜": {
-    "gloss": "victoria; superar",
+    "gloss": "ganar",
     "example": {
       "word": "胜利",
       "pinyin": "shèng lì",
@@ -3248,7 +3248,7 @@
     }
   },
   "诗": {
-    "gloss": "poesía",
+    "gloss": "poema",
     "example": {
       "word": "诗歌",
       "pinyin": "shī gē",
@@ -3272,7 +3272,7 @@
     }
   },
   "湿": {
-    "gloss": "húmedo",
+    "gloss": "mojado, húmedo",
     "example": {
       "word": "潮湿",
       "pinyin": "cháo shī",
@@ -3320,7 +3320,7 @@
     }
   },
   "守": {
-    "gloss": "guardar; cumplir",
+    "gloss": "guardar, defender, vigilar",
     "example": {
       "word": "遵守",
       "pinyin": "zūn shǒu",
@@ -3568,7 +3568,7 @@
     }
   },
   "逃": {
-    "gloss": "huir; escapar",
+    "gloss": "escapar",
     "example": {
       "word": "逃跑",
       "pinyin": "táo pǎo",
@@ -3576,7 +3576,7 @@
     }
   },
   "桃": {
-    "gloss": "melocotón",
+    "gloss": "durazno",
     "example": {
       "word": "桃子",
       "pinyin": "táo zi",
@@ -3752,7 +3752,7 @@
     }
   },
   "歪": {
-    "gloss": "torcido; ladeado",
+    "gloss": "torcido, inclinado, desviado",
     "example": {
       "word": "歪曲",
       "pinyin": "wāi qū",
@@ -3760,7 +3760,7 @@
     }
   },
   "弯": {
-    "gloss": "curva; doblar",
+    "gloss": "doblar",
     "example": {
       "word": "弯曲",
       "pinyin": "wān qū",
@@ -3832,7 +3832,7 @@
     }
   },
   "未": {
-    "gloss": "aún no; futuro",
+    "gloss": "todavía no",
     "example": {
       "word": "未来",
       "pinyin": "wèi lái",
@@ -3888,7 +3888,7 @@
     }
   },
   "握": {
-    "gloss": "agarrar; estrechar",
+    "gloss": "sostener, agarrar",
     "example": {
       "word": "握手",
       "pinyin": "wò shǒu",
@@ -3920,7 +3920,7 @@
     }
   },
   "雾": {
-    "gloss": "niebla",
+    "gloss": "niebla, neblina",
     "example": {
       "word": "雾气",
       "pinyin": "wù qì",
@@ -3960,7 +3960,7 @@
     }
   },
   "吓": {
-    "gloss": "asustar",
+    "gloss": "asustar, atemorizar",
     "example": {
       "word": "吓唬",
       "pinyin": "xià hu",
@@ -3992,7 +3992,7 @@
     }
   },
   "限": {
-    "gloss": "límite; restringir",
+    "gloss": "limitar",
     "example": {
       "word": "限制",
       "pinyin": "xiàn zhì",
@@ -4008,7 +4008,7 @@
     }
   },
   "乡": {
-    "gloss": "campo; aldea",
+    "gloss": "pueblo natal, aldea natal",
     "example": {
       "word": "家乡",
       "pinyin": "jiā xiāng",
@@ -4056,7 +4056,7 @@
     }
   },
   "歇": {
-    "gloss": "descansar",
+    "gloss": "descansar, tomar un descanso",
     "example": {
       "word": "休息",
       "pinyin": "xiū xi",
@@ -4112,7 +4112,7 @@
     }
   },
   "胸": {
-    "gloss": "pecho; seno",
+    "gloss": "pecho, seno, tórax",
     "example": {
       "word": "胸膛",
       "pinyin": "xiōng táng",
@@ -4240,7 +4240,7 @@
     }
   },
   "痒": {
-    "gloss": "picor",
+    "gloss": "que pica",
     "example": {
       "word": "发痒",
       "pinyin": "fā yǎng",
@@ -4256,7 +4256,7 @@
     }
   },
   "摇": {
-    "gloss": "sacudir; balancear",
+    "gloss": "agitar",
     "example": {
       "word": "摇摆",
       "pinyin": "yáo bǎi",
@@ -4288,7 +4288,7 @@
     }
   },
   "移": {
-    "gloss": "mover; trasladar",
+    "gloss": "mover, desplazar",
     "example": {
       "word": "移动",
       "pinyin": "yí dòng",
@@ -4320,7 +4320,7 @@
     }
   },
   "亿": {
-    "gloss": "cien millones",
+    "gloss": "100 millones",
     "example": {
       "word": "亿万",
       "pinyin": "yì wàn",
@@ -4528,7 +4528,7 @@
     }
   },
   "灾": {
-    "gloss": "desastre",
+    "gloss": "desastre, calamidad",
     "example": {
       "word": "灾难",
       "pinyin": "zāi nàn",
@@ -4552,7 +4552,7 @@
     }
   },
   "糟": {
-    "gloss": "pésimo; residuos",
+    "gloss": "terrible",
     "example": {
       "word": "糟糕",
       "pinyin": "zāo gāo",
@@ -4568,7 +4568,7 @@
     }
   },
   "造": {
-    "gloss": "construir; crear",
+    "gloss": "construir",
     "example": {
       "word": "创造",
       "pinyin": "chuàng zào",
@@ -4752,7 +4752,7 @@
     }
   },
   "制": {
-    "gloss": "sistema; fabricar",
+    "gloss": "controlar",
     "example": {
       "word": "制度",
       "pinyin": "zhì dù",
@@ -4760,7 +4760,7 @@
     }
   },
   "治": {
-    "gloss": "gobernar; curar",
+    "gloss": "gobernar, regir",
     "example": {
       "word": "治理",
       "pinyin": "zhì lǐ",
@@ -4848,7 +4848,7 @@
     }
   },
   "抓": {
-    "gloss": "agarrar; capturar",
+    "gloss": "agarrar",
     "example": {
       "word": "抓住",
       "pinyin": "zhuā zhù",
@@ -4872,7 +4872,7 @@
     }
   },
   "撞": {
-    "gloss": "chocar; golpear",
+    "gloss": "chocar con, colisionar con",
     "example": {
       "word": "碰撞",
       "pinyin": "pèng zhuàng",
@@ -4904,7 +4904,7 @@
     }
   },
   "紫": {
-    "gloss": "púrpura; violeta",
+    "gloss": "púrpura",
     "example": {
       "word": "紫色",
       "pinyin": "zǐ sè",
@@ -4936,7 +4936,7 @@
     }
   },
   "醉": {
-    "gloss": "borracho; ebrio",
+    "gloss": "estar borracho, intoxicado",
     "example": {
       "word": "喝醉",
       "pinyin": "hē zuì",

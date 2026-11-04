@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
+import { sensesText } from '../src/data/wordSenses';
 
 vi.mock('../src/data/vocabulary/extra.json', () => ({
   default: [
-    { id: 'word-7a0b-5e8f-5458-cheng2-xu4-yuan2', simplified: '程序员', traditional: '程序員', pinyin: 'chéng xù yuán', meaning: 'programador', characters: ['程', '序', '员'], topicIds: ['trabajo'], sourceId: 'curated-extra' },
+    { id: 'word-7a0b-5e8f-5458-cheng2-xu4-yuan2', simplified: '程序员', traditional: '程序員', pinyin: 'chéng xù yuán', senses: [{ text: 'programador' }], characters: ['程', '序', '员'], topicIds: ['trabajo'], sourceId: 'curated-extra' },
   ],
 }));
 
@@ -26,6 +27,6 @@ describe('Extra vocabulary', () => {
 
   it('lets search and word pages find Extra words', () => {
     expect(allWords().filter((word) => word.simplified === '程序员')).toHaveLength(1);
-    expect(findWord('word-7a0b-5e8f-5458-cheng2-xu4-yuan2')?.meaning).toBe('programador');
+    expect(sensesText(findWord('word-7a0b-5e8f-5458-cheng2-xu4-yuan2')?.senses ?? [])).toBe('programador');
   });
 });

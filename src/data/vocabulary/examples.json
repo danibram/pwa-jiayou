@@ -1,7 +1,38 @@
 {
-  "飞机": { "chinese": "我坐飞机去北京。", "spanish": "Voy a Pekín en avión." },
-  "高兴": { "chinese": "今天我很高兴。", "spanish": "Hoy estoy muy contento." },
-  "喝": { "chinese": "我想喝水。", "spanish": "Quiero beber agua." },
-  "妈妈": { "chinese": "妈妈不在家。", "spanish": "Mamá no está en casa." },
-  "看": { "chinese": "我在看书呢。", "spanish": "Estoy leyendo un libro." }
+  "飞机": {
+    "chinese": "我坐飞机去北京。",
+    "spanish": "Voy a Pekín en avión."
+  },
+  "高兴": {
+    "chinese": "今天我很高兴。",
+    "spanish": "Hoy estoy muy contento."
+  },
+  "喝": {
+    "chinese": "我想喝水。",
+    "spanish": "Quiero beber agua."
+  },
+  "妈妈": {
+    "chinese": "妈妈不在家。",
+    "spanish": "Mamá no está en casa."
+  },
+  "看": {
+    "chinese": "我在看书呢。",
+    "spanish": "Estoy leyendo un libro."
+  },
+  "比": {
+    "chinese": "这家店的咖啡比那家便宜。",
+    "spanish": "El café de esta cafetería es más barato que el de aquella."
+  },
+  "啊": {
+    "chinese": "啊，今天是你的生日！",
+    "spanish": "¡Ah, hoy es tu cumpleaños!"
+  },
+  "抱歉": {
+    "chinese": "抱歉，我把你的名字写错了。",
+    "spanish": "Perdona, he escrito mal tu nombre."
+  },
+  "恶心": {
+    "chinese": "这股味道太恶心了，我得开窗。",
+    "spanish": "Este olor me da mucho asco, tengo que abrir la ventana."
+  }
 }
