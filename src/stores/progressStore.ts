@@ -1,491 +1,299 @@
-import { endOfDay, schedule, startOfDay } from '../domain/progress/schedule';
-import { createSignal } from 'solid-js';
-import { createStore, reconcile } from 'solid-js/store';
+import { afterAnswer, schedule, startOfDay, endOfDay } from '../domain/progress/schedule';
+import { reconcile, unwrap } from 'solid-js/store';
 import { parseProgress } from '../domain/progress/serialization';
+import {
+  activityStreak,
+  buildCharQueue,
+  CHAR_NEW_PER_DAY,
+  CLEAN_TO_RECOVER,
+  currentDaily,
+  isNewProgress,
+  isWeakProgress,
+  MASTERED_INTERVAL,
+  newLeftToday,
+  WORD_NEW_PER_DAY,
+} from '../domain/progress/queue';
+import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+import { sumActivity } from '../domain/progress/activity';
+import { mergeProgress } from '../domain/sync/merge';
+import { openCheckpoint, restoreCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
+import { emptyProgress, emptyState, progressDocument, serialize, type ProgressDocument } from './progressState';
+import { vocabularyProgressStore } from './vocabularyProgressStore';
 export { parseProgress } from '../domain/progress/serialization';
-import type { CharProgress, DailyLog, ProgressState } from '../domain/progress/types';
-export type { CharProgress, DailyLog } from '../domain/progress/types';
+export type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
+export { GRADES } from '../domain/progress/types';
+export {
+  activityStreak,
+  CHAR_NEW_PER_DAY,
+  CLEAN_TO_RECOVER,
+  isWeakProgress,
+  KNOWN_PER_SESSION,
+  NEW_PER_DAY,
+  SESSION_SIZE,
+  WORD_NEW_PER_DAY,
+} from '../domain/progress/queue';
 
-export type Grade = 'again' | 'hard' | 'good';
-export const GRADES = ['again', 'hard', 'good'] as const satisfies readonly Grade[];
-
-const STORAGE_KEY = 'hsk-flashcards-stats';
 const DAY_MS = 86_400_000;
-const MASTERED_INTERVAL = 21;
 export const DAILY_GOAL = 20;
-export const NEW_PER_DAY = 10;
-/** New characters a day, shared by every way into a session. Each one is watched, traced and written. */
-export const CHAR_NEW_PER_DAY = 8;
-/** Characters already known from words, checked at the start of a session. They do not spend the cap. */
-export const KNOWN_PER_SESSION = 10;
-export const WORD_NEW_PER_DAY = 20;
-/** The daily cap, for Home and word detail to explain it. The word is the unit; its characters come with it. */
-export const DAILY_NEW_RULE_TEXT = `${WORD_NEW_PER_DAY} palabras nuevas al día`;
-/**
- * Bien answers in a row that take an item off the weak list in ordinary sessions.
- * A Bien inside a Flojos session is enough on its own: that session exists to clear them.
- */
-export const CLEAN_TO_RECOVER = 2;
-export const SESSION_SIZE = 20;
+/** The daily cap in words, for Home and word detail to explain it. */
+export const DAILY_NEW_RULE_TEXT = `${WORD_NEW_PER_DAY} palabras y ${CHAR_NEW_PER_DAY} caracteres nuevos al día`;
 
-const today = () => new Date().toLocaleDateString('sv-SE');
-const yesterday = () => new Date(Date.now() - DAY_MS).toLocaleDateString('sv-SE');
+export type { ProgressCheckpoint } from '../domain/progress/checkpoint';
 
-const emptyDaily = (): DailyLog => ({ day: today(), reviewed: 0, introduced: 0, streak: 0 });
-
-const empty = (): CharProgress => ({
-  right: 0,
-  wrong: 0,
-  reps: 0,
-  lapses: 0,
-  interval: 0,
-  ease: 2.5,
-  due: 0,
-  strokeRuns: 0,
-  strokeBest: null,
-  lastSeen: 0,
-  clean: 0,
-  lastReview: 0,
-});
-
-/** Missed at some point and not yet answered Bien twice in a row since. A long interval does not hide a recent miss. */
-export const isWeakProgress = (p: CharProgress | undefined): boolean =>
-  !!p && p.wrong > 0 && p.clean < CLEAN_TO_RECOVER;
-
-/** Already graded today: a retry inside a session, which must not move the ease again. */
-const gradedToday = (p: CharProgress | undefined, now: number) => !!p && p.lastReview >= startOfDay(now);
-
-/** A miss outside the schedule brings the item back tomorrow at the latest, without touching its ease. */
-const pullForward = (p: CharProgress, now: number): number => Math.min(p.due, startOfDay(now));
-
-/** Words due by the end of tomorrow above which Más palabras waits: new words today are tomorrow's reviews. */
-export const TOMORROW_LOAD_LIMIT = 60;
-
-const afterAnswer = (clean: number, grade: Grade) => (grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean);
-
-let loadBlocked = false;
-const [storageError, setStorageError] = createSignal<string | null>(null);
-const load = (): ProgressState => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw === null ? { chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} } : parseProgress(raw);
-  } catch {
-    loadBlocked = true;
-    setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
-    return { chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} };
-  }
-};
-
-const [state, setState] = createStore<ProgressState>(load());
-const serialize = (data: ProgressState) => JSON.stringify({ version: 3, chars: data.chars, daily: data.daily, words: data.words, wordDaily: data.wordDaily, activity: data.activity });
-
-const ACTIVITY_DAYS = 120;
-
-/** Counts one answer or first look today and drops days older than the calendar shows. */
-const logActivity = () => {
-  const day = today();
-  const next: Record<string, number> = { ...state.activity, [day]: (state.activity[day] ?? 0) + 1 };
-  const keep = Object.keys(next).sort().slice(-ACTIVITY_DAYS);
-  setState('activity', reconcile(Object.fromEntries(keep.map((key) => [key, next[key]]))));
-};
-
-/**
- * Days in a row with any practice, words or characters, ending today, or yesterday when today has
- * none yet. It reads the calendar's log, so the streak and the calendar always agree.
- */
-export const activityStreak = (activity: Record<string, number>, now = new Date()): number => {
-  const day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
-  const active = (d: Date) => (activity[d.toLocaleDateString('sv-SE')] ?? 0) > 0;
-  if (!active(day)) day.setDate(day.getDate() - 1);
-  let streak = 0;
-  while (active(day)) {
-    streak++;
-    day.setDate(day.getDate() - 1);
-  }
-  return streak;
-};
-
-/**
- * Words missed in a session before their first graded answer. A word is enrolled when its recall
- * card is graded, so a miss on an earlier pick card would otherwise leave no trace and the word
- * would not show as flojo on Home. Kept in memory: it only has to last until that recall.
- */
-const missedBeforeEnrolment = new Set<string>();
-
-const save = (): boolean => {
-  if (loadBlocked) return false;
-  try {
-    localStorage.setItem(STORAGE_KEY, serialize(state));
-    setStorageError(null);
-    return true;
-  } catch {
-    setStorageError('No se pudo guardar el progreso. Exporta una copia y vuelve a intentarlo.');
-    return false;
-  }
-};
-
-const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
-  setState('chars', char, fn(state.chars[char] ?? empty()));
-};
-
-/** Rolls the daily log over to today, keeping the streak if yesterday was active. */
-const currentDaily = (): DailyLog => {
-  const d = state.daily;
-  if (d.day === today()) return d;
-  return {
-    day: today(),
-    reviewed: 0,
-    introduced: 0,
-    streak: d.day === yesterday() && (d.reviewed > 0 || d.introduced > 0) ? d.streak : 0,
+/** The character store over `doc`. Tests pass a document of their own to start from clean progress. */
+export const createProgressStore = (doc: ProgressDocument) => {
+  const { deviceId, state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, openCheckpoints, logActivity, missedBeforeEnrolment, save } = doc;
+  const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
+    writeRecord('chars', char, fn(state.chars[char] ?? emptyProgress()));
   };
-};
 
-/** Everything a session can change, taken when it starts so "descartar" can undo it. */
-export type ProgressCheckpoint = string;
+  return {
+    storageError,
 
-export const progressStore = {
-  storageError,
+    /**
+     * Starts noting what a session changes, so "descartar" can undo it. Words and characters share
+     * one document, so one checkpoint covers both. Close it when the session leaves the screen.
+     */
+    checkpoint(): ProgressCheckpoint {
+      return this.resumeCheckpoint(openCheckpoint(state, deviceId));
+    },
 
-  /** Words and characters share one store, so one checkpoint covers both kinds of session. */
-  checkpoint(): ProgressCheckpoint {
-    return serialize(state);
-  },
+    /** Keeps noting changes into a checkpoint saved with a paused session. */
+    resumeCheckpoint(checkpoint: ProgressCheckpoint): ProgressCheckpoint {
+      openCheckpoints.add(checkpoint);
+      return checkpoint;
+    },
 
-  /** Answers and first looks per local day ("2026-11-01" → 34), oldest first, at most 120 days. */
-  activity(): Record<string, number> {
-    return state.activity;
-  },
+    closeCheckpoint(checkpoint: ProgressCheckpoint): void {
+      openCheckpoints.delete(checkpoint);
+    },
 
-  /** Puts progress, daily counts and streak back exactly as they were at `checkpoint()`. */
-  rollback(checkpoint: ProgressCheckpoint): void {
-    missedBeforeEnrolment.clear();
-    setState(reconcile(parseProgress(checkpoint)));
-    save();
-  },
+    /**
+     * Answers and first looks per local day ("2026-11-01" → 34), every device's added up. Each
+     * device keeps at most 120 days.
+     */
+    activity(): Record<string, number> {
+      return sumActivity(state.activity);
+    },
 
-  exportBackup(): string {
-    return serialize(state);
-  },
+    /**
+     * Puts the records the session changed, daily counts and the calendar back as they were at
+     * `checkpoint()`. Records it never touched keep whatever they hold now.
+     */
+    rollback(checkpoint: ProgressCheckpoint): void {
+      openCheckpoints.delete(checkpoint);
+      missedBeforeEnrolment.clear();
+      setState(reconcile(restoreCheckpoint(unwrap(state), checkpoint, deviceId)));
+      save();
+    },
 
-  importBackup(raw: string): void {
-    const imported = parseProgress(raw);
-    // Write first so a failed import leaves both the current state and stored data intact.
-    localStorage.setItem(STORAGE_KEY, serialize(imported));
-    setState(reconcile(imported));
-    loadBlocked = false;
-    setStorageError(null);
-  },
+    exportBackup(): string {
+      return serialize(state);
+    },
 
-  retrySave(): boolean {
-    if (loadBlocked) {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw !== null) {
-          const recovered = parseProgress(raw);
-          // Do not discard progress made in memory while storage was unavailable.
-          if (Object.keys(state.chars).length > 0 || Object.keys(state.words).length > 0) {
-            setStorageError('El progreso actual y el guardado difieren. Exporta el actual antes de restaurar el guardado.');
-            return false;
+    importBackup(raw: string): void {
+      const imported = parseProgress(raw);
+      // Write first so a failed import leaves both the current state and stored data intact.
+      writeStored(imported);
+      setState(reconcile(imported));
+      setLoadBlocked(false);
+      setStorageError(null);
+    },
+
+    /**
+     * Merges a backup into the current progress: of each character or word, the later copy stays,
+     * and the calendar keeps every device's days. Throws before changing anything if the file is bad.
+     */
+    mergeBackup(raw: string): void {
+      const merged = mergeProgress(unwrap(state), parseProgress(raw));
+      // Write first so a failed merge leaves both the current state and stored data intact.
+      writeStored(merged);
+      setState(reconcile(merged));
+      setLoadBlocked(false);
+      setStorageError(null);
+    },
+
+    retrySave(): boolean {
+      if (isLoadBlocked()) {
+        try {
+          const recovered = readStored();
+          if (recovered !== null) {
+            // Do not discard progress made in memory while storage was unavailable.
+            if (Object.keys(state.chars).length > 0 || Object.keys(state.words).length > 0) {
+              setStorageError('El progreso actual y el guardado difieren. Exporta el actual antes de restaurar el guardado.');
+              return false;
+            }
+            setState(reconcile(recovered));
           }
-          setState(reconcile(recovered));
+          setLoadBlocked(false);
+        } catch {
+          setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
+          return false;
         }
-        loadBlocked = false;
+      }
+      return save();
+    },
+
+    recoverStoredProgress(): boolean {
+      try {
+        const recovered = readStored();
+        if (recovered === null) {
+          setStorageError('No se encontró progreso guardado para recuperar.');
+          return false;
+        }
+        setState(reconcile(recovered));
+        setLoadBlocked(false);
+        setStorageError(null);
+        return true;
       } catch {
         setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
         return false;
       }
-    }
-    return save();
-  },
+    },
+    get(char: string): CharProgress | undefined {
+      return state.chars[char];
+    },
 
-  recoverStoredProgress(): boolean {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw === null) {
-        setStorageError('No se encontró progreso guardado para recuperar.');
-        return false;
-      }
-      const recovered = parseProgress(raw);
-      setState(reconcile(recovered));
-      loadBlocked = false;
-      setStorageError(null);
+    /** `free`: a character already known from a word. It does not spend the daily new-character cap. */
+    grade(char: string, grade: Grade, options: { free?: boolean } = {}) {
+      const now = Date.now();
+      const isNew = !state.chars[char] || state.chars[char].right + state.chars[char].wrong === 0;
+      update(char, (p) => ({ ...schedule(p, grade, now, { sameDay: (p.lastReview ?? 0) >= startOfDay(now) }), lastSeen: now }));
+      const daily = currentDaily(state.daily);
+      setState('daily', {
+        ...daily,
+        reviewed: daily.reviewed + 1,
+        introduced: daily.introduced + (isNew && !options.free ? 1 : 0),
+        streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak,
+      });
+      logActivity();
+      save();
+    },
+
+    /**
+     * A first look. The character comes back tomorrow as a real question.
+     * It does not count as a right or a wrong answer.
+     */
+    introduce(char: string, options: { free?: boolean } = {}) {
+      if (!this.isNew(char)) return;
+      const now = Date.now();
+      update(char, (p) => ({
+        ...p,
+        interval: 1,
+        due: now + DAY_MS,
+        lastSeen: now,
+      }));
+      const daily = currentDaily(state.daily);
+      setState('daily', {
+        ...daily,
+        introduced: daily.introduced + (options.free ? 0 : 1),
+        streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak,
+      });
+      logActivity();
+      save();
+    },
+
+    /** Free practice: counts the answer but leaves the schedule alone, so cramming can't inflate intervals. */
+    practice(char: string, correct: boolean) {
+      // Due and weak characters are what a review is for, so their answers move the schedule.
+      if (this.isDue(char) || this.isWeak(char)) return this.grade(char, correct ? 'good' : 'again');
+      if (this.isNew(char)) return;
+      update(char, (p) => ({
+        ...p,
+        right: p.right + (correct ? 1 : 0),
+        wrong: p.wrong + (correct ? 0 : 1),
+        clean: afterAnswer(p.clean, correct ? 'good' : 'again'),
+        due: correct ? p.due : Math.min(p.due, startOfDay(Date.now() + DAY_MS)),
+        lastSeen: Date.now(),
+      }));
+      // Practice still counts on the calendar, the same moment it is answered.
+      logActivity();
+      save();
+    },
+
+    /** Shorthand for a binary right/wrong answer. */
+    recordReview(char: string, correct: boolean) {
+      this.grade(char, correct ? 'good' : 'again');
+    },
+
+    recordStrokes(char: string, mistakes: number) {
+      update(char, (p) => ({
+        ...p,
+        strokeRuns: p.strokeRuns + 1,
+        strokeBest: p.strokeBest === null ? mistakes : Math.min(p.strokeBest, mistakes),
+        lastSeen: Date.now(),
+      }));
+      save();
+    },
+
+    isNew(char: string): boolean {
+      return isNewProgress(state.chars[char]);
+    },
+
+    isDue(char: string, now = Date.now()): boolean {
+      const p = state.chars[char];
+      return !!p && !this.isNew(char) && p.due < endOfDay(now);
+    },
+
+    /** Recognised reliably enough to be asked to write it from memory. */
+    canWrite(char: string): boolean {
+      return (state.chars[char]?.reps ?? 0) >= 2;
+    },
+
+    isSeen(char: string): boolean {
+      return !this.isNew(char);
+    },
+
+    isMastered(char: string): boolean {
+      return (state.chars[char]?.interval ?? 0) >= MASTERED_INTERVAL;
+    },
+
+    /** Missed at some point and not yet answered Bien twice in a row since. */
+    isWeak(char: string): boolean {
+      return isWeakProgress(state.chars[char]);
+    },
+
+    /** A Bien in a Flojos session: the character leaves the weak list now. Returns whether it was weak. */
+    recoverWeak(char: string): boolean {
+      if (!this.isWeak(char)) return false;
+      update(char, (p) => ({ ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) }));
+      save();
       return true;
-    } catch {
-      setStorageError('No se pudo leer el progreso guardado. No se sobrescribirá.');
-      return false;
-    }
-  },
-  get(char: string): CharProgress | undefined {
-    return state.chars[char];
-  },
+    },
 
-  /** `free`: a character already known from a word. It does not spend the daily new-character cap. */
-  grade(char: string, grade: Grade, options: { free?: boolean } = {}) {
-    const now = Date.now();
-    const isNew = !state.chars[char] || state.chars[char].right + state.chars[char].wrong === 0;
-    const sameDay = gradedToday(state.chars[char], now);
-    update(char, (p) => ({ ...schedule(p, grade, now, { sameDay }), lastSeen: now }));
-    const daily = currentDaily();
-    setState('daily', {
-      ...daily,
-      reviewed: daily.reviewed + 1,
-      introduced: daily.introduced + (isNew && !options.free ? 1 : 0),
-      streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak,
-    });
-    logActivity();
-    save();
-  },
+    /** New characters the daily cap still allows today. */
+    newLeftToday(): number {
+      return newLeftToday(CHAR_NEW_PER_DAY, state.daily);
+    },
 
-  /**
-   * A first look. The character comes back tomorrow as a real question.
-   * It does not count as a right or a wrong answer.
-   */
-  introduce(char: string, options: { free?: boolean } = {}) {
-    if (!this.isNew(char)) return;
-    const now = Date.now();
-    update(char, (p) => ({
-      ...p,
-      interval: 1,
-      due: now + DAY_MS,
-      lastSeen: now,
-    }));
-    const daily = currentDaily();
-    setState('daily', {
-      ...daily,
-      introduced: daily.introduced + (options.free ? 0 : 1),
-      streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak,
-    });
-    logActivity();
-    save();
-  },
+    /** Today's session. The rules live in `buildCharQueue`. */
+    buildQueue<T extends { character: string }>(
+      chars: T[],
+      extraNew = 0,
+      /** Unseen characters the learner already met in a word. They go in `known`, outside the cap. */
+      prefer: (char: string) => boolean = () => false,
+    ): { due: T[]; fresh: T[]; known: T[] } {
+      return buildCharQueue(chars, state.chars, state.daily, extraNew, prefer);
+    },
 
-  /** Free practice: counts the answer but leaves the schedule alone, so cramming can't inflate intervals. */
-  practice(char: string, correct: boolean) {
-    // Due and weak characters are what a review is for, so their answers move the schedule.
-    if (this.isDue(char) || this.isWeak(char)) return this.grade(char, correct ? 'good' : 'again');
-    if (this.isNew(char)) return;
-    const now = Date.now();
-    update(char, (p) => ({
-      ...p,
-      right: p.right + (correct ? 1 : 0),
-      wrong: p.wrong + (correct ? 0 : 1),
-      clean: afterAnswer(p.clean, correct ? 'good' : 'again'),
-      due: correct ? p.due : pullForward(p, now + DAY_MS),
-      lastSeen: now,
-    }));
-    // Practice still counts on the calendar, the same moment it is answered.
-    logActivity();
-    save();
-  },
+    /** Days in a row with any practice. The same number for words and characters. */
+    streak(): number {
+      return activityStreak(this.activity());
+    },
 
-  /** Shorthand for a binary right/wrong answer. */
-  recordReview(char: string, correct: boolean) {
-    this.grade(char, correct ? 'good' : 'again');
-  },
+    get daily(): DailyLog {
+      return { ...currentDaily(state.daily), streak: activityStreak(sumActivity(state.activity)) };
+    },
 
-  recordStrokes(char: string, mistakes: number) {
-    update(char, (p) => ({
-      ...p,
-      strokeRuns: p.strokeRuns + 1,
-      strokeBest: p.strokeBest === null ? mistakes : Math.min(p.strokeBest, mistakes),
-      lastSeen: Date.now(),
-    }));
-    save();
-  },
-
-  isNew(char: string): boolean {
-    const p = state.chars[char];
-    // A first look sets a due date and still has no answers, so it is no longer new.
-    return !p || (p.right + p.wrong === 0 && p.due === 0);
-  },
-
-  /** Due any time today: a review is a daily appointment, not one at the exact hour of the last answer. */
-  isDue(char: string, now = Date.now()): boolean {
-    const p = state.chars[char];
-    return !!p && !this.isNew(char) && p.due < endOfDay(now);
-  },
-
-  /** Recognised reliably enough to be asked to write it from memory. */
-  canWrite(char: string): boolean {
-    return (state.chars[char]?.reps ?? 0) >= 2;
-  },
-
-  isSeen(char: string): boolean {
-    return !this.isNew(char);
-  },
-
-  isMastered(char: string): boolean {
-    return (state.chars[char]?.interval ?? 0) >= MASTERED_INTERVAL;
-  },
-
-  /** Missed at some point and not yet answered Bien twice in a row since. */
-  isWeak(char: string): boolean {
-    return isWeakProgress(state.chars[char]);
-  },
-
-  /** A Bien in a Flojos session: the character leaves the weak list now. Returns whether it was weak. */
-  recoverWeak(char: string): boolean {
-    if (!this.isWeak(char)) return false;
-    update(char, (p) => ({ ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) }));
-    save();
-    return true;
-  },
-
-  /** New characters the daily cap still allows today. */
-  newLeftToday(): number {
-    return Math.max(0, CHAR_NEW_PER_DAY - this.daily.introduced);
-  },
-
-  /**
-   * Today's session: due cards first (most overdue first), then unseen ones in frequency order.
-   * A character missed earlier today is not due again today: the session already asked it twice.
-   */
-  buildQueue<T extends { character: string }>(
-    chars: T[],
-    extraNew = 0,
-    /** Unseen characters the learner already met in a word. They go in `known`, outside the cap. */
-    prefer: (char: string) => boolean = () => false,
-  ): { due: T[]; fresh: T[]; known: T[] } {
-    const now = Date.now();
-    const startOfDay = new Date(now).setHours(0, 0, 0, 0);
-    const due = chars
-      .filter((c) => this.isDue(c.character, now) && !(state.chars[c.character].interval === 0 && state.chars[c.character].due >= startOfDay))
-      .sort((a, b) => state.chars[a.character].due - state.chars[b.character].due)
-      .slice(0, SESSION_SIZE);
-    const left = this.newLeftToday();
-    const unseen = chars.filter((c) => this.isNew(c.character));
-    const known = unseen.filter((c) => prefer(c.character)).slice(0, KNOWN_PER_SESSION);
-    const budget = extraNew ? Math.min(extraNew, left) : Math.max(0, Math.min(left, SESSION_SIZE - due.length));
-    const fresh = unseen.filter((c) => !prefer(c.character)).slice(0, budget);
-    return { due, fresh, known };
-  },
-
-  /** Days in a row with any practice. The same number for words and characters. */
-  streak(): number {
-    return activityStreak(state.activity);
-  },
-
-  get daily(): DailyLog {
-    return { ...currentDaily(), streak: activityStreak(state.activity) };
-  },
-
-  clear() {
-    missedBeforeEnrolment.clear();
-    setState({ chars: {}, daily: emptyDaily(), words: {}, wordDaily: emptyDaily(), activity: {} });
-    save();
-  },
+    clear() {
+      missedBeforeEnrolment.clear();
+      setState(emptyState());
+      save();
+    },
+  };
 };
 
-
-const currentWordDaily = (): DailyLog => {
-  const d = state.wordDaily;
-  if (d.day === today()) return d;
-  return { day: today(), reviewed: 0, introduced: 0, streak: d.day === yesterday() && (d.reviewed > 0 || d.introduced > 0) ? d.streak : 0 };
-};
-
-export const vocabularyProgressStore = {
-  storageError,
-  get(id: string): CharProgress | undefined { return state.words[id]; },
-  isNew(id: string): boolean {
-    const p = state.words[id];
-    return !p || (p.right + p.wrong === 0 && p.due === 0);
-  },
-  /** Due any time today, the same as characters. */
-  isDue(id: string, now = Date.now()): boolean {
-    const p = state.words[id];
-    return !!p && !this.isNew(id) && p.due < endOfDay(now);
-  },
-  isMastered(id: string): boolean { return (state.words[id]?.interval ?? 0) >= MASTERED_INTERVAL; },
-  isWeak(id: string): boolean { return isWeakProgress(state.words[id]); },
-  /** A Bien in a Flojos session: the word leaves the weak list now. Returns whether it was weak. */
-  recoverWeak(id: string): boolean {
-    const p = state.words[id];
-    if (!isWeakProgress(p)) return false;
-    setState('words', id, { ...p, clean: Math.max(p.clean, CLEAN_TO_RECOVER) });
-    save();
-    return true;
-  },
-  /** Whether a review answer moves this word's schedule: it is due, or it is weak. */
-  schedules(id: string): boolean { return this.isDue(id) || this.isWeak(id); },
-  /** New words the daily cap still allows today. */
-  newLeftToday(): number { return Math.max(0, WORD_NEW_PER_DAY - this.daily.introduced); },
-  introduce(id: string): void {
-    if (!this.isNew(id)) return;
-    const now = Date.now();
-    setState('words', id, { ...empty(), interval: 1, due: now + DAY_MS, lastSeen: now });
-    const daily = currentWordDaily();
-    setState('wordDaily', { ...daily, introduced: daily.introduced + 1, streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
-    logActivity();
-    save();
-  },
-  grade(id: string, grade: Grade): void {
-    const now = Date.now();
-    const isNew = this.isNew(id);
-    // The day a word is taught, its answers come seconds after the lesson: they set tomorrow's review, not the ease.
-    const scheduled = schedule(state.words[id] ?? empty(), grade, now, { sameDay: isNew || gradedToday(state.words[id], now) });
-    // Missed earlier in this session, before it was enrolled: it starts out flojo.
-    const missed = missedBeforeEnrolment.delete(id) && grade !== 'again';
-    setState('words', id, { ...scheduled, ...(missed ? { wrong: scheduled.wrong + 1, clean: 0 } : {}), lastSeen: now });
-    const daily = currentWordDaily();
-    setState('wordDaily', { ...daily, reviewed: daily.reviewed + 1, introduced: daily.introduced + (isNew ? 1 : 0), streak: daily.reviewed === 0 && daily.introduced === 0 ? daily.streak + 1 : daily.streak });
-    logActivity();
-    save();
-  },
-  practice(id: string, grade: Grade, scheduleDue = true): void {
-    if (scheduleDue && this.schedules(id)) return this.grade(id, grade);
-    if (this.isNew(id)) {
-      if (grade === 'again') missedBeforeEnrolment.add(id);
-      return;
-    }
-    const p = state.words[id];
-    const now = Date.now();
-    setState('words', id, { ...p, right: p.right + (grade === 'again' ? 0 : 1), wrong: p.wrong + (grade === 'again' ? 1 : 0), clean: afterAnswer(p.clean, grade), due: grade === 'again' ? pullForward(p, now + DAY_MS) : p.due, lastSeen: now });
-    // Practice counts on the calendar, the same as for characters.
-    logActivity();
-    save();
-  },
-  /**
-   * Today's session: the most overdue words, at most a session's worth, then new ones.
-   * `dueTotal` is every word due today, so Home can say how many are really waiting.
-   */
-  buildQueue<T extends { id: string }>(entries: T[], extraNew = 0): { due: T[]; fresh: T[]; dueTotal: number } {
-    const now = Date.now();
-    const allDue = entries.filter((entry) => this.isDue(entry.id, now)).sort((a, b) => state.words[a.id].due - state.words[b.id].due);
-    const due = allDue.slice(0, SESSION_SIZE);
-    // The daily session teaches ten. "Aprender más" reaches the rest of the cap, once nothing is due.
-    const left = this.newLeftToday();
-    const budget = extraNew
-      ? (this.canLearnMore(entries) ? Math.min(extraNew, left) : 0)
-      : Math.max(0, Math.min(NEW_PER_DAY - this.daily.introduced, left, SESSION_SIZE - due.length));
-    return { due, fresh: entries.filter((entry) => this.isNew(entry.id)).slice(0, budget), dueTotal: allDue.length };
-  },
-  /** Words due by the end of tomorrow among `entries`. */
-  dueByTomorrow(entries: readonly { id: string }[], now = Date.now()): number {
-    const limit = endOfDay(now + DAY_MS);
-    return entries.filter((entry) => { const p = state.words[entry.id]; return !!p && !this.isNew(entry.id) && p.due < limit; }).length;
-  },
-  /**
-   * Whether "Más palabras" may teach beyond the daily session: nothing is due today and
-   * tomorrow's reviews stay under the limit. Each new word comes back about five times in a month.
-   */
-  canLearnMore(entries: readonly { id: string }[]): boolean {
-    const now = Date.now();
-    if (entries.some((entry) => this.isDue(entry.id, now))) return false;
-    return this.dueByTomorrow(entries, now) < TOMORROW_LOAD_LIMIT;
-  },
-  /**
-   * "Ya la sé" on a word being taught. It does not spend the daily cap and skips the first steps:
-   * it comes back in five days, and a miss then sends it down the normal ladder.
-   */
-  markKnown(id: string): void {
-    if (!this.isNew(id)) return;
-    const now = Date.now();
-    setState('words', id, { ...empty(), right: 1, reps: 2, clean: 1, interval: 5, due: now + 5 * DAY_MS, lastSeen: now, lastReview: now });
-    logActivity();
-    save();
-  },
-  get daily(): DailyLog { return { ...currentWordDaily(), streak: activityStreak(state.activity) }; },
-};
+export const progressStore = createProgressStore(progressDocument);
 
 /** Whether today's cap still allows a new word or character. */
 export const canLearnNew = (kind: 'word' | 'char'): boolean =>

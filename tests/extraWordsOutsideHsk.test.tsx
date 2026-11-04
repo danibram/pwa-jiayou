@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@solidjs/testing-library';
+import { fireEvent, render, screen, within } from '@solidjs/testing-library';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Pinyin from '../src/components/Pinyin';
 import Vocabulario from '../src/pages/Vocabulario';
@@ -66,7 +66,7 @@ describe('a character outside HSK', () => {
 
   it('keeps the same label on every glyph, HSK or not', () => {
     page({ wordId: 'word-5496-55b1-ka-li2' });
-    expect(screen.getAllByRole('button', { name: /^Ver el carácter / })).toHaveLength(2);
+    expect(within(screen.getByRole('group', { name: '咖喱' })).getAllByRole('button', { name: /^Ver el carácter / })).toHaveLength(2);
     expect(screen.queryByRole('button', { name: /Practicar trazos/ })).toBeNull();
   });
 

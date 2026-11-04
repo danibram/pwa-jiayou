@@ -306,9 +306,6 @@ const Vocabulario: Component<Props> = (props) => {
               </div>
             }>{(row) => row.kind === 'word' ? (() => {
               const word = row.word;
-              // A one-character HSK word opens the character sheet too; the sheet links on to the word.
-              // One outside HSK (an Extra word like 喱) has no record, so it keeps its own word page.
-              const single = word.characters.length === 1 && characterRecord(word.simplified, characterStore.state.characters);
               return (
                 <ResultRow
                   class="min-h-[4.5rem] py-2"
@@ -319,7 +316,7 @@ const Vocabulario: Component<Props> = (props) => {
                   outsidePlan={!inPlan().has(word.id)}
                   status={inPlan().has(word.id) ? statusOf(word.id) : undefined}
                   label={`${word.simplified}, ${formatPinyinWord(word.pinyin)}, ${word.meaning}, ${word.level ? `HSK ${word.level}` : 'Extra'}${inPlan().has(word.id) ? `, ${statusWord(statusOf(word.id), true)}` : ', fuera de tus niveles'}`}
-                  onClick={() => (single ? setCharOpen(word.simplified) : props.onSelect(word.id))}
+                  onClick={() => props.onSelect(word.id)}
                 />
               );
             })() : (() => {
@@ -435,6 +432,36 @@ const Vocabulario: Component<Props> = (props) => {
                 <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {WORD_NEW_PER_DAY} palabras nuevas de hoy. Esta iría por encima del límite.</p>
               </Show>
               <Show when={!progress.isNew(word().id) && !progress.isDue(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
+            </div>
+            {/* The tiles read as artwork, so the characters are also listed as rows that look tappable. */}
+            <div class="mt-6 border-t border-line pt-5 text-left">
+              <p class="text-sm text-ink-soft">Caracteres</p>
+              <ul class="mt-1">
+                <For each={[...new Set(word().characters)]}>{(char) => {
+                  const record = () => characterOrWordStub(char, characterStore.state.characters);
+                  return (
+                    <li class="border-b border-line/70 last:border-b-0">
+                      <button
+                        type="button"
+                        class="flex min-h-12 w-full items-center gap-3 py-2 text-left"
+                        aria-label={record() ? `Ver el carácter ${char}, ${record()!.pinyin}, ${mainMeaning(record()!)}` : `Ver el carácter ${char}`}
+                        onClick={() => setCharOpen(char)}
+                      >
+                        <span lang="zh-CN" class="w-20 shrink-0 font-hanzi text-xl">{char}</span>
+                        <span class="min-w-0 flex-1">
+                          <Show when={record()}>{(known) => (
+                            <>
+                              <Pinyin text={known().pinyin} class="block text-sm" />
+                              <span class="block truncate text-xs text-ink-soft first-letter:uppercase">{mainMeaning(known())}</span>
+                            </>
+                          )}</Show>
+                        </span>
+                        <Icon name="next" size={16} class="shrink-0 text-ink-faint" />
+                      </button>
+                    </li>
+                  );
+                }}</For>
+              </ul>
             </div>
             <Show when={vocabularyExample(word().simplified)}>
               {(example) => (

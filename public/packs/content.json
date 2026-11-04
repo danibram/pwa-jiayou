@@ -1,0 +1,45 @@
+{
+  "packs": [
+    {
+      "id": "hsk2",
+      "level": 2,
+      "hash": "f48771cfac34",
+      "size": 5668816,
+      "schema": 1
+    },
+    {
+      "id": "hsk3",
+      "level": 3,
+      "hash": "9aa08018917c",
+      "size": 8968700,
+      "schema": 1
+    },
+    {
+      "id": "hsk4",
+      "level": 4,
+      "hash": "39579cd73da8",
+      "size": 13512819,
+      "schema": 1
+    },
+    {
+      "id": "hsk5",
+      "level": 5,
+      "hash": "9c90bf893639",
+      "size": 17897722,
+      "schema": 1
+    },
+    {
+      "id": "hsk6",
+      "level": 6,
+      "hash": "787986e0110f",
+      "size": 24007111,
+      "schema": 1
+    },
+    {
+      "id": "audio",
+      "hash": "3e6c0284df46",
+      "size": 28007083,
+      "schema": 1
+    }
+  ]
+}
