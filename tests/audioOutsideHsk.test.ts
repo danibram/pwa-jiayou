@@ -70,7 +70,7 @@ describe('offline media for Extra words', () => {
     vi.stubGlobal('fetch', async (input: RequestInfo) => {
       fetched.push(String(input));
       const url = String(input);
-      if (/\/packs\/hsk\d\.json$/.test(url)) return new Response(readFileSync(`public${url}`, 'utf8'), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (/\/packs\/hsk\d\.json\?v=\w+$/.test(url)) return new Response(readFileSync(`public${url.split('?')[0]}`, 'utf8'), { status: 200, headers: { 'Content-Type': 'application/json' } });
       if (url.endsWith('syllables.json')) return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } });
       if (url.endsWith('.mp3')) return new Response('audio', { status: 200, headers: { 'Content-Type': 'audio/mpeg' } });
       return new Response('{"strokes":[],"medians":[]}', { status: 200, headers: { 'Content-Type': 'application/json' } });

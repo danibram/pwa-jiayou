@@ -1,67 +1,7 @@
-export type Tone = 1 | 2 | 3 | 4 | 5;
+import { PLAIN, TONE_MARKS, type Tone } from '../../shared/pinyin/index.ts';
 
-const TONE_MARKS: Record<string, Tone> = {
-  ā: 1,
-  ē: 1,
-  ī: 1,
-  ō: 1,
-  ū: 1,
-  ǖ: 1,
-  á: 2,
-  é: 2,
-  í: 2,
-  ó: 2,
-  ú: 2,
-  ǘ: 2,
-  ǎ: 3,
-  ě: 3,
-  ǐ: 3,
-  ǒ: 3,
-  ǔ: 3,
-  ǚ: 3,
-  à: 4,
-  è: 4,
-  ì: 4,
-  ò: 4,
-  ù: 4,
-  ǜ: 4,
-  ń: 2,
-  ň: 3,
-  ǹ: 4,
-};
-
-/** Letters used in the CNS11643 syllable filenames. ü is v, ê is eh. */
-const PLAIN: Record<string, string> = {
-  ā: 'a',
-  á: 'a',
-  ǎ: 'a',
-  à: 'a',
-  ē: 'e',
-  é: 'e',
-  ě: 'e',
-  è: 'e',
-  ī: 'i',
-  í: 'i',
-  ǐ: 'i',
-  ì: 'i',
-  ō: 'o',
-  ó: 'o',
-  ǒ: 'o',
-  ò: 'o',
-  ū: 'u',
-  ú: 'u',
-  ǔ: 'u',
-  ù: 'u',
-  ǖ: 'v',
-  ǘ: 'v',
-  ǚ: 'v',
-  ǜ: 'v',
-  ü: 'v',
-  ê: 'eh',
-  ń: 'n',
-  ň: 'n',
-  ǹ: 'n',
-};
+export type { Tone };
+export { syllableKey, wordId } from '../../shared/pinyin/index.ts';
 
 /** Lowercase letters only, tone marks stripped. Matches syllable key folding without the tone suffix. */
 export const foldPinyin = (text: string): string => {
@@ -85,34 +25,6 @@ export const toneOf = (syllable: string): Tone => {
     if (tone) return tone;
   }
   return 5;
-};
-
-/**
- * Filename stem for a syllable in the CNS11643 packs.
- * Tone 1 has no suffix (`ma`), tones 2–4 append the number, and an unmarked
- * syllable is the neutral tone (`ma5`).
- */
-export const syllableKey = (syllable: string): string | null => {
-  let tone: Tone | null = null;
-  let base = '';
-  for (const ch of syllable.trim().toLowerCase()) {
-    if (ch in TONE_MARKS) tone = TONE_MARKS[ch];
-    if (ch in PLAIN) base += PLAIN[ch];
-    else if (ch >= 'a' && ch <= 'z') base += ch;
-  }
-  if (!base) return null;
-  const resolved = tone ?? 5;
-  return resolved === 1 ? base : `${base}${resolved}`;
-};
-
-/**
- * A word's id: its hanzi, so any list that brings the same word shares its progress, then its
- * dictionary reading, one space-separated syllable per hanzi. Same rule as scripts/syllable-keys.mjs.
- */
-export const wordId = (simplified: string, pinyin: string): string => {
-  const hanzi = [...simplified].map((char) => char.codePointAt(0)!.toString(16));
-  const syllables = pinyin.trim().split(/\s+/).map((syllable) => syllableKey(syllable));
-  return `word-${[...hanzi, ...syllables].join('-')}`;
 };
 
 const MARKED: Record<string, string> = { a: 'āáǎà', e: 'ēéěè', i: 'īíǐì', o: 'ōóǒò', u: 'ūúǔù', ü: 'ǖǘǚǜ' };

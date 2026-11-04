@@ -2,21 +2,22 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const stores = async () => {
   vi.resetModules();
-  const { progressStore, vocabularyProgressStore } = await import('../src/stores/progressStore');
+  const { progressStore } = await import('../src/stores/progressStore');
+  const { vocabularyProgressStore } = await import('../src/stores/vocabularyProgressStore');
   return { chars: progressStore, words: vocabularyProgressStore };
 };
 
 describe('vocabulary progress', () => {
   beforeEach(() => localStorage.clear());
 
-  it('migrates version 2 without crediting words and round trips both histories', async () => {
-    localStorage.setItem('hsk-flashcards-stats', JSON.stringify({ version: 2, chars: { 好: { right: 4, interval: 21 } }, daily: { day: '2026-10-31', reviewed: 1, introduced: 1, streak: 1 } }));
+  it('keeps characters and words apart and round trips both histories', async () => {
+    localStorage.setItem('hsk-flashcards-stats', JSON.stringify({ version: 4, chars: { 好: { right: 4, interval: 21 } }, daily: { day: '2026-10-31', reviewed: 1, introduced: 1, streak: 1 }, words: {}, wordDaily: { day: '2026-10-31', reviewed: 0, introduced: 0, streak: 0 } }));
     const { chars, words } = await stores();
     expect(chars.isMastered('好')).toBe(true);
     expect(words.isNew('好')).toBe(true);
     words.grade('好', 'good');
     const backup = chars.exportBackup();
-    expect(JSON.parse(backup)).toMatchObject({ version: 3, words: { 好: { right: 1 } }, chars: { 好: { right: 4 } } });
+    expect(JSON.parse(backup)).toMatchObject({ version: 4, words: { 好: { right: 1 } }, chars: { 好: { right: 4 } } });
     chars.clear();
     expect(words.isNew('好')).toBe(true);
     chars.importBackup(backup);

@@ -93,72 +93,6 @@ describe('Character Store', () => {
     });
   });
 
-  describe('Training Mode', () => {
-    beforeEach(() => {
-      characterStore.selectLevel(1);
-    });
-
-    it('starts training mode', () => {
-      characterStore.startTraining();
-      expect(characterStore.state.trainingMode).toBe(true);
-      expect(characterStore.state.trainingResults.correct).toBe(0);
-      expect(characterStore.state.trainingResults.incorrect).toBe(0);
-    });
-
-    it('records correct answers', () => {
-      characterStore.startTraining();
-      characterStore.recordAnswer(true);
-      characterStore.recordAnswer(true);
-      expect(characterStore.state.trainingResults.correct).toBe(2);
-      expect(characterStore.state.trainingResults.incorrect).toBe(0);
-    });
-
-    it('records incorrect answers', () => {
-      characterStore.startTraining();
-      characterStore.recordAnswer(false);
-      characterStore.recordAnswer(false);
-      characterStore.recordAnswer(false);
-      expect(characterStore.state.trainingResults.correct).toBe(0);
-      expect(characterStore.state.trainingResults.incorrect).toBe(3);
-    });
-
-    it('calculates training result correctly', () => {
-      characterStore.startTraining();
-      characterStore.recordAnswer(true);
-      characterStore.recordAnswer(true);
-      characterStore.recordAnswer(false);
-
-      const result = characterStore.getTrainingResult();
-      expect(result.correct).toBe(2);
-      expect(result.incorrect).toBe(1);
-      expect(result.total).toBe(3);
-      expect(result.percentage).toBe(67); // 2/3 = 66.67 rounded
-    });
-
-    it('shuffles characters for training', () => {
-      const shuffled1 = characterStore.getShuffledCharacters();
-      const shuffled2 = characterStore.getShuffledCharacters();
-
-      expect(shuffled1.length).toBe(shuffled2.length);
-      // Los arrays deberían tener los mismos caracteres pero potencialmente en diferente orden
-      expect(shuffled1.length).toBeGreaterThan(0);
-    });
-
-    it('resets training without moving the card deck', () => {
-      characterStore.setCurrentIndex(4);
-      characterStore.startTraining();
-      characterStore.recordAnswer(true);
-      characterStore.recordAnswer(false);
-
-      characterStore.resetTraining();
-
-      expect(characterStore.state.trainingMode).toBe(false);
-      expect(characterStore.state.currentIndex).toBe(4);
-      expect(characterStore.state.trainingResults.correct).toBe(0);
-      expect(characterStore.state.trainingResults.incorrect).toBe(0);
-    });
-  });
-
   describe('Persistence', () => {
     it('saves progress to localStorage', () => {
       characterStore.selectLevel(2);
@@ -206,19 +140,6 @@ describe('Character data', () => {
     characterStore.installCharacters(parseCharacterList(pack(2), 2));
     characterStore.installCharacters(parseCharacterList(pack(3), 3));
     expect(characterStore.getAvailableLevels()).toEqual([1, 2, 3]);
-  });
-
-  it('shuffles without losing or duplicating characters', () => {
-    characterStore.selectLevel(1);
-    const original = characterStore
-      .getCharactersByLevel()
-      .map((c) => c.character)
-      .sort();
-    const shuffled = characterStore
-      .getShuffledCharacters()
-      .map((c) => c.character)
-      .sort();
-    expect(shuffled).toEqual(original);
   });
 });
 

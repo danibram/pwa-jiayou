@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { WORD_NEW_PER_DAY, progressStore, vocabularyProgressStore } from '../src/stores/progressStore';
+import { WORD_NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
+import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { topicPlan, topicWords } from '../src/utils/topicPlan';
 import { vocabulary } from '../src/data/vocabulary';
