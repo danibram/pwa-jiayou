@@ -22,6 +22,8 @@ export interface CharProgress {
   lastSeen: number;
   /** Bien answers in a row since the last miss, free practice included. */
   clean: number;
+  /** Epoch ms of the last graded answer. Free practice and stroke runs leave it alone. 0 in older saves. */
+  lastReview?: number;
   /** Epoch ms of the last write. Of two copies of a record, the later one wins. */
   updatedAt: number;
   /** The device that wrote it last. Breaks a tie between two writes in the same millisecond. */

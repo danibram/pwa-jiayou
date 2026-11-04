@@ -1,7 +1,7 @@
 import type { HskLevel } from '../types';
-import { vocabularyByLevel, vocabularyLevels, type VocabularyEntry } from './vocabulary';
+import { extraVocabulary, vocabularyByLevel, vocabularyLevels, type VocabularyEntry } from './vocabulary';
 
-/** What the learner studies. The HSK levels ship with the app; "Mis palabras" is the learner's own. */
+/** What the learner studies: the HSK levels and the Extra list, all curated in the content editor. */
 export type ListId = string;
 
 export interface StudyList {
@@ -14,8 +14,8 @@ export interface StudyList {
 
 export const hskListId = (level: HskLevel): ListId => `hsk-${level}`;
 
-export const MY_WORDS_LIST: ListId = 'mine';
-export const MY_WORDS_TITLE = 'Mis palabras';
+/** Words outside HSK. Offered in the list picker even while empty, so learners can opt in to later releases. */
+export const EXTRA_LIST: ListId = 'extra';
 
 /** The lists that ship with the app. "Mis palabras" lives in stores/studyLists, since its words change. */
 export const hskLists: StudyList[] = vocabularyLevels.map((level) => ({
@@ -25,19 +25,34 @@ export const hskLists: StudyList[] = vocabularyLevels.map((level) => ({
   hskLevel: level,
 }));
 
-/** Every list's id and title, the learner's own last. Knowing them needs no words. */
-const listHeads: Omit<StudyList, 'words'>[] = [
-  ...hskLists.map(({ id, title, hskLevel }) => ({ id, title, hskLevel })),
-  { id: MY_WORDS_LIST, title: MY_WORDS_TITLE },
+/** Every list, Extra last. */
+export const studyLists = (): StudyList[] => [
+  ...hskLists,
+  { id: EXTRA_LIST, title: 'Extra', words: extraVocabulary },
 ];
 
 export const DEFAULT_LIST: ListId = hskListId(1);
 
 /** Known ids only, each once, in catalog order. */
 export const knownLists = (ids: readonly ListId[]): ListId[] =>
-  listHeads.map((list) => list.id).filter((id) => ids.includes(id));
+  studyLists().map((list) => list.id).filter((id) => ids.includes(id));
 
-const listHead = (id: ListId) => listHeads.find((list) => list.id === id)!;
+export const studyList = (id: ListId): StudyList | undefined => studyLists().find((list) => list.id === id);
+const listHead = (id: ListId): StudyList => studyList(id)!;
+
+/** The words of `ids`, each once. A word in two lists shares one progress, so it appears once. */
+export const wordsInLists = (ids: readonly ListId[]): VocabularyEntry[] => {
+  const seen = new Set<string>();
+  const out: VocabularyEntry[] = [];
+  for (const id of knownLists(ids)) {
+    for (const word of studyList(id)!.words) {
+      if (seen.has(word.id)) continue;
+      seen.add(word.id);
+      out.push(word);
+    }
+  }
+  return out;
+};
 
 /** The HSK levels among `ids`, for what still goes by level. */
 export const hskLevelsOf = (ids: readonly ListId[]): HskLevel[] =>

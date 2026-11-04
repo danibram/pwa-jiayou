@@ -64,14 +64,15 @@ describe('when the next reviews come', () => {
     expect(nextReviewsLabel(base)).toBe('');
   });
 
-  it('counts a card due this evening as today, not tomorrow', () => {
+  it('counts a card due this evening as due from the morning, not later today or tomorrow', () => {
     progressStore.clear();
     vocabularyProgressStore.introduce('w4');
     const p = vocabularyProgressStore.get('w4')!;
-    const evening = new Date(p.due);
-    const now = new Date(evening.getFullYear(), evening.getMonth(), evening.getDate(), 0, 30).getTime();
-    const summary = summarizeProgress(['w4'], vocabularyProgressStore, now);
-    expect(summary.laterToday).toBe(1);
+    const due = new Date(p.due);
+    const morning = new Date(due.getFullYear(), due.getMonth(), due.getDate(), 0, 30).getTime();
+    expect(vocabularyProgressStore.isDue('w4', morning)).toBe(true);
+    const summary = summarizeProgress(['w4'], vocabularyProgressStore, morning);
+    expect(summary.laterToday).toBe(0);
     expect(summary.tomorrow).toBe(0);
   });
 });

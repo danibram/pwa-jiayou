@@ -7,7 +7,7 @@ import Pinyin from './Pinyin';
 import ToneNeighbors from './ToneNeighbors';
 import { StatusTag, type StudyStatus } from './TopicProgress';
 import type { VocabularyEntry } from '../data/vocabulary';
-import { allWords } from '../stores/myWordsStore';
+import { allWords } from '../data/vocabulary';
 import { levelRank } from '../utils/wordOrder';
 import { characterStore } from '../stores/characterStore';
 import type { KnownCharacter } from '../utils/wordCharacter';
@@ -28,7 +28,6 @@ interface CharacterDetailSheetProps {
   /** Asking first is the caller's job; this only reports the tap. Without it the sheet says where to download. */
   onDownload?: () => void;
   onStrokes?: () => void;
-  onOpenCard?: () => void;
   /** Opens a word from the list of words with this character. */
   onOpenWord?: (wordId: string) => void;
   onOpenCharacter?: (character: string) => void;
@@ -42,7 +41,7 @@ interface CharacterDetailSheetProps {
  * Up to five HSK words that use the character: the character as a word of its own first,
  * then the levels you study, then the lowest level.
  */
-/** The learner's own words count as studied: they added them. */
+/** Extra words have no level, so they rank with the levels being studied. */
 const wordsWith = (char: string, studying: readonly number[], currentWordId?: string) => {
   const studied = (word: VocabularyEntry) => (word.level ? studying.includes(word.level) : true);
   return allWords()
@@ -107,15 +106,6 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
       style={{ 'padding-bottom': 'max(env(safe-area-inset-bottom), 1.25rem)' }}
       onClose={() => props.onClose()}
     >
-      <Show when={char().hsk_level}>
-        {(level) => (
-          <div class="flex items-center justify-end">
-            <span class="rounded-full border border-line px-2 py-0.5 text-[0.6875rem] font-semibold tabular-nums text-ink-soft">
-              HSK {level()}
-            </span>
-          </div>
-        )}
-      </Show>
 
       {/* The glyph is as tall as everything beside it, so the sheet has no empty corner. */}
       <div ref={(element) => (header = element)} class="mt-1 flex items-center gap-4">
@@ -231,11 +221,6 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
             Ver trazos y escribirlo
           </button>
         </Show>
-      </Show>
-      <Show when={props.installed && props.onOpenCard}>
-        <button type="button" class="mt-1 h-11 w-full text-sm text-ink-soft underline decoration-line underline-offset-4" onClick={() => props.onOpenCard?.()}>
-          Abrir en tarjetas
-        </button>
       </Show>
     </Drawer>
   );

@@ -3,7 +3,9 @@ import {
   vocabulary,
   vocabularyByLevel,
   vocabularyCoverage,
+  officialCounts,
   vocabularySources,
+  vocabularyExample,
 } from '../src/data/vocabulary';
 import sourceFixture from '../src/data/vocabulary/source-fixture.json';
 import hsk1 from '../src/data/vocabulary/hsk1.json';
@@ -39,13 +41,36 @@ const pilotIds = [
 ].map((simplified) => expectedId(rawWordFor(simplified)));
 
 describe('HSK 2.0 vocabulary', () => {
+  it('keeps the added PDF words and their characters in the catalog', async () => {
+    const { default: levels } = await import('../src/data/characterLevels.json');
+    for (const simplified of ['饭店', '没有', '哪儿', '那儿', '说', '一点儿', '踢足球', '这儿', '电子邮件', '刮风', '刷牙']) {
+      const entry = vocabulary.find((word) => word.simplified === simplified);
+      expect(entry, simplified).toBeDefined();
+      expect(entry?.meaning).toBeTruthy();
+      for (const character of entry?.characters ?? []) expect(character in levels, character).toBe(true);
+    }
+    expect(vocabularyExample('飞机')).toEqual({ chinese: '我坐飞机去北京。', spanish: 'Voy a Pekín en avión.' });
+    expect(vocabularyExample('八')).toBeUndefined();
+    expect(vocabulary.find((entry) => entry.simplified === '号')?.level).toBe(1);
+    for (const simplified of ['等', '对', '过', '为什么', '着急', '作业']) {
+      expect(vocabulary.find((entry) => entry.simplified === simplified)?.level, simplified).toBe(2);
+    }
+    expect(vocabulary.filter((entry) => entry.simplified === '还').map((entry) => entry.pinyin)).toEqual(['hái', 'huán']);
+    expect(vocabulary.filter((entry) => entry.simplified === '长').map((entry) => entry.pinyin)).toEqual(['cháng', 'zhǎng']);
+    expect(vocabulary.find((entry) => entry.simplified === '声音')?.meaning).toContain('sonido');
+    expect(vocabulary.find((entry) => entry.simplified === '问题')?.meaning).toContain('problema');
+    expect(vocabulary.find((entry) => entry.simplified === '送')?.meaning).toContain('regalar');
+    expect(vocabulary.find((entry) => entry.simplified === '送')?.meaning).toContain('enviar');
+  });
   it('covers exclusive levels 1–6 with stable identities', () => {
     expect(vocabularyCoverage).toMatchObject({
       edition: 'HSK 2.0',
       complete: true,
       levels: [1, 2, 3, 4, 5, 6],
     });
-    expect(vocabulary).toHaveLength(151 + 147 + 298 + 598 + 1298 + 2500);
+    const levels = vocabularyCoverage.levels;
+    expect(vocabulary).toHaveLength(levels.reduce((sum, level) => sum + vocabularyCoverage.counts[level], 0));
+    expect(vocabulary.length).toBeGreaterThanOrEqual(levels.reduce((sum, level) => sum + officialCounts[level], 0));
     expect(new Set(vocabulary.map((entry) => entry.id)).size).toBe(vocabulary.length);
     for (const level of vocabularyCoverage.levels) {
       expect(vocabularyByLevel[level]).toHaveLength(vocabularyCoverage.counts[level]);

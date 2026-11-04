@@ -2,9 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { ActivityByDevice } from '../src/domain/progress/activity';
 import type { CharProgress, DailyLog, ProgressState } from '../src/domain/progress/types';
 import { mergeProgress, mergeRecords } from '../src/domain/sync/merge';
-import { vocabulary } from '../src/data/vocabulary';
-import { createMemoryKeyValue } from '../src/persistence/keyValue';
-import { createMyWordsStore, type MyWordRecord } from '../src/stores/myWordsStore';
 
 /** mulberry32: a small seeded generator, so a failing case can be replayed from its seed. */
 const random = (seed: number) => () => {
@@ -39,16 +36,6 @@ const activity = (rng: Rng): ActivityByDevice => Object.fromEntries(
 
 const progress = (rng: Rng): ProgressState => ({ chars: records(rng), words: records(rng), daily: daily(rng), wordDaily: daily(rng), activity: activity(rng) });
 
-const myWord = (rng: Rng): MyWordRecord => ({
-  addedAt: int(rng, 4),
-  removedAt: pick(rng, [null, null, 2]),
-  updatedAt: int(rng, 4),
-  deviceId: pick(rng, DEVICES),
-  ...(rng() < 0.5 ? { own: { simplified: '一', traditional: '一', pinyin: 'yī', meaning: pick(rng, ['uno', 'one']), topicIds: [] } } : {}),
-});
-
-const myWords = (rng: Rng) => Object.fromEntries(IDS.filter(() => rng() < 0.6).map((id) => [id, myWord(rng)]));
-
 const RUNS = 300;
 
 describe('progress merge', () => {
@@ -76,35 +63,5 @@ describe('progress merge', () => {
     const local: ProgressState = { chars: {}, words: {}, daily: day, wordDaily: day, activity: { phone: { '2026-11-01': 5 } } };
     const backup: ProgressState = { ...local, activity: { phone: { '2026-11-01': 3, '2026-10-31': 2 }, laptop: { '2026-11-01': 4 } } };
     expect(mergeProgress(local, backup).activity).toEqual({ phone: { '2026-11-01': 5, '2026-10-31': 2 }, laptop: { '2026-11-01': 4 } });
-  });
-});
-
-describe('Mis palabras merge', () => {
-  it('is commutative, idempotent and associative', () => {
-    for (let seed = 1; seed <= RUNS; seed++) {
-      const rng = random(seed);
-      const [a, b, c] = [myWords(rng), myWords(rng), myWords(rng)];
-      expect(mergeRecords(a, b), `seed ${seed}`).toEqual(mergeRecords(b, a));
-      expect(mergeRecords(a, a), `seed ${seed}`).toEqual(a);
-      expect(mergeRecords(mergeRecords(a, b), c), `seed ${seed}`).toEqual(mergeRecords(a, mergeRecords(b, c)));
-    }
-  });
-
-  it('loses no word added on either of two devices, and keeps a later removal', () => {
-    const phone = createMyWordsStore(createMemoryKeyValue(), { deviceId: 'phone' });
-    const laptop = createMyWordsStore(createMemoryKeyValue(), { deviceId: 'laptop' });
-    phone.addCatalog(vocabulary[0].id);
-    phone.addCatalog(vocabulary[2].id);
-    laptop.addCatalog(vocabulary[1].id);
-    laptop.add({ simplified: '奶茶', pinyin: 'nai3 cha2', meaning: 'té con leche' });
-    phone.mergeData(laptop.exportData());
-    expect([...phone.ids].sort()).toEqual([vocabulary[0].id, vocabulary[1].id, vocabulary[2].id, 'word-5976-8336-nai3-cha2'].sort());
-    expect(phone.findWord('word-5976-8336-nai3-cha2')?.meaning).toBe('té con leche');
-    // The laptop takes one off after the merge; merging again carries the removal over.
-    laptop.mergeData(phone.exportData());
-    laptop.remove(vocabulary[2].id);
-    phone.mergeData(laptop.exportData());
-    expect(phone.has(vocabulary[2].id)).toBe(false);
-    expect(phone.ids).toEqual(laptop.ids);
   });
 });

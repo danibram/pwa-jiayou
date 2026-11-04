@@ -8,7 +8,8 @@ import TopBar from '../components/TopBar';
 import Pinyin from '../components/Pinyin';
 import RiceGrid from '../components/RiceGrid';
 import { vocabulary, type VocabularyEntry } from '../data/vocabulary';
-import { allWords, findWord } from '../stores/myWordsStore';
+import { allWords, findWord } from '../data/vocabulary';
+import { characterExample, characterGloss } from '../utils/wordParts';
 import { topicById } from '../data/topics';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
@@ -51,19 +52,22 @@ const withPrompts = (cards: DeckCard[]): DeckCard[] => {
   let turn = 0;
   const out = cards.map((card) => {
     const reps = progress.get(card.entry.id)?.reps ?? 0;
-    if (card.kind !== 'review' || reps < 1) return card;
+    if (card.kind !== 'review') return card;
+    // Never answered right yet (or back after a lapse): recognise it among words already met.
+    if (reps < 1) return { ...card, prompt: 'recognize' as Prompt };
     const sides: readonly Prompt[] = reps >= 2 ? ['meaning', 'reverse', 'listen'] : ['meaning', 'reverse'];
     const prompt = sides[turn++ % sides.length];
-    return prompt === 'meaning' ? card : { ...card, prompt };
+    if (prompt === 'meaning' && reps >= 3) return card;
+    // A word met only a couple of times is answered by picking it, by ear or from the Spanish,
+    // so the grade is a result, not a guess about oneself. Self-grading starts once it is settled.
+    if (reps < 3) return { ...card, prompt: (prompt === 'listen' ? 'hear' : prompt === 'meaning' ? 'recognize' : 'pick') as Prompt };
+    return { ...card, prompt };
   });
-  // Every session trains the ear at least once: a word already reviewed if there is one, else
-  // the recognition recall of a word taught earlier in the session. Never a pick card.
-  if (canSpeak() && !out.some((card) => card.prompt === 'listen')) {
+  // Every session with reviews trains the ear once. Never on a word taught today: one hearing is not enough to recognise it.
+  if (canSpeak() && !out.some((card) => card.prompt === 'listen' || card.prompt === 'hear')) {
     const met = (card: DeckCard) => card.kind === 'review' && (progress.get(card.entry.id)?.reps ?? 0) >= 1;
-    const target = out.find((card) => met(card) && !card.prompt)
-      ?? out.find((card) => met(card) && card.prompt === 'reverse')
-      ?? out.find((card) => card.kind === 'recall' && !card.prompt);
-    if (target) out[out.indexOf(target)] = { ...target, prompt: 'listen' };
+    const target = out.find((card) => met(card) && !card.prompt) ?? out.find((card) => met(card) && card.prompt === 'reverse');
+    if (target) out[out.indexOf(target)] = { ...target, prompt: (progress.get(target.entry.id)?.reps ?? 0) < 3 ? 'hear' : 'listen' };
   }
   return out;
 };
@@ -96,7 +100,8 @@ const topicDeck = (topicIds: string[]): DeckCard[] => {
   const due = source.filter((entry) => progress.isDue(entry.id));
   const rest = source.filter((entry) => !progress.isDue(entry.id) && !progress.isNew(entry.id));
   const reviews = [...due, ...rest].map((entry) => ({ entry, kind: 'review' as const }));
-  const fresh = learningOrder(source.filter((entry) => progress.isNew(entry.id))).slice(0, Math.min(progress.newLeftToday(), SESSION_SIZE));
+  // The same ten new words as Hoy: a topic must not spend the whole day's cap at once.
+  const fresh = learningOrder(source.filter((entry) => progress.isNew(entry.id))).slice(0, Math.min(progress.newLeftToday(), MORE_SIZE));
   // Each new word brings two recall cards, so it takes three of the session's places.
   const reviewRoom = Math.max(0, SESSION_SIZE - fresh.length * 3);
   return withPrompts(interleave(reviews.slice(0, Math.max(reviewRoom, fresh.length ? 0 : SESSION_SIZE)), fresh));
@@ -111,11 +116,12 @@ interface Props {
   onPractice?: (practiceId: string) => void;
 }
 
-/** Another HSK word that shares a character, as a usage example. */
+/** Another HSK word that shares a character, as a usage example. Not one of the word's own parts (好 in 你好): the tiles already show those. */
 const relatedWord = (entry: VocabularyEntry) =>
   vocabulary.find((other) =>
     other.id !== entry.id &&
     other.simplified !== entry.simplified &&
+    !entry.simplified.includes(other.simplified) &&
     other.level <= Math.max(levelRank(entry), 2) &&
     other.characters.some((char) => entry.characters.includes(char)));
 
@@ -183,9 +189,9 @@ const VocabularyReview: Component<Props> = (props) => {
   /** Answers given before a pause. Descartar undoes them too, so the leave sheet says how many. */
   const answeredBeforePause = saved ? saved.counts.again + saved.counts.hard + saved.counts.good : 0;
   const current = () => deck()[position()];
-  /** Only cards the learner answers count. An introduction is reading, not answering. */
+  /** Every card counts, introductions too, so Continuar on a new word visibly moves the session on. */
   const counter = () => {
-    const answered = (cards: DeckCard[]) => cards.filter((card) => card.kind !== 'learn').length;
+    const answered = (cards: DeckCard[]) => cards.length;
     // A deck saved before recalls were built in still adds them as it goes.
     const owed = deck().slice(position()).filter((card, index, rest) => card.kind === 'learn' && !rest.slice(index + 1).some((later) => later.kind === 'recall' && later.entry.id === card.entry.id)).length;
     return { done: answered(deck().slice(0, position())), left: answered(deck().slice(position())) + owed };
@@ -195,16 +201,18 @@ const VocabularyReview: Component<Props> = (props) => {
   const prompt = (): Prompt => step() === 'learn' ? 'meaning' : current()?.prompt ?? 'meaning';
   const choices = createMemo(on(position, () => {
     const card = current();
-    if (card?.prompt !== 'pick') return [];
+    if (card?.prompt !== 'pick' && card?.prompt !== 'hear' && card?.prompt !== 'recognize') return [];
     const shown = new Set(deck().slice(0, position()).map((earlier) => earlier.entry.id));
     return pickChoices(card.entry, pool, (entry) => shown.has(entry.id) || !progress.isNew(entry.id));
   }));
-  /** The hanzi stays hidden while a reverse, listening or pick card is being answered. */
-  const showWord = () => revealed() || prompt() === 'meaning';
+  /** The hanzi stays hidden while a reverse, listening or pick card is being answered. A recognize card asks from it. */
+  const showWord = () => revealed() || prompt() === 'meaning' || prompt() === 'recognize';
+  /** Cards answered by choosing among words already met. They grade themselves. */
+  const choosing = () => prompt() === 'pick' || prompt() === 'hear' || prompt() === 'recognize';
   // A listening card speaks first: the sound is the question. A new word is heard as it is first shown.
   createEffect(on(() => [position(), prompt(), step()] as const, ([, kind, at]) => {
     const card = current();
-    if (card && !revealed() && (kind === 'listen' || (at === 'learn' && canSpeak()))) speakWord(card.entry.pinyin, card.entry.simplified, () => setAudioError(true));
+    if (card && !revealed() && (kind === 'listen' || kind === 'hear' || (at === 'learn' && canSpeak()))) speakWord(card.entry.pinyin, card.entry.simplified, () => setAudioError(true));
   }));
   const progressNote = () => topic ? `${items()} de ${topicTotal} palabras ${topicIds && topicIds.length > 1 ? 'de los temas' : 'del tema'}` : current()?.kind === 'learn' ? 'Palabra nueva' : undefined;
   /** Words that came back after an Olvidé, once each. */
@@ -213,6 +221,14 @@ const VocabularyReview: Component<Props> = (props) => {
     return [...new Map(deck().filter((card) => result[card.entry.id] === 'again').map((card) => [card.entry.id, card.entry])).values()];
   });
   const practised = createMemo(() => [...new Map(deck().map((card) => [card.entry.id, card.entry])).values()]);
+  /** Words taught in this session. Their answers came seconds after the lesson, so the summary lists them instead of grading them. */
+  const taught = createMemo(() => [...new Map(deck().filter((card) => card.kind === 'learn').map((card) => [card.entry.id, card.entry])).values()]);
+  const reviewCounts = createMemo(() => {
+    const out = { ...countsBefore };
+    const fresh = new Set(taught().map((entry) => entry.id));
+    for (const [id, grade] of Object.entries(results())) if (!fresh.has(id)) out[grade] += 1;
+    return out;
+  });
   const asItem = (entry: VocabularyEntry) => ({ character: entry.simplified, pinyin: entry.pinyin });
   let timer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => { if (timer) clearTimeout(timer); });
@@ -265,7 +281,8 @@ const VocabularyReview: Component<Props> = (props) => {
   const alreadyKnown = () => {
     const card = current();
     if (!card || step() !== 'learn') return;
-    if (progress.isNew(card.entry.id)) progress.grade(card.entry.id, 'good');
+    // Known already: it skips the first steps and does not spend today's new words.
+    if (progress.isNew(card.entry.id)) progress.markKnown(card.entry.id);
     batch(() => {
       setResults((old) => ({ ...old, [card.entry.id]: 'good' }));
       setDeck((old) => old.filter((other, index) => index <= position() || other.entry.id !== card.entry.id));
@@ -280,10 +297,11 @@ const VocabularyReview: Component<Props> = (props) => {
     if (mode === 'practice') progress.practice(card.entry.id, value, allPractice);
     else if (progress.isDue(card.entry.id) || (card.kind === 'recall' && (progress.get(card.entry.id)?.right ?? 0) + (progress.get(card.entry.id)?.wrong ?? 0) === 0)) progress.grade(card.entry.id, value);
     else progress.practice(card.entry.id, value, false);
-    // A Bien in Flojos is what the session is for: the word leaves the weak list now.
-    if (weakPractice && value === 'good' && progress.recoverWeak(card.entry.id)) setRecovered((n) => n + 1);
     // A retry after an Olvidé does not change the word's result: the summary keeps the miss.
     const retry = card.kind === 'review' && deck().slice(0, position()).some((earlier) => earlier.entry.id === card.entry.id);
+    // A Bien in Flojos is what the session is for: the word leaves the weak list now.
+    // Not on the retry four cards after a miss: that measures seconds of memory, not days.
+    if (weakPractice && value === 'good' && !retry && progress.recoverWeak(card.entry.id)) setRecovered((n) => n + 1);
     batch(() => {
       if (!retry) setResults((old) => {
         const before = old[card.entry.id];
@@ -301,7 +319,7 @@ const VocabularyReview: Component<Props> = (props) => {
     });
     // A miss, or a pick found after a wrong one, waits for Continuar. A clean answer moves on after a
     // short beat; a pick card stays a little longer so the right word and its sound land.
-    const picked = card.prompt === 'pick';
+    const picked = card.prompt === 'pick' || card.prompt === 'hear' || card.prompt === 'recognize';
     if (value === 'again' || (picked && wrongPicks().length > 0)) { setHeld(true); return; }
     timer = setTimeout(next, picked ? 1100 : 500);
   };
@@ -393,7 +411,7 @@ const VocabularyReview: Component<Props> = (props) => {
       if (!current() || finished()) return;
       if (step() === 'learn') teach();
       else if (feedback() !== null) next();
-      else if (!revealed() && prompt() !== 'pick') setRevealed(true);
+      else if (!revealed() && !choosing()) setRevealed(true);
     } else if (revealed() && feedback() === null && step() !== 'learn') {
       const value = GRADES.find((g) => GRADE_KEY[g] === event.key);
       if (value) grade(value);
@@ -441,30 +459,40 @@ const VocabularyReview: Component<Props> = (props) => {
               <SessionProgress done={counter().done} left={counter().left} note={progressNote()} />
               <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:justify-center">
                 <Show when={prompt() !== 'meaning'}>
-                  <p class="eyebrow mb-3">{prompt() === 'reverse' || prompt() === 'pick' ? 'Significado → palabra' : 'Escucha'}</p>
+                  <p class="eyebrow mb-3">{prompt() === 'reverse' || prompt() === 'pick' ? 'Significado → palabra' : prompt() === 'recognize' ? 'Palabra → significado' : 'Escucha'}</p>
                 </Show>
-                <Show when={!showWord() && prompt() === 'pick'}>
-                  <p class="text-[1.75rem] font-semibold leading-snug text-balance first-letter:uppercase">{askGloss(current().entry).text}</p>
-                  <Show when={askGloss(current().entry).hint}>{(hint) => <p class="mt-1 text-sm text-ink-soft">{hint()}</p>}</Show>
-                  <p class="mt-2 text-sm text-ink-soft">¿Cómo se dice «{askGloss(current().entry).text}»?</p>
+                <Show when={!showWord() && (prompt() === 'pick' || prompt() === 'hear')}>
+                  <Show when={prompt() === 'pick'} fallback={
+                    <div class="flex flex-col items-center">
+                      <SpeakButton word size="lg" pinyin={current().entry.pinyin} hanzi={current().entry.simplified} label="Escuchar otra vez" onUnavailable={() => setAudioError(true)} />
+                      <p class="mt-3 text-sm text-ink-soft">¿Qué palabra has oído?</p>
+                    </div>
+                  }>
+                    <p class="text-[1.75rem] font-semibold leading-snug text-balance first-letter:uppercase">{askGloss(current().entry).text}</p>
+                    <Show when={askGloss(current().entry).hint}>{(hint) => <p class="mt-1 text-sm text-ink-soft">{hint()}</p>}</Show>
+                    <p class="mt-2 text-sm text-ink-soft">¿Cómo se dice «{askGloss(current().entry).text}»?</p>
+                  </Show>
                   <div class="mt-5 grid w-full max-w-[20rem] grid-cols-2 gap-2.5" role="group" aria-label="Elige la palabra">
                     <For each={choices()}>{(choice) => (
                       <button
                         type="button"
-                        class="tile flex min-h-[4.5rem] items-center justify-center px-2 font-hanzi text-[1.75rem] leading-none transition active:scale-[0.97]"
-                        classList={{ 'border-seal/60 bg-seal-soft text-ink-faint line-through decoration-seal/60': wrongPicks().includes(choice.id) }}
+                        class="tile flex min-h-[4.5rem] flex-col items-center justify-center px-2 transition active:scale-[0.97]"
+                        classList={{ 'border-seal/60 bg-seal-soft': wrongPicks().includes(choice.id) }}
                         disabled={wrongPicks().includes(choice.id)}
-                        aria-label={choice.simplified}
-                        lang="zh-CN"
+                        aria-label={wrongPicks().includes(choice.id) ? `${choice.simplified}: ${displayGloss(choice)}` : choice.simplified}
                         onClick={() => pick(choice)}
                       >
-                        {choice.simplified}
+                        <span class="font-hanzi text-[1.75rem] leading-none" classList={{ 'text-ink-faint': wrongPicks().includes(choice.id) }} lang="zh-CN">{choice.simplified}</span>
+                        {/* A wrong pick says what it was, so the mix-up teaches something. */}
+                        <Show when={wrongPicks().includes(choice.id)}>
+                          <span class="mt-1 line-clamp-2 font-sans text-xs leading-tight text-seal">{displayGloss(choice).split(';')[0]}</span>
+                        </Show>
                       </button>
                     )}</For>
                   </div>
                   <Show when={wrongPicks().length === 1}><p role="status" class="mt-3 text-sm text-seal">Esa no. Prueba otra vez.</p></Show>
                 </Show>
-                <Show when={!showWord() && prompt() !== 'pick'}>
+                <Show when={!showWord() && prompt() !== 'pick' && prompt() !== 'hear'}>
                   <Show when={prompt() === 'reverse'} fallback={
                     <div class="flex flex-col items-center">
                       <SpeakButton word size="lg" pinyin={current().entry.pinyin} hanzi={current().entry.simplified} label="Escuchar otra vez" onUnavailable={() => setAudioError(true)} />
@@ -487,6 +515,26 @@ const VocabularyReview: Component<Props> = (props) => {
                   )}</For>
                 </div>
                 </Show>
+                <Show when={!revealed() && prompt() === 'recognize'}>
+                  <p class="mt-3 text-sm text-ink-soft">¿Qué significa?</p>
+                  <div class="mt-3 grid w-full max-w-[20rem] grid-cols-1 gap-2" role="group" aria-label="Elige el significado">
+                    <For each={choices()}>{(choice) => (
+                      <button
+                        type="button"
+                        class="tile flex min-h-12 items-center justify-between gap-3 px-4 text-left transition active:scale-[0.98]"
+                        classList={{ 'border-seal/60 bg-seal-soft': wrongPicks().includes(choice.id) }}
+                        disabled={wrongPicks().includes(choice.id)}
+                        aria-label={displayGloss(choice).split(';')[0]}
+                        onClick={() => pick(choice)}
+                      >
+                        <span class="text-base font-medium first-letter:uppercase" classList={{ 'text-ink-faint': wrongPicks().includes(choice.id) }}>{displayGloss(choice).split(';')[0]}</span>
+                        {/* A wrong pick shows whose meaning it was. */}
+                        <Show when={wrongPicks().includes(choice.id)}><span class="font-hanzi text-xl text-seal" lang="zh-CN">{choice.simplified}</span></Show>
+                      </button>
+                    )}</For>
+                  </div>
+                  <Show when={wrongPicks().length === 1}><p role="status" class="mt-3 text-sm text-seal">Ese no. Prueba otra vez.</p></Show>
+                </Show>
                 <Show when={revealed() || step() === 'learn'}>
                   <Pinyin word text={current().entry.pinyin} class="mt-3 text-2xl font-medium" />
                   <p class="mt-2 text-2xl font-semibold leading-snug text-balance">{displayGloss(current().entry)}</p>
@@ -502,15 +550,43 @@ const VocabularyReview: Component<Props> = (props) => {
                       <p class="mt-0.5 text-sm text-ink-soft">{other().meaning.split(';')[0]}</p>
                     </div>
                   )}</Show>
+                  {/* A one-character word with no other word to show it in (的, 了) gets its curated example. */}
+                  <Show when={!relatedWord(current().entry) && current().entry.characters.length === 1 ? characterExample(current().entry.simplified) : undefined}>{(example) => (
+                    <div class="mt-3 w-full max-w-[19rem] rounded-xl bg-paper/60 px-4 py-2 text-left">
+                      <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Ejemplo</p>
+                      <p class="mt-1 flex flex-wrap items-baseline gap-x-2 text-ink">
+                        <span class="font-hanzi text-[1.5rem] leading-none" lang="zh-CN">{example().word}</span>
+                        <Pinyin word text={example().pinyin} class="text-base font-medium whitespace-nowrap" />
+                      </p>
+                      <p class="mt-0.5 text-sm text-ink-soft">{example().es}</p>
+                    </div>
+                  )}</Show>
                   <Show when={audioError()}><p role="status" class="mt-2 text-sm text-seal">No se pudo reproducir el audio. Comprueba la voz china del dispositivo.</p></Show>
-                  <p class="mt-3 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Trazos</p>
+                  <p class="mt-3 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">{current().entry.characters.length > 1 ? 'Cómo se escribe · toca un carácter' : 'Cómo se escribe'}</p>
                   <div class="mt-1.5 flex flex-wrap justify-center gap-2">
-                    <For each={current().entry.characters}>{(char, index) => <button class="tile min-h-11 min-w-11 px-3 font-hanzi text-xl" onClick={() => props.onStrokes(char)} aria-label={current().entry.characters.filter((part) => part === char).length > 1 ? `Practicar trazos de ${char}, posición ${index() + 1} de ${current().entry.characters.length}` : `Practicar trazos de ${char}`}>{char}<Show when={current().entry.characters.filter((part) => part === char).length > 1}><span class="block font-sans text-xs text-ink-soft">{index() + 1} de {current().entry.characters.length}</span></Show></button>}</For>
+                    <For each={current().entry.characters}>{(char, index) => {
+                      const gloss = () => (current().entry.characters.length > 1 ? characterGloss(char) : undefined);
+                      const repeated = () => current().entry.characters.filter((part) => part === char).length > 1;
+                      return (
+                        <button class="tile min-h-11 min-w-11 max-w-[8rem] px-3 py-1" onClick={() => props.onStrokes(char)} aria-label={`Practicar trazos de ${char}${gloss() ? `, ${gloss()}` : ''}${repeated() ? `, posición ${index() + 1} de ${current().entry.characters.length}` : ''}`}>
+                          <span class="block font-hanzi text-xl" lang="zh-CN">{char}</span>
+                          <Show when={gloss()}><span class="block truncate font-sans text-xs text-ink-soft">{gloss()}</span></Show>
+                          <Show when={repeated()}><span class="block font-sans text-xs text-ink-soft">{index() + 1} de {current().entry.characters.length}</span></Show>
+                        </button>
+                      );
+                    }}</For>
                   </div>
                 </Show>
-                <Show when={feedback()}>{(value) => (
-                  <p role="status" class="mt-3 inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-semibold animate-pop" classList={{ 'bg-jade/15 text-jade': value() === 'good', 'bg-ink/10 text-ink': value() === 'hard', 'bg-seal/15 text-seal': value() === 'again' }}>
-                    {value() === 'again' ? 'Vuelve en unas tarjetas' : value() === 'hard' ? 'Casi' : 'Bien'}
+                {/* After a wrong pick, the mix-up itself is the lesson: name both words. A grade label would say nothing on day one. */}
+                <Show when={feedback() && choosing() && wrongPicks().length > 0 ? pool.concat(allWords()).find((entry) => entry.id === wrongPicks()[0]) : undefined} fallback={
+                  <Show when={feedback()}>{(value) => (
+                    <p role="status" class="mt-3 inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-semibold animate-pop" classList={{ 'bg-jade/15 text-jade': value() === 'good', 'bg-ink/10 text-ink': value() === 'hard', 'bg-seal/15 text-seal': value() === 'again' }}>
+                      {value() === 'again' ? 'Vuelve en unas tarjetas' : value() === 'hard' ? 'Casi' : 'Bien'}
+                    </p>
+                  )}</Show>
+                }>{(wrong) => (
+                  <p role="status" class="mt-3 max-w-[19rem] rounded-xl bg-seal-soft/60 px-4 py-2 text-sm leading-snug text-ink animate-pop">
+                    Tocaste <span class="font-hanzi text-base" lang="zh-CN">{wrong().simplified}</span> {wrong().pinyin}, «{displayGloss(wrong()).split(';')[0].toLowerCase()}». <span class="font-hanzi text-base" lang="zh-CN">{current().entry.simplified}</span> es «{displayGloss(current().entry).split(';')[0].toLowerCase()}».{feedback() === 'again' ? ' Vuelve en unas tarjetas.' : ''}
                   </p>
                 )}</Show>
                 <Show when={!revealed() && step() !== 'learn' && prompt() === 'meaning'}><p class="mt-8 text-sm text-ink-soft">¿Qué significa esta palabra?</p></Show>
@@ -518,11 +594,12 @@ const VocabularyReview: Component<Props> = (props) => {
               <Show when={error() || progress.storageError()}><p role="alert" class="mb-2 text-sm text-seal">No se pudo guardar el progreso en este dispositivo.</p></Show>
               <Show when={step() === 'learn'} fallback={
                 <Show when={revealed()} fallback={
-                  <Show when={prompt() === 'pick'} fallback={<button class="btn-ink h-14 w-full" onClick={() => setRevealed(true)}>Mostrar respuesta</button>}>
+                  <Show when={choosing()} fallback={<button class="btn-ink h-14 w-full" onClick={() => setRevealed(true)}>Mostrar respuesta</button>}>
                     <button class="btn-quiet h-14 w-full" onClick={dontKnow}>No lo sé</button>
                   </Show>
                 }>
-                  <Show when={held()} fallback={<GradeButtons onGrade={grade} disabled={feedback() !== null} suggested={feedback()} />}>
+                  {/* A pick grades itself: no grade bar to read, just a way on. */}
+                  <Show when={held() || choosing()} fallback={<GradeButtons onGrade={grade} disabled={feedback() !== null} suggested={feedback()} />}>
                     <button class="btn-ink h-14 w-full" onClick={next}>Continuar</button>
                   </Show>
                 </Show>
@@ -537,7 +614,9 @@ const VocabularyReview: Component<Props> = (props) => {
       </Show>
       <SessionLeaveSheet open={leaving()} answeredBeforePause={answeredBeforePause} onStay={() => setLeaving(false)} onPause={props.onBack} onDiscard={discardAndLeave} />
       <ScoreModal
-        summary={finished() ? { ...counts(), total: counts().again + counts().hard + counts().good, percentage: (() => { const total = counts().again + counts().hard + counts().good; return total ? Math.round(((counts().good + counts().hard / 2) / total) * 100) : 0; })(), streak: Math.max(progress.daily.streak, charProgress.daily.streak) } : null}
+        summary={finished() ? { ...reviewCounts(), total: reviewCounts().again + reviewCounts().hard + reviewCounts().good, percentage: (() => { const total = reviewCounts().again + reviewCounts().hard + reviewCounts().good; return total ? Math.round(((reviewCounts().good + reviewCounts().hard / 2) / total) * 100) : 0; })(), streak: Math.max(progress.daily.streak, charProgress.daily.streak) } : null}
+        learned={taught().filter((entry) => !progress.isNew(entry.id)).map((entry) => ({ character: entry.simplified, pinyin: entry.pinyin, meaning: displayGloss(entry).split(';')[0], struggled: !!results()[entry.id] && results()[entry.id] !== 'good' }))}
+        tomorrow={finished() && mode !== 'practice' ? progress.dueByTomorrow(pool) : undefined}
         weakChange={weakPractice && finished() ? { before: weakBefore, after: pool.filter(isWeak).length, recovered: recovered() } : undefined}
         weakNow={finished() ? pool.filter(isWeak).length : undefined}
         missed={missed().map(asItem)}

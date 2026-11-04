@@ -1,4 +1,4 @@
-import { afterAnswer, schedule } from '../domain/progress/schedule';
+import { afterAnswer, schedule, startOfDay, endOfDay } from '../domain/progress/schedule';
 import { reconcile, unwrap } from 'solid-js/store';
 import { parseProgress } from '../domain/progress/serialization';
 import {
@@ -7,7 +7,6 @@ import {
   CHAR_NEW_PER_DAY,
   CLEAN_TO_RECOVER,
   currentDaily,
-  isDueProgress,
   isNewProgress,
   isWeakProgress,
   MASTERED_INTERVAL,
@@ -159,7 +158,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
     grade(char: string, grade: Grade, options: { free?: boolean } = {}) {
       const now = Date.now();
       const isNew = !state.chars[char] || state.chars[char].right + state.chars[char].wrong === 0;
-      update(char, (p) => ({ ...schedule(p, grade, now), lastSeen: now }));
+      update(char, (p) => ({ ...schedule(p, grade, now, { sameDay: (p.lastReview ?? 0) >= startOfDay(now) }), lastSeen: now }));
       const daily = currentDaily(state.daily);
       setState('daily', {
         ...daily,
@@ -204,6 +203,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
         right: p.right + (correct ? 1 : 0),
         wrong: p.wrong + (correct ? 0 : 1),
         clean: afterAnswer(p.clean, correct ? 'good' : 'again'),
+        due: correct ? p.due : Math.min(p.due, startOfDay(Date.now() + DAY_MS)),
         lastSeen: Date.now(),
       }));
       // Practice still counts on the calendar, the same moment it is answered.
@@ -231,7 +231,8 @@ export const createProgressStore = (doc: ProgressDocument) => {
     },
 
     isDue(char: string, now = Date.now()): boolean {
-      return isDueProgress(state.chars[char], now);
+      const p = state.chars[char];
+      return !!p && !this.isNew(char) && p.due < endOfDay(now);
     },
 
     /** Recognised reliably enough to be asked to write it from memory. */
