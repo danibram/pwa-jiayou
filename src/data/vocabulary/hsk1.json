@@ -226,7 +226,7 @@
     "simplified": "的",
     "traditional": "的",
     "pinyin": "de",
-    "meaning": "partícula posesiva",
+    "meaning": "partícula posesiva y atributiva; énfasis",
     "level": 1,
     "characters": [
       "的"
@@ -365,7 +365,7 @@
     "simplified": "多",
     "traditional": "多",
     "pinyin": "duō",
-    "meaning": "mucho; muchos",
+    "meaning": "mucho; ¿cuánto? (cantidad o grado)",
     "level": 1,
     "characters": [
       "多"
@@ -492,7 +492,7 @@
     "simplified": "个",
     "traditional": "個",
     "pinyin": "gè",
-    "meaning": "(clasificador general)",
+    "meaning": "clasificador general para personas y unidades",
     "level": 1,
     "characters": [
       "个"
@@ -509,7 +509,7 @@
     "simplified": "工作",
     "traditional": "工作",
     "pinyin": "gōng zuò",
-    "meaning": "trabajar",
+    "meaning": "trabajo; trabajar",
     "level": 1,
     "characters": [
       "工",
@@ -1119,7 +1119,7 @@
     "simplified": "能",
     "traditional": "能",
     "pinyin": "néng",
-    "meaning": "poder",
+    "meaning": "poder; ser capaz de",
     "level": 1,
     "characters": [
       "能"
@@ -1398,7 +1398,7 @@
     "simplified": "上",
     "traditional": "上",
     "pinyin": "shàng",
-    "meaning": "arriba; subir; anterior",
+    "meaning": "arriba; subir; sobre; anterior",
     "level": 1,
     "characters": [
       "上"
@@ -1429,7 +1429,7 @@
     "simplified": "少",
     "traditional": "少",
     "pinyin": "shǎo",
-    "meaning": "poco; faltar",
+    "meaning": "poco; pocos; faltar",
     "level": 1,
     "characters": [
       "少"
@@ -1722,7 +1722,7 @@
     "simplified": "喂",
     "traditional": "喂",
     "pinyin": "wèi",
-    "meaning": "¡oye!; ¿diga? (teléfono)",
+    "meaning": "¿diga? (al teléfono); hola",
     "level": 1,
     "characters": [
       "喂"
@@ -2320,7 +2320,7 @@
     "simplified": "坐",
     "traditional": "坐",
     "pinyin": "zuò",
-    "meaning": "sentarse; ir en",
+    "meaning": "sentarse; ir en (un transporte)",
     "level": 1,
     "characters": [
       "坐"
@@ -2361,5 +2361,118 @@
       "好"
     ],
     "sourceId": "curated-extra"
+  },
+  {
+    "id": "word-996d-5e97-fan4-dian4",
+    "simplified": "饭店",
+    "traditional": "飯店",
+    "pinyin": "fàn diàn",
+    "meaning": "restaurante; hotel",
+    "level": 1,
+    "characters": [
+      "饭",
+      "店"
+    ],
+    "topicIds": [
+      "comida",
+      "lugares"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-6ca1-6709-mei2-you3",
+    "simplified": "没有",
+    "traditional": "沒有",
+    "pinyin": "méi yǒu",
+    "meaning": "no tener; no haber",
+    "level": 1,
+    "characters": [
+      "没",
+      "有"
+    ],
+    "topicIds": [
+      "gramatica"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-54ea-513f-nar3",
+    "simplified": "哪儿",
+    "traditional": "哪兒",
+    "pinyin": "nǎr",
+    "meaning": "dónde",
+    "level": 1,
+    "characters": [
+      "哪",
+      "儿"
+    ],
+    "topicIds": [
+      "preguntas"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-90a3-513f-nar4",
+    "simplified": "那儿",
+    "traditional": "那兒",
+    "pinyin": "nàr",
+    "meaning": "allí",
+    "level": 1,
+    "characters": [
+      "那",
+      "儿"
+    ],
+    "topicIds": [
+      "direcciones"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-8bf4-shuo",
+    "simplified": "说",
+    "traditional": "說",
+    "pinyin": "shuō",
+    "meaning": "decir",
+    "level": 1,
+    "characters": [
+      "说"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-4e00-70b9-513f-yi-dianr3",
+    "simplified": "一点儿",
+    "traditional": "一點兒",
+    "pinyin": "yī diǎnr",
+    "meaning": "un poco",
+    "level": 1,
+    "characters": [
+      "一",
+      "点",
+      "儿"
+    ],
+    "topicIds": [
+      "numeros",
+      "clasificadores"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-53f7-hao4",
+    "simplified": "号",
+    "traditional": "號",
+    "pinyin": "hào",
+    "meaning": "número; día del mes",
+    "level": 1,
+    "characters": [
+      "号"
+    ],
+    "topicIds": [
+      "numeros"
+    ],
+    "sourceId": "hsk-2-0"
   }
 ]

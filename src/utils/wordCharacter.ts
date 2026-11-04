@@ -1,4 +1,4 @@
-import { allWords } from '../stores/myWordsStore';
+import { allWords } from '../data/vocabulary';
 import type { HSKCharacter } from '../types';
 import { characterRecord } from './characterSearch';
 import { pinyinParts } from './pinyin';

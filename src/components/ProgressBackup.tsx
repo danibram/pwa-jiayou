@@ -1,13 +1,11 @@
 import { createSignal, Show } from 'solid-js';
 import { parseProgress, progressStore } from '../stores/progressStore';
-import { myWordsStore } from '../stores/myWordsStore';
 import { notifyProgressReset } from '../utils/progressReset';
-import { isRecord } from '../utils/parse';
 import { discardSession } from '../utils/sessionStore';
 import { discardAllVocabularySessions } from '../utils/vocabularySession';
 
-/** The progress file, with the learner's own word list alongside. Older files have no `myWords`. */
-const backupFile = () => JSON.stringify({ ...JSON.parse(progressStore.exportBackup()), myWords: myWordsStore.exportData() });
+/** The progress file. Files from before Extra may carry a `myWords` list, which import ignores. */
+const backupFile = () => progressStore.exportBackup();
 
 const downloadBackup = () => {
   const url = URL.createObjectURL(new Blob([backupFile()], { type: 'application/json' }));
@@ -33,13 +31,13 @@ export function ProgressStorageNotice() {
     }
   };
   return (
-    <Show when={progressStore.storageError() || myWordsStore.storageError()}>
+    <Show when={progressStore.storageError()}>
       {(error) => (
         <aside role="alert" class="sheet fixed inset-x-4 top-4 z-50 mx-auto max-w-md p-4 text-ink">
           <p class="font-semibold">Problema al guardar el progreso</p>
           <p class="mt-1 text-sm text-ink-soft">{typeof error() === 'string' ? error() : 'No se pudieron guardar tus palabras. Exporta una copia antes de cerrar la app.'}</p>
           <div class="mt-3 flex flex-wrap gap-2">
-            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => { if (progressStore.storageError()) progressStore.retrySave(); if (myWordsStore.storageError()) myWordsStore.retrySave(); }}>Reintentar</button>
+            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => progressStore.retrySave()}>Reintentar</button>
             <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={downloadBackup}>Exportar copia</button>
             <Show when={progressStore.storageError()}><button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(true)}>Recuperar progreso guardado</button></Show>
           </div>
@@ -75,8 +73,6 @@ export default function ProgressBackup() {
       if (requestId !== readRequest) return;
       // Validate before asking the user to replace their progress.
       const parsed = parseProgress(text);
-      const saved: unknown = JSON.parse(text);
-      if (isRecord(saved) && saved.myWords !== undefined) myWordsStore.checkData(saved.myWords);
       setBackupCounts({ chars: Object.keys(parsed.chars).length, words: Object.keys(parsed.words).length });
       setPending(text);
       setMessage('');
@@ -90,11 +86,7 @@ export default function ProgressBackup() {
     const raw = pending();
     if (!raw) return;
     try {
-      // Check the word list before anything is replaced, so a bad file changes nothing.
-      const saved: unknown = JSON.parse(raw);
-      const myWords = isRecord(saved) && saved.myWords !== undefined ? myWordsStore.checkData(saved.myWords) : undefined;
       progressStore.importBackup(raw);
-      if (myWords) myWordsStore.importData(myWords);
       signalProgressReplaced();
       setMessage('Copia restaurada.');
       setPending(undefined);

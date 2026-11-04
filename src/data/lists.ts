@@ -1,8 +1,7 @@
 import type { HskLevel } from '../types';
-import { findWord, myWordsStore } from '../stores/myWordsStore';
-import { vocabularyByLevel, vocabularyLevels, type VocabularyEntry } from './vocabulary';
+import { extraVocabulary, vocabularyByLevel, vocabularyLevels, type VocabularyEntry } from './vocabulary';
 
-/** What the learner studies. The HSK levels ship with the app; "Mis palabras" is the learner's own. */
+/** What the learner studies: the HSK levels and the Extra list, all curated in the content editor. */
 export type ListId = string;
 
 export interface StudyList {
@@ -15,7 +14,8 @@ export interface StudyList {
 
 export const hskListId = (level: HskLevel): ListId => `hsk-${level}`;
 
-export const MY_WORDS_LIST: ListId = 'mine';
+/** Words outside HSK. Offered in the list picker even while empty, so learners can opt in to later releases. */
+export const EXTRA_LIST: ListId = 'extra';
 
 const hskLists: StudyList[] = vocabularyLevels.map((level) => ({
   id: hskListId(level),
@@ -24,10 +24,10 @@ const hskLists: StudyList[] = vocabularyLevels.map((level) => ({
   hskLevel: level,
 }));
 
-/** Every list, the learner's own last. Its words change as the learner adds them, so read it each time. */
+/** Every list, Extra last. */
 export const studyLists = (): StudyList[] => [
   ...hskLists,
-  { id: MY_WORDS_LIST, title: 'Mis palabras', words: myWordsStore.words() },
+  { id: EXTRA_LIST, title: 'Extra', words: extraVocabulary },
 ];
 
 export const DEFAULT_LIST: ListId = hskListId(1);
@@ -46,8 +46,7 @@ export const wordsInLists = (ids: readonly ListId[]): VocabularyEntry[] => {
     for (const word of studyList(id)!.words) {
       if (seen.has(word.id)) continue;
       seen.add(word.id);
-      // A correction in Mis palabras wins over the stock HSK row.
-      out.push(findWord(word.id) ?? word);
+      out.push(word);
     }
   }
   return out;

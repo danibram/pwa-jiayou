@@ -7,13 +7,13 @@ import HomeProgress, { type ProgressSnapshot } from '../components/HomeProgress'
 import LevelChips from '../components/LevelChips';
 import { summarizeProgress, type ProgressSummary } from '../utils/progressSummary';
 import { agree, countNoun, type NounKind } from '../utils/countNoun';
-import { canLearnNew, DAILY_NEW_RULE_TEXT, progressStore, WORD_NEW_PER_DAY } from '../stores/progressStore';
+import { canLearnNew, DAILY_NEW_RULE_TEXT, progressStore, SESSION_SIZE, WORD_NEW_PER_DAY } from '../stores/progressStore';
 import ActivityCalendar from '../components/ActivityCalendar';
 import Pinyin from '../components/Pinyin';
 import { createDialogFocus } from '../utils/dialog';
 import type { HomeTarget } from '../screen';
 import { vocabularyByLevel } from '../data/vocabulary';
-import { allWords } from '../stores/myWordsStore';
+import { allWords } from '../data/vocabulary';
 import { vocabularyProgressStore } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { prepareListMedia } from '../utils/levelPacks';
@@ -25,7 +25,7 @@ interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
 }
 
-type Step = { kind: 'more'; n: number } | { kind: 'weak'; n: number } | { kind: 'write' } | { kind: 'all' } | { kind: 'done' };
+type Step = { kind: 'more'; n: number } | { kind: 'weak'; n: number } | { kind: 'all' } | { kind: 'done' };
 
 /**
  * Under a closed day. The headline already says "Hecho por hoy", so there is no second button
@@ -34,14 +34,12 @@ type Step = { kind: 'more'; n: number } | { kind: 'weak'; n: number } | { kind: 
 const NextAction: Component<{
   next: Step;
   onMore: () => void;
-  onWrite?: () => void;
   onAll: () => void;
 }> = (props) => {
   const extra = () => {
     const next = props.next;
     // Flojos already has its own link in the progress card.
     if (next.kind === 'more') return { label: `aprender ${next.n} más`, go: props.onMore };
-    if (next.kind === 'write' && props.onWrite) return { label: 'practicar escritura', go: props.onWrite };
     if (next.kind === 'all') return { label: 'repasar todo', go: props.onAll };
     return null;
   };
@@ -75,7 +73,7 @@ const CapNote: Component<{ limit: number; kind: NounKind }> = (props) => {
       </p>
       <Show when={open()}>
         <p class="mt-1.5 text-xs leading-relaxed">
-          Lo nuevo se fija repasándolo en los días siguientes. Con {DAILY_NEW_RULE_TEXT}, los repasos de mañana siguen siendo pocos y se te queda más.
+          Lo nuevo se fija repasándolo en los días siguientes: cada palabra vuelve unas cinco veces en el primer mes. Con {DAILY_NEW_RULE_TEXT}, los repasos no se acumulan y se te queda más.
         </p>
       </Show>
     </div>
@@ -149,7 +147,8 @@ const Home: Component<HomeProps> = (props) => {
   /** What the CTA offers once nothing is pending today. The daily cap decides whether "more" is possible. */
   const wordNext = (): Step => {
     const unseen = words().filter((word) => vocabularyProgressStore.isNew(word.id)).length;
-    const n = Math.min(10, unseen, vocabularyProgressStore.newLeftToday());
+    // Tomorrow's reviews are already heavy: more new words today would pile them higher.
+    const n = vocabularyProgressStore.canLearnMore(words()) ? Math.min(10, unseen, vocabularyProgressStore.newLeftToday()) : 0;
     if (n > 0) return { kind: 'more', n };
     if (wordSummary().weak > 0) return { kind: 'weak', n: wordSummary().weak };
     if (unseen === 0) return { kind: 'all' };
@@ -174,12 +173,17 @@ const Home: Component<HomeProps> = (props) => {
   });
 
   const wordLevelLabel = () => vocabularyStore.listLabel();
+  /** About eight seconds a card: a review is one card, a new word three (lesson, pick, recognition). */
+  const sessionMinutes = () => Math.max(1, Math.round(((wordQueue().due.length + wordQueue().fresh.length * 3) * 8) / 60));
+  const practisedToday = () => (progressStore.activity()[new Date().toLocaleDateString('sv-SE')] ?? 0) > 0;
 
   const wordTodayLine = () => {
     const dueN = wordQueue().due.length;
     const freshN = wordQueue().fresh.length;
     if (dueN === 0 && freshN === 0) return restLine(wordNext(), true);
-    const review = dueN === 1 ? '1 repaso' : `${dueN} repasos`;
+    const total = wordQueue().dueTotal;
+    // The session takes twenty at a time; the line says how many are really waiting.
+    const review = total > dueN ? `${dueN} de ${total} repasos` : dueN === 1 ? '1 repaso' : `${dueN} repasos`;
     const fresh = `${freshN} ${agree(freshN, 'word', 'nuev')}`;
     if (dueN === 0) return `Hoy: ${fresh}.`;
     if (freshN === 0) return `Hoy: ${review}.`;
@@ -212,12 +216,6 @@ const Home: Component<HomeProps> = (props) => {
       title: 'Repasar todo',
       body: 'Las palabras elegidas',
       go: () => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: '__all__' }),
-    },
-    {
-      glyph: '词',
-      title: 'Mis palabras',
-      body: 'Tu lista personal',
-      go: () => props.onNavigate({ page: 'mis-palabras' }),
     },
     {
       glyph: '设',
@@ -292,7 +290,7 @@ const Home: Component<HomeProps> = (props) => {
         <img src="/icon.svg" alt="" class="h-10 w-10 shrink-0 rounded-[0.7rem] shadow-lift rotate-[-3deg]" />
         <div class="min-w-0 flex-1 leading-tight">
           <div class="font-sans text-[1.375rem] font-semibold tracking-tight">Jiāyóu</div>
-          <div class="truncate text-xs text-ink-faint">Vocabulario chino por niveles HSK</div>
+          <div class="truncate text-xs text-ink-faint">Vocabulario chino HSK</div>
         </div>
         <Show when={streak() > 0}>
           <div
@@ -311,7 +309,10 @@ const Home: Component<HomeProps> = (props) => {
           <p class="font-display text-[1.65rem] font-semibold leading-snug text-balance">
             {wordTodayLine()}
           </p>
-          <p class="mt-0.5 text-sm text-ink-soft">De {wordLevelLabel()}</p>
+          <p class="mt-0.5 text-sm text-ink-soft">De {wordLevelLabel()}<Show when={wordPending() > 0}> · unos {sessionMinutes()} min</Show></p>
+          <Show when={streak() > 0 && !practisedToday()}>
+            <p class="mt-1 text-sm font-medium text-ink">Practica hoy para llegar a {streak() + 1} días seguidos.</p>
+          </Show>
           <HomeProgress summary={wordSummary()} feminine previous={previousWords} today={wordToday()} onWeak={() => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: '__weak__' })} />
           <div class="mt-4">
             <LevelChips
@@ -339,6 +340,11 @@ const Home: Component<HomeProps> = (props) => {
           </div>
           <Show when={!canLearnNew('word') && words().some((word) => vocabularyProgressStore.isNew(word.id))}>
             <CapNote limit={WORD_NEW_PER_DAY} kind="word" />
+          </Show>
+          <Show when={canLearnNew('word') && wordQueue().dueTotal >= SESSION_SIZE && words().some((word) => vocabularyProgressStore.isNew(word.id))}>
+            <p class="mt-3 rounded-tile bg-line/30 px-3 py-2.5 text-sm text-ink-soft">
+              Hoy toca ponerse al día. Las palabras nuevas vuelven cuando bajen los repasos.
+            </p>
           </Show>
           <Show when={wordPending() === 0 && words().some((word) => vocabularyProgressStore.isNew(word.id)) === false}>
             <p class="mt-4 text-sm text-ink-soft">
