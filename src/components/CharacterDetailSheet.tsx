@@ -7,9 +7,8 @@ import Pinyin from './Pinyin';
 import ToneNeighbors from './ToneNeighbors';
 import { StatusTag, type StudyStatus } from './TopicProgress';
 import type { VocabularyEntry } from '../data/vocabulary';
-import { allWords } from '../data/vocabulary';
+import { vocabularyStore } from '../stores/vocabularyStore';
 import { levelRank } from '../utils/wordOrder';
-import { characterStore } from '../stores/characterStore';
 import type { KnownCharacter } from '../utils/wordCharacter';
 import { charactersWithRadical, indexRowFor } from '../utils/characterSearch';
 import { displayGloss, glossHead } from '../utils/glossDisplay';
@@ -39,27 +38,23 @@ interface CharacterDetailSheetProps {
 }
 
 /**
- * Up to six HSK words that use the character: the character as a word of its own first,
- * then the levels you study, then the lowest level.
+ * Up to six words of the checked lists that use the character: the character as a word of its own
+ * first, then the lowest level.
  */
-/** Extra words have no level, so they rank with the levels being studied. */
-const wordsWith = (char: string, studying: readonly number[], currentWordId?: string) => {
-  const studied = (word: VocabularyEntry) => (word.level ? studying.includes(word.level) : true);
-  return allWords()
-    .filter((word) => word.characters.includes(char) && word.id !== currentWordId)
+const wordsWith = (char: string, currentWordId?: string) =>
+  vocabularyStore.getSelectedWords()
+    .filter((word: VocabularyEntry) => word.characters.includes(char) && word.id !== currentWordId)
     .sort((a, b) =>
       Number(b.simplified === char) - Number(a.simplified === char) ||
-      Number(studied(b)) - Number(studied(a)) ||
       levelRank(a) - levelRank(b) ||
       a.simplified.length - b.simplified.length)
     .slice(0, 6);
-};
 
 /** One look at a character, the same from search, a word page or anywhere else. Nothing here changes what you study. */
 const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
   const char = () => props.character;
   const [loadedStrokes, setLoadedStrokes] = createSignal(0);
-  const words = createMemo(() => wordsWith(char().character, characterStore.state.selectedLevels, props.currentWordId));
+  const words = createMemo(() => wordsWith(char().character, props.currentWordId));
   const headline = () => glossHead(mainMeaning(char()));
   const fold = (text: string) => text.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').trim();
   /** The extra senses, minus any the headline already says. */
@@ -97,7 +92,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
     const r = char().radical;
     if (!r || r === char().character) return undefined;
     const row = indexRowFor(r);
-    return { char: r, pinyin: row?.pinyin, gloss: row ? glossHead(row.gloss) : undefined, siblings: charactersWithRadical(r, char().character).slice(0, 6) };
+    return { char: r, pinyin: row?.pinyin, gloss: row ? glossHead(row.gloss) : undefined, siblings: charactersWithRadical(r, char().character, vocabularyStore.studiedLevels()).slice(0, 6) };
   };
 
   return (

@@ -25,6 +25,18 @@
       ],
       "port": 4318,
       "url": "http://127.0.0.1:4318"
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "preview",
+        "--port",
+        "4173",
+        "--strictPort"
+      ],
+      "port": 4173
     }
   ]
 }

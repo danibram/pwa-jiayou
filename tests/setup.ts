@@ -9,6 +9,15 @@ Object.defineProperty(globalThis, '__CONTENT__', {
   value: JSON.parse(readFileSync(`${process.cwd()}/public/packs/content.json`, 'utf8')),
 });
 
+// Vite also counts each level's words at build time, so pickers know a list's size before it downloads.
+Object.defineProperty(globalThis, '__WORD_COUNTS__', {
+  configurable: true,
+  value: Object.fromEntries([1, 2, 3, 4, 5, 6].map((level) => [
+    level,
+    JSON.parse(readFileSync(`${process.cwd()}/src/data/vocabulary/hsk${level}.json`, 'utf8')).length,
+  ])),
+});
+
 class MemoryStorage implements Storage {
   private items = new Map<string, string>();
 
@@ -70,7 +79,10 @@ globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
   if (!url.startsWith('/')) return realFetch(input, init);
   const { readFile } = await import('node:fs/promises');
   try {
-    const body = await readFile(`${process.cwd()}/public${decodeURIComponent(url.split('?')[0])}`);
+    const path = decodeURIComponent(url.split('?')[0]);
+    // A level's words are served from the editor's source list, as vite.config.ts does.
+    const words = /^\/packs\/hsk(\d)\/words\.json$/.exec(path);
+    const body = await readFile(words ? `${process.cwd()}/src/data/vocabulary/hsk${words[1]}.json` : `${process.cwd()}/public${path}`);
     return new Response(body, { status: 200, headers: { 'content-type': 'application/json' } });
   } catch {
     return new Response(null, { status: 404 });

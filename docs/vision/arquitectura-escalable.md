@@ -17,7 +17,7 @@ El objetivo es que el salto a una API con cuentas y sincronización entre dispos
 4. A cada registro de progreso le falta un `updatedAt`. `lastSeen` no sirve para eso.
 5. Para resolver conflictos recomiendo last-write-wins por registro (un carácter o una palabra), con un `deviceId` de desempate. CRDT y last-write-wins por campo cuestan más y, en el segundo caso, rompen la coherencia del repaso espaciado.
 6. Diez módulos leen o escriben localStorage por su cuenta. Una capa de persistencia síncrona con claves centralizadas es la primera PR y no cambia comportamiento.
-7. El contenido está empaquetado de forma desigual. Las seis listas de vocabulario y el índice de búsqueda van en el JS, los caracteres 2 a 6 van en packs. La caché de packs se invalida entera con cualquier cambio de audio.
+7. El contenido está empaquetado de forma desigual. Las seis listas de vocabulario y el índice de búsqueda van en el JS, los caracteres 2 a 6 van en packs. La caché de packs se invalida entera con cualquier cambio de audio. (4 de noviembre de 2026: las palabras de HSK 2 a 6 ya van en los packs y cada pack tiene su caché. Ver [como-funciona.md](como-funciona.md).)
 8. El `api/` en Bun es una herramienta editorial que escribe en el repo. Sirve para lo que hace y debe seguir separada de la futura API de usuarios, compartiendo tipos y `wordId`.
 9. La navegación sin router aguanta. Le falta traducir `Screen` a URL y de vuelta, algo que cabe junto a `parseScreen`.
 10. El plan tiene tres fases. Primero refactors sin cambio de comportamiento, después preparar el modelo de datos sin servidor, y la API cuando exista.
@@ -217,7 +217,7 @@ IndexedDB no hace falta hoy. Con el checkpoint acotado, el progreso completo cab
 
 Este reparto tiene tres problemas.
 
-1. El reparto es desigual. Las 4.992 palabras van en el JS desde el primer arranque, pero los caracteres de HSK 2 a 6 se descargan por nivel.
+1. El reparto es desigual. Las 4.992 palabras van en el JS desde el primer arranque, pero los caracteres de HSK 2 a 6 se descargan por nivel. Resuelto el 4 de noviembre de 2026, solo HSK 1 va en el JS ([como-funciona.md](como-funciona.md)).
 2. La versión de la caché de medios es un único hash de todo `public/packs` y `public/audio` (`vite.config.ts:8-18`). Cambiar un MP3 invalida todos los packs de todos los usuarios. `previousCopy` (`levelPacks.ts:101-114`) lo compensa copiando la versión vieja marcada con `x-jiayou-stale`.
 3. Los `manifest.json` de cada pack (`scripts/build-media-packs.mjs:83-92`) tienen recuentos pero no versión ni hash, y la app no los lee.
 

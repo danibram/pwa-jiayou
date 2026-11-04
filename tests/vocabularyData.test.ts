@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sensesText } from '../src/data/wordSenses';
+import { vocabulary, vocabularyByLevel } from './fixtures/levelWords';
 import {
-  vocabulary,
-  vocabularyByLevel,
   vocabularyCoverage,
   officialCounts,
   vocabularySources,

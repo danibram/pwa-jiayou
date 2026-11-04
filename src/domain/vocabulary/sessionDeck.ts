@@ -1,4 +1,4 @@
-import { vocabulary, type VocabularyEntry } from '../../data/vocabulary';
+import { catalogWords, type VocabularyEntry } from '../../data/vocabulary';
 import { leadSense } from '../../data/wordSenses';
 import { levelRank } from '../../utils/wordOrder';
 import { shuffle } from '../../utils/shuffle';
@@ -71,7 +71,7 @@ const sharesSense = (entry: VocabularyEntry, sense: string) => senses(entry).som
 export const askGloss = (entry: VocabularyEntry): { text: string; hint?: string } => {
   const [first = leadSense(entry.senses), second] = senses(entry);
   const sense = first.toLowerCase();
-  const clash = vocabulary.some((other) => other.simplified !== entry.simplified && other.level <= Math.max(levelRank(entry), 3) && sharesSense(other, sense));
+  const clash = catalogWords().some((other) => other.simplified !== entry.simplified && other.level <= Math.max(levelRank(entry), 3) && sharesSense(other, sense));
   if (!clash) return { text: first };
   if (second) return { text: `${first}, ${second}` };
   return { text: first, hint: entry.characters.length === 1 ? 'Un carácter' : `${entry.characters.length} caracteres` };
@@ -84,7 +84,7 @@ export const askGloss = (entry: VocabularyEntry): { text: string; hint?: string 
  * so the wrong ones are tempting and the pick tests the word, not a guess by shape.
  */
 export const pickChoices = (target: VocabularyEntry, pool: VocabularyEntry[], met: (entry: VocabularyEntry) => boolean = () => false): VocabularyEntry[] => {
-  const source = pool.length >= 8 ? pool : vocabulary;
+  const source = pool.length >= 8 ? pool : catalogWords();
   const sense = firstSense(target);
   const fits = (entry: VocabularyEntry) =>
     entry.id !== target.id && entry.simplified !== target.simplified && firstSense(entry) !== sense && !sharesSense(entry, sense);

@@ -7,7 +7,7 @@ import SessionProgress from '../components/SessionProgress';
 import TopBar from '../components/TopBar';
 import Pinyin from '../components/Pinyin';
 import RiceGrid from '../components/RiceGrid';
-import { vocabulary, type VocabularyEntry } from '../data/vocabulary';
+import { catalogWords, type VocabularyEntry } from '../data/vocabulary';
 import { allWords, findWord } from '../data/vocabulary';
 import { characterExample, characterGloss } from '../utils/wordParts';
 import { topicById } from '../data/topics';
@@ -124,7 +124,7 @@ interface Props {
 
 /** Another HSK word that shares a character, as a usage example. Not one of the word's own parts (好 in 你好): the tiles already show those. */
 const relatedWord = (entry: VocabularyEntry) =>
-  vocabulary.find((other) =>
+  catalogWords().find((other) =>
     other.id !== entry.id &&
     other.simplified !== entry.simplified &&
     !entry.simplified.includes(other.simplified) &&

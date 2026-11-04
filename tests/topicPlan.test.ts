@@ -3,7 +3,7 @@ import { WORD_NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { topicPlan, topicWords } from '../src/utils/topicPlan';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 
 vi.mock('../src/data/vocabulary/extra.json', async () => ({ default: (await import('./fixtures/extraWords')).extraWords }));
 

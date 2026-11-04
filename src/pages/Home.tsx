@@ -13,7 +13,7 @@ import ActivityCalendar from '../components/ActivityCalendar';
 import Pinyin from '../components/Pinyin';
 import { createDialogFocus } from '../utils/dialog';
 import type { HomeTarget } from '../screen';
-import { vocabularyByLevel } from '../data/vocabulary';
+import { levelWords, wordCount } from '../data/vocabulary';
 import { allWords } from '../data/vocabulary';
 import { vocabularyProgressStore } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
@@ -191,12 +191,12 @@ const Home: Component<HomeProps> = (props) => {
   ];
 
   const masteredWordsIn = (lvl: (typeof wordLevels)[number]) =>
-    vocabularyByLevel[lvl].filter((word) => vocabularyProgressStore.isMastered(word.id)).length;
+    levelWords(lvl).filter((word) => vocabularyProgressStore.isMastered(word.id)).length;
 
   const learningWordsIn = (lvl: (typeof wordLevels)[number]) =>
-    vocabularyByLevel[lvl].filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id)).length;
+    levelWords(lvl).filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id)).length;
 
-  /** Strokes and audio for newly ticked words download behind the page; the words themselves are already here. */
+  /** A newly ticked level downloads its words, then their strokes and audio, behind the page. */
   const [mediaSave, setMediaSave] = createSignal<{ done: number; total: number }>();
   const [mediaFailed, setMediaFailed] = createSignal(false);
   let mediaRun = 0;
@@ -284,7 +284,7 @@ const Home: Component<HomeProps> = (props) => {
               levels={wordLevels}
               isSelected={levelOn}
               onToggle={pickWordLevel}
-              count={(lvl) => vocabularyByLevel[lvl].length}
+              count={wordCount}
               mastered={masteredWordsIn}
               learning={learningWordsIn}
               unit="palabras"

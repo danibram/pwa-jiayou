@@ -1,5 +1,6 @@
 import { Component, For, Show, createMemo } from 'solid-js';
-import { allWords, findWord, type VocabularyEntry } from '../data/vocabulary';
+import type { VocabularyEntry } from '../data/vocabulary';
+import { vocabularyStore } from '../stores/vocabularyStore';
 import { relationGroups, type WordRelationKind } from '../data/wordRelations';
 import { leadSense } from '../data/wordSenses';
 import Pinyin from './Pinyin';
@@ -20,7 +21,7 @@ const short = (word: VocabularyEntry) => leadSense(word.senses);
 /** Curated synonym, antonym, classifier and related links, each drawn the way it reads. */
 const WordRelations: Component<Props> = (props) => {
   const groups = createMemo(() =>
-    relationGroups(props.word, findWord, allWords()).filter((group) => KINDS.includes(group.kind))
+    relationGroups(props.word, (id) => vocabularyStore.findSelectedWord(id), vocabularyStore.getSelectedWords()).filter((group) => KINDS.includes(group.kind))
       .sort((a, b) => KINDS.indexOf(a.kind) - KINDS.indexOf(b.kind)));
 
   const open = (word: VocabularyEntry) => () => props.onOpenWord(word.id);

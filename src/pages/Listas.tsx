@@ -31,7 +31,7 @@ const Listas: Component<ListasProps> = (props) => {
   };
 
   /** An empty Extra can be ticked to receive updates, but it alone gives nothing to study yet. */
-  const hasWords = () => chosen().some((id) => (studyList(id)?.words.length ?? 0) > 0);
+  const hasWords = () => chosen().some((id) => (studyList(id)?.total ?? 0) > 0);
 
   const save = () => {
     if (!hasWords()) return;
@@ -56,8 +56,8 @@ const Listas: Component<ListasProps> = (props) => {
           <For each={studyLists()}>
             {(list) => {
               const pack = list.hskLevel ? catalogLevel(list.hskLevel) : undefined;
-              const words = list.words.length === 1 ? '1 palabra' : `${list.words.length} palabras`;
-              const counts = list.words.length === 0 ? 'Sin palabras todavía. Llegan con las actualizaciones.' : `${words}${pack ? ` · ${pack.count} caracteres` : ''}`;
+              const words = list.total === 1 ? '1 palabra' : `${list.total} palabras`;
+              const counts = list.total === 0 ? 'Sin palabras todavía. Llegan con las actualizaciones.' : `${words}${pack ? ` · ${pack.count} caracteres` : ''}`;
               return (
               <li class="border-t border-line first:border-t-0">
                 <Show

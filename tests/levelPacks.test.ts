@@ -3,9 +3,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { characterStore } from '../src/stores/characterStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { wordsInLists } from '../src/stores/studyLists';
-import { applyListChoice, downloadState, loadInstalledPacks, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
+import { applyListChoice, downloadState, loadInstalledPacks, loadSelectedWords, packsForWords, readInstalledLevels, saveStudyMedia } from '../src/utils/levelPacks';
+import { allWords, hasLevelWords, levelWords, removeLevelWords, wordCount } from '../src/data/vocabulary';
 
-const body = (level: number) => readFileSync(`public/packs/hsk${level}.json`, 'utf8');
+/** What the server sends for a level's pack list, or for its word list (packs/hskN/words.json). */
+const body = (level: number, url = '') =>
+  readFileSync(url.includes('/words.json') ? `src/data/vocabulary/hsk${level}.json` : `public/packs/hsk${level}.json`, 'utf8');
 const strokeJson = '{"strokes":["M0 0"],"medians":[[[0,0],[1,1]]]}';
 
 describe('level packs', () => {
@@ -19,6 +22,8 @@ describe('level packs', () => {
     characterStore.removeLevel(2);
     characterStore.removeLevel(3);
     characterStore.reset();
+    vocabularyStore.reset();
+    for (const level of [2, 3, 4, 5, 6] as const) removeLevelWords(level);
     caches.clear();
     vi.stubGlobal('caches', {
       open: async (name: string) => {
@@ -45,7 +50,7 @@ describe('level packs', () => {
       if (url.endsWith('.mp3')) return new Response('audio', { status: 200, headers: { 'content-type': 'audio/mpeg' } });
       const level = url.includes('hsk3') ? 3 : url.includes('hsk2') ? 2 : 0;
       if (!level || url.includes('fail')) return new Response('', { status: 404 });
-      return new Response(body(level), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      return new Response(body(level, url), { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
   });
 
@@ -80,7 +85,7 @@ describe('level packs', () => {
       if (url.includes('syllables.json')) return new Response('[]', { status: 200, headers: { 'content-type': 'application/json' } });
       if (url.includes('hsk3')) return new Response('', { status: 404 });
       if (url.includes('/strokes/')) return new Response(strokeJson, { status: 200, headers: { 'content-type': 'application/json' } });
-      return new Response(body(2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      return new Response(body(2, url), { status: 200, headers: { 'Content-Type': 'application/json' } });
     });
     const download = applyListChoice(['hsk-1', 'hsk-2', 'hsk-3']);
     expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1', 'hsk-2', 'hsk-3']);
@@ -133,5 +138,59 @@ describe('level packs', () => {
     vi.stubGlobal('fetch', online);
     await saveStudyMedia();
     expect([...caches.get(hsk2)!.values()].some((response) => response.headers.get('x-jiayou-stale'))).toBe(false);
+  });
+
+  it('ships HSK 1 words only; the others are counted but not on the device', () => {
+    expect(levelWords(1).length).toBe(wordCount(1));
+    for (const level of [2, 3, 4, 5, 6] as const) {
+      expect(hasLevelWords(level)).toBe(false);
+      expect(levelWords(level)).toEqual([]);
+      expect(wordCount(level)).toBeGreaterThan(100);
+    }
+    expect(allWords().every((word) => !word.level || word.level === 1)).toBe(true);
+  });
+
+  it('downloads the words of an activated list into its pack, and drops them when the list goes', async () => {
+    const asked: string[] = [];
+    const serve = globalThis.fetch;
+    vi.stubGlobal('fetch', async (input: RequestInfo) => {
+      asked.push(String(input));
+      return serve(input);
+    });
+    await applyListChoice(['hsk-1', 'hsk-2']);
+    const wordFiles = asked.filter((url) => url.includes('/words.json'));
+    // HSK 2 words borrow HSK 3 characters, but only HSK 2 words come down.
+    expect(wordFiles).toHaveLength(1);
+    expect(wordFiles[0]).toMatch(/\/packs\/hsk2\/words\.json\?v=\w+/);
+    expect(levelWords(2).length).toBe(wordCount(2));
+    expect(hasLevelWords(3)).toBe(false);
+    const hsk2 = [...caches.keys()].find((name) => name.startsWith('jiayou-pack-hsk2-'))!;
+    expect([...caches.get(hsk2)!.keys()].some((key) => key.includes('/hsk2/words.json'))).toBe(true);
+    expect(vocabularyStore.getSelectedWords().some((word) => word.level === 2)).toBe(true);
+
+    await applyListChoice(['hsk-1']);
+    expect(hasLevelWords(2)).toBe(false);
+    expect(vocabularyStore.getSelectedWords().every((word) => word.level === 1)).toBe(true);
+  });
+
+  it('reads the studied words from the cache at start-up, without the network', async () => {
+    await applyListChoice(['hsk-1', 'hsk-2']);
+    // A fresh start: the words are only in the pack cache.
+    removeLevelWords(2);
+    vi.stubGlobal('fetch', async () => { throw new TypeError('offline'); });
+    await loadSelectedWords();
+    expect(levelWords(2).length).toBe(wordCount(2));
+  });
+
+  it('removes the cached words of a list that is turned off', async () => {
+    await applyListChoice(['hsk-1', 'hsk-2']);
+    expect(stored.keys().some((key) => key.includes('/hsk2/words.json'))).toBe(true);
+    // HSK 1 words still borrow HSK 2 characters, so the pack stays, but its words leave memory.
+    await applyListChoice(['hsk-1']);
+    expect(hasLevelWords(2)).toBe(false);
+    await applyListChoice(['hsk-1', 'hsk-3']).catch(() => {});
+    await applyListChoice(['hsk-1']);
+    expect(stored.keys().some((key) => key.includes('/hsk3/'))).toBe(false);
+    expect(hasLevelWords(3)).toBe(false);
   });
 });

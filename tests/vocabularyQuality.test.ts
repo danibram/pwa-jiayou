@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { leadSense, sensesText, WORD_POS, type WordSense } from '../src/data/wordSenses';
-import { vocabulary, vocabularyByLevel } from '../src/data/vocabulary';
+import { vocabulary, vocabularyByLevel } from './fixtures/levelWords';
 import { topics } from '../src/data/topics';
 
 // These rules check what a card, a list row or a review shows: the text of the first use.

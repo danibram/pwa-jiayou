@@ -53,7 +53,9 @@ const Trazos: Component<TrazosProps> = (props) => {
     const focus = props.focus;
     switch (focus.kind) {
       case 'topic': {
-        const base = charactersInTopic(focus.topicId, characterStore.state.characters);
+        // Only the levels being studied, not the packs borrowed for a few characters of their words.
+        const studied = characterStore.state.characters.filter((row) => characterStore.state.selectedLevels.includes(row.hsk_level));
+        const base = charactersInTopic(focus.topicId, studied);
         const seen = new Set(base.map((row) => row.character));
         // Extra words tagged with this topic add their characters after the catalog ones.
         const extras: StrokeCharacter[] = [];

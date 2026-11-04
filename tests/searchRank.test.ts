@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { sensesText } from '../src/data/wordSenses';
 import { searchCharacters } from '../src/utils/characterSearch';
 import { rankBy, searchScore } from '../src/utils/searchRank';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 
 const firstChars = (query: string) =>
   searchCharacters(query, []).slice(0, 3).map((hit) => (hit.kind === 'listed' ? hit.row.character : hit.character.character));

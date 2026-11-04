@@ -1,5 +1,5 @@
 import type { HskLevel } from '../types';
-import { extraVocabulary, vocabularyByLevel, vocabularyLevels, type VocabularyEntry } from './vocabulary';
+import { extraVocabulary, levelWords, vocabularyLevels, wordCount, type VocabularyEntry } from './vocabulary';
 
 /** What the learner studies: the HSK levels and the Extra list, all curated in the content editor. */
 export type ListId = string;
@@ -7,7 +7,10 @@ export type ListId = string;
 export interface StudyList {
   id: ListId;
   title: string;
-  words: VocabularyEntry[];
+  /** The words on the device. Empty for an HSK list until its pack is downloaded. */
+  readonly words: VocabularyEntry[];
+  /** How many words the list has, downloaded or not. */
+  readonly total: number;
   /** Set on the HSK lists. Character packs and the character lane still go by level. */
   hskLevel?: HskLevel;
 }
@@ -21,14 +24,17 @@ export const EXTRA_LIST: ListId = 'extra';
 export const hskLists: StudyList[] = vocabularyLevels.map((level) => ({
   id: hskListId(level),
   title: `HSK ${level}`,
-  words: vocabularyByLevel[level],
+  get words() { return levelWords(level); },
+  total: wordCount(level),
   hskLevel: level,
 }));
+
+const extraList: StudyList = { id: EXTRA_LIST, title: 'Extra', words: extraVocabulary, total: extraVocabulary.length };
 
 /** Every list, Extra last. */
 export const studyLists = (): StudyList[] => [
   ...hskLists,
-  { id: EXTRA_LIST, title: 'Extra', words: extraVocabulary },
+  extraList,
 ];
 
 export const DEFAULT_LIST: ListId = hskListId(1);

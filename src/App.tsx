@@ -14,7 +14,7 @@ import {
   type Screen,
 } from './screen';
 import { createScreenHistory } from './createScreenHistory';
-import { catalogLevels } from './data/catalog';
+import { BUNDLED_LEVEL } from './data/catalog';
 import { hasUsedApp, loadInstalledPacks, readInstalledLevels, saveStudyMedia, writeInstalledLevels } from './utils/levelPacks';
 
 const installedChoice = () => readInstalledLevels();
@@ -56,7 +56,8 @@ const App: Component = () => {
     onCleanup(() => window.removeEventListener('online', retry));
     if (gate() !== 'app') return;
     const saved = installedChoice();
-    const levels = saved ?? catalogLevels.filter((row) => row.available).map((row) => row.level);
+    // Without a saved choice only HSK 1 is here; saveStudyMedia then fetches the packs the lists need.
+    const levels = saved ?? [BUNDLED_LEVEL];
     void loadInstalledPacks(levels)
       .then(() => {
         if (saved === null) writeInstalledLevels(levels);

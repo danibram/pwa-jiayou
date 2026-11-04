@@ -1,7 +1,7 @@
 import { BUNDLED_LEVEL, catalogLevels, characterLevel } from '../data/catalog';
 import { hskLevelsOf, type ListId } from '../data/lists';
 import { wordsInLists } from '../stores/studyLists';
-import type { VocabularyEntry } from '../data/vocabulary';
+import { BUNDLED_WORD_LEVEL, hasLevelWords, installLevelWords, removeLevelWords, type VocabularyEntry } from '../data/vocabulary';
 import { characterStore, parseCharacterList } from '../stores/characterStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import type { HskLevel } from '../types';
@@ -267,11 +267,14 @@ const wordMediaUrls = (words: readonly VocabularyEntry[]): string[] => {
   return [...urls];
 };
 
-const readPack = async (level: HskLevel) => {
-  const path = packPath(level);
+/**
+ * A JSON file of a level's pack: from the current cache, else the network, else an earlier
+ * version of the pack. Saved into the current cache once read from the network.
+ */
+const readPackJson = async (path: string, level: HskLevel): Promise<unknown> => {
   const cache = await openCacheFor(path);
   const hit = cache ? await cache.match(path) : undefined;
-  if (hit && !hit.headers.get('x-jiayou-stale')) return parseCharacterList(await hit.json(), level);
+  if (hit && !hit.headers.get('x-jiayou-stale')) return hit.json();
   let response: Response;
   try {
     response = await fetch(path);
@@ -282,10 +285,38 @@ const readPack = async (level: HskLevel) => {
     response = (old ?? hit)!;
   }
   if (!response.ok) throw new Error(`No se pudo guardar HSK ${level}.`);
-  const rows = parseCharacterList(await response.clone().json(), level);
+  const body: unknown = await response.clone().json();
   if (cache) await cache.put(path, response);
-  return rows;
+  return body;
 };
+
+const readPack = async (level: HskLevel) => parseCharacterList(await readPackJson(packPath(level), level), level);
+
+/** The level's word list, at a URL that changes with its pack so no HTTP cache hands back an old one. */
+export const wordsPath = (level: HskLevel) => `${packMediaRoot(level)}words.json?v=${packEntry(level)?.hash ?? '0'}`;
+
+/** HSK 2 to 6 words are not in the app until their list is activated. HSK 1 always is. */
+const wordsDownloadable = (level: HskLevel) => level !== BUNDLED_WORD_LEVEL && !!packEntry(level);
+
+/**
+ * Put the words of these levels on the device: from the cache, or downloaded the first time.
+ * One level that fails does not stop the others; the first failure is thrown once all were tried.
+ */
+export const loadLevelWords = async (levels: readonly HskLevel[]) => {
+  let failure: unknown;
+  for (const level of levels) {
+    if (!wordsDownloadable(level) || hasLevelWords(level)) continue;
+    try {
+      installLevelWords(level, await readPackJson(wordsPath(level), level));
+    } catch (error) {
+      failure ??= error;
+    }
+  }
+  if (failure) throw failure;
+};
+
+/** The words of the lists being studied, at start-up. Must run before the first screen reads them. */
+export const loadSelectedWords = () => loadLevelWords(hskLevelsOf(vocabularyStore.state.selectedLists));
 
 /** Deletes the caches whose names `drop` picks. A browser without Cache Storage has none. */
 const deleteCaches = async (drop: (name: string) => boolean) => {
@@ -329,6 +360,8 @@ export const loadInstalledPacks = async (levels: readonly HskLevel[]) => {
  * Returns the packs now on the device.
  */
 export const prepareListMedia = async (lists: readonly ListId[], onProgress?: PackProgress): Promise<HskLevel[]> => {
+  // Words first, since they decide which packs and media are needed. A list whose words fail keeps the rest going.
+  const wordsFailed = await loadLevelWords(hskLevelsOf(lists)).then(() => undefined, (error: unknown) => error ?? new Error('Sin palabras'));
   const words = wordsInLists(lists);
   const needed = packsForWords(words);
   packSyllables.clear();
@@ -340,6 +373,7 @@ export const prepareListMedia = async (lists: readonly ListId[], onProgress?: Pa
   for (const level of installed) await registerSyllables(level);
   await cacheUrls(wordMediaUrls(words), onProgress);
   await dropOlderVersions(installed);
+  if (wordsFailed) throw wordsFailed;
   return installed;
 };
 
@@ -379,13 +413,18 @@ export const applyListChoice = async (wanted: readonly ListId[], onProgress?: Pa
   if (levels.length > 0) characterStore.selectLevels(levels);
   const selection = [...wanted];
   const run = pendingMedia.catch(() => {}).then(async () => {
-    const previous = readInstalledLevels() ?? [BUNDLED_LEVEL];
     const installed = await downloadLists(selection, onProgress);
     if (vocabularyStore.state.selectedLists.join('|') !== selection.join('|')) return;
-    for (const level of previous) {
+    const studied = hskLevelsOf(selection);
+    // Every pack these lists do not use goes, also one left half-saved by a download that failed.
+    for (const level of [2, 3, 4, 5, 6] as const) {
       if (!downloadable(level) || installed.includes(level)) continue;
       characterStore.removeLevel(level);
       await forgetPack(level);
+    }
+    // Words of a list no longer studied leave the device with it; the pack holds them.
+    for (const level of [2, 3, 4, 5, 6] as const) {
+      if (!studied.includes(level)) removeLevelWords(level);
     }
     writeInstalledLevels(installed);
   });

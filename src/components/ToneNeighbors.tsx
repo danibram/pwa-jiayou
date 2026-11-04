@@ -1,5 +1,5 @@
 import { Component, createMemo } from 'solid-js';
-import { allWords } from '../data/vocabulary';
+import { vocabularyStore } from '../stores/vocabularyStore';
 import { characterForHit, searchCharacters } from '../utils/characterSearch';
 import { glossHead } from '../utils/glossDisplay';
 import { leadSense } from '../data/wordSenses';
@@ -37,11 +37,14 @@ const ToneNeighbors: Component<Props> = (props) => {
         : props.onOpenCharacter ? () => props.onOpenCharacter!(character) : undefined;
       byKey.set(key, { key, hanzi: character, pinyin, gloss: glossHead(meaning), match, level, onOpen });
     };
-    for (const word of allWords()) {
+    // Words of the checked lists, and characters of the levels being studied.
+    for (const word of vocabularyStore.getSelectedWords()) {
       if ([...word.simplified].length === 1) add(word.simplified, word.pinyin, leadSense(word.senses), word.level, word.id);
     }
+    const levels = vocabularyStore.studiedLevels();
     for (const hit of searchCharacters('', [])) {
       const char = characterForHit(hit, []);
+      if (!levels.includes(char.hsk_level)) continue;
       for (const pinyin of char.pinyin.split(/[\s,;/]+/)) add(char.character, pinyin, char.gloss ?? char.definition, char.hsk_level);
     }
     const sorted = [...byKey.values()].sort(bySound);

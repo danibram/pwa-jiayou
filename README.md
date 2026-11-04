@@ -22,7 +22,7 @@ A phone-first progressive web app for Spanish speakers learning Chinese. It cove
 
 ### Browse
 
-- Buscar finds words by Chinese, pinyin or Spanish, across HSK 1 to 6 and Extra.
+- Buscar finds words by Chinese, pinyin or Spanish in the lists you study, and characters of the HSK levels you study. Nothing from a list that is off shows anywhere: not in Buscar, Temas, a word page or a character sheet. Temas is the one exception: it also lists Extra words that have a topic. [docs/vision/como-funciona.md](docs/vision/como-funciona.md) has the details.
 - Temas groups characters into 22 topics (verbs, questions, family, food, …) and lets you practise one topic on its own.
 - Every word opens its characters. A character sheet shows the gloss HSK uses, the dictionary definition, radical, stroke count, an example word, and the other words that use it.
 - Home shows a word of the day.
@@ -39,7 +39,7 @@ Opciones offers three voice modes. "China continental" plays recordings by Chen 
 
 ### Offline and updates
 
-- The app shell, fonts and HSK 1 are precached by the service worker. Pack lists, strokes and clips go into a separate cache named after a hash of the media folders, so a release with new media refreshes it without touching your lists.
+- The app shell, fonts and HSK 1 are precached by the service worker. Each level's pack (its words, character list, strokes and clips) goes into a cache of its own, named after a hash of that pack's files, so a release that changes HSK 4 leaves HSK 2 alone.
 - Opciones shows what is saved, how much storage it uses, and whether a new version is waiting.
 - A banner offers new versions. The app checks hourly and when it comes back to the foreground.
 
@@ -65,7 +65,7 @@ Opciones exports a JSON file with word progress, character progress and daily co
 | HSK 5 | 1298 | 619 | `public/packs/hsk5` |
 | HSK 6 | 2500 | 970 | `public/packs/hsk6` |
 
-Word lists live in `src/data/vocabulary/hskN.json` and are bundled. Character lists are `src/data/hsk1.json` and `public/packs/hskN.json`. Each character pack folder holds its stroke JSON, syllable clips and a `manifest.json` with counts and missing files. `src/data/searchIndex.json` holds all 2650 characters for search.
+Word lists live in `src/data/vocabulary/hskN.json`. HSK 1 is bundled; HSK 2 to 6 are served as `packs/hskN/words.json` (see `vite.config.ts`) and download when the list is ticked. Character lists are `src/data/hsk1.json` and `public/packs/hskN.json`. Each character pack folder holds its stroke JSON, syllable clips and a `manifest.json` with counts and missing files. `src/data/searchIndex.json` holds all 2650 characters for search.
 
 Word levels come from the HSK 2.0 exclusive lists and do not describe the level of each character. HSK 1 has the 150 official words plus 你好. Sources, licences and the reading rules are in [docs/data/vocabulary.md](docs/data/vocabulary.md).
 

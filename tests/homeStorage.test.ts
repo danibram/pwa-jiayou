@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 import { readHomeSnapshot, rememberHomeSnapshot } from '../src/utils/homeSnapshot';
 import { findPausedPractice, saveVocabularySession, type VocabularySessionSnapshot } from '../src/utils/vocabularySession';
 
