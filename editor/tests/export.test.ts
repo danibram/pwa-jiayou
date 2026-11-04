@@ -51,7 +51,7 @@ describe('standalone content export', () => {
     const snapshot = { ...structuredClone(base), vocabulary: [{ ...base.vocabulary[0], example: { chinese: '我有一个。', spanish: 'Tengo uno.' } }] };
     const draftPath = join(dir, 'draft.json');
     writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(base)), snapshot,
-      references: { 'word-1': { url: '/es/dictionary/一-yi', retrieved: '2026-11-04', examples: [{ chinese: '一二三。', pinyin: 'Yī èr sān.', spanish: 'Uno, dos, tres.' }] } },
+      references: { 'word-1': { url: 'https://example.com/dictionary/一-yi', retrieved: '2026-11-04', examples: [{ chinese: '一二三。', pinyin: 'Yī èr sān.', spanish: 'Uno, dos, tres.' }] } },
     }));
     run(dir, 'import', draftPath);
     const rows = JSON.parse(readFileSync(join(dir, 'editor/export/src/data/vocabulary/hsk1.json'), 'utf8'));

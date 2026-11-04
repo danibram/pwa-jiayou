@@ -94,11 +94,11 @@ describe('content editor', () => {
   });
 
   it('keeps source phrases as draft references and publishes only an authored example', async () => {
-    const references = { 'word-1': { url: '/es/dictionary/好-hao', retrieved: '2026-11-04', examples: [{ chinese: '你好。', pinyin: 'Nǐ hǎo.', spanish: 'Hola.' }] } };
+    const references = { 'word-1': { url: 'https://example.com/dictionary/好-hao', retrieved: '2026-11-04', examples: [{ chinese: '你好。', pinyin: 'Nǐ hǎo.', spanish: 'Hola.' }] } };
     localStorage.setItem('jiayou-content-draft-v1', JSON.stringify({ schemaVersion: 1, baseRevision: 'rev-1', snapshot: base, references }));
     render(() => <Editor />);
     fireEvent.click(await screen.findByRole('button', { name: 'Revisar' }));
-    expect(screen.getByText(/Referencias de /)).toBeInTheDocument();
+    expect(screen.getByText(/Frases de referencia/)).toBeInTheDocument();
     expect(screen.getByText(/Esta entrada conserva/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Editar ficha' }));
     expect(screen.getByLabelText('Frase en chino')).toHaveValue('');

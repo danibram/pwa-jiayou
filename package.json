@@ -12,8 +12,6 @@
     "strokes": "node scripts/copy-strokes.mjs",
     "search-index": "node scripts/build-search-index.mjs",
     "fetch-hsk": "node scripts/fetch-hsk-from-hanzidb.mjs",
-    "scrape-": "node scripts/scrape-.mjs",
-    "categorize-topics": "node scripts/categorize--topics.mjs",
     "media-packs": "node scripts/build-media-packs.mjs",
     "localize-hsk": "node scripts/localize-hsk456.mjs",
     "build-vocabulary": "node scripts/build-vocabulary.mjs",
