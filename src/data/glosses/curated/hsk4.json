@@ -1,11 +1,11 @@
 {
   "按": {
     "gloss": "presionar; según",
-    "definition": "presionar; según",
+    "definition": "(verbo) presionar, empujar (con la mano o el dedo); (verbo) controlar, contener, archivar; (preposición) según, basado en",
     "example": {
-      "word": "按照",
-      "pinyin": "àn zhào",
-      "es": "según"
+      "word": "按下",
+      "pinyin": "an xia",
+      "es": "poner la mano, presionar"
     }
   },
   "案": {
@@ -27,12 +27,12 @@
     }
   },
   "败": {
-    "gloss": "fracasar; derrotar",
-    "definition": "fracasar; derrotar",
+    "gloss": "perder, ser derrotado",
+    "definition": "perder, ser derrotado; derrotar, vencer; fracasar, no tener éxito",
     "example": {
-      "word": "失败",
-      "pinyin": "shī bài",
-      "es": "fracaso"
+      "word": "倒败",
+      "pinyin": "dao bai",
+      "es": "ser derrotado, decaer,"
     }
   },
   "拜": {
@@ -54,48 +54,48 @@
     }
   },
   "棒": {
-    "gloss": "palo; genial",
-    "definition": "palo; genial",
+    "gloss": "palo; garrote; porra",
+    "definition": "(adjetivo) genial, increíble, maravilloso; (sustantivo) palo, garrote, bastón",
     "example": {
-      "word": "棒球",
-      "pinyin": "bàng qiú",
-      "es": "béisbol"
+      "word": "冰棒",
+      "pinyin": "bing bang",
+      "es": "palo, garrote, porra"
     }
   },
   "保": {
-    "gloss": "proteger; garantizar",
-    "definition": "proteger; garantizar",
+    "gloss": "proteger; salvaguardar",
+    "definition": "(verbo) proteger, garantizar, mantener; (sustantivo) una garantía, garantía",
     "example": {
-      "word": "保护",
-      "pinyin": "bǎo hù",
-      "es": "proteger"
+      "word": "中保",
+      "pinyin": "zhong bao",
+      "es": "proteger, salvaguardar,"
     }
   },
   "抱": {
-    "gloss": "abrazar",
-    "definition": "abrazar",
+    "gloss": "tomar en brazos",
+    "definition": "tomar en brazos; abrazar; atesorar; albergar (un sentimiento, esperanza, expectativa); (coloquial, de la ropa) quedar bien",
     "example": {
-      "word": "拥抱",
-      "pinyin": "yōng bào",
-      "es": "abrazo"
+      "word": "合抱",
+      "pinyin": "he bao",
+      "es": "abrazar, tomar en brazos,"
     }
   },
   "倍": {
-    "gloss": "veces; doble",
-    "definition": "veces; doble",
+    "gloss": "veces; doblar; varias veces",
+    "definition": "(clasificador) veces (indica multiplicador después de un número)",
     "example": {
-      "word": "加倍",
-      "pinyin": "jiā bèi",
-      "es": "duplicar"
+      "word": "三倍",
+      "pinyin": "san bei",
+      "es": "veces, doblar, varias veces"
     }
   },
   "笨": {
-    "gloss": "tonto; torpe",
-    "definition": "tonto; torpe",
+    "gloss": "tonto",
+    "definition": "tonto; bobo; torpe; lerdo",
     "example": {
-      "word": "笨拙",
-      "pinyin": "bèn zhuō",
-      "es": "torpe"
+      "word": "呆笨",
+      "pinyin": "dai ben",
+      "es": "tonto, estúpido, aburrido"
     }
   },
   "毕": {
@@ -108,12 +108,12 @@
     }
   },
   "遍": {
-    "gloss": "vez; por todas partes",
-    "definition": "vez; por todas partes",
+    "gloss": "en todas partes; en todas",
+    "definition": "(clasificador) para el número de veces que una acción se realiza completamente de principio a fin; 'vez/veces'",
     "example": {
-      "word": "遍地",
-      "pinyin": "biàn dì",
-      "es": "por todas partes"
+      "word": "一遍",
+      "pinyin": "yi bian",
+      "es": "en todas partes, en todas"
     }
   },
   "标": {
@@ -126,12 +126,12 @@
     }
   },
   "饼": {
-    "gloss": "torta; galleta",
-    "definition": "torta; galleta",
+    "gloss": "pasteles de arroz; galletas",
+    "definition": "torta plana redonda (ej. panqueque, pastel, pastel de luna); bollería; galleta",
     "example": {
-      "word": "饼干",
-      "pinyin": "bǐng gān",
-      "es": "galleta"
+      "word": "喜饼",
+      "pinyin": "xi bing",
+      "es": "pasteles de arroz, galletas"
     }
   },
   "并": {
@@ -144,12 +144,12 @@
     }
   },
   "播": {
-    "gloss": "sembrar; emitir",
-    "definition": "sembrar; emitir",
+    "gloss": "sembrar; esparcir",
+    "definition": "sembrar (semillas); transmitir (noticias, programas); difundir (información)",
     "example": {
-      "word": "播放",
-      "pinyin": "bō fàng",
-      "es": "reproducir"
+      "word": "主播",
+      "pinyin": "zhu bo",
+      "es": "sembrar, esparcir"
     }
   },
   "博": {
@@ -171,30 +171,30 @@
     }
   },
   "部": {
-    "gloss": "parte; departamento",
-    "definition": "parte; departamento",
+    "gloss": "parte; división; sección",
+    "definition": "(clasificador) para películas, libros, máquinas, etc.; (sustantivo) departamento, ministerio, sección",
     "example": {
-      "word": "部分",
-      "pinyin": "bù fen",
-      "es": "parte"
+      "word": "上部",
+      "pinyin": "shang bu",
+      "es": "parte, división, sección"
     }
   },
   "擦": {
-    "gloss": "fregar; limpiar",
-    "definition": "fregar; limpiar",
+    "gloss": "fregar; frotar",
+    "definition": "limpiar, frotar (con un paño o toalla); aplicar (lápiz labial, crema, loción, etc.) frotando o dando golpecitos",
     "example": {
-      "word": "擦拭",
-      "pinyin": "cā shì",
-      "es": "frotar"
+      "word": "挨擦",
+      "pinyin": "ai ca",
+      "es": "fregar, fregar, frotar, fregar"
     }
   },
   "猜": {
     "gloss": "adivinar",
     "definition": "adivinar",
     "example": {
-      "word": "猜测",
-      "pinyin": "cāi cè",
-      "es": "suponer"
+      "word": "嫌猜",
+      "pinyin": "xian cai",
+      "es": "adivinar, conjeturar, suponer"
     }
   },
   "材": {
@@ -243,12 +243,12 @@
     }
   },
   "尝": {
-    "gloss": "probar; experimentar",
-    "definition": "probar; experimentar",
+    "gloss": "gusto",
+    "definition": "probar (comida o bebida); experimentar, probar (un sentimiento o situación)",
     "example": {
-      "word": "尝试",
-      "pinyin": "cháng shì",
-      "es": "intentar"
+      "word": "何尝",
+      "pinyin": "he chang",
+      "es": "gusto"
     }
   },
   "诚": {
@@ -288,12 +288,12 @@
     }
   },
   "抽": {
-    "gloss": "sacar; fumar",
-    "definition": "sacar; fumar",
+    "gloss": "sacar",
+    "definition": "sacar, extraer (de entre); azotar, golpear; (de plantas) brotar, retoñar",
     "example": {
-      "word": "抽奖",
-      "pinyin": "chōu jiǎng",
-      "es": "sorteo"
+      "word": "抽中",
+      "pinyin": "chou zhong",
+      "es": "sacar, sacar"
     }
   },
   "厨": {
@@ -316,20 +316,20 @@
   },
   "处": {
     "gloss": "lugar; tratar",
-    "definition": "lugar; tratar",
+    "definition": "(sustantivo) lugar, ubicación, sitio; (sustantivo) departamento, oficina, sección (usado en compuestos: 办公处, 售票处); (sustantivo) punto, aspecto (usado en compuestos: 好处, 难处, 长处)",
     "example": {
-      "word": "处理",
-      "pinyin": "chǔ lǐ",
-      "es": "gestionar"
+      "word": "并处",
+      "pinyin": "bing chu",
+      "es": "lugar, localidad"
     }
   },
   "传": {
-    "gloss": "transmitir; biografía",
-    "definition": "transmitir; biografía",
+    "gloss": "transmitir",
+    "definition": "transmitir; transferir; propagar; circular; contagiar; conducir (electricidad)",
     "example": {
-      "word": "传统",
-      "pinyin": "chuán tǒng",
-      "es": "tradición"
+      "word": "上传",
+      "pinyin": "shang chuan",
+      "es": "convocar"
     }
   },
   "窗": {
@@ -342,30 +342,30 @@
     }
   },
   "此": {
-    "gloss": "este; aquí",
-    "definition": "este; aquí",
+    "gloss": "este",
+    "definition": "este; estos",
     "example": {
-      "word": "此外",
-      "pinyin": "cǐ wài",
-      "es": "además"
+      "word": "以此",
+      "pinyin": "yi ci",
+      "es": "esto, estos"
     }
   },
   "粗": {
-    "gloss": "grueso; tosco",
-    "definition": "grueso; tosco",
+    "gloss": "áspero; grueso; curso",
+    "definition": "(de textura) áspero, grueso; (de objetos cilíndricos) grueso; (de comportamiento, habla o actitud) grosero, vulgar",
     "example": {
-      "word": "粗心",
-      "pinyin": "cū xīn",
-      "es": "descuidado"
+      "word": "动粗",
+      "pinyin": "dong cu",
+      "es": "áspero, grueso, curso"
     }
   },
   "存": {
-    "gloss": "existir; guardar",
-    "definition": "existir; guardar",
+    "gloss": "existir; vivir; ser",
+    "definition": "depositar (dinero en un banco); guardar, conservar (datos, comida, objetos); existir, sobrevivir",
     "example": {
-      "word": "存在",
-      "pinyin": "cún zài",
-      "es": "existencia"
+      "word": "并存",
+      "pinyin": "bing cun",
+      "es": "existir, vivir, ser"
     }
   },
   "袋": {
@@ -378,12 +378,12 @@
     }
   },
   "戴": {
-    "gloss": "ponerse; llevar",
-    "definition": "ponerse; llevar",
+    "gloss": "usar en la parte superior",
+    "definition": "ponerse o llevar puesto (gafas, sombrero, guantes, joyas, etc.)",
     "example": {
-      "word": "戴上",
-      "pinyin": "dài shàng",
-      "es": "ponerse"
+      "word": "佩戴",
+      "pinyin": "pei dai",
+      "es": "usar en la parte superior"
     }
   },
   "弹": {
@@ -397,10 +397,10 @@
   },
   "刀": {
     "gloss": "cuchillo",
-    "definition": "cuchillo",
+    "definition": "cuchillo; hoja; (jerga) dólar",
     "example": {
-      "word": "刀子",
-      "pinyin": "dāo zi",
+      "word": "冰刀",
+      "pinyin": "bing dao",
       "es": "cuchillo"
     }
   },
@@ -423,57 +423,57 @@
     }
   },
   "登": {
-    "gloss": "subir; publicar",
-    "definition": "subir; publicar",
+    "gloss": "subir",
+    "definition": "subir, ascender (una montaña, escaleras, etc.); publicar, registrar (en un periódico, registro, etc.); pisar (sobre algo)",
     "example": {
-      "word": "登记",
-      "pinyin": "dēng jì",
-      "es": "registrarse"
+      "word": "刊登",
+      "pinyin": "kan deng",
+      "es": "subir, subir, subir, subir"
     }
   },
   "低": {
-    "gloss": "bajo; bajar",
-    "definition": "bajo; bajar",
+    "gloss": "bajo",
+    "definition": "(adjetivo) bajo (en altura, nivel, precio, temperatura, etc.); (verbo) bajar, inclinar (cabeza, voz, ojos, etc.)",
     "example": {
-      "word": "降低",
-      "pinyin": "jiàng dī",
-      "es": "bajar"
+      "word": "低下",
+      "pinyin": "di xia",
+      "es": "bajo"
     }
   },
   "底": {
-    "gloss": "fondo; base",
-    "definition": "fondo; base",
+    "gloss": "abajo; debajo; parte inferior",
+    "definition": "parte inferior, base, suela (de un recipiente, zapato o estructura); final (de un período de tiempo, ej. mes o año)",
     "example": {
-      "word": "到底",
-      "pinyin": "dào dǐ",
-      "es": "al fin y al cabo"
+      "word": "交底",
+      "pinyin": "jiao di",
+      "es": "abajo, debajo, parte inferior"
     }
   },
   "掉": {
-    "gloss": "caer; perder",
-    "definition": "caer; perder",
+    "gloss": "caer",
+    "definition": "caer; dejar caer; perder; desaparecer; (usado después de ciertos verbos como complemento resultativo) indica finalización, eliminación o cambio de estado",
     "example": {
       "word": "丢掉",
-      "pinyin": "diū diào",
-      "es": "tirar"
+      "pinyin": "diu diao",
+      "es": "girar, moverse"
     }
   },
   "丢": {
-    "gloss": "perder; tirar",
-    "definition": "perder; tirar",
+    "gloss": "perder",
+    "definition": "perder; extraviar; tirar; desechar",
     "example": {
-      "word": "丢失",
-      "pinyin": "diū shī",
-      "es": "perder"
+      "word": "丢下",
+      "pinyin": "diu xia",
+      "es": "desechar"
     }
   },
   "堵": {
-    "gloss": "atascar; tapar",
-    "definition": "atascar; tapar",
+    "gloss": "muro",
+    "definition": "(verbo) obstruir, bloquear, tapar; (clasificador) usado para paredes; (adjetivo) agobiado (emocionalmente), sofocado",
     "example": {
-      "word": "堵车",
-      "pinyin": "dǔ chē",
-      "es": "atasco"
+      "word": "七堵",
+      "pinyin": "Qi du",
+      "es": "muro"
     }
   },
   "肚": {
@@ -486,30 +486,30 @@
     }
   },
   "度": {
-    "gloss": "grado; vez",
-    "definition": "grado; vez",
+    "gloss": "grado; sistema",
+    "definition": "(verbo) pasar (tiempo); (sustantivo) grado, extensión, límite; grado (temperatura, ángulo, etc.); (clasificador) vez, ocasión (para eventos)",
     "example": {
-      "word": "程度",
-      "pinyin": "chéng dù",
-      "es": "grado"
+      "word": "一度",
+      "pinyin": "yi du",
+      "es": "grado, sistema"
     }
   },
   "断": {
-    "gloss": "cortar; interrumpir",
-    "definition": "cortar; interrumpir",
+    "gloss": "cortar",
+    "definition": "romper, partirse (físicamente); cortar, interrumpir; abandonar, abstenerse de (un hábito)",
     "example": {
-      "word": "判断",
-      "pinyin": "pàn duàn",
-      "es": "juzgar"
+      "word": "不断",
+      "pinyin": "bu duan",
+      "es": "cortar, cortar"
     }
   },
   "队": {
-    "gloss": "equipo; fila",
-    "definition": "equipo; fila",
+    "gloss": "equipo; grupo",
+    "definition": "(sustantivo) equipo, grupo, escuadrón; (clasificador) para grupos o columnas de personas, animales o vehículos en formación",
     "example": {
-      "word": "队伍",
-      "pinyin": "duì wu",
-      "es": "fila"
+      "word": "主队",
+      "pinyin": "zhu dui",
+      "es": "equipo, grupo"
     }
   },
   "尔": {
@@ -522,57 +522,57 @@
     }
   },
   "翻": {
-    "gloss": "voltear; traducir",
-    "definition": "voltear; traducir",
+    "gloss": "dar la vuelta, voltear",
+    "definition": "dar la vuelta, voltear; revolver, buscar; traducir",
     "example": {
-      "word": "翻译",
-      "pinyin": "fān yì",
-      "es": "traducir"
+      "word": "兜翻",
+      "pinyin": "dou fan",
+      "es": "voltear, trastornar, zozobrar"
     }
   },
   "烦": {
-    "gloss": "molestar; aburrido",
-    "definition": "molestar; aburrido",
+    "gloss": "molestar; fastidiar",
+    "definition": "(adjetivo) molesto, irritado; problemático, tedioso (de tareas/situaciones); (verbo) molestar, preocupar (a alguien)",
     "example": {
-      "word": "麻烦",
-      "pinyin": "má fan",
-      "es": "molestia"
+      "word": "劳烦",
+      "pinyin": "lao fan",
+      "es": "molestar, fastidiar, molestar"
     }
   },
   "反": {
-    "gloss": "opuesto; en contra",
-    "definition": "opuesto; en contra",
+    "gloss": "reverso; opuesto; contrario",
+    "definition": "(adjetivo / adverbio) opuesto; contrario; al revés; (verbo) oponerse; rebelarse contra; (adverbio) por el contrario; en cambio (a menudo escrito como 反而)",
     "example": {
-      "word": "反对",
-      "pinyin": "fǎn duì",
-      "es": "oponerse"
+      "word": "三反",
+      "pinyin": "san fan",
+      "es": "reverso, opuesto, contrario,"
     }
   },
   "肥": {
-    "gloss": "gordo; fértil",
-    "definition": "gordo; fértil",
+    "gloss": "gordo; regordete; obeso",
+    "definition": "(adj.) gordo (de carne/animal), fértil (suelo), holgado (ropa); (v.) fertilizar; también jerga para enriquecerse ilícitamente; (n.) fertilizante, estiércol",
     "example": {
-      "word": "减肥",
-      "pinyin": "jiǎn féi",
-      "es": "adelgazar"
+      "word": "催肥",
+      "pinyin": "cui fei",
+      "es": "gordo, regordete, obeso"
     }
   },
   "费": {
-    "gloss": "gasto; costar",
-    "definition": "gasto; costar",
+    "gloss": "gastos; honorarios",
+    "definition": "(verbo) gastar, consumir (tiempo, esfuerzo o dinero); (sustantivo) tarifa, cargo, gasto",
     "example": {
-      "word": "费用",
-      "pinyin": "fèi yòng",
-      "es": "gastos"
+      "word": "付费",
+      "pinyin": "fu fei",
+      "es": "gastos, gastos, honorarios"
     }
   },
   "份": {
     "gloss": "porción; parte",
-    "definition": "porción; parte",
+    "definition": "(clasificador) para documentos, periódicos, revistas, contratos, regalos, porciones de comida, etc.",
     "example": {
-      "word": "身份",
-      "pinyin": "shēn fèn",
-      "es": "identidad"
+      "word": "九份",
+      "pinyin": "Jiu fen",
+      "es": "porción, parte"
     }
   },
   "奋": {
@@ -594,12 +594,12 @@
     }
   },
   "封": {
-    "gloss": "sellar; sobre",
-    "definition": "sellar; sobre",
+    "gloss": "carta; sobre",
+    "definition": "(clasificador) para cartas, telegramas y otros mensajes o documentos sellados; (verbo) sellar, cerrar (un sobre, un recipiente)",
     "example": {
       "word": "信封",
-      "pinyin": "xìn fēng",
-      "es": "sobre"
+      "pinyin": "xin feng",
+      "es": "carta, sobre"
     }
   },
   "否": {
@@ -630,12 +630,12 @@
     }
   },
   "福": {
-    "gloss": "felicidad; suerte",
-    "definition": "felicidad; suerte",
+    "gloss": "buena fortuna",
+    "definition": "buena fortuna; felicidad; suerte",
     "example": {
-      "word": "幸福",
-      "pinyin": "xìng fú",
-      "es": "felicidad"
+      "word": "享福",
+      "pinyin": "xiang fu",
+      "es": "felicidad, buena fortuna,"
     }
   },
   "父": {
@@ -648,12 +648,12 @@
     }
   },
   "付": {
-    "gloss": "pagar; entregar",
-    "definition": "pagar; entregar",
+    "gloss": "pagar",
+    "definition": "pagar; entregar (a alguien)",
     "example": {
-      "word": "付款",
-      "pinyin": "fù kuǎn",
-      "es": "pagar"
+      "word": "交付",
+      "pinyin": "jiao fu",
+      "es": "dar, entregar, pagar, entregar"
     }
   },
   "负": {
@@ -675,21 +675,21 @@
     }
   },
   "富": {
-    "gloss": "rico; abundante",
-    "definition": "rico; abundante",
+    "gloss": "rico, abundante, acaudalado",
+    "definition": "rico, abundante, acaudalado",
     "example": {
-      "word": "富裕",
-      "pinyin": "fù yù",
-      "es": "rico"
+      "word": "仇富",
+      "pinyin": "chou fu",
+      "es": "abundante, amplio"
     }
   },
   "改": {
-    "gloss": "cambiar; corregir",
-    "definition": "cambiar; corregir",
+    "gloss": "cambiar, modificar",
+    "definition": "cambiar, modificar; corregir (errores, tareas, etc.)",
     "example": {
-      "word": "改变",
-      "pinyin": "gǎi biàn",
-      "es": "cambiar"
+      "word": "修改",
+      "pinyin": "xiu gai",
+      "es": "cambiar, alterar"
     }
   },
   "概": {
@@ -702,21 +702,21 @@
     }
   },
   "赶": {
-    "gloss": "alcanzar; apresurarse",
-    "definition": "alcanzar; apresurarse",
+    "gloss": "perseguir; seguir",
+    "definition": "alcanzar (un vehículo, evento), llegar a tiempo para; apurarse, darse prisa; ahuyentar, echar",
     "example": {
-      "word": "赶快",
-      "pinyin": "gǎn kuài",
-      "es": "deprisa"
+      "word": "赶上",
+      "pinyin": "gan shang",
+      "es": "perseguir, seguir"
     }
   },
   "敢": {
-    "gloss": "atreverse",
-    "definition": "atreverse",
+    "gloss": "atreverse; aventurarse",
+    "definition": "atreverse, tener el valor de (hacer algo)",
     "example": {
       "word": "勇敢",
-      "pinyin": "yǒng gǎn",
-      "es": "valiente"
+      "pinyin": "yong gan",
+      "es": "atreverse, aventurarse"
     }
   },
   "钢": {
@@ -756,12 +756,12 @@
     }
   },
   "各": {
-    "gloss": "cada; respectivo",
-    "definition": "cada; respectivo",
+    "gloss": "cada uno; individualmente",
+    "definition": "(determinante) cada, todo (usado antes de un sustantivo para referirse a cada miembro individual de un grupo); (adverbio) cada uno, por separado (usado antes de un verbo para indicar que cada individuo realiza la acción)",
     "example": {
-      "word": "各种",
-      "pinyin": "gè zhǒng",
-      "es": "todo tipo"
+      "word": "各人",
+      "pinyin": "ge ren",
+      "es": "cada uno, individualmente,"
     }
   },
   "功": {
@@ -792,12 +792,12 @@
     }
   },
   "够": {
-    "gloss": "suficiente",
-    "definition": "suficiente",
+    "gloss": "suficiente; adecuado",
+    "definition": "(adverbio) suficiente, suficientemente (antes de adjetivos; también coloquialmente 'realmente'); (verbo) ser suficiente, bastar; (verbo) alcanzar (estirándose)",
     "example": {
-      "word": "足够",
-      "pinyin": "zú gòu",
-      "es": "bastante"
+      "word": "不够",
+      "pinyin": "bu gou",
+      "es": "suficiente, adecuado"
     }
   },
   "估": {
@@ -810,21 +810,21 @@
     }
   },
   "鼓": {
-    "gloss": "tambor; animar",
-    "definition": "tambor; animar",
+    "gloss": "tambor",
+    "definition": "(sustantivo) tambor; (verbo) tocar (un tambor); tamborilear; (verbo) animar, reunir; hincharse, inflarse",
     "example": {
-      "word": "鼓励",
-      "pinyin": "gǔ lì",
-      "es": "animar"
+      "word": "哑鼓",
+      "pinyin": "ya gu",
+      "es": "tambor"
     }
   },
   "挂": {
     "gloss": "colgar",
-    "definition": "colgar",
+    "definition": "colgar; colgar (el teléfono); reprobar (un examen, una tarea, etc.); estar acabado (jerga)",
     "example": {
-      "word": "挂念",
-      "pinyin": "guà niàn",
-      "es": "preocuparse"
+      "word": "倒挂",
+      "pinyin": "dao gua",
+      "es": "colgar, suspender"
     }
   },
   "观": {
@@ -837,39 +837,39 @@
     }
   },
   "管": {
-    "gloss": "tubo; gestionar",
-    "definition": "tubo; gestionar",
+    "gloss": "gestionar; tubo",
+    "definition": "(verbo) gestionar, estar a cargo de, cuidar; (verbo) importar, preocuparse por (a menudo en oraciones negativas); (clasificador) para objetos tubulares (pasta de dientes, bolígrafos, etc.)",
     "example": {
-      "word": "管理",
-      "pinyin": "guǎn lǐ",
-      "es": "gestionar"
+      "word": "不管",
+      "pinyin": "bu guan",
+      "es": "tubería, tubo, conducto"
     }
   },
   "光": {
     "gloss": "luz; solo",
-    "definition": "luz; solo",
+    "definition": "(sustantivo) luz; rayo; (adverbio) solo; meramente; (adjetivo) agotado; terminado",
     "example": {
-      "word": "光明",
-      "pinyin": "guāng míng",
-      "es": "luminoso"
+      "word": "X光",
+      "pinyin": "X guang",
+      "es": "ligero, brillante, brillar"
     }
   },
   "广": {
-    "gloss": "amplio",
-    "definition": "amplio",
+    "gloss": "amplio; extenso",
+    "definition": "(adjetivo) amplio, extenso (en alcance o rango); (adjetivo) numeroso, generalizado",
     "example": {
-      "word": "广大",
-      "pinyin": "guǎng dà",
-      "es": "vasto"
+      "word": "京广",
+      "pinyin": "Jing Guang",
+      "es": "amplio, extenso, amplio"
     }
   },
   "逛": {
-    "gloss": "pasear",
-    "definition": "pasear",
+    "gloss": "deambular; pasear",
+    "definition": "pasear, deambular (por ocio)",
     "example": {
-      "word": "逛街",
-      "pinyin": "guàng jiē",
-      "es": "ir de tiendas"
+      "word": "瞎逛",
+      "pinyin": "xia guang",
+      "es": "deambular, pasear, deambular,"
     }
   },
   "规": {
@@ -891,12 +891,12 @@
     }
   },
   "海": {
-    "gloss": "mar; océano",
-    "definition": "mar; océano",
+    "gloss": "mar",
+    "definition": "mar; océano; (figurado) una gran cantidad; un gran número de personas o cosas",
     "example": {
-      "word": "海洋",
-      "pinyin": "hǎi yáng",
-      "es": "océano"
+      "word": "上海",
+      "pinyin": "Shang hai",
+      "es": "mar, océano"
     }
   },
   "寒": {
@@ -909,12 +909,12 @@
     }
   },
   "汗": {
-    "gloss": "sudor",
-    "definition": "sudor",
+    "gloss": "sudor, transpiración",
+    "definition": "sudor, transpiración",
     "example": {
-      "word": "出汗",
-      "pinyin": "chū hàn",
-      "es": "sudar"
+      "word": "冷汗",
+      "pinyin": "leng han",
+      "es": "transpiración, sudor"
     }
   },
   "航": {
@@ -927,12 +927,12 @@
     }
   },
   "合": {
-    "gloss": "unir; adecuado",
-    "definition": "unir; adecuado",
+    "gloss": "cerrar",
+    "definition": "cerrar; encajar; unir, combinar",
     "example": {
-      "word": "合适",
-      "pinyin": "hé shì",
-      "es": "adecuado"
+      "word": "上合",
+      "pinyin": "Shang He",
+      "es": "combinar, unir, unir"
     }
   },
   "何": {
@@ -963,12 +963,12 @@
     }
   },
   "厚": {
-    "gloss": "grueso; generoso",
-    "definition": "grueso; generoso",
+    "gloss": "grueso",
+    "definition": "grueso (de objetos planos); profundo, generoso, amable",
     "example": {
-      "word": "厚度",
-      "pinyin": "hòu dù",
-      "es": "grosor"
+      "word": "仁厚",
+      "pinyin": "ren hou",
+      "es": "grueso"
     }
   },
   "呼": {
@@ -999,12 +999,12 @@
     }
   },
   "户": {
-    "gloss": "puerta; hogar",
-    "definition": "puerta; hogar",
+    "gloss": "puerta",
+    "definition": "(clasificador) para hogares, familias o residencias registradas",
     "example": {
-      "word": "户口",
-      "pinyin": "hù kǒu",
-      "es": "empadronamiento"
+      "word": "佃户",
+      "pinyin": "dian hu",
+      "es": "puerta"
     }
   },
   "划": {
@@ -1017,12 +1017,12 @@
     }
   },
   "怀": {
-    "gloss": "seno; albergar",
-    "definition": "seno; albergar",
+    "gloss": "seno; pecho",
+    "definition": "(sustantivo) pecho, seno; (verbo) albergar, guardar (sentimientos, esperanzas); (verbo) estar embarazada (怀着孩子)",
     "example": {
-      "word": "怀疑",
-      "pinyin": "huái yí",
-      "es": "sospechar"
+      "word": "仁怀",
+      "pinyin": "Ren huai",
+      "es": "seno, pecho"
     }
   },
   "悔": {
@@ -1035,30 +1035,30 @@
     }
   },
   "活": {
-    "gloss": "vivir; activo",
-    "definition": "vivir; activo",
+    "gloss": "vivir; existir; sobrevivir",
+    "definition": "(verbo) vivir; (adjetivo) vivo, viviente; (sustantivo, coloquial) trabajo, empleo",
     "example": {
-      "word": "生活",
-      "pinyin": "shēng huó",
-      "es": "vida"
+      "word": "做活",
+      "pinyin": "zuo huo",
+      "es": "vivir, existir, sobrevivir"
     }
   },
   "伙": {
-    "gloss": "compañero; grupo",
-    "definition": "compañero; grupo",
+    "gloss": "compañero; colega",
+    "definition": "(clasificador) para grupos de personas",
     "example": {
       "word": "伙伴",
-      "pinyin": "huǒ bàn",
-      "es": "compañero"
+      "pinyin": "huo ban",
+      "es": "compañero, colega"
     }
   },
   "货": {
-    "gloss": "mercancía",
-    "definition": "mercancía",
+    "gloss": "bienes, mercancía",
+    "definition": "bienes, mercancía; producto básico",
     "example": {
-      "word": "货物",
-      "pinyin": "huò wù",
-      "es": "mercancías"
+      "word": "干货",
+      "pinyin": "gan huo",
+      "es": "bienes, mercancías, productos"
     }
   },
   "获": {
@@ -1107,12 +1107,12 @@
     }
   },
   "及": {
-    "gloss": "alcanzar; y",
-    "definition": "alcanzar; y",
+    "gloss": "extender",
+    "definition": "(conjunción) y; así como (se usa en escritos formales para conectar sustantivos o frases nominales)",
     "example": {
-      "word": "及时",
-      "pinyin": "jí shí",
-      "es": "a tiempo"
+      "word": "不及",
+      "pinyin": "bu ji",
+      "es": "extender"
     }
   },
   "即": {
@@ -1170,12 +1170,12 @@
     }
   },
   "既": {
-    "gloss": "ya que; ambos",
-    "definition": "ya que; ambos",
+    "gloss": "ya; tanto… como",
+    "definition": "(adverbio) ya (formal); (conjunción) tanto... como... — usado en la estructura 既…又/也…",
     "example": {
-      "word": "既然",
-      "pinyin": "jì rán",
-      "es": "ya que"
+      "word": "既定",
+      "pinyin": "ji ding",
+      "es": "ya"
     }
   },
   "济": {
@@ -1197,12 +1197,12 @@
     }
   },
   "寄": {
-    "gloss": "enviar; confiar",
-    "definition": "enviar; confiar",
+    "gloss": "enviar; transmitir",
+    "definition": "enviar (por correo), echar al correo, enviar por correo; vivir temporalmente fuera de casa, alojarse",
     "example": {
-      "word": "寄信",
-      "pinyin": "jì xìn",
-      "es": "enviar carta"
+      "word": "传寄",
+      "pinyin": "chuan ji",
+      "es": "enviar, transmitir, enviar"
     }
   },
   "价": {
@@ -1224,75 +1224,75 @@
     }
   },
   "减": {
-    "gloss": "reducir; restar",
-    "definition": "reducir; restar",
+    "gloss": "reducir, disminuir, restar",
+    "definition": "reducir, disminuir, restar",
     "example": {
-      "word": "减少",
-      "pinyin": "jiǎn shǎo",
-      "es": "reducir"
+      "word": "删减",
+      "pinyin": "shan jian",
+      "es": "disminuir, restar, disminuir"
     }
   },
   "建": {
-    "gloss": "construir; fundar",
-    "definition": "construir; fundar",
+    "gloss": "construir; establecer",
+    "definition": "construir, establecer, edificar",
     "example": {
-      "word": "建议",
-      "pinyin": "jiàn yì",
-      "es": "sugerir"
+      "word": "修建",
+      "pinyin": "xiu jian",
+      "es": "construir, establecer,"
     }
   },
   "键": {
     "gloss": "tecla; clave",
-    "definition": "tecla; clave",
+    "definition": "(sustantivo) tecla (en teclado, piano, etc.); (sustantivo) botón (en ratón u otro dispositivo); (sustantivo) enlace químico",
     "example": {
-      "word": "关键",
-      "pinyin": "guān jiàn",
-      "es": "clave"
+      "word": "三键",
+      "pinyin": "san jian",
+      "es": "cerrojo de puerta, cerrojo de"
     }
   },
   "江": {
-    "gloss": "río grande",
-    "definition": "río grande",
+    "gloss": "río",
+    "definition": "río",
     "example": {
-      "word": "长江",
-      "pinyin": "Cháng Jiāng",
-      "es": "Yangtsé"
+      "word": "中江",
+      "pinyin": "Zhong jiang",
+      "es": "río grande"
     }
   },
   "将": {
-    "gloss": "futuro; general",
-    "definition": "futuro; general",
+    "gloss": "ir a; futuro",
+    "definition": "(adverbio) futuro, ir a; (preposición) se usa para mover el objeto antes del verbo, equivalente a 把 pero más formal",
     "example": {
-      "word": "将来",
-      "pinyin": "jiāng lái",
-      "es": "futuro"
+      "word": "上将",
+      "pinyin": "shang jiang",
+      "es": "voluntad, yendo a, futuro"
     }
   },
   "奖": {
-    "gloss": "premio",
-    "definition": "premio",
+    "gloss": "premio; recompensa",
+    "definition": "(sustantivo) premio, galardón; (verbo) premiar, otorgar un premio",
     "example": {
-      "word": "奖励",
-      "pinyin": "jiǎng lì",
-      "es": "recompensa"
+      "word": "中奖",
+      "pinyin": "zhong jiang",
+      "es": "premio, recompensa"
     }
   },
   "降": {
-    "gloss": "bajar; rendirse",
-    "definition": "bajar; rendirse",
+    "gloss": "descender; caer",
+    "definition": "caer, bajar, descender (de temperatura, precios, altitud, etc.)",
     "example": {
-      "word": "降低",
-      "pinyin": "jiàng dī",
-      "es": "bajar"
+      "word": "下降",
+      "pinyin": "xia jiang",
+      "es": "descender, caer, caer"
     }
   },
   "交": {
-    "gloss": "entregar; cruzar",
-    "definition": "entregar; cruzar",
+    "gloss": "entregar, presentar",
+    "definition": "entregar, presentar; pagar (dinero, tarifas); hacer (amigos), relacionarse con",
     "example": {
-      "word": "交流",
-      "pinyin": "jiāo liú",
-      "es": "intercambiar"
+      "word": "上交",
+      "pinyin": "shang jiao",
+      "es": "mezcla"
     }
   },
   "郊": {
@@ -1341,12 +1341,12 @@
     }
   },
   "仅": {
-    "gloss": "solo; meramente",
-    "definition": "solo; meramente",
+    "gloss": "solo",
+    "definition": "solo; meramente; apenas",
     "example": {
-      "word": "仅仅",
-      "pinyin": "jǐn jǐn",
-      "es": "tan solo"
+      "word": "不仅",
+      "pinyin": "bu jin",
+      "es": "sólo, simplemente, únicamen…"
     }
   },
   "尽": {
@@ -1359,12 +1359,12 @@
     }
   },
   "紧": {
-    "gloss": "tenso; apretado",
-    "definition": "tenso; apretado",
+    "gloss": "tenso",
+    "definition": "(adjetivo) apretado, ajustado (de ropa, zapatos, etc.); (adjetivo) urgente, apremiante; escaso de dinero, apurado; (verbo) apretar",
     "example": {
-      "word": "紧张",
-      "pinyin": "jǐn zhāng",
-      "es": "nervioso"
+      "word": "加紧",
+      "pinyin": "jia jin",
+      "es": "tenso, tenso, tenso"
     }
   },
   "禁": {
@@ -1458,12 +1458,12 @@
     }
   },
   "举": {
-    "gloss": "levantar; ejemplo",
-    "definition": "levantar; ejemplo",
+    "gloss": "levantar, alzar",
+    "definition": "levantar, alzar; citar, dar (un ejemplo); elegir, seleccionar",
     "example": {
-      "word": "举行",
-      "pinyin": "jǔ xíng",
-      "es": "celebrar"
+      "word": "一举",
+      "pinyin": "yi ju",
+      "es": "levantar, levantar"
     }
   },
   "拒": {
@@ -1503,12 +1503,12 @@
     }
   },
   "聚": {
-    "gloss": "reunir",
-    "definition": "reunir",
+    "gloss": "reunirse, juntarse",
+    "definition": "reunirse, juntarse; congregarse",
     "example": {
-      "word": "聚会",
-      "pinyin": "jù huì",
-      "es": "reunión"
+      "word": "凝聚",
+      "pinyin": "ning ju",
+      "es": "reunir, reunir, reunir"
     }
   },
   "绝": {
@@ -1521,26 +1521,26 @@
     }
   },
   "烤": {
-    "gloss": "asar; hornear",
-    "definition": "asar; hornear",
+    "gloss": "hornear; asar; tostar; cocinar",
+    "definition": "asar, hornear, asar a la parrilla",
     "example": {
-      "word": "烧烤",
-      "pinyin": "shāo kǎo",
-      "es": "barbacoa"
+      "word": "烘烤",
+      "pinyin": "hong kao",
+      "es": "hornear, asar, tostar, cocinar"
     }
   },
   "科": {
-    "gloss": "rama; ciencia",
-    "definition": "rama; ciencia",
+    "gloss": "sección; departamento; ciencia",
+    "definition": "(sustantivo) asignatura, disciplina, campo de estudio; (sustantivo) departamento administrativo, sección; (sustantivo) familia taxonómica (biología)",
     "example": {
-      "word": "科学",
-      "pinyin": "kē xué",
-      "es": "ciencia"
+      "word": "主科",
+      "pinyin": "zhu ke",
+      "es": "sección, departamento, ciencia"
     }
   },
   "棵": {
-    "gloss": "clasif. (árboles)",
-    "definition": "clasif. (árboles)",
+    "gloss": "clasificador de árboles",
+    "definition": "(clasificador) para árboles, coles, plantas y otra vegetación en crecimiento",
     "example": {
       "word": "一棵树",
       "pinyin": "yì kē shù",
@@ -1548,21 +1548,21 @@
     }
   },
   "克": {
-    "gloss": "gramo; superar",
-    "definition": "gramo; superar",
+    "gloss": "gramo",
+    "definition": "(clasificador) gramo (unidad de peso); (clasificador) unidad tibetana de superficie (aproximadamente 6 áreas)",
     "example": {
-      "word": "克服",
-      "pinyin": "kè fú",
-      "es": "superar"
+      "word": "丁克",
+      "pinyin": "ding ke",
+      "es": "gramo"
     }
   },
   "肯": {
-    "gloss": "consentir; sí",
-    "definition": "consentir; sí",
+    "gloss": "estar dispuesto a",
+    "definition": "estar dispuesto a; consentir",
     "example": {
-      "word": "肯定",
-      "pinyin": "kěn dìng",
-      "es": "afirmar"
+      "word": "中肯",
+      "pinyin": "zhong ken",
+      "es": "deseoso"
     }
   },
   "恐": {
@@ -1575,21 +1575,21 @@
     }
   },
   "苦": {
-    "gloss": "amargo; duro",
-    "definition": "amargo; duro",
+    "gloss": "amargo",
+    "definition": "amargo (sabor); duro, doloroso, difícil (vida, experiencia, trabajo)",
     "example": {
-      "word": "辛苦",
-      "pinyin": "xīn kǔ",
-      "es": "duro"
+      "word": "何苦",
+      "pinyin": "he ku",
+      "es": "amargo"
     }
   },
   "款": {
-    "gloss": "fondos; estilo",
-    "definition": "fondos; estilo",
+    "gloss": "artículo",
+    "definition": "(sustantivo) una suma de dinero; fondos; (sustantivo) estilo, diseño, modelo; (clasificador) se usa para artículos, modelos, tipos o secciones/párrafos en un documento",
     "example": {
-      "word": "贷款",
-      "pinyin": "dài kuǎn",
-      "es": "préstamo"
+      "word": "上款",
+      "pinyin": "shang kuan",
+      "es": "artículo, artículo"
     }
   },
   "况": {
@@ -1611,12 +1611,12 @@
     }
   },
   "困": {
-    "gloss": "dificultad; cansar",
-    "definition": "dificultad; cansar",
+    "gloss": "soñoliento, cansado",
+    "definition": "soñoliento, cansado; apurado, indigente; atrapar, rodear",
     "example": {
-      "word": "困难",
-      "pinyin": "kùn nan",
-      "es": "dificultad"
+      "word": "交困",
+      "pinyin": "jiao kun",
+      "es": "rodear, asediar"
     }
   },
   "垃": {
@@ -1629,30 +1629,30 @@
     }
   },
   "拉": {
-    "gloss": "tirar; arrastrar",
-    "definition": "tirar; arrastrar",
+    "gloss": "tirar, arrastrar, dibujar",
+    "definition": "tirar, arrastrar, dibujar; tocar (un instrumento de arco); charlar",
     "example": {
-      "word": "拉开",
-      "pinyin": "lā kāi",
-      "es": "abrir tirando"
+      "word": "杰拉",
+      "pinyin": "Jie la",
+      "es": "tirar, arrastrar"
     }
   },
   "辣": {
     "gloss": "picante",
-    "definition": "picante",
+    "definition": "picante (de comida)",
     "example": {
-      "word": "辣椒",
-      "pinyin": "là jiāo",
-      "es": "chile"
+      "word": "中辣",
+      "pinyin": "zhong la",
+      "es": "picante, picante, picante"
     }
   },
   "懒": {
     "gloss": "perezoso",
     "definition": "perezoso",
     "example": {
-      "word": "懒惰",
-      "pinyin": "lǎn duò",
-      "es": "pereza"
+      "word": "偷懒",
+      "pinyin": "tou lan",
+      "es": "perezoso, lánguido, apático"
     }
   },
   "浪": {
@@ -1710,21 +1710,21 @@
     }
   },
   "俩": {
-    "gloss": "dos (personas)",
-    "definition": "dos (personas)",
+    "gloss": "dos; par",
+    "definition": "dos (coloquial, equivalente a 两个); ambos (usado después de un pronombre para dos personas)",
     "example": {
-      "word": "咱俩",
-      "pinyin": "zán liǎ",
-      "es": "nosotros dos"
+      "word": "伎俩",
+      "pinyin": "ji liang",
+      "es": "dos, par"
     }
   },
   "连": {
-    "gloss": "conectar; incluso",
-    "definition": "conectar; incluso",
+    "gloss": "unirse; conectarse",
+    "definition": "(verbo) conectar; unir; vincular; (preposición) incluyendo (usado con 在内); (preposición) incluso (usado con 都/也 en el patrón 连...都/也)",
     "example": {
-      "word": "连续",
-      "pinyin": "lián xù",
-      "es": "continuo"
+      "word": "一连",
+      "pinyin": "yi lian",
+      "es": "unirse, conectarse"
     }
   },
   "怜": {
@@ -1746,12 +1746,12 @@
     }
   },
   "凉": {
-    "gloss": "fresco; frío",
-    "definition": "fresco; frío",
+    "gloss": "fresco, frío",
+    "definition": "fresco, frío",
     "example": {
-      "word": "凉快",
-      "pinyin": "liáng kuai",
-      "es": "fresquito"
+      "word": "乘凉",
+      "pinyin": "cheng liang",
+      "es": "fresco, frío"
     }
   },
   "谅": {
@@ -1764,21 +1764,21 @@
     }
   },
   "量": {
-    "gloss": "cantidad; medir",
-    "definition": "cantidad; medir",
+    "gloss": "cantidad, monto",
+    "definition": "cantidad, monto; capacidad, volumen",
     "example": {
-      "word": "数量",
-      "pinyin": "shù liàng",
-      "es": "cantidad"
+      "word": "丈量",
+      "pinyin": "zhang liang",
+      "es": "medida, cantidad, capacidad"
     }
   },
   "列": {
-    "gloss": "fila; enumerar",
-    "definition": "fila; enumerar",
+    "gloss": "una linea",
+    "definition": "(verbo) ordenar, alinear, enumerar; (clasificador) para trenes, filas de personas o cosas",
     "example": {
-      "word": "列入",
-      "pinyin": "liè rù",
-      "es": "incluir"
+      "word": "下列",
+      "pinyin": "xia lie",
+      "es": "una linea"
     }
   },
   "林": {
@@ -1800,21 +1800,21 @@
     }
   },
   "另": {
-    "gloss": "otro; además",
-    "definition": "otro; además",
+    "gloss": "otro; separado",
+    "definition": "(pronombre) otro, otra (usado antes de un clasificador o frase de numeral-clasificador); (adverbio) por separado, en una ocasión diferente",
     "example": {
-      "word": "另外",
-      "pinyin": "lìng wài",
-      "es": "además"
+      "word": "另一",
+      "pinyin": "ling yi",
+      "es": "otro, separado, otro"
     }
   },
   "流": {
-    "gloss": "fluir; corriente",
-    "definition": "fluir; corriente",
+    "gloss": "fluir; circular; derivar",
+    "definition": "fluir (de líquidos, aire, etc.); propagarse, circular (de noticias, tendencias, etc.)",
     "example": {
-      "word": "流行",
-      "pinyin": "liú xíng",
-      "es": "de moda"
+      "word": "一流",
+      "pinyin": "yi liu",
+      "es": "fluir, circular, derivar"
     }
   },
   "律": {
@@ -1836,12 +1836,12 @@
     }
   },
   "乱": {
-    "gloss": "caos; desorden",
-    "definition": "caos; desorden",
+    "gloss": "confusión; estado de caos",
+    "definition": "(adjetivo) desordenado, caótico; (adjetivo) confundido, alterado (de la mente o sentimientos); (adverbio) aleatoriamente, arbitrariamente, indiscriminadamente",
     "example": {
-      "word": "混乱",
-      "pinyin": "hùn luàn",
-      "es": "caos"
+      "word": "乱世",
+      "pinyin": "luan shi",
+      "es": "confusión, estado de caos,"
     }
   },
   "论": {
@@ -1854,12 +1854,12 @@
     }
   },
   "落": {
-    "gloss": "caer; quedar",
-    "definition": "caer; quedar",
+    "gloss": "caer",
+    "definition": "caer; dejar caer; (del sol o la luna) ponerse; quedarse atrás; rezagarse",
     "example": {
-      "word": "落后",
-      "pinyin": "luò hòu",
-      "es": "quedarse atrás"
+      "word": "下落",
+      "pinyin": "xia luo",
+      "es": "caer, caer"
     }
   },
   "麻": {
@@ -1890,12 +1890,12 @@
     }
   },
   "毛": {
-    "gloss": "pelo; rough",
-    "definition": "pelo; rough",
+    "gloss": "pelo; pelaje; plumas",
+    "definition": "(sustantivo) pelo, piel, plumas, lana; (sustantivo) moho, hongo; (clasificador) para una unidad monetaria fraccionaria = una décima de yuan (一角)",
     "example": {
-      "word": "毛衣",
-      "pinyin": "máo yī",
-      "es": "jersey"
+      "word": "不毛",
+      "pinyin": "bu mao",
+      "es": "pelo, pelaje, plumas"
     }
   },
   "貌": {
@@ -1908,57 +1908,57 @@
     }
   },
   "美": {
-    "gloss": "hermoso; América",
-    "definition": "hermoso; América",
+    "gloss": "hermoso",
+    "definition": "hermoso; bonito; bueno; excelente; satisfactorio",
     "example": {
-      "word": "美丽",
-      "pinyin": "měi lì",
-      "es": "hermoso"
+      "word": "七美",
+      "pinyin": "Qi mei",
+      "es": "hermosa, bonita"
     }
   },
   "梦": {
     "gloss": "sueño",
-    "definition": "sueño",
+    "definition": "sueño (mientras duermes o una aspiración preciada); soñar (durante el sueño)",
     "example": {
-      "word": "梦想",
-      "pinyin": "mèng xiǎng",
+      "word": "做梦",
+      "pinyin": "zuo meng",
       "es": "sueño"
     }
   },
   "迷": {
-    "gloss": "perderse; fan",
-    "definition": "perderse; fan",
+    "gloss": "hechizar; enamorar",
+    "definition": "perderse, perder el camino o el sentido de la dirección; estar obsesionado con, estar loco por (una actividad)",
     "example": {
-      "word": "迷路",
-      "pinyin": "mí lù",
-      "es": "perderse"
+      "word": "低迷",
+      "pinyin": "di mi",
+      "es": "hechizar, hechizar, enamorar"
     }
   },
   "密": {
-    "gloss": "denso; secreto",
-    "definition": "denso; secreto",
+    "gloss": "denso; espeso; cercano",
+    "definition": "denso, espeso (de vegetación, población, etc.); cercano, íntimo (relación); secreto, confidencial",
     "example": {
-      "word": "秘密",
-      "pinyin": "mì mì",
-      "es": "secreto"
+      "word": "保密",
+      "pinyin": "bao mi",
+      "es": "denso, espeso, cercano"
     }
   },
   "免": {
-    "gloss": "evitar; eximir",
-    "definition": "evitar; eximir",
+    "gloss": "eximir",
+    "definition": "eximir; excusar (de un deber u obligación); destituir; remover (de un cargo); evitar; eludir (algo no deseado)",
     "example": {
-      "word": "免费",
-      "pinyin": "miǎn fèi",
-      "es": "gratis"
+      "word": "不免",
+      "pinyin": "bu mian",
+      "es": "repuesto"
     }
   },
   "秒": {
     "gloss": "segundo",
-    "definition": "segundo",
+    "definition": "(clasificador) segundo (unidad de tiempo)",
     "example": {
-      "word": "秒表",
-      "pinyin": "miǎo biǎo",
-      "es": "cronómetro"
+      "word": "奈秒",
+      "pinyin": "nai miao",
+      "es": "barba de grano o maíz"
     }
   },
   "民": {
@@ -1971,11 +1971,11 @@
     }
   },
   "命": {
-    "gloss": "vida; orden",
-    "definition": "vida; orden",
+    "gloss": "vida",
+    "definition": "vida; destino, hado; orden, mandato",
     "example": {
-      "word": "生命",
-      "pinyin": "shēng mìng",
+      "word": "丢命",
+      "pinyin": "diu ming",
       "es": "vida"
     }
   },
@@ -1990,10 +1990,10 @@
   },
   "母": {
     "gloss": "madre",
-    "definition": "madre",
+    "definition": "(adjetivo) hembra (de animales)",
     "example": {
-      "word": "母亲",
-      "pinyin": "mǔ qin",
+      "word": "丈母",
+      "pinyin": "zhang mu",
       "es": "madre"
     }
   },
@@ -2025,39 +2025,39 @@
     }
   },
   "闹": {
-    "gloss": "alborotar; ruidoso",
-    "definition": "alborotar; ruidoso",
+    "gloss": "disputa",
+    "definition": "(adjetivo) ruidoso, cacofónico; (verbo) hacer ruido; molestar; causar problemas; (verbo) sufrir de (una enfermedad); tener un ataque de",
     "example": {
-      "word": "热闹",
-      "pinyin": "rè nao",
-      "es": "animado"
+      "word": "取闹",
+      "pinyin": "qu nao",
+      "es": "disputa"
     }
   },
   "内": {
-    "gloss": "dentro; interior",
-    "definition": "dentro; interior",
+    "gloss": "dentro",
+    "definition": "dentro; en el interior; interior",
     "example": {
-      "word": "内容",
-      "pinyin": "nèi róng",
-      "es": "contenido"
+      "word": "之内",
+      "pinyin": "zhi nei",
+      "es": "adentro"
     }
   },
   "弄": {
-    "gloss": "hacer; jugar",
-    "definition": "hacer; jugar",
+    "gloss": "hacer",
+    "definition": "hacer, gestionar, manejar (acción general); jugar con, toquetear (interferir con un objeto); conseguir, obtener (cuando va seguido de 到)",
     "example": {
-      "word": "弄好",
-      "pinyin": "nòng hǎo",
-      "es": "arreglar"
+      "word": "作弄",
+      "pinyin": "zuo nong",
+      "es": "hacer, jugar o juguetear con"
     }
   },
   "暖": {
-    "gloss": "cálido",
-    "definition": "cálido",
+    "gloss": "cálido; cordial",
+    "definition": "cálido (adjetivo); calentar (verbo)",
     "example": {
-      "word": "温暖",
-      "pinyin": "wēn nuǎn",
-      "es": "cálido"
+      "word": "保暖",
+      "pinyin": "bao nuan",
+      "es": "cálido, cordial"
     }
   },
   "偶": {
@@ -2070,21 +2070,21 @@
     }
   },
   "排": {
-    "gloss": "fila; ordenar",
-    "definition": "fila; ordenar",
+    "gloss": "fila; rango; línea",
+    "definition": "(verbo) ordenar; hacer cola; poner en orden; (sustantivo) una fila; una línea; (clasificador) para filas o líneas de cosas",
     "example": {
-      "word": "安排",
-      "pinyin": "ān pái",
-      "es": "organizar"
+      "word": "一排",
+      "pinyin": "yi pai",
+      "es": "fila, rango, línea"
     }
   },
   "牌": {
-    "gloss": "letrero; carta",
-    "definition": "letrero; carta",
+    "gloss": "letrero; cartel",
+    "definition": "naipe, ficha de mahjong o pieza de juego; letrero, placa, tableta; medalla, insignia",
     "example": {
-      "word": "牌子",
-      "pinyin": "pái zi",
-      "es": "marca"
+      "word": "上牌",
+      "pinyin": "shang pai",
+      "es": "letrero, cartel"
     }
   },
   "判": {
@@ -2106,12 +2106,12 @@
     }
   },
   "陪": {
-    "gloss": "acompañar",
-    "definition": "acompañar",
+    "gloss": "acompañar; estar con; hacer",
+    "definition": "acompañar, hacer compañía (a alguien)",
     "example": {
-      "word": "陪同",
-      "pinyin": "péi tóng",
-      "es": "acompañar"
+      "word": "久陪",
+      "pinyin": "jiu pei",
+      "es": "acompañar, estar con, hacer"
     }
   },
   "批": {
@@ -2133,21 +2133,21 @@
     }
   },
   "篇": {
-    "gloss": "artículo; clasif.",
-    "definition": "artículo; clasif.",
+    "gloss": "artículo; clasificador de textos",
+    "definition": "(clasificador) para escritos como artículos, ensayos, capítulos, entradas de diario; (sustantivo) tira de bambú antigua usada para escribir; por extensión, un escrito",
     "example": {
-      "word": "文章",
-      "pinyin": "wén zhāng",
-      "es": "artículo"
+      "word": "名篇",
+      "pinyin": "ming pian",
+      "es": "capítulo, sección, ensayo,"
     }
   },
   "骗": {
-    "gloss": "engañar",
-    "definition": "engañar",
+    "gloss": "engañar, defraudar, estafar",
+    "definition": "engañar, defraudar, estafar",
     "example": {
-      "word": "骗子",
-      "pinyin": "piàn zi",
-      "es": "estafador"
+      "word": "受骗",
+      "pinyin": "shou pian",
+      "es": "estafar, estafar, defraudar"
     }
   },
   "聘": {
@@ -2169,30 +2169,30 @@
     }
   },
   "评": {
-    "gloss": "valorar; comentar",
-    "definition": "valorar; comentar",
+    "gloss": "valorar; criticar",
+    "definition": "evaluar, juzgar, comentar (la calidad o mérito de)",
     "example": {
-      "word": "评价",
-      "pinyin": "píng jià",
-      "es": "valorar"
+      "word": "品评",
+      "pinyin": "pin ping",
+      "es": "valorar, criticar, valorar"
     }
   },
   "泼": {
-    "gloss": "echar; salpicar",
-    "definition": "echar; salpicar",
+    "gloss": "salpicar",
+    "definition": "salpicar; derramar (líquido); (coloquial) ser grosero, tosco o rudo (en el habla o comportamiento)",
     "example": {
-      "word": "活泼",
-      "pinyin": "huó po",
-      "es": "vivaz"
+      "word": "撒泼",
+      "pinyin": "sa po",
+      "es": "verter, salpicar, regar,"
     }
   },
   "破": {
-    "gloss": "romper; derrotar",
-    "definition": "romper; derrotar",
+    "gloss": "romper; arruinar; destruir",
+    "definition": "(adjetivo) gastado, dañado, roto; (verbo) romper, partir, destruir; (verbo) derrotar, resolver (un caso), descubrir la verdad de",
     "example": {
-      "word": "破坏",
-      "pinyin": "pò huài",
-      "es": "destruir"
+      "word": "侦破",
+      "pinyin": "zhen po",
+      "es": "romper, arruinar, destruir"
     }
   },
   "葡": {
@@ -2232,12 +2232,12 @@
     }
   },
   "签": {
-    "gloss": "firmar; etiqueta",
-    "definition": "firmar; etiqueta",
+    "gloss": "firmar; respaldar",
+    "definition": "firmar (el nombre en un documento); firmar (un contrato, acuerdo, etc.)",
     "example": {
-      "word": "签名",
-      "pinyin": "qiān míng",
-      "es": "firma"
+      "word": "中签",
+      "pinyin": "zhong qian",
+      "es": "firmar, respaldar"
     }
   },
   "歉": {
@@ -2250,12 +2250,12 @@
     }
   },
   "敲": {
-    "gloss": "golpear; llamar",
-    "definition": "golpear; llamar",
+    "gloss": "llamar, tocar, golpear",
+    "definition": "llamar, tocar, golpear; (coloquial) cobrar de más, timar",
     "example": {
-      "word": "敲门",
-      "pinyin": "qiāo mén",
-      "es": "llamar a la puerta"
+      "word": "推敲",
+      "pinyin": "tui qiao",
+      "es": "golpear, batir, machacar,"
     }
   },
   "桥": {
@@ -2268,12 +2268,12 @@
     }
   },
   "巧": {
-    "gloss": "hábil; oportuno",
-    "definition": "hábil; oportuno",
+    "gloss": "casual",
+    "definition": "casual; por casualidad; oportuno; hábil; ingenioso; astuto",
     "example": {
-      "word": "巧妙",
-      "pinyin": "qiǎo miào",
-      "es": "ingenioso"
+      "word": "不巧",
+      "pinyin": "bu qiao",
+      "es": "hábil, ingenioso, astuto"
     }
   },
   "切": {
@@ -2286,57 +2286,57 @@
     }
   },
   "亲": {
-    "gloss": "pariente; íntimo",
-    "definition": "pariente; íntimo",
+    "gloss": "pariente; cercano",
+    "definition": "adjetivo: cercano, íntimo, propio (consanguíneo); verbo: besar",
     "example": {
-      "word": "亲自",
-      "pinyin": "qīn zì",
-      "es": "en persona"
+      "word": "令亲",
+      "pinyin": "ling qin",
+      "es": "parientes, padres"
     }
   },
   "琴": {
-    "gloss": "instrumento de cuerda",
-    "definition": "instrumento de cuerda",
+    "gloss": "laúd o guitarra china",
+    "definition": "guqin (cítara china antigua); instrumento musical (especialmente de cuerda o teclado)",
     "example": {
-      "word": "钢琴",
-      "pinyin": "gāng qín",
-      "es": "piano"
+      "word": "伦琴",
+      "pinyin": "lun qin",
+      "es": "laúd o guitarra china"
     }
   },
   "穷": {
-    "gloss": "pobre; extremo",
-    "definition": "pobre; extremo",
+    "gloss": "pobre, empobrecido",
+    "definition": "pobre, empobrecido; (como complemento) agotado, acabado",
     "example": {
-      "word": "穷人",
-      "pinyin": "qióng rén",
-      "es": "pobre"
+      "word": "不穷",
+      "pinyin": "bu qiong",
+      "es": "pobre, indigente, empobrecido"
     }
   },
   "区": {
-    "gloss": "zona; distrito",
-    "definition": "zona; distrito",
+    "gloss": "área, región, distrito",
+    "definition": "área, región, distrito",
     "example": {
-      "word": "地区",
-      "pinyin": "dì qū",
-      "es": "región"
+      "word": "中区",
+      "pinyin": "zhong qu",
+      "es": "área, distrito, región, barrio"
     }
   },
   "取": {
-    "gloss": "tomar; obtener",
-    "definition": "tomar; obtener",
+    "gloss": "obtener, tomar, ir a buscar",
+    "definition": "obtener, tomar, ir a buscar; elegir, seleccionar",
     "example": {
-      "word": "取得",
-      "pinyin": "qǔ dé",
-      "es": "obtener"
+      "word": "借取",
+      "pinyin": "jie qu",
+      "es": "tomar, recibir, obtener"
     }
   },
   "全": {
     "gloss": "todo; completo",
-    "definition": "todo; completo",
+    "definition": "(adjetivo) todo; entero; completo; (adverbio) completamente; totalmente",
     "example": {
-      "word": "全部",
-      "pinyin": "quán bù",
-      "es": "todo"
+      "word": "保全",
+      "pinyin": "bao quan",
+      "es": "mantener, conservar entero o"
     }
   },
   "泉": {
@@ -2349,21 +2349,21 @@
     }
   },
   "缺": {
-    "gloss": "faltar; carencia",
-    "definition": "faltar; carencia",
+    "gloss": "faltar, carecer de",
+    "definition": "faltar, carecer de; estar ausente, faltar",
     "example": {
-      "word": "缺少",
-      "pinyin": "quē shǎo",
-      "es": "faltar"
+      "word": "候缺",
+      "pinyin": "hou que",
+      "es": "faltar, faltar"
     }
   },
   "却": {
-    "gloss": "sin embargo; retroceder",
-    "definition": "sin embargo; retroceder",
+    "gloss": "pero; sin embargo",
+    "definition": "(adverbio) pero, sin embargo, no obstante (indica contraste o inesperado)",
     "example": {
-      "word": "退却",
-      "pinyin": "tuì què",
-      "es": "retirarse"
+      "word": "了却",
+      "pinyin": "liao que",
+      "es": "todavía, pero"
     }
   },
   "确": {
@@ -2376,12 +2376,12 @@
     }
   },
   "染": {
-    "gloss": "teñir; contagiar",
-    "definition": "teñir; contagiar",
+    "gloss": "teñir",
+    "definition": "teñir (cabello, tela, etc.); contraer (una enfermedad) o infectarse; adquirir (malos hábitos) o contaminarse con",
     "example": {
-      "word": "污染",
-      "pinyin": "wū rǎn",
-      "es": "contaminación"
+      "word": "传染",
+      "pinyin": "chuan ran",
+      "es": "teñir"
     }
   },
   "扰": {
@@ -2403,39 +2403,39 @@
     }
   },
   "扔": {
-    "gloss": "tirar; lanzar",
-    "definition": "tirar; lanzar",
+    "gloss": "tirar",
+    "definition": "tirar; desechar",
     "example": {
-      "word": "扔掉",
-      "pinyin": "rēng diào",
-      "es": "tirar"
+      "word": "乱扔",
+      "pinyin": "luan reng",
+      "es": "tirar, lanzar"
     }
   },
   "仍": {
-    "gloss": "todavía; aún",
-    "definition": "todavía; aún",
+    "gloss": "todavía",
+    "definition": "(adverbio) todavía, aún (indicando continuación o una situación sin cambios); (adverbio) todavía; como antes (literario)",
     "example": {
       "word": "仍然",
-      "pinyin": "réng rán",
-      "es": "todavía"
+      "pinyin": "reng ran",
+      "es": "sin embargo, todavía, como"
     }
   },
   "入": {
-    "gloss": "entrar; unirse",
-    "definition": "entrar; unirse",
+    "gloss": "entrar, introducirse en",
+    "definition": "entrar, introducirse en; unirse, hacerse miembro de; ingresar (datos, información)",
     "example": {
-      "word": "进入",
-      "pinyin": "jìn rù",
-      "es": "entrar"
+      "word": "并入",
+      "pinyin": "bing ru",
+      "es": "entrar, entrar (a), unirse"
     }
   },
   "散": {
-    "gloss": "dispersar; suelto",
-    "definition": "dispersar; suelto",
+    "gloss": "dispersar, esparcir",
+    "definition": "dispersar, esparcir; difundir (noticias, información); distribuir, repartir",
     "example": {
-      "word": "散步",
-      "pinyin": "sàn bù",
-      "es": "pasear"
+      "word": "冗散",
+      "pinyin": "rong san",
+      "es": "esparcir, dispersar,"
     }
   },
   "森": {
@@ -2457,21 +2457,21 @@
     }
   },
   "伤": {
-    "gloss": "herida; dañar",
-    "definition": "herida; dañar",
+    "gloss": "herida; lesión",
+    "definition": "(verbo) lesionar, herir; (sustantivo) lesión, herida",
     "example": {
-      "word": "受伤",
-      "pinyin": "shòu shāng",
-      "es": "herirse"
+      "word": "中伤",
+      "pinyin": "zhong shang",
+      "es": "herida, lesión"
     }
   },
   "稍": {
-    "gloss": "un poco",
-    "definition": "un poco",
+    "gloss": "un poco, ligeramente, algo",
+    "definition": "un poco, ligeramente, algo",
     "example": {
-      "word": "稍微",
-      "pinyin": "shāo wēi",
-      "es": "un poco"
+      "word": "稍嫌",
+      "pinyin": "shao xian",
+      "es": "poco, ligeramente"
     }
   },
   "勺": {
@@ -2484,12 +2484,12 @@
     }
   },
   "社": {
-    "gloss": "sociedad; grupo",
-    "definition": "sociedad; grupo",
+    "gloss": "sociedad; club",
+    "definition": "(forma ligada) sociedad, organización, agencia (usado en muchos compuestos); (histórico) dios de la tierra",
     "example": {
-      "word": "社会",
-      "pinyin": "shè huì",
-      "es": "sociedad"
+      "word": "公社",
+      "pinyin": "gong she",
+      "es": "dios de la tierra y altares"
     }
   },
   "申": {
@@ -2502,11 +2502,11 @@
     }
   },
   "深": {
-    "gloss": "profundo; intenso",
-    "definition": "profundo; intenso",
+    "gloss": "profundo",
+    "definition": "profundo (de agua, agujero, color, etc.); (figurado) profundo (de comprensión, sentimiento, etc.)",
     "example": {
-      "word": "深刻",
-      "pinyin": "shēn kè",
+      "word": "加深",
+      "pinyin": "jia shen",
       "es": "profundo"
     }
   },
@@ -2529,12 +2529,12 @@
     }
   },
   "剩": {
-    "gloss": "sobrar",
-    "definition": "sobrar",
+    "gloss": "quedar",
+    "definition": "quedar; sobrar",
     "example": {
       "word": "剩下",
-      "pinyin": "shèng xià",
-      "es": "quedar"
+      "pinyin": "sheng xia",
+      "es": "sobras, residuos, restos"
     }
   },
   "失": {
@@ -2547,21 +2547,21 @@
     }
   },
   "拾": {
-    "gloss": "recoger; diez",
-    "definition": "recoger; diez",
+    "gloss": "recoger",
+    "definition": "recoger; ordenar o clasificar",
     "example": {
-      "word": "收拾",
-      "pinyin": "shōu shi",
-      "es": "ordenar"
+      "word": "执拾",
+      "pinyin": "zhi shi",
+      "es": "recoger, recoger, ordenar"
     }
   },
   "使": {
-    "gloss": "hacer; enviar",
-    "definition": "hacer; enviar",
+    "gloss": "hacer que; usar",
+    "definition": "causar, hacer (que alguien haga algo); usar, emplear (formal/literario)",
     "example": {
-      "word": "使用",
-      "pinyin": "shǐ yòng",
-      "es": "usar"
+      "word": "使出",
+      "pinyin": "shi chu",
+      "es": "causar, enviar en una misión,"
     }
   },
   "士": {
@@ -2583,12 +2583,12 @@
     }
   },
   "式": {
-    "gloss": "estilo; fórmula",
-    "definition": "estilo; fórmula",
+    "gloss": "estilo; forma",
+    "definition": "(sufijo) -estilo; -tipo; -forma; -patrón",
     "example": {
-      "word": "方式",
-      "pinyin": "fāng shì",
-      "es": "manera"
+      "word": "中式",
+      "pinyin": "Zhong shi",
+      "es": "estilo, sistema, fórmula,"
     }
   },
   "柿": {
@@ -2619,30 +2619,30 @@
     }
   },
   "收": {
-    "gloss": "recoger; recibir",
-    "definition": "recoger; recibir",
+    "gloss": "recibir, aceptar",
+    "definition": "recibir, aceptar; cobrar, recolectar; guardar, ordenar",
     "example": {
-      "word": "收到",
-      "pinyin": "shōu dào",
-      "es": "recibir"
+      "word": "创收",
+      "pinyin": "chuang shou",
+      "es": "reunir, recoger"
     }
   },
   "首": {
-    "gloss": "cabeza; primero",
-    "definition": "cabeza; primero",
+    "gloss": "cabeza; clasificador de canciones",
+    "definition": "(clasificador) para canciones, poemas y piezas musicales",
     "example": {
-      "word": "首先",
-      "pinyin": "shǒu xiān",
-      "es": "en primer lugar"
+      "word": "一首歌",
+      "pinyin": "yì shǒu gē",
+      "es": "una canción"
     }
   },
   "受": {
-    "gloss": "recibir; sufrir",
-    "definition": "recibir; sufrir",
+    "gloss": "recibir",
+    "definition": "recibir, aceptar (un regalo, educación, etc.); sufrir, soportar (dificultades, dolor, etc.); se usa antes de verbos para indicar pasiva o 'ser …ado' (p. ej., 受欢迎 'ser popular', 受帮助 'ser ayudado')",
     "example": {
-      "word": "接受",
-      "pinyin": "jiē shòu",
-      "es": "aceptar"
+      "word": "享受",
+      "pinyin": "xiang shou",
+      "es": "recibir, aceptar, obtener"
     }
   },
   "售": {
@@ -2664,12 +2664,12 @@
     }
   },
   "输": {
-    "gloss": "transportar; perder",
-    "definition": "transportar; perder",
+    "gloss": "transportar; acarrear",
+    "definition": "perder (una competencia, juego o discusión); transportar; transmitir (forma ligada, a menudo en compuestos); (coloquial) ingresar (una contraseña o código)",
     "example": {
-      "word": "运输",
-      "pinyin": "yùn shū",
-      "es": "transporte"
+      "word": "伏输",
+      "pinyin": "fu shu",
+      "es": "transportar, acarrear,"
     }
   },
   "熟": {
@@ -2700,21 +2700,21 @@
     }
   },
   "帅": {
-    "gloss": "elegante; general",
-    "definition": "elegante; general",
+    "gloss": "guapo",
+    "definition": "guapo, atractivo (del aspecto de un hombre); genial, con estilo, impresionante (de objetos, acciones o el estilo de alguien)",
     "example": {
-      "word": "帅气",
-      "pinyin": "shuài qi",
-      "es": "guapo"
+      "word": "元帅",
+      "pinyin": "yuan shuai",
+      "es": "comandante, comandante en jefe"
     }
   },
   "顺": {
-    "gloss": "seguir; favorable",
-    "definition": "seguir; favorable",
+    "gloss": "obedecer; someterse; acompañar",
+    "definition": "(verbo) seguir, obedecer; (preposición) a lo largo de (un camino, dirección); (adjetivo) fluido, favorable, que va bien",
     "example": {
-      "word": "顺利",
-      "pinyin": "shùn lì",
-      "es": "sin problemas"
+      "word": "不顺",
+      "pinyin": "bu shun",
+      "es": "obedecer, someterse, acompañar"
     }
   },
   "硕": {
@@ -2727,21 +2727,21 @@
     }
   },
   "死": {
-    "gloss": "morir; muerto",
-    "definition": "morir; muerto",
+    "gloss": "morir",
+    "definition": "morir; inflexible, rígido, fijo; (complemento verbal) extremadamente, hasta morir (coloquial)",
     "example": {
-      "word": "死亡",
-      "pinyin": "sǐ wáng",
-      "es": "muerte"
+      "word": "人死",
+      "pinyin": "ren si",
+      "es": "morir"
     }
   },
   "松": {
-    "gloss": "pino; flojo",
-    "definition": "pino; flojo",
+    "gloss": "suelto",
+    "definition": "suelto; aflojar; relajarse",
     "example": {
-      "word": "放松",
-      "pinyin": "fàng sōng",
-      "es": "relajarse"
+      "word": "嘴松",
+      "pinyin": "zui song",
+      "es": "pino"
     }
   },
   "嗽": {
@@ -2772,21 +2772,21 @@
     }
   },
   "酸": {
-    "gloss": "ácido; agrio",
-    "definition": "ácido; agrio",
+    "gloss": "agrio, ácido",
+    "definition": "agrio, ácido; dolorido, adolorido; apenado, afligido",
     "example": {
-      "word": "酸奶",
-      "pinyin": "suān nǎi",
-      "es": "yogur"
+      "word": "乙酸",
+      "pinyin": "yi suan",
+      "es": "agrio, agrio"
     }
   },
   "随": {
-    "gloss": "seguir; según",
-    "definition": "seguir; según",
+    "gloss": "seguir; escuchar; someterse a",
+    "definition": "seguir (físicamente o en secuencia); cumplir con, aceptar; variar según, depender de",
     "example": {
-      "word": "随便",
-      "pinyin": "suí biàn",
-      "es": "como quieras"
+      "word": "任随",
+      "pinyin": "ren sui",
+      "es": "seguir, escuchar, someterse a"
     }
   },
   "孙": {
@@ -2799,21 +2799,21 @@
     }
   },
   "台": {
-    "gloss": "plataforma; Taiwán",
-    "definition": "plataforma; Taiwán",
+    "gloss": "plataforma; clasificador de máquinas",
+    "definition": "(sustantivo) plataforma, escenario, terraza; también estación (p. ej., 电视台, 气象台); (clasificador) para máquinas, vehículos, dispositivos electrónicos, etc.",
     "example": {
-      "word": "舞台",
-      "pinyin": "wǔ tái",
-      "es": "escenario"
+      "word": "一台电脑",
+      "pinyin": "yì tái diànnǎo",
+      "es": "un ordenador"
     }
   },
   "抬": {
-    "gloss": "levantar",
-    "definition": "levantar",
+    "gloss": "levantar; llevar",
+    "definition": "levantar, alzar (la cabeza, la mano, etc.); cargar (entre dos o más personas)",
     "example": {
-      "word": "抬头",
-      "pinyin": "tái tóu",
-      "es": "levantar la cabeza"
+      "word": "哄抬",
+      "pinyin": "hong tai",
+      "es": "levantar, llevar"
     }
   },
   "态": {
@@ -2826,48 +2826,48 @@
     }
   },
   "谈": {
-    "gloss": "hablar; conversar",
-    "definition": "hablar; conversar",
+    "gloss": "hablar",
+    "definition": "hablar; discutir",
     "example": {
-      "word": "谈话",
-      "pinyin": "tán huà",
-      "es": "charla"
+      "word": "交谈",
+      "pinyin": "jiao tan",
+      "es": "hablar"
     }
   },
   "汤": {
-    "gloss": "sopa; caldo",
-    "definition": "sopa; caldo",
+    "gloss": "sopa",
+    "definition": "sopa; decocción de hierbas medicinales; caldo",
     "example": {
-      "word": "汤水",
-      "pinyin": "tāng shuǐ",
-      "es": "caldo"
+      "word": "商汤",
+      "pinyin": "Shang Tang",
+      "es": "agua caliente"
     }
   },
   "糖": {
-    "gloss": "azúcar; dulce",
-    "definition": "azúcar; dulce",
+    "gloss": "azúcar, caramelo, dulces",
+    "definition": "azúcar, caramelo, dulces",
     "example": {
-      "word": "糖果",
-      "pinyin": "táng guǒ",
-      "es": "caramelos"
+      "word": "丁糖",
+      "pinyin": "ding tang",
+      "es": "azúcar"
     }
   },
   "躺": {
-    "gloss": "acostarse",
-    "definition": "acostarse",
+    "gloss": "acostarse, recostarse",
+    "definition": "acostarse, recostarse",
     "example": {
-      "word": "躺下",
-      "pinyin": "tǎng xià",
-      "es": "tumbarse"
+      "word": "仰躺",
+      "pinyin": "yang tang",
+      "es": "acostarse, reclinarse"
     }
   },
   "趟": {
-    "gloss": "vez (viaje)",
-    "definition": "vez (viaje)",
+    "gloss": "tiempo; ocasión",
+    "definition": "(clasificador) para viajes, trayectos o veces de ir a algún lugar y regresar",
     "example": {
-      "word": "一趟",
-      "pinyin": "yí tàng",
-      "es": "un viaje"
+      "word": "单趟",
+      "pinyin": "dan tang",
+      "es": "tiempo, ocasión"
     }
   },
   "萄": {
@@ -2889,12 +2889,12 @@
     }
   },
   "填": {
-    "gloss": "rellenar",
-    "definition": "rellenar",
+    "gloss": "llenar",
+    "definition": "llenar (un agujero, recipiente, etc.); rellenar (un formulario, documento)",
     "example": {
-      "word": "填写",
-      "pinyin": "tián xiě",
-      "es": "rellenar"
+      "word": "代填",
+      "pinyin": "dai tian",
+      "es": "llenar, llenar"
     }
   },
   "厅": {
@@ -2907,30 +2907,30 @@
     }
   },
   "停": {
-    "gloss": "parar; detener",
-    "definition": "parar; detener",
+    "gloss": "parar",
+    "definition": "parar; estacionar (un vehículo)",
     "example": {
-      "word": "停止",
-      "pinyin": "tíng zhǐ",
-      "es": "cesar"
+      "word": "不停",
+      "pinyin": "bu ting",
+      "es": "detener, suspender, retrasar"
     }
   },
   "挺": {
-    "gloss": "erecto; bastante",
-    "definition": "erecto; bastante",
+    "gloss": "pararse erguido; enderezarse",
+    "definition": "(adverbio) bastante (coloquial, más suave que 很); (verbo) enderezarse; sacar; resistir, soportar",
     "example": {
-      "word": "挺好",
-      "pinyin": "tǐng hǎo",
-      "es": "muy bien"
+      "word": "丫挺",
+      "pinyin": "ya ting",
+      "es": "pararse erguido, enderezarse"
     }
   },
   "通": {
-    "gloss": "pasar; comunicar",
-    "definition": "pasar; comunicar",
+    "gloss": "pasar; común; comunicar",
+    "definition": "(verbo) atravesar; estar abierto o conectado; tener un conocimiento profundo de (un tema); (adjetivo) (de escritura, razonamiento) coherente, lógico, claro; (clasificador) para cartas, telegramas, llamadas telefónicas, etc.",
     "example": {
-      "word": "通过",
-      "pinyin": "tōng guò",
-      "es": "mediante"
+      "word": "三通",
+      "pinyin": "san tong",
+      "es": "pasar, común, comunicar"
     }
   },
   "童": {
@@ -2943,30 +2943,30 @@
     }
   },
   "桶": {
-    "gloss": "cubo; barril",
-    "definition": "cubo; barril",
+    "gloss": "cubo",
+    "definition": "cubo; bote de basura; barril",
     "example": {
-      "word": "水桶",
-      "pinyin": "shuǐ tǒng",
-      "es": "cubo"
+      "word": "便桶",
+      "pinyin": "bian tong",
+      "es": "balde, balde, tina"
     }
   },
   "推": {
-    "gloss": "empujar; recomendar",
-    "definition": "empujar; recomendar",
+    "gloss": "empujar",
+    "definition": "empujar; rechazar; declinar; nominar; elegir",
     "example": {
-      "word": "推荐",
-      "pinyin": "tuī jiàn",
-      "es": "recomendar"
+      "word": "公推",
+      "pinyin": "gong tui",
+      "es": "empujar, expulsar"
     }
   },
   "脱": {
-    "gloss": "quitarse; escapar",
-    "definition": "quitarse; escapar",
+    "gloss": "quitarse",
+    "definition": "quitarse (ropa, zapatos, accesorios); mudar (piel, plumas, pelaje); escapar, alejarse de (una situación, peligro)",
     "example": {
-      "word": "脱离",
-      "pinyin": "tuō lí",
-      "es": "separarse"
+      "word": "出脱",
+      "pinyin": "chu tuo",
+      "es": "despegar"
     }
   },
   "袜": {
@@ -2997,12 +2997,12 @@
     }
   },
   "围": {
-    "gloss": "rodear",
-    "definition": "rodear",
+    "gloss": "rodear, cercar",
+    "definition": "rodear, cercar; envolverse (alrededor de uno mismo, ej., una bufanda o chal)",
     "example": {
-      "word": "周围",
-      "pinyin": "zhōu wéi",
-      "es": "alrededor"
+      "word": "三围",
+      "pinyin": "san wei",
+      "es": "rodear, cercar, acorralar"
     }
   },
   "卫": {
@@ -3015,12 +3015,12 @@
     }
   },
   "味": {
-    "gloss": "sabor; olor",
-    "definition": "sabor; olor",
+    "gloss": "sabor, gusto",
+    "definition": "sabor, gusto; olor, hedor",
     "example": {
-      "word": "味道",
-      "pinyin": "wèi dao",
-      "es": "sabor"
+      "word": "一味",
+      "pinyin": "yi wei",
+      "es": "gusto, olfato, olor"
     }
   },
   "温": {
@@ -3042,30 +3042,30 @@
     }
   },
   "无": {
-    "gloss": "no; sin",
-    "definition": "no; sin",
+    "gloss": "no tener, carecer de",
+    "definition": "no tener, carecer de",
     "example": {
-      "word": "无法",
-      "pinyin": "wú fǎ",
-      "es": "imposible"
+      "word": "不无",
+      "pinyin": "bu wu",
+      "es": "negativo, no, no"
     }
   },
   "误": {
-    "gloss": "error; retrasar",
-    "definition": "error; retrasar",
+    "gloss": "errar; cometer un error",
+    "definition": "equivocarse (en comprensión o acción); mal-; retrasar; perder (un plazo o evento programado)",
     "example": {
-      "word": "错误",
-      "pinyin": "cuò wù",
-      "es": "error"
+      "word": "偏误",
+      "pinyin": "pian wu",
+      "es": "errar, cometer un error"
     }
   },
   "吸": {
-    "gloss": "aspirar; atraer",
-    "definition": "aspirar; atraer",
+    "gloss": "inhalar; aspirar",
+    "definition": "inhalar, respirar hacia adentro; chupar, aspirar (líquido); absorber (líquido, energía, etc.)",
     "example": {
-      "word": "吸收",
-      "pinyin": "xī shōu",
-      "es": "absorber"
+      "word": "吮吸",
+      "pinyin": "shun xi",
+      "es": "inhalar, aspirar"
     }
   },
   "悉": {
@@ -3087,12 +3087,12 @@
     }
   },
   "细": {
-    "gloss": "fino; detallado",
-    "definition": "fino; detallado",
+    "gloss": "delgado, esbelto",
+    "definition": "delgado, esbelto; fino (de textura o partículas); (de un sonido) bajo, suave, leve",
     "example": {
       "word": "仔细",
-      "pinyin": "zǐ xì",
-      "es": "cuidadoso"
+      "pinyin": "zi xi",
+      "es": "bien, pequeño"
     }
   },
   "咸": {
@@ -3105,21 +3105,21 @@
     }
   },
   "险": {
-    "gloss": "peligro; riesgo",
-    "definition": "peligro; riesgo",
+    "gloss": "paso estrecho; punto",
+    "definition": "(adjetivo) peligroso, arriesgado; (adjetivo) riesgoso; (adverbio) casi, apenas; por poco",
     "example": {
-      "word": "危险",
-      "pinyin": "wēi xiǎn",
-      "es": "peligro"
+      "word": "保险",
+      "pinyin": "bao xian",
+      "es": "paso estrecho, punto"
     }
   },
   "线": {
-    "gloss": "línea; hilo",
-    "definition": "línea; hilo",
+    "gloss": "hilo",
+    "definition": "hilo; cuerda; cable; línea; (clasificador) para rayos, líneas o hilos de algo (p. ej., esperanza, luz); nivel (en la clasificación de ciudades)",
     "example": {
-      "word": "路线",
-      "pinyin": "lù xiàn",
-      "es": "ruta"
+      "word": "一线",
+      "pinyin": "yi xian",
+      "es": "línea, hilo, alambre"
     }
   },
   "羡": {
@@ -3186,12 +3186,12 @@
     }
   },
   "醒": {
-    "gloss": "despertar",
-    "definition": "despertar",
+    "gloss": "despertarse",
+    "definition": "despertarse; estar despierto; despejarse (de la borrachera); volver en sí",
     "example": {
-      "word": "醒来",
-      "pinyin": "xǐng lái",
-      "es": "despertarse"
+      "word": "叫醒",
+      "pinyin": "jiao xing",
+      "es": "despertar"
     }
   },
   "幸": {
@@ -3205,20 +3205,20 @@
   },
   "性": {
     "gloss": "naturaleza; sexo",
-    "definition": "naturaleza; sexo",
+    "definition": "(sufijo) forma sustantivos abstractos a partir de adjetivos o verbos, indicando una cualidad, propiedad o estado",
     "example": {
-      "word": "性格",
-      "pinyin": "xìng gé",
-      "es": "carácter"
+      "word": "中性",
+      "pinyin": "zhong xing",
+      "es": "naturaleza, carácter, sexo"
     }
   },
   "修": {
-    "gloss": "reparar; estudiar",
-    "definition": "reparar; estudiar",
+    "gloss": "reparar",
+    "definition": "reparar; arreglar; construir; edificar; estudiar; tomar (un curso o clase)",
     "example": {
-      "word": "修理",
-      "pinyin": "xiū lǐ",
-      "es": "arreglar"
+      "word": "下修",
+      "pinyin": "xia xiu",
+      "es": "estudiar"
     }
   },
   "羞": {
@@ -3267,12 +3267,12 @@
     }
   },
   "压": {
-    "gloss": "presión; oprimir",
-    "definition": "presión; oprimir",
+    "gloss": "prensa",
+    "definition": "presionar, empujar hacia abajo; suprimir, mantener bajo control",
     "example": {
-      "word": "压力",
-      "pinyin": "yā lì",
-      "es": "presión"
+      "word": "低压",
+      "pinyin": "di ya",
+      "es": "prensa"
     }
   },
   "鸭": {
@@ -3294,21 +3294,21 @@
     }
   },
   "烟": {
-    "gloss": "humo; tabaco",
-    "definition": "humo; tabaco",
+    "gloss": "cigarrillo o tabaco de pipa",
+    "definition": "cigarrillo o tabaco de pipa; humo; niebla; vapor",
     "example": {
-      "word": "香烟",
-      "pinyin": "xiāng yān",
-      "es": "cigarrillo"
+      "word": "人烟",
+      "pinyin": "ren yan",
+      "es": "humo, hollín"
     }
   },
   "严": {
-    "gloss": "estricto; severo",
-    "definition": "estricto; severo",
+    "gloss": "estricto, severo, riguroso",
+    "definition": "estricto, severo, riguroso; apretado, sellado herméticamente",
     "example": {
-      "word": "严格",
-      "pinyin": "yán gé",
-      "es": "estricto"
+      "word": "嘴严",
+      "pinyin": "zui yan",
+      "es": "estricto, riguroso, rígido"
     }
   },
   "言": {
@@ -3339,12 +3339,12 @@
     }
   },
   "演": {
-    "gloss": "actuar; ejercer",
-    "definition": "actuar; ejercer",
+    "gloss": "actuar",
+    "definition": "actuar, interpretar (en una obra, película, etc.); desarrollar, evolucionar (a menudo en compuestos como 演变)",
     "example": {
-      "word": "表演",
-      "pinyin": "biǎo yǎn",
-      "es": "actuar"
+      "word": "上演",
+      "pinyin": "shang yan",
+      "es": "actuar, ponerse"
     }
   },
   "厌": {
@@ -3384,12 +3384,12 @@
     }
   },
   "养": {
-    "gloss": "criar; mantener",
-    "definition": "criar; mantener",
+    "gloss": "criar; cuidar",
+    "definition": "criar (hijos o animales), educar; tener (mascotas); mantener (económicamente), proveer para",
     "example": {
-      "word": "培养",
-      "pinyin": "péi yǎng",
-      "es": "cultivar"
+      "word": "休养",
+      "pinyin": "xiu yang",
+      "es": "levantar, levantar, levantar"
     }
   },
   "邀": {
@@ -3421,11 +3421,11 @@
   },
   "页": {
     "gloss": "página",
-    "definition": "página",
+    "definition": "(clasificador) para páginas (de un libro, documento, papel)",
     "example": {
-      "word": "页面",
-      "pinyin": "yè miàn",
-      "es": "página"
+      "word": "上页",
+      "pinyin": "shang ye",
+      "es": "página, hoja, hoja"
     }
   },
   "疑": {
@@ -3474,29 +3474,29 @@
     }
   },
   "引": {
-    "gloss": "tirar; citar",
-    "definition": "tirar; citar",
+    "gloss": "guiar, dirigir",
+    "definition": "guiar, dirigir; atraer, llamar (la atención o el interés); citar, referenciar (como evidencia o justificación)",
     "example": {
-      "word": "引起",
-      "pinyin": "yǐn qǐ",
-      "es": "provocar"
+      "word": "公引",
+      "pinyin": "gong yin",
+      "es": "tirar, sacar, atraer"
     }
   },
   "印": {
-    "gloss": "imprimir; sello",
-    "definition": "imprimir; sello",
+    "gloss": "imprimir; sellar; estampar",
+    "definition": "(verbo) imprimir, sellar o grabar; (sustantivo) sello, estampilla, impresión o marca",
     "example": {
-      "word": "印刷",
-      "pinyin": "yìn shuā",
-      "es": "imprimir"
+      "word": "中印",
+      "pinyin": "Zhong Yin",
+      "es": "imprimir, sellar, estampar,"
     }
   },
   "赢": {
     "gloss": "ganar",
-    "definition": "ganar",
+    "definition": "ganar (una competencia, juego, etc.); vencer (a un oponente); obtener ganancias; generar utilidades",
     "example": {
-      "word": "赢得",
-      "pinyin": "yíng dé",
+      "word": "共赢",
+      "pinyin": "gong ying",
       "es": "ganar"
     }
   },
@@ -3546,21 +3546,21 @@
     }
   },
   "由": {
-    "gloss": "por; causa",
-    "definition": "por; causa",
+    "gloss": "causa; razón",
+    "definition": "por (indicando el agente o realizador de una acción); compuesto de; de (indicando composición o fuente); para que ... (indicando decisión o responsabilidad)",
     "example": {
-      "word": "由于",
-      "pinyin": "yóu yú",
-      "es": "debido a"
+      "word": "不由",
+      "pinyin": "bu you",
+      "es": "causa, razón"
     }
   },
   "油": {
-    "gloss": "aceite; grasa",
-    "definition": "aceite; grasa",
+    "gloss": "aceite",
+    "definition": "aceite; grasa; petróleo",
     "example": {
-      "word": "汽油",
-      "pinyin": "qì yóu",
-      "es": "gasolina"
+      "word": "中油",
+      "pinyin": "Zhong you",
+      "es": "aceite, grasa, grasa, manteca"
     }
   },
   "愉": {
@@ -3573,12 +3573,12 @@
     }
   },
   "与": {
-    "gloss": "y; con; dar",
-    "definition": "y; con; dar",
+    "gloss": "y; con",
+    "definition": "(conjunción) y (formal, que conecta sustantivos); (preposición) con, junto con (formal)",
     "example": {
-      "word": "参加",
-      "pinyin": "cān jiā",
-      "es": "participar"
+      "word": "交与",
+      "pinyin": "jiao yu",
+      "es": "y"
     }
   },
   "羽": {
@@ -3600,21 +3600,21 @@
     }
   },
   "原": {
-    "gloss": "origen; original",
-    "definition": "origen; original",
+    "gloss": "original, anterior",
+    "definition": "original, anterior; crudo, sin procesar",
     "example": {
-      "word": "原来",
-      "pinyin": "yuán lái",
-      "es": "resulta que"
+      "word": "三原",
+      "pinyin": "San yuan",
+      "es": "fuente, origen, comienzo"
     }
   },
   "约": {
-    "gloss": "acuerdo; aproximadamente",
-    "definition": "acuerdo; aproximadamente",
+    "gloss": "tratado; acuerdo; pacto",
+    "definition": "(verbo) hacer una cita; quedar; (verbo) invitar; (adverbio) aproximadamente; alrededor de",
     "example": {
-      "word": "约会",
-      "pinyin": "yuē huì",
-      "es": "cita"
+      "word": "俭约",
+      "pinyin": "jian yue",
+      "es": "tratado, acuerdo, pacto"
     }
   },
   "阅": {
@@ -3627,12 +3627,12 @@
     }
   },
   "云": {
-    "gloss": "nube; decir",
-    "definition": "nube; decir",
+    "gloss": "nube",
+    "definition": "nube; (apellido) Yun; (abreviatura) provincia de Yunnan",
     "example": {
-      "word": "白云",
-      "pinyin": "bái yún",
-      "es": "nube blanca"
+      "word": "云云",
+      "pinyin": "yun yun",
+      "es": "decir, hablar"
     }
   },
   "允": {
@@ -3645,12 +3645,12 @@
     }
   },
   "杂": {
-    "gloss": "mezclado; miscelánea",
-    "definition": "mezclado; miscelánea",
+    "gloss": "mezclado, variado, diverso",
+    "definition": "mezclado, variado, diverso",
     "example": {
-      "word": "复杂",
-      "pinyin": "fù zá",
-      "es": "complejo"
+      "word": "冗杂",
+      "pinyin": "rong za",
+      "es": "mezclado, mezclado"
     }
   },
   "咱": {
@@ -3681,12 +3681,12 @@
     }
   },
   "则": {
-    "gloss": "norma; entonces",
-    "definition": "norma; entonces",
+    "gloss": "entonces; norma",
+    "definition": "(conjunción) pero; entonces (indicando contraste o consecuencia); (forma ligada) estándar; norma; principio; (clasificador) para elementos escritos (noticias, artículos, reglas, etc.)",
     "example": {
-      "word": "原则",
-      "pinyin": "yuán zé",
-      "es": "principio"
+      "word": "一则",
+      "pinyin": "yi ze",
+      "es": "regla, ley, regulación"
     }
   },
   "责": {
@@ -3699,12 +3699,12 @@
     }
   },
   "增": {
-    "gloss": "aumentar",
-    "definition": "aumentar",
+    "gloss": "aumentar; añadir",
+    "definition": "aumentar, incrementar, añadir a",
     "example": {
-      "word": "增加",
-      "pinyin": "zēng jiā",
-      "es": "aumentar"
+      "word": "倍增",
+      "pinyin": "bei zeng",
+      "es": "aumentar, añadir, aumentar"
     }
   },
   "展": {
@@ -3717,84 +3717,84 @@
     }
   },
   "占": {
-    "gloss": "ocupar; constituir",
-    "definition": "ocupar; constituir",
+    "gloss": "ocupar",
+    "definition": "ocupar, tomar (espacio, tiempo o una posición)",
     "example": {
-      "word": "占据",
-      "pinyin": "zhàn jù",
-      "es": "ocupar"
+      "word": "占中",
+      "pinyin": "Zhan Zhong",
+      "es": "divino"
     }
   },
   "章": {
     "gloss": "capítulo; sello",
-    "definition": "capítulo; sello",
+    "definition": "(clasificador) para capítulos de un libro, secciones de un documento o cláusulas de una ley; (clasificador) para movimientos de una sinfonía",
     "example": {
-      "word": "文章",
-      "pinyin": "wén zhāng",
-      "es": "artículo"
+      "word": "像章",
+      "pinyin": "xiang zhang",
+      "es": "composición"
     }
   },
   "招": {
-    "gloss": "llamar; reclutar",
-    "definition": "llamar; reclutar",
+    "gloss": "reclutar, contratar",
+    "definition": "reclutar, contratar; provocar, incurrir, atraer (a menudo negativo); hacer señas, saludar con la mano",
     "example": {
-      "word": "招聘",
-      "pinyin": "zhāo pìn",
-      "es": "contratar"
+      "word": "中招",
+      "pinyin": "zhong zhao",
+      "es": "llamar, convocar"
     }
   },
   "折": {
-    "gloss": "doblar; descuento",
-    "definition": "doblar; descuento",
+    "gloss": "romper, fracturar",
+    "definition": "romper, fracturar; doblar, plegar; descontar, convertir (moneda)",
     "example": {
-      "word": "打折",
-      "pinyin": "dǎ zhé",
-      "es": "rebajar"
+      "word": "九折",
+      "pinyin": "jiu zhe",
+      "es": "romper, romper"
     }
   },
   "针": {
     "gloss": "aguja",
-    "definition": "aguja",
+    "definition": "aguja (de coser, alfiler); (médico) inyección, pinchazo; (quirúrgico) punto de sutura",
     "example": {
-      "word": "打针",
-      "pinyin": "dǎ zhēn",
-      "es": "inyección"
+      "word": "分针",
+      "pinyin": "fen zhen",
+      "es": "aguja"
     }
   },
   "争": {
-    "gloss": "disputar; luchar",
-    "definition": "disputar; luchar",
+    "gloss": "disputar; pelear; contender",
+    "definition": "contender / esforzarse por / competir por; discutir / disputar",
     "example": {
-      "word": "竞争",
-      "pinyin": "jìng zhēng",
-      "es": "competir"
+      "word": "不争",
+      "pinyin": "bu zheng",
+      "es": "disputar, pelear, contender,"
     }
   },
   "整": {
-    "gloss": "entero; ordenar",
-    "definition": "entero; ordenar",
+    "gloss": "entero, todo, completo",
+    "definition": "entero, todo, completo; en orden, ordenado",
     "example": {
-      "word": "整理",
-      "pinyin": "zhěng lǐ",
-      "es": "ordenar"
+      "word": "休整",
+      "pinyin": "xiu zheng",
+      "es": "ordenado, ordenado, ordenado"
     }
   },
   "证": {
-    "gloss": "prueba; certificado",
-    "definition": "prueba; certificado",
+    "gloss": "probar; confirmar; verificar",
+    "definition": "certificado, carné de identidad; prueba, evidencia",
     "example": {
-      "word": "证明",
-      "pinyin": "zhèng míng",
-      "es": "demostrar"
+      "word": "上证",
+      "pinyin": "Shang Zheng",
+      "es": "probar, confirmar, verificar"
     }
   },
   "之": {
-    "gloss": "de (partícula)",
-    "definition": "de (partícula)",
+    "gloss": "partícula (literaria)",
+    "definition": "(literario, partícula posesiva) equivalente a 的; (literario, pronombre de objeto) lo, la, lo; (literario, demostrativo) este",
     "example": {
-      "word": "之前",
-      "pinyin": "zhī qián",
-      "es": "antes"
+      "word": "久之",
+      "pinyin": "jiu zhi",
+      "es": "marca la frase anterior como"
     }
   },
   "支": {
@@ -3816,12 +3816,12 @@
     }
   },
   "值": {
-    "gloss": "valor; valer",
-    "definition": "valor; valer",
+    "gloss": "valor",
+    "definition": "(verbo) valer; (verbo) estar de turno",
     "example": {
-      "word": "值得",
-      "pinyin": "zhí de",
-      "es": "valer la pena"
+      "word": "不值",
+      "pinyin": "bu zhi",
+      "es": "precio"
     }
   },
   "职": {
@@ -3843,12 +3843,12 @@
     }
   },
   "止": {
-    "gloss": "parar; solo",
-    "definition": "parar; solo",
+    "gloss": "detener, cesar, parar",
+    "definition": "detener, cesar, parar; prevenir, detener (que ocurra)",
     "example": {
-      "word": "停止",
-      "pinyin": "tíng zhǐ",
-      "es": "parar"
+      "word": "不止",
+      "pinyin": "bu zhi",
+      "es": "detenerse, detenerse, desistir"
     }
   },
   "址": {
@@ -3861,21 +3861,21 @@
     }
   },
   "指": {
-    "gloss": "dedo; señalar",
-    "definition": "dedo; señalar",
+    "gloss": "señalar, indicar, mostrar",
+    "definition": "señalar, indicar, mostrar; depender de, contar con",
     "example": {
-      "word": "指导",
-      "pinyin": "zhǐ dǎo",
-      "es": "guiar"
+      "word": "中指",
+      "pinyin": "zhong zhi",
+      "es": "dedo, dedo del pie"
     }
   },
   "至": {
-    "gloss": "hasta; llegar",
-    "definition": "hasta; llegar",
+    "gloss": "alcanzar; llegar",
+    "definition": "(verbo, literario) llegar",
     "example": {
-      "word": "至少",
-      "pinyin": "zhì shǎo",
-      "es": "al menos"
+      "word": "乃至",
+      "pinyin": "nai zhi",
+      "es": "alcanzar, llegar"
     }
   },
   "志": {
@@ -3915,12 +3915,12 @@
     }
   },
   "祝": {
-    "gloss": "desear; felicitar",
-    "definition": "desear; felicitar",
+    "gloss": "orar por felicidad o",
+    "definition": "desear (a alguien algo bueno)",
     "example": {
-      "word": "祝福",
-      "pinyin": "zhù fú",
-      "es": "bendición"
+      "word": "庙祝",
+      "pinyin": "miao zhu",
+      "es": "orar por felicidad o"
     }
   },
   "专": {
@@ -3942,12 +3942,12 @@
     }
   },
   "赚": {
-    "gloss": "ganar (dinero)",
-    "definition": "ganar (dinero)",
+    "gloss": "ganar dinero; ganar",
+    "definition": "ganar (una ganancia), hacer dinero",
     "example": {
-      "word": "赚钱",
-      "pinyin": "zhuàn qián",
-      "es": "ganar dinero"
+      "word": "赚取",
+      "pinyin": "zhuan qu",
+      "es": "ganar dinero, ganar"
     }
   },
   "资": {
@@ -3969,12 +3969,12 @@
     }
   },
   "族": {
-    "gloss": "clan; etnia",
-    "definition": "clan; etnia",
+    "gloss": "un clan familiar; grupo",
+    "definition": "(sufijo) grupo étnico, raza; también usado para clanes y linajes; (sufijo) grupo social definido por un rasgo o actividad compartida",
     "example": {
-      "word": "民族",
-      "pinyin": "mín zú",
-      "es": "etnia"
+      "word": "一族",
+      "pinyin": "yi zu",
+      "es": "un clan familiar, grupo"
     }
   },
   "尊": {
@@ -3987,11 +3987,11 @@
     }
   },
   "座": {
-    "gloss": "asiento; base",
-    "definition": "asiento; base",
+    "gloss": "asiento",
+    "definition": "(clasificador) para objetos grandes e inmóviles como montañas, edificios, puentes y torres; (sustantivo) asiento, base, soporte",
     "example": {
-      "word": "座位",
-      "pinyin": "zuò wèi",
+      "word": "上座",
+      "pinyin": "shang zuo",
       "es": "asiento"
     }
   }

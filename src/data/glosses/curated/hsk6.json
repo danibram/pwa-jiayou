@@ -261,8 +261,8 @@
     }
   },
   "爆": {
-    "gloss": "estallar; explotar",
-    "definition": "estallar; explotar",
+    "gloss": "explotar, reventar",
+    "definition": "explotar, reventar; saltear (a fuego alto), hervir rápidamente",
     "example": {
       "word": "爆炸",
       "pinyin": "bào zhà",
@@ -352,7 +352,7 @@
   },
   "逼": {
     "gloss": "obligar; forzar",
-    "definition": "obligar; forzar",
+    "definition": "forzar, obligar (a alguien a hacer algo); avanzar hacia, acercarse a, cercar (un lugar)",
     "example": {
       "word": "逼迫",
       "pinyin": "bī pò",
@@ -576,8 +576,8 @@
     }
   },
   "捕": {
-    "gloss": "capturar; arrestar",
-    "definition": "capturar; arrestar",
+    "gloss": "atrapar, capturar",
+    "definition": "atrapar, capturar",
     "example": {
       "word": "捕捉",
       "pinyin": "bǔ zhuō",
@@ -676,7 +676,7 @@
   },
   "侧": {
     "gloss": "lado; ladeado",
-    "definition": "lado; ladeado",
+    "definition": "(sustantivo) lado, parte lateral; (verbo) inclinar, apoyar, girar hacia un lado",
     "example": {
       "word": "侧面",
       "pinyin": "cè miàn",
@@ -874,7 +874,7 @@
   },
   "撑": {
     "gloss": "apuntalar",
-    "definition": "apuntalar",
+    "definition": "sostener, apuntalar o abrir (un paraguas, etc.); empujar o mover con un palo (un bote); llenar hasta el punto de reventar (especialmente al comer)",
     "example": {
       "word": "支撑",
       "pinyin": "zhī chēng",
@@ -1063,7 +1063,7 @@
   },
   "串": {
     "gloss": "sarta; ensartar",
-    "definition": "sarta; ensartar",
+    "definition": "(clasificador) usado para cosas ensartadas o en manojo o en fila: sarta de, manojo de, brocheta de; (sustantivo) una sarta; un manojo; una brocheta",
     "example": {
       "word": "一串",
       "pinyin": "yí chuàn",
@@ -1216,7 +1216,7 @@
   },
   "寸": {
     "gloss": "cun; pulgada",
-    "definition": "cun; pulgada",
+    "definition": "(clasificador) pulgada china (aprox. 3,33 cm, 1/10 de un pie chino)",
     "example": {
       "word": "尺寸",
       "pinyin": "chǐ cun",
@@ -1252,7 +1252,7 @@
   },
   "搭": {
     "gloss": "montar; unir",
-    "definition": "montar; unir",
+    "definition": "levantar, construir (andamios, un cobertizo, un estante); tomar, viajar en (transporte público o un viaje en coche privado); emparejar, combinar, añadir (cosas o personas juntas)",
     "example": {
       "word": "搭配",
       "pinyin": "dā pèi",
@@ -1503,8 +1503,8 @@
     }
   },
   "吊": {
-    "gloss": "colgar; condolerse",
-    "definition": "colgar; condolerse",
+    "gloss": "colgar, suspender",
+    "definition": "colgar, suspender; condolerse, lamentar",
     "example": {
       "word": "吊销",
       "pinyin": "diào xiāo",
@@ -1513,7 +1513,7 @@
   },
   "跌": {
     "gloss": "caer; tropezar",
-    "definition": "caer; tropezar",
+    "definition": "caer, dar un traspié (de una persona u objeto); bajar, caer (de precios, temperatura, etc.)",
     "example": {
       "word": "跌倒",
       "pinyin": "diē dǎo",
@@ -1585,7 +1585,7 @@
   },
   "栋": {
     "gloss": "viga; edificio",
-    "definition": "viga; edificio",
+    "definition": "(clasificador) para casas, edificios y otras estructuras independientes",
     "example": {
       "word": "一栋",
       "pinyin": "yí dòng",
@@ -1657,7 +1657,7 @@
   },
   "渡": {
     "gloss": "cruzar; ferry",
-    "definition": "cruzar; ferry",
+    "definition": "cruzar (un río, mar, etc.); superar (un período difícil)",
     "example": {
       "word": "过渡",
       "pinyin": "guò dù",
@@ -1666,7 +1666,7 @@
   },
   "端": {
     "gloss": "extremo; correcto",
-    "definition": "extremo; correcto",
+    "definition": "sostener (una taza, tazón, etc.) nivelado con ambas manos; llevar (en ambas manos); presentar (una opinión o idea)",
     "example": {
       "word": "极端",
       "pinyin": "jí duān",
@@ -1693,7 +1693,7 @@
   },
   "夺": {
     "gloss": "arrebatar",
-    "definition": "arrebatar",
+    "definition": "arrebatar, tomar por la fuerza; competir por, ganar (un premio o título); abrirse paso a la fuerza",
     "example": {
       "word": "夺取",
       "pinyin": "duó qǔ",
@@ -1765,7 +1765,7 @@
   },
   "番": {
     "gloss": "vez; turno",
-    "definition": "vez; turno",
+    "definition": "(clasificador) para ocurrencias de un evento, acción o enunciado, a menudo implicando una ronda o período completo; (clasificador) para un tipo o clase de situación, sabor, etc. (usado con 一 en frases como 别有一番∼); (clasificador) para veces o -plo, usado en expresiones como 翻一番 (duplicar)",
     "example": {
       "word": "番茄",
       "pinyin": "fān qié",
@@ -1783,7 +1783,7 @@
   },
   "犯": {
     "gloss": "cometer; criminal",
-    "definition": "cometer; criminal",
+    "definition": "cometer (un delito, ofensa o error); tener una recurrencia (de una enfermedad o mal hábito)",
     "example": {
       "word": "犯罪",
       "pinyin": "fàn zuì",
@@ -1864,7 +1864,7 @@
   },
   "粉": {
     "gloss": "polvo; rosa",
-    "definition": "polvo; rosa",
+    "definition": "(sustantivo) polvo; polvo cosmético; (sustantivo) fideos hechos de almidón (p. ej., fideos de arroz, fideos de frijol); (adjetivo) rosa",
     "example": {
       "word": "面粉",
       "pinyin": "miàn fěn",
@@ -2179,7 +2179,7 @@
   },
   "割": {
     "gloss": "cortar; segar",
-    "definition": "cortar; segar",
+    "definition": "cortar (con una cuchilla); separar; (figurado) cortar; romper (un lazo, una relación o algo querido)",
     "example": {
       "word": "分割",
       "pinyin": "fēn gē",
@@ -2215,7 +2215,7 @@
   },
   "宫": {
     "gloss": "palacio",
-    "definition": "palacio",
+    "definition": "palacio; edificio público dedicado a actividades culturales o juveniles (ej. 少年宫, 文化宫)",
     "example": {
       "word": "宫殿",
       "pinyin": "gōng diàn",
@@ -2323,7 +2323,7 @@
   },
   "罐": {
     "gloss": "lata; tarro",
-    "definition": "lata; tarro",
+    "definition": "lata, frasco, olla (contenedor)",
     "example": {
       "word": "罐头",
       "pinyin": "guàn tou",
@@ -2349,8 +2349,8 @@
     }
   },
   "棍": {
-    "gloss": "palo; bribón",
-    "definition": "palo; bribón",
+    "gloss": "palo",
+    "definition": "palo; vara; garrote",
     "example": {
       "word": "棍子",
       "pinyin": "gùn zi",
@@ -2440,7 +2440,7 @@
   },
   "嘿": {
     "gloss": "hey; ¡eh!",
-    "definition": "hey; ¡eh!",
+    "definition": "(interjección) ¡oye! (para llamar la atención o saludar informalmente); (interjección) ¡wow! (expresando sorpresa o admiración)",
     "example": {
       "word": "嘿嘿",
       "pinyin": "hēi hēi",
@@ -2458,7 +2458,7 @@
   },
   "狠": {
     "gloss": "cruel; feroz",
-    "definition": "cruel; feroz",
+    "definition": "(adjetivo) despiadado, feroz, fiero, decidido; (verbo) endurecer (el corazón); ser estricto o severo con (alguien, uno mismo); (adverbio) ferozmente, severamente (modifica un verbo para intensificar la acción)",
     "example": {
       "word": "狠心",
       "pinyin": "hěn xīn",
@@ -2485,7 +2485,7 @@
   },
   "横": {
     "gloss": "horizontal; arbitrario",
-    "definition": "horizontal; arbitrario",
+    "definition": "horizontal, a través, transversal (adjetivo/adverbio); trazo horizontal (sustantivo, en caracteres chinos); cruzar (verbo, un río, carretera, etc.)",
     "example": {
       "word": "横向",
       "pinyin": "héng xiàng",
@@ -2593,7 +2593,7 @@
   },
   "患": {
     "gloss": "sufrir; calamidad",
-    "definition": "sufrir; calamidad",
+    "definition": "contraer / padecer (una enfermedad)",
     "example": {
       "word": "患病",
       "pinyin": "huàn bìng",
@@ -2746,7 +2746,7 @@
   },
   "混": {
     "gloss": "mezclar; confundir",
-    "definition": "mezclar; confundir",
+    "definition": "(verbo) mezclar, confundir; (verbo) ir tirando, arreglárselas, apañárselas; (adverbio) imprudentemente, irreflexivamente, indiscriminadamente",
     "example": {
       "word": "混乱",
       "pinyin": "hùn luàn",
@@ -2872,7 +2872,7 @@
   },
   "尖": {
     "gloss": "puntiagudo; agudo",
-    "definition": "puntiagudo; agudo",
+    "definition": "(adjetivo) afilado, puntiagudo; estridente, penetrante; agudo, perspicaz; (sustantivo) punta, extremo; (sustantivo) la mejor parte; la crema y nata",
     "example": {
       "word": "尖锐",
       "pinyin": "jiān ruì",
@@ -2925,8 +2925,8 @@
     }
   },
   "剑": {
-    "gloss": "espada",
-    "definition": "espada",
+    "gloss": "espada de doble filo",
+    "definition": "espada de doble filo",
     "example": {
       "word": "宝剑",
       "pinyin": "bǎo jiàn",
@@ -3196,7 +3196,7 @@
   },
   "井": {
     "gloss": "pozo",
-    "definition": "pozo",
+    "definition": "pozo (pozo de agua)",
     "example": {
       "word": "水井",
       "pinyin": "shuǐ jǐng",
@@ -3466,7 +3466,7 @@
   },
   "扣": {
     "gloss": "golpear; botón",
-    "definition": "golpear; botón",
+    "definition": "(verbo) deducir (dinero), retener; (verbo) abrochar, abotonar; (verbo) confiscar, detener",
     "example": {
       "word": "纽扣",
       "pinyin": "niǔ kòu",
@@ -3484,7 +3484,7 @@
   },
   "酷": {
     "gloss": "cruel; muy",
-    "definition": "cruel; muy",
+    "definition": "(préstamo) genial, estiloso, moderno; fuerte, intenso (de vino, sabor o clima); despiadado, cruel",
     "example": {
       "word": "酷热",
       "pinyin": "kù rè",
@@ -3601,7 +3601,7 @@
   },
   "赖": {
     "gloss": "depender; achacar",
-    "definition": "depender; achacar",
+    "definition": "(verbo) confiar en; depender de; (verbo) desdecirse; negar responsabilidad; culpar falsamente; (adjetivo) deshonesto; desvergonzado",
     "example": {
       "word": "依赖",
       "pinyin": "yī lài",
@@ -3609,8 +3609,8 @@
     }
   },
   "栏": {
-    "gloss": "barandilla; columna",
-    "definition": "barandilla; columna",
+    "gloss": "valla",
+    "definition": "valla; barandilla; barrera; columna (de texto, datos o un formulario)",
     "example": {
       "word": "栏目",
       "pinyin": "lán mù",
@@ -3672,8 +3672,8 @@
     }
   },
   "牢": {
-    "gloss": "cárcel; firme",
-    "definition": "cárcel; firme",
+    "gloss": "prisión",
+    "definition": "prisión; firme, resistente",
     "example": {
       "word": "牢固",
       "pinyin": "láo gù",
@@ -3736,7 +3736,7 @@
   },
   "粒": {
     "gloss": "grano; partícula",
-    "definition": "grano; partícula",
+    "definition": "(clasificador) para cosas pequeñas y redondas (pastillas, balas, granos, perlas, etc.); (sustantivo) grano, gránulo",
     "example": {
       "word": "粒子",
       "pinyin": "lì zǐ",
@@ -3763,7 +3763,7 @@
   },
   "晾": {
     "gloss": "secar al aire",
-    "definition": "secar al aire",
+    "definition": "secar (ropa, etc.) al aire; (figurado) desairar, ignorar deliberadamente",
     "example": {
       "word": "晾干",
       "pinyin": "liàng gān",
@@ -3799,7 +3799,7 @@
   },
   "淋": {
     "gloss": "empapar; gotear",
-    "definition": "empapar; gotear",
+    "definition": "empapar, verter (un líquido) sobre; colar, escurrir (líquido de comida, hierbas, etc.)",
     "example": {
       "word": "淋浴",
       "pinyin": "lín yù",
@@ -4059,8 +4059,8 @@
     }
   },
   "埋": {
-    "gloss": "enterrar; ocultar",
-    "definition": "enterrar; ocultar",
+    "gloss": "enterrar",
+    "definition": "enterrar",
     "example": {
       "word": "埋葬",
       "pinyin": "mái zàng",
@@ -4069,7 +4069,7 @@
   },
   "迈": {
     "gloss": "avanzar; viejo",
-    "definition": "avanzar; viejo",
+    "definition": "dar un paso, caminar a zancadas",
     "example": {
       "word": "迈步",
       "pinyin": "mài bù",
@@ -4321,7 +4321,7 @@
   },
   "灭": {
     "gloss": "extinguir; aniquilar",
-    "definition": "extinguir; aniquilar",
+    "definition": "extinguir, apagar (un fuego, luz, etc.); apagarse (de un fuego, luz); exterminar, eliminar (plagas, enemigos, etc.)",
     "example": {
       "word": "消灭",
       "pinyin": "xiāo miè",
@@ -4491,8 +4491,8 @@
     }
   },
   "泥": {
-    "gloss": "barro; lodo",
-    "definition": "barro; lodo",
+    "gloss": "barro",
+    "definition": "barro; arcilla; pasta/pulpa",
     "example": {
       "word": "泥土",
       "pinyin": "ní tǔ",
@@ -4563,8 +4563,8 @@
     }
   },
   "扭": {
-    "gloss": "torcer; girar",
-    "definition": "torcer; girar",
+    "gloss": "torcer, escurrir",
+    "definition": "torcer, escurrir; torcerse (un tobillo, etc.); girar (p. ej., una perilla, un mango)",
     "example": {
       "word": "扭转",
       "pinyin": "niǔ zhuǎn",
@@ -4707,8 +4707,8 @@
     }
   },
   "抛": {
-    "gloss": "lanzar; abandonar",
-    "definition": "lanzar; abandonar",
+    "gloss": "lanzar, arrojar, tirar",
+    "definition": "lanzar, arrojar, tirar; abandonar, dejar de lado",
     "example": {
       "word": "抛弃",
       "pinyin": "pāo qì",
@@ -4726,7 +4726,7 @@
   },
   "泡": {
     "gloss": "burbuja; remojar",
-    "definition": "burbuja; remojar",
+    "definition": "(sustantivo) burbuja, espuma, ampolla; (verbo) remojar, infusionar; (verbo) holgazanear, merodear; (jerga) ligar (con alguien)",
     "example": {
       "word": "泡沫",
       "pinyin": "pào mò",
@@ -4780,7 +4780,7 @@
   },
   "捧": {
     "gloss": "sostener con ambas",
-    "definition": "sostener con ambas",
+    "definition": "(verbo) sostener (algo) con las manos ahuecadas; ofrecer con ambas manos; (verbo) halagar; alabar excesivamente; (clasificador) puñado; puñado doble",
     "example": {
       "word": "捧场",
       "pinyin": "pěng chǎng",
@@ -4870,7 +4870,7 @@
   },
   "坡": {
     "gloss": "pendiente; ladera",
-    "definition": "pendiente; ladera",
+    "definition": "(sustantivo) pendiente; (adjetivo) inclinado; sesgado",
     "example": {
       "word": "山坡",
       "pinyin": "shān pō",
@@ -4915,7 +4915,7 @@
   },
   "扑": {
     "gloss": "abalarse; atacar",
-    "definition": "abalarse; atacar",
+    "definition": "abalanzarse sobre, lanzarse hacia; aletear, agitar (alas, etc.); lanzarse de lleno a (una tarea, trabajo, etc.)",
     "example": {
       "word": "扑灭",
       "pinyin": "pū miè",
@@ -5086,7 +5086,7 @@
   },
   "牵": {
     "gloss": "tirar; implicar",
-    "definition": "tirar; implicar",
+    "definition": "tirar, llevar (un animal con una cuerda); (forma ligada) implicar, involucrar (ej. 牵涉, 牵连)",
     "example": {
       "word": "牵挂",
       "pinyin": "qiān guà",
@@ -5302,7 +5302,7 @@
   },
   "券": {
     "gloss": "cupón; título",
-    "definition": "cupón; título",
+    "definition": "(sustantivo) billete, vale, cupón; (sustantivo) bono, título valor; (sustantivo) escritura, contrato, certificado",
     "example": {
       "word": "证券",
       "pinyin": "zhèng quàn",
@@ -5472,8 +5472,8 @@
     }
   },
   "撒": {
-    "gloss": "esparcir; soltar",
-    "definition": "esparcir; soltar",
+    "gloss": "soltar, liberar",
+    "definition": "soltar, liberar; lanzar, arrojar (una red)",
     "example": {
       "word": "撒谎",
       "pinyin": "sā huǎng",
@@ -5482,7 +5482,7 @@
   },
   "塞": {
     "gloss": "tapar; frontera",
-    "definition": "tapar; frontera",
+    "definition": "(verbo) rellenar, meter a la fuerza; bloquear, tapar; (sustantivo) corcho, tapón",
     "example": {
       "word": "堵塞",
       "pinyin": "dǔ sè",
@@ -5779,7 +5779,7 @@
   },
   "竖": {
     "gloss": "vertical; erguir",
-    "definition": "vertical; erguir",
+    "definition": "(adjetivo) vertical, erguido; (verbo) erigir, poner vertical; (sustantivo) trazo vertical (en caracteres chinos)",
     "example": {
       "word": "竖立",
       "pinyin": "shù lì",
@@ -5940,8 +5940,8 @@
     }
   },
   "艘": {
-    "gloss": "clasif. (barcos)",
-    "definition": "clasif. (barcos)",
+    "gloss": "clasificador de barcos",
+    "definition": "(clasificador) para barcos y lanchas",
     "example": {
       "word": "一艘船",
       "pinyin": "yì sōu chuán",
@@ -5985,8 +5985,8 @@
     }
   },
   "塔": {
-    "gloss": "torre; pagoda",
-    "definition": "torre; pagoda",
+    "gloss": "pagoda",
+    "definition": "pagoda; torre; estupa (budista)",
     "example": {
       "word": "宝塔",
       "pinyin": "bǎo tǎ",
@@ -6157,7 +6157,7 @@
   },
   "掏": {
     "gloss": "sacar; vaciar",
-    "definition": "sacar; vaciar",
+    "definition": "sacar o extraer (de un bolsillo, bolsa o recipiente); cucharar",
     "example": {
       "word": "掏出",
       "pinyin": "tāo chū",
@@ -6219,8 +6219,8 @@
     }
   },
   "添": {
-    "gloss": "añadir",
-    "definition": "añadir",
+    "gloss": "agregar, aumentar, reponer",
+    "definition": "agregar, aumentar, reponer",
     "example": {
       "word": "添加",
       "pinyin": "tiān jiā",
@@ -6228,8 +6228,8 @@
     }
   },
   "田": {
-    "gloss": "campo; tierra",
-    "definition": "campo; tierra",
+    "gloss": "campo",
+    "definition": "campo; tierra de cultivo",
     "example": {
       "word": "田地",
       "pinyin": "tián dì",
@@ -6319,7 +6319,7 @@
   },
   "吞": {
     "gloss": "tragar; anexar",
-    "definition": "tragar; anexar",
+    "definition": "tragar (comida, pastillas, emociones); absorber, anexar (una empresa, territorio)",
     "example": {
       "word": "吞咽",
       "pinyin": "tūn yàn",
@@ -6328,7 +6328,7 @@
   },
   "拖": {
     "gloss": "arrastrar; retrasar",
-    "definition": "arrastrar; retrasar",
+    "definition": "arrastrar, remolcar, ir a la zaga; trapear (el piso); retrasar, prolongar",
     "example": {
       "word": "拖延",
       "pinyin": "tuō yán",
@@ -6363,8 +6363,8 @@
     }
   },
   "挖": {
-    "gloss": "cavar",
-    "definition": "cavar",
+    "gloss": "cavar, excavar",
+    "definition": "cavar, excavar",
     "example": {
       "word": "挖掘",
       "pinyin": "wā jué",
@@ -6805,7 +6805,7 @@
   },
   "嫌": {
     "gloss": "detestar; sospecha",
-    "definition": "detestar; sospecha",
+    "definition": "disgustar (generalmente porque algo es insatisfactorio); quejarse de; encontrar defectos en",
     "example": {
       "word": "嫌疑",
       "pinyin": "xián yí",
@@ -7299,8 +7299,8 @@
     }
   },
   "淹": {
-    "gloss": "ahogar; inundar",
-    "definition": "ahogar; inundar",
+    "gloss": "inundar",
+    "definition": "inundar; sumergir; ahogar; irritar o escocer (de líquidos, ej. sudor en los ojos)",
     "example": {
       "word": "淹没",
       "pinyin": "yān mò",
@@ -7317,8 +7317,8 @@
     }
   },
   "沿": {
-    "gloss": "a lo largo de",
-    "definition": "a lo largo de",
+    "gloss": "a lo largo de; orilla",
+    "definition": "(preposición) a lo largo de; (verbo) seguir (una línea, tradición, etc.); continuar; (sustantivo) borde, orilla",
     "example": {
       "word": "沿海",
       "pinyin": "yán hǎi",
@@ -7389,8 +7389,8 @@
     }
   },
   "仰": {
-    "gloss": "mirar arriba; admirar",
-    "definition": "mirar arriba; admirar",
+    "gloss": "mirar hacia arriba",
+    "definition": "mirar hacia arriba; levantar la vista; admirar; venerar; depender de; confiar en",
     "example": {
       "word": "仰望",
       "pinyin": "yǎng wàng",
@@ -7444,7 +7444,7 @@
   },
   "野": {
     "gloss": "campo; salvaje",
-    "definition": "campo; salvaje",
+    "definition": "salvaje (de plantas, animales, naturaleza); incultivado; grosero, rudo, incivilizado (de comportamiento, modales)",
     "example": {
       "word": "野外",
       "pinyin": "yě wài",
@@ -7975,7 +7975,7 @@
   },
   "赠": {
     "gloss": "regalar",
-    "definition": "regalar",
+    "definition": "obsequiar, regalar (formal)",
     "example": {
       "word": "赠送",
       "pinyin": "zèng sòng",
@@ -7983,8 +7983,8 @@
     }
   },
   "扎": {
-    "gloss": "clavar; acampar",
-    "definition": "clavar; acampar",
+    "gloss": "atar",
+    "definition": "atar; amarrar; hacer un manojo",
     "example": {
       "word": "扎实",
       "pinyin": "zhā shi",
@@ -8209,7 +8209,7 @@
   },
   "镇": {
     "gloss": "pueblo; reprimir",
-    "definition": "pueblo; reprimir",
+    "definition": "(sustantivo) pueblo pequeño; (verbo) suprimir, someter, calmar; guardar, proteger; (verbo) enfriar (comida o bebida)",
     "example": {
       "word": "镇压",
       "pinyin": "zhèn yā",
@@ -8245,7 +8245,7 @@
   },
   "枝": {
     "gloss": "rama",
-    "definition": "rama",
+    "definition": "(sustantivo) rama; (clasificador) para objetos largos, delgados y parecidos a palos (bolígrafos, armas, flores, ramas, etc.)",
     "example": {
       "word": "树枝",
       "pinyin": "shù zhī",
@@ -8361,8 +8361,8 @@
     }
   },
   "肿": {
-    "gloss": "hinchazón",
-    "definition": "hinchazón",
+    "gloss": "hincharse",
+    "definition": "hincharse; estar hinchado",
     "example": {
       "word": "肿胀",
       "pinyin": "zhǒng zhàng",
@@ -8371,7 +8371,7 @@
   },
   "州": {
     "gloss": "provincia; estado",
-    "definition": "provincia; estado",
+    "definition": "(histórico) prefectura o provincia en la China imperial; estado (de EE. UU.), óblast (de Rusia), cantón (de Suiza)",
     "example": {
       "word": "广州",
       "pinyin": "Guǎng zhōu",
@@ -8388,8 +8388,8 @@
     }
   },
   "粥": {
-    "gloss": "gachas; arroz caldo",
-    "definition": "gachas; arroz caldo",
+    "gloss": "gachas de arroz",
+    "definition": "gachas de arroz",
     "example": {
       "word": "稀粥",
       "pinyin": "xī zhōu",
@@ -8424,8 +8424,8 @@
     }
   },
   "株": {
-    "gloss": "planta; clasif.",
-    "definition": "planta; clasif.",
+    "gloss": "planta; clasificador de plantas",
+    "definition": "(clasificador) para árboles y plantas; (clasificador) para cepas de virus o bacterias (biología)",
     "example": {
       "word": "一株",
       "pinyin": "yì zhū",
@@ -8596,7 +8596,7 @@
   },
   "捉": {
     "gloss": "atrapar; agarrar",
-    "definition": "atrapar; agarrar",
+    "definition": "atrapar, capturar (agarrar o apresar rápidamente)",
     "example": {
       "word": "捕捉",
       "pinyin": "bǔ zhuō",
@@ -8704,7 +8704,7 @@
   },
   "钻": {
     "gloss": "taladrar; diamante",
-    "definition": "taladrar; diamante",
+    "definition": "taladrar, perforar (un agujero); estudiar intensivamente, profundizar en (un tema); adular, meterse (para beneficio personal)",
     "example": {
       "word": "钻石",
       "pinyin": "zuàn shí",
@@ -8713,7 +8713,7 @@
   },
   "罪": {
     "gloss": "crimen; culpa",
-    "definition": "crimen; culpa",
+    "definition": "crimen (delito legal); culpa; falta; pecado (transgresión religiosa o moral)",
     "example": {
       "word": "犯罪",
       "pinyin": "fàn zuì",

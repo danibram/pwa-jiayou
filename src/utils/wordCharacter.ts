@@ -1,4 +1,5 @@
 import { allWords } from '../data/vocabulary';
+import { leadSense } from '../data/wordSenses';
 import type { HSKCharacter } from '../types';
 import { characterRecord } from './characterSearch';
 import { pinyinParts } from './pinyin';
@@ -25,6 +26,6 @@ export const characterOrWordStub = (char: string, installed: readonly HSKCharact
     stroke_count: 0,
     general_standard: 0,
     frequency_rank: 0,
-    gloss: `en ${word.simplified}: ${word.meaning.split(';')[0]}`,
+    gloss: `en ${word.simplified}: ${leadSense(word.senses)}`,
   };
 };

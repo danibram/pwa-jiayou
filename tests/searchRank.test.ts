@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { sensesText } from '../src/data/wordSenses';
 import { searchCharacters } from '../src/utils/characterSearch';
 import { rankBy, searchScore } from '../src/utils/searchRank';
 import { vocabulary } from '../src/data/vocabulary';
@@ -7,7 +8,7 @@ const firstChars = (query: string) =>
   searchCharacters(query, []).slice(0, 3).map((hit) => (hit.kind === 'listed' ? hit.row.character : hit.character.character));
 
 const words = (query: string) =>
-  rankBy(vocabulary, query, (word) => ({ hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: word.meaning }))
+  rankBy(vocabulary, query, (word) => ({ hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: sensesText(word.senses) }))
     .map((word) => word.simplified);
 
 describe('search ranking', () => {

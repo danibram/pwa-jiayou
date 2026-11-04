@@ -232,7 +232,7 @@
     }
   },
   "爆": {
-    "gloss": "estallar; explotar",
+    "gloss": "explotar, reventar",
     "example": {
       "word": "爆炸",
       "pinyin": "bào zhà",
@@ -512,7 +512,7 @@
     }
   },
   "捕": {
-    "gloss": "capturar; arrestar",
+    "gloss": "atrapar, capturar",
     "example": {
       "word": "捕捉",
       "pinyin": "bǔ zhuō",
@@ -1336,7 +1336,7 @@
     }
   },
   "吊": {
-    "gloss": "colgar; condolerse",
+    "gloss": "colgar, suspender",
     "example": {
       "word": "吊销",
       "pinyin": "diào xiāo",
@@ -2088,7 +2088,7 @@
     }
   },
   "棍": {
-    "gloss": "palo; bribón",
+    "gloss": "palo",
     "example": {
       "word": "棍子",
       "pinyin": "gùn zi",
@@ -2600,7 +2600,7 @@
     }
   },
   "剑": {
-    "gloss": "espada",
+    "gloss": "espada de doble filo",
     "example": {
       "word": "宝剑",
       "pinyin": "bǎo jiàn",
@@ -3208,7 +3208,7 @@
     }
   },
   "栏": {
-    "gloss": "barandilla; columna",
+    "gloss": "valla",
     "example": {
       "word": "栏目",
       "pinyin": "lán mù",
@@ -3264,7 +3264,7 @@
     }
   },
   "牢": {
-    "gloss": "cárcel; firme",
+    "gloss": "prisión",
     "example": {
       "word": "牢固",
       "pinyin": "láo gù",
@@ -3608,7 +3608,7 @@
     }
   },
   "埋": {
-    "gloss": "enterrar; ocultar",
+    "gloss": "enterrar",
     "example": {
       "word": "埋葬",
       "pinyin": "mái zàng",
@@ -3992,7 +3992,7 @@
     }
   },
   "泥": {
-    "gloss": "barro; lodo",
+    "gloss": "barro",
     "example": {
       "word": "泥土",
       "pinyin": "ní tǔ",
@@ -4056,7 +4056,7 @@
     }
   },
   "扭": {
-    "gloss": "torcer; girar",
+    "gloss": "torcer, escurrir",
     "example": {
       "word": "扭转",
       "pinyin": "niǔ zhuǎn",
@@ -4184,7 +4184,7 @@
     }
   },
   "抛": {
-    "gloss": "lanzar; abandonar",
+    "gloss": "lanzar, arrojar, tirar",
     "example": {
       "word": "抛弃",
       "pinyin": "pāo qì",
@@ -4864,7 +4864,7 @@
     }
   },
   "撒": {
-    "gloss": "esparcir; soltar",
+    "gloss": "soltar, liberar",
     "example": {
       "word": "撒谎",
       "pinyin": "sā huǎng",
@@ -5320,7 +5320,7 @@
     }
   },
   "塔": {
-    "gloss": "torre; pagoda",
+    "gloss": "pagoda",
     "example": {
       "word": "宝塔",
       "pinyin": "bǎo tǎ",
@@ -5528,7 +5528,7 @@
     }
   },
   "添": {
-    "gloss": "añadir",
+    "gloss": "agregar, aumentar, reponer",
     "example": {
       "word": "添加",
       "pinyin": "tiān jiā",
@@ -5536,7 +5536,7 @@
     }
   },
   "田": {
-    "gloss": "campo; tierra",
+    "gloss": "campo",
     "example": {
       "word": "田地",
       "pinyin": "tián dì",
@@ -5656,7 +5656,7 @@
     }
   },
   "挖": {
-    "gloss": "cavar",
+    "gloss": "cavar, excavar",
     "example": {
       "word": "挖掘",
       "pinyin": "wā jué",
@@ -6488,7 +6488,7 @@
     }
   },
   "淹": {
-    "gloss": "ahogar; inundar",
+    "gloss": "inundar",
     "example": {
       "word": "淹没",
       "pinyin": "yān mò",
@@ -6568,7 +6568,7 @@
     }
   },
   "仰": {
-    "gloss": "mirar arriba; admirar",
+    "gloss": "mirar hacia arriba",
     "example": {
       "word": "仰望",
       "pinyin": "yǎng wàng",
@@ -7096,7 +7096,7 @@
     }
   },
   "扎": {
-    "gloss": "clavar; acampar",
+    "gloss": "atar",
     "example": {
       "word": "扎实",
       "pinyin": "zhā shi",
@@ -7432,7 +7432,7 @@
     }
   },
   "肿": {
-    "gloss": "hinchazón",
+    "gloss": "hincharse",
     "example": {
       "word": "肿胀",
       "pinyin": "zhǒng zhàng",
@@ -7456,7 +7456,7 @@
     }
   },
   "粥": {
-    "gloss": "gachas; arroz caldo",
+    "gloss": "gachas de arroz",
     "example": {
       "word": "稀粥",
       "pinyin": "xī zhōu",

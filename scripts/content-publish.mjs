@@ -64,7 +64,18 @@ const topicsSource = async (root, topics) => {
     for (let i = 0; i < quoted.length; i += 16) lines.push(`      ${quoted.slice(i, i + 16).join(', ')},`);
     return `[\n${lines.join('\n')}\n    ]`;
   };
-  const rows = topics.map((topic) => `  {\n    id: ${quote(topic.id)},\n    title: ${quote(topic.title)},\n    glyph: ${quote(topic.glyph)},\n    characters: ${characters(topic.characters)},\n  },`).join('\n');
+  const rows = topics.map((topic) => {
+    const lines = [
+      `    id: ${quote(topic.id)}`,
+      `    title: ${quote(topic.title)}`,
+      `    glyph: ${quote(topic.glyph)}`,
+      `    kind: ${quote(topic.kind ?? 'theme')}`,
+    ];
+    if (topic.parentId) lines.push(`    parentId: ${quote(topic.parentId)}`);
+    if (topic.listed === false) lines.push('    listed: false');
+    lines.push(`    characters: ${characters(topic.characters)}`);
+    return `  {\n${lines.join(',\n')},\n  },`;
+  }).join('\n');
   return [path, source.replace(pattern, `export const topics: Topic[] = [\n${rows}\n];`)];
 };
 
@@ -75,8 +86,10 @@ const topicsSource = async (root, topics) => {
 export async function planDraft(draft, root = defaultRoot) {
   const { validateSnapshot, validateDraft } = await model(root);
   const base = await readJson(join(root, 'content/snapshot.json'));
+  // validateSnapshot fills a missing topic kind, so hash the file as written first.
+  const revision = snapshotRevision(base);
   validateSnapshot(base);
-  validateDraft(draft, base, snapshotRevision(base));
+  validateDraft(draft, base, revision);
   const snapshot = draft.snapshot;
   const files = [];
   if (!equal(snapshot, base)) files.push(['content/snapshot.json', json(snapshot)]);

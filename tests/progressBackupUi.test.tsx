@@ -102,7 +102,7 @@ describe('progress backup UI', () => {
     const saved = progressStore.exportBackup();
     progressStore.clear();
     vocabularyProgressStore.grade('other', 'good');
-    const entry = { id: 'other', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', meaning: 'hello', level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
+    const entry = { id: 'other', simplified: '你好', traditional: '你好', pinyin: 'nǐ hǎo', senses: [{ text: 'hello' }], level: 1 as const, characters: ['你', '好'], topicIds: [], sourceId: 'test' };
     saveVocabularySession({ version: 1, deck: [{ entry, kind: 'review' }], position: 0, revealed: false, step: 'ask', feedback: null, counts: { again: 0, hard: 0, good: 0 }, heading: 'Words' });
     render(() => <ProgressBackup />);
     const file = new File([saved], 'progress.json');
