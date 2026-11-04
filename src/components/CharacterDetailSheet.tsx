@@ -11,9 +11,10 @@ import { allWords } from '../data/vocabulary';
 import { levelRank } from '../utils/wordOrder';
 import { characterStore } from '../stores/characterStore';
 import type { KnownCharacter } from '../utils/wordCharacter';
-import { indexRowFor } from '../utils/characterSearch';
+import { charactersWithRadical, indexRowFor } from '../utils/characterSearch';
 import { displayGloss, glossHead } from '../utils/glossDisplay';
 import { mainMeaning, otherMeanings } from '../utils/meaning';
+import { leadSense } from '../data/wordSenses';
 import { canSpeak } from '../utils/speech';
 
 interface CharacterDetailSheetProps {
@@ -38,7 +39,7 @@ interface CharacterDetailSheetProps {
 }
 
 /**
- * Up to five HSK words that use the character: the character as a word of its own first,
+ * Up to six HSK words that use the character: the character as a word of its own first,
  * then the levels you study, then the lowest level.
  */
 /** Extra words have no level, so they rank with the levels being studied. */
@@ -51,7 +52,7 @@ const wordsWith = (char: string, studying: readonly number[], currentWordId?: st
       Number(studied(b)) - Number(studied(a)) ||
       levelRank(a) - levelRank(b) ||
       a.simplified.length - b.simplified.length)
-    .slice(0, 5);
+    .slice(0, 6);
 };
 
 /** One look at a character, the same from search, a word page or anywhere else. Nothing here changes what you study. */
@@ -96,7 +97,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
     const r = char().radical;
     if (!r || r === char().character) return undefined;
     const row = indexRowFor(r);
-    return { char: r, pinyin: row?.pinyin, gloss: row ? glossHead(row.gloss) : undefined };
+    return { char: r, pinyin: row?.pinyin, gloss: row ? glossHead(row.gloss) : undefined, siblings: charactersWithRadical(r, char().character).slice(0, 6) };
   };
 
   return (
@@ -133,18 +134,6 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
             {(status) => <StatusTag status={status()} feminine={false} class="mt-2" />}
           </Show>
           <dl class="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1.5 text-sm">
-            <Show when={radical()}>
-              {(r) => (
-                <>
-                  <dt class="text-ink-soft">Radical</dt>
-                  <dd class="flex min-w-0 items-baseline gap-2">
-                    <span class="font-hanzi text-lg leading-none text-jade" lang="zh-CN">{r().char}</span>
-                    <Show when={r().pinyin}>{(p) => <Pinyin text={p()} class="text-sm" />}</Show>
-                    <Show when={r().gloss}>{(g) => <span class="min-w-0 truncate text-ink-soft">{g()}</span>}</Show>
-                  </dd>
-                </>
-              )}
-            </Show>
             <Show when={strokes() > 0}>
               <dt class="text-ink-soft">Trazos</dt>
               <dd class="tabular-nums">{strokes()}</dd>
@@ -154,15 +143,50 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
               <dd class="font-hanzi text-lg leading-none" lang="zh-TW">{char().traditional}</dd>
             </Show>
           </dl>
-          <Show when={radical()}>
-            <p class="mt-1 text-xs text-ink-faint">En el carácter, el radical va en verde.</p>
-          </Show>
         </div>
       </div>
 
+      {/* The radical is the part a learner can spot in other characters, so it gets its own card. */}
+      <Show when={radical()}>
+        {(r) => (
+          <section class="tile mt-5 px-3 py-3" aria-label="Radical">
+            <div class="flex items-center gap-3">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-tile bg-jade-soft/60 font-hanzi text-[2rem] leading-none text-jade" lang="zh-CN">{r().char}</span>
+              <span class="min-w-0 flex-1">
+                <span class="eyebrow block">Radical</span>
+                <span class="flex min-w-0 items-baseline gap-2">
+                  <Show when={r().pinyin}>{(p) => <Pinyin text={p()} class="text-sm" />}</Show>
+                  <Show when={r().gloss}>{(g) => <span class="min-w-0 truncate text-sm text-ink-soft">{g()}</span>}</Show>
+                </span>
+                <span class="block text-xs text-ink-faint">En verde dentro del carácter.</span>
+              </span>
+            </div>
+            <Show when={r().siblings.length > 0}>
+              <p class="mt-3 text-xs text-ink-soft">También lo llevan</p>
+              <ul class="mt-1.5 flex flex-wrap gap-1.5">
+                <For each={r().siblings}>{(row) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="flex min-h-9 items-center gap-1.5 rounded-full border border-line/80 px-2.5 py-1 active:bg-ink/5 disabled:opacity-100"
+                      disabled={!props.onOpenCharacter}
+                      aria-label={`${row.character}, ${row.pinyin}, ${glossHead(row.gloss)}`}
+                      onClick={() => props.onOpenCharacter?.(row.character)}
+                    >
+                      <span class="font-hanzi text-lg leading-none" lang="zh-CN">{row.character}</span>
+                      <span class="max-w-[5.5rem] truncate text-xs text-ink-soft">{glossHead(row.gloss)}</span>
+                    </button>
+                  </li>
+                )}</For>
+              </ul>
+            </Show>
+          </section>
+        )}
+      </Show>
+
       <Show when={words().length > 0 || char().example}>
         <h3 class="eyebrow mt-5">Palabras con <span class="font-hanzi text-sm normal-case tracking-normal" lang="zh-CN">{char().character}</span></h3>
-        <ul class="mt-1 divide-y divide-line/70">
+        <ul class="tile mt-2 divide-y divide-line/70 px-3">
           <Show when={words().length === 0 ? char().example : undefined}>
             {(example) => (
               <li class="flex items-baseline gap-3 py-2">
@@ -178,7 +202,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
                 <>
                   <span class="font-hanzi text-xl" lang="zh-CN">{word.simplified}</span>
                   <Pinyin word text={word.pinyin} class="shrink-0 text-sm" />
-                  <span class="min-w-0 flex-1 truncate text-right text-sm text-ink-soft first-letter:uppercase">{word.meaning}</span>
+                  <span class="min-w-0 flex-1 truncate text-right text-sm text-ink-soft first-letter:uppercase">{leadSense(word.senses)}</span>
                 </>
               );
               return (

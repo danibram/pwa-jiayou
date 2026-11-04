@@ -1,10 +1,11 @@
-import { Component, createMemo, For, Show } from 'solid-js';
+import { Component, createMemo } from 'solid-js';
 import { allWords } from '../data/vocabulary';
 import { characterForHit, searchCharacters } from '../utils/characterSearch';
-import { foldPinyin, markTones, toneOf } from '../utils/pinyin';
-import Pinyin from './Pinyin';
-import SpeakButton from './SpeakButton';
-import Icon from './Icon';
+import { glossHead } from '../utils/glossDisplay';
+import { leadSense } from '../data/wordSenses';
+import { markTones } from '../utils/pinyin';
+import { bySound, readingOf, soundMatch } from '../utils/soundAlike';
+import SoundAlike, { type SoundAlikeItem } from './SoundAlike';
 
 interface Props {
   character: string;
@@ -13,57 +14,44 @@ interface Props {
   onOpenCharacter?: (character: string) => void;
 }
 
-const reading = (value: string) => {
-  const marked = markTones(value.trim());
-  if (!/^[a-züêāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜńňǹ]+$/i.test(marked)) return undefined;
-  return { base: foldPinyin(marked), tone: toneOf(marked) };
-};
+/** Tiles per group; the common ones come first, so rare HSK 6 homophones fall off and other tones still show. */
+const LIMIT = { same: 6, tone: 8 };
 
+/** Single characters with the same syllable as this one, in the character drawer. */
 const ToneNeighbors: Component<Props> = (props) => {
-  const matches = createMemo(() => {
-    const current = reading(props.pinyin);
-    if (!current) return [];
-    const seen = new Set<string>();
-    const result: { character: string; pinyin: string; meaning: string; wordId?: string; level?: number }[] = [];
+  const items = createMemo((): SoundAlikeItem[] => {
+    const current = readingOf(markTones(props.pinyin));
+    if (!current || current.bases.length !== 1) return [];
+    const byKey = new Map<string, SoundAlikeItem>();
     const add = (character: string, pinyin: string, meaning: string, level?: number, wordId?: string) => {
-      const candidate = reading(pinyin);
-      if (!candidate || character === props.character || candidate.base !== current.base || candidate.tone === current.tone) return;
-      const key = `${character}:${candidate.base}:${candidate.tone}`;
-      if (seen.has(key)) return;
-      seen.add(key);
-      result.push({ character, pinyin, meaning, level, wordId });
+      const reading = readingOf(markTones(pinyin));
+      if (character === props.character || !reading) return;
+      const match = soundMatch(current, reading);
+      if (!match) return;
+      const key = `${character}:${reading.tones[0]}`;
+      const known = byKey.get(key);
+      // The word entry knows how to open the word page; keep it over the bare character.
+      if (known && (known.level !== undefined || !wordId)) return;
+      const onOpen = wordId && props.onOpenWord
+        ? () => props.onOpenWord!(wordId)
+        : props.onOpenCharacter ? () => props.onOpenCharacter!(character) : undefined;
+      byKey.set(key, { key, hanzi: character, pinyin, gloss: glossHead(meaning), match, level, onOpen });
     };
     for (const word of allWords()) {
-      if ([...word.simplified].length === 1) add(word.simplified, word.pinyin, word.meaning, word.level, word.id);
+      if ([...word.simplified].length === 1) add(word.simplified, word.pinyin, leadSense(word.senses), word.level, word.id);
     }
     for (const hit of searchCharacters('', [])) {
       const char = characterForHit(hit, []);
       for (const pinyin of char.pinyin.split(/[\s,;/]+/)) add(char.character, pinyin, char.gloss ?? char.definition, char.hsk_level);
     }
-    return result.sort((a, b) => (a.level ?? 7) - (b.level ?? 7) || toneOf(a.pinyin) - toneOf(b.pinyin));
+    const sorted = [...byKey.values()].sort(bySound);
+    return [
+      ...sorted.filter((item) => item.match === 'same').slice(0, LIMIT.same),
+      ...sorted.filter((item) => item.match === 'tone').slice(0, LIMIT.tone),
+    ];
   });
 
-  return (
-    <Show when={matches().length > 0}>
-      <section class="mt-5 border-t border-line pt-4" aria-label="Misma sílaba, otros tonos">
-        <h3 class="eyebrow">Misma sílaba, otros tonos</h3>
-        <p class="mt-1 text-xs text-ink-soft">Compara cómo cambia el significado con el tono.</p>
-        <ul class="mt-1 divide-y divide-line/70">
-          <For each={matches()}>{(item) => (
-            <li class="flex items-center gap-1">
-              <button type="button" class="flex min-h-11 min-w-0 flex-1 items-center gap-3 py-2 text-left" onClick={() => item.wordId && props.onOpenWord ? props.onOpenWord(item.wordId) : props.onOpenCharacter?.(item.character)} disabled={item.wordId ? !props.onOpenWord && !props.onOpenCharacter : !props.onOpenCharacter}>
-                <span class="w-8 shrink-0 font-hanzi text-xl" lang="zh-CN">{item.character}</span>
-                <span class="min-w-0 flex-1"><Pinyin text={item.pinyin} class="block text-sm" /><span class="block truncate text-xs text-ink-soft first-letter:uppercase">{item.meaning.split(';')[0]}</span></span>
-                <Show when={item.level}><span class="text-xs text-ink-faint">HSK {item.level}</span></Show>
-                <Icon name="next" size={14} class="shrink-0 text-ink-faint" />
-              </button>
-              <SpeakButton pinyin={item.pinyin} hanzi={item.character} />
-            </li>
-          )}</For>
-        </ul>
-      </section>
-    </Show>
-  );
+  return <SoundAlike items={items()} hint="Caracteres con la misma sílaba. El tono cambia el significado." />;
 };
 
 export default ToneNeighbors;

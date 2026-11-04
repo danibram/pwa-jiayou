@@ -18,6 +18,8 @@ The word 东西 uses `dōng xi` for "thing", 多少 uses `duō shao` for "how ma
 
 Word list JSON is bundled with the app. Stroke and syllable audio still come from the character packs (`public/strokes`, `public/audio`, `public/packs/hskN/`).
 
+The [ importer](.md) gathers Spanish definition proposals for local HSK 4, 5 and 6 entries, plus relationships and reference sentences from a sample of HSK 2 to 6 entries. Draft references keep source URLs and retrieval dates and are not published as vocabulary examples. Authored sentences use the optional `VocabularyEntry.example` field. The licenses below describe the original vocabulary sources, not  content.
+
 ## Source license
 
 MIT License
@@ -41,3 +43,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Significados por uso
+
+Cada palabra guarda `senses`, una lista de usos `{ pos, text, note }`, en lugar de un texto con punto y coma. El modelo y sus ayudas están en `src/data/wordSenses.ts`; el editor valida la categoría contra la misma lista cerrada. La migración desde `meaning` está en `scripts/migrate-word-senses.mjs`: `split` analiza cada texto con `scripts/word-senses.mjs` y escribe lotes en `.cache/senses/`, y `apply` junta las categorías asignadas y escribe un borrador para `content-publish.mjs promote`. El texto lo separa el script; un modelo solo asignó la categoría de los 7563 usos que no la traían escrita. Los scripts antiguos `localize-vocabulary.mjs`, `fix-vocabulary-data.mjs` y `compare-hsk3-pdf.mjs` siguen leyendo `meaning` y solo sirven para las listas de origen.

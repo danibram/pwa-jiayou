@@ -11,9 +11,9 @@ const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 const hash = (value: string) => createHash('sha256').update(value).digest('hex');
 const base = {
   schemaVersion: 1,
-  vocabulary: [{ id: 'word-1', simplified: '一', traditional: '一', pinyin: 'yī', meaning: 'uno', level: 1, characters: ['一'], topicIds: ['numbers'], sourceId: 'hsk-2-0' }],
+  vocabulary: [{ id: 'word-1', simplified: '一', traditional: '一', pinyin: 'yī', senses: [{ text: 'uno' }], level: 1, characters: ['一'], topicIds: ['numbers'], sourceId: 'hsk-2-0' }],
   characters: ['一', '二', '三', '四', '五'].map((character, index) => ({ character, traditional: character, pinyin: 'yī', definition: index === 0 ? 'uno' : 'número', radical: '一', stroke_count: index + 1, hsk_level: 1, general_standard: index + 1, frequency_rank: index + 1 })),
-  topics: [{ id: 'numbers', title: 'Números', glyph: '一', characters: ['一', '二', '三', '四', '五'] }],
+  topics: [{ id: 'numbers', title: 'Números', glyph: '一', kind: 'tag', characters: ['一', '二', '三', '四', '五'] }],
 };
 const setup = () => {
   const dir = mkdtempSync(join(tmpdir(), 'jiayou-export-'));
@@ -46,6 +46,20 @@ const run = (dir: string, ...args: string[]) => {
 afterEach(() => { for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true }); });
 
 describe('standalone content export', () => {
+  it('exports authored word examples but excludes imported reference phrases', () => {
+    const dir = setup();
+    const snapshot = { ...structuredClone(base), vocabulary: [{ ...base.vocabulary[0], example: { chinese: '我有一个。', spanish: 'Tengo uno.' } }] };
+    const draftPath = join(dir, 'draft.json');
+    writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(base)), snapshot,
+      references: { 'word-1': { url: '/es/dictionary/一-yi', retrieved: '2026-11-04', examples: [{ chinese: '一二三。', pinyin: 'Yī èr sān.', spanish: 'Uno, dos, tres.' }] } },
+    }));
+    run(dir, 'import', draftPath);
+    const rows = JSON.parse(readFileSync(join(dir, 'editor/export/src/data/vocabulary/hsk1.json'), 'utf8'));
+    expect(rows[0].example).toEqual(snapshot.vocabulary[0].example);
+    const canonical = readFileSync(join(dir, 'editor/export/content/snapshot.json'), 'utf8');
+    expect(canonical).not.toContain('references');
+    expect(canonical).not.toContain('Uno, dos, tres.');
+  });
   it('does not export app data for an unchanged real snapshot', () => {
     const dir = setupReal();
     const body = readFileSync(join(dir, 'content/snapshot.json'), 'utf8');
@@ -88,15 +102,15 @@ describe('standalone content export', () => {
   it('exports edits, topic order and extra words without altering the base', () => {
     const dir = setup();
     const snapshot = structuredClone(base);
-    snapshot.vocabulary[0].meaning = 'primero';
+    snapshot.vocabulary[0].senses = [{ text: 'primero' }];
     snapshot.characters[0].definition = 'primer número';
-    snapshot.topics.unshift({ id: 'newtopic', title: 'Nuevo', glyph: '一', characters: ['一', '二', '三', '四', '五'] });
+    snapshot.topics.unshift({ id: 'newtopic', title: 'Nuevo', glyph: '一', kind: 'theme', characters: ['一', '二', '三', '四', '五'] });
     snapshot.vocabulary.push({ ...snapshot.vocabulary[0], id: 'extra-1', level: undefined as unknown as number, topicIds: ['newtopic'] });
     const draftPath = join(dir, 'draft.json');
     writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(base)), snapshot }));
     run(dir, 'import', draftPath);
     const out = (path: string) => join(dir, 'editor/export', path);
-    expect(JSON.parse(readFileSync(out('src/data/vocabulary/hsk1.json'), 'utf8'))[0]).toMatchObject({ id: 'word-1', meaning: 'primero' });
+    expect(JSON.parse(readFileSync(out('src/data/vocabulary/hsk1.json'), 'utf8'))[0]).toMatchObject({ id: 'word-1', senses: [{ text: 'primero' }] });
     expect(JSON.parse(readFileSync(out('src/data/vocabulary/extra.json'), 'utf8'))[0]).toMatchObject({ id: 'extra-1', topicIds: ['newtopic'] });
     expect(JSON.parse(readFileSync(out('src/data/hsk1.json'), 'utf8'))[0]).toMatchObject({ character: '一', definition: 'primer número' });
     expect(readFileSync(out('src/data/topics.ts'), 'utf8')).toContain('Nuevo');

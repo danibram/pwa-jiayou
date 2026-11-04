@@ -4,7 +4,13 @@
     "simplified": "吧",
     "traditional": "吧",
     "pinyin": "ba",
-    "meaning": "(partícula de sugerencia)",
+    "senses": [
+      {
+        "pos": "partícula",
+        "text": "partícula de sugerencia",
+        "note": "de sugerencia"
+      }
+    ],
     "level": 2,
     "characters": [
       "吧"
@@ -19,7 +25,12 @@
     "simplified": "白",
     "traditional": "白",
     "pinyin": "bái",
-    "meaning": "blanco",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "blanco"
+      }
+    ],
     "level": 2,
     "characters": [
       "白"
@@ -34,7 +45,12 @@
     "simplified": "百",
     "traditional": "百",
     "pinyin": "bǎi",
-    "meaning": "cien",
+    "senses": [
+      {
+        "pos": "numeral",
+        "text": "cien"
+      }
+    ],
     "level": 2,
     "characters": [
       "百"
@@ -49,7 +65,16 @@
     "simplified": "帮助",
     "traditional": "幫助",
     "pinyin": "bāng zhù",
-    "meaning": "ayudar; ayuda",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "ayudar"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "ayuda"
+      }
+    ],
     "level": 2,
     "characters": [
       "帮",
@@ -65,7 +90,12 @@
     "simplified": "报纸",
     "traditional": "報紙",
     "pinyin": "bào zhǐ",
-    "meaning": "periódico",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "periódico"
+      }
+    ],
     "level": 2,
     "characters": [
       "报",
@@ -79,7 +109,16 @@
     "simplified": "比",
     "traditional": "比",
     "pinyin": "bǐ",
-    "meaning": "comparar; más que",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "comparar"
+      },
+      {
+        "pos": "preposición",
+        "text": "más que"
+      }
+    ],
     "level": 2,
     "characters": [
       "比"
@@ -94,14 +133,20 @@
     "simplified": "便宜",
     "traditional": "便宜",
     "pinyin": "pián yi",
-    "meaning": "barato",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "barato"
+      }
+    ],
     "level": 2,
     "characters": [
       "便",
       "宜"
     ],
     "topicIds": [
-      "compras"
+      "compras",
+      "tiendas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -110,7 +155,17 @@
     "simplified": "别",
     "traditional": "別",
     "pinyin": "bié",
-    "meaning": "no (imperativo); otro",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "no",
+        "note": "imperativo"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "otro"
+      }
+    ],
     "level": 2,
     "characters": [
       "别"
@@ -125,7 +180,12 @@
     "simplified": "唱歌",
     "traditional": "唱歌",
     "pinyin": "chàng gē",
-    "meaning": "cantar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "cantar"
+      }
+    ],
     "level": 2,
     "characters": [
       "唱",
@@ -141,7 +201,12 @@
     "simplified": "出",
     "traditional": "出",
     "pinyin": "chū",
-    "meaning": "salir",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "salir"
+      }
+    ],
     "level": 2,
     "characters": [
       "出"
@@ -156,14 +221,24 @@
     "simplified": "穿",
     "traditional": "穿",
     "pinyin": "chuān",
-    "meaning": "llevar puesto; vestir",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "llevar puesto"
+      },
+      {
+        "pos": "verbo",
+        "text": "vestir"
+      }
+    ],
     "level": 2,
     "characters": [
       "穿"
     ],
     "topicIds": [
       "verbos",
-      "ropa"
+      "ropa",
+      "casa"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -172,13 +247,19 @@
     "simplified": "船",
     "traditional": "舩",
     "pinyin": "chuán",
-    "meaning": "barco",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "barco"
+      }
+    ],
     "level": 2,
     "characters": [
       "船"
     ],
     "topicIds": [
-      "transporte"
+      "transporte",
+      "vehiculos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -187,7 +268,16 @@
     "simplified": "次",
     "traditional": "次",
     "pinyin": "cì",
-    "meaning": "vez; ocasión",
+    "senses": [
+      {
+        "pos": "clasificador",
+        "text": "vez"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "ocasión"
+      }
+    ],
     "level": 2,
     "characters": [
       "次"
@@ -203,7 +293,16 @@
     "simplified": "从",
     "traditional": "从",
     "pinyin": "cóng",
-    "meaning": "desde; a partir de",
+    "senses": [
+      {
+        "pos": "preposición",
+        "text": "desde"
+      },
+      {
+        "pos": "preposición",
+        "text": "a partir de"
+      }
+    ],
     "level": 2,
     "characters": [
       "从"
@@ -218,7 +317,16 @@
     "simplified": "错",
     "traditional": "錯",
     "pinyin": "cuò",
-    "meaning": "error; incorrecto",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "error"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "incorrecto"
+      }
+    ],
     "level": 2,
     "characters": [
       "错"
@@ -231,7 +339,12 @@
     "simplified": "打篮球",
     "traditional": "打籃球",
     "pinyin": "dǎ lán qiú",
-    "meaning": "jugar al baloncesto",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "jugar al baloncesto"
+      }
+    ],
     "level": 2,
     "characters": [
       "打",
@@ -246,14 +359,20 @@
     "simplified": "大家",
     "traditional": "大家",
     "pinyin": "dà jiā",
-    "meaning": "todos",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "todos"
+      }
+    ],
     "level": 2,
     "characters": [
       "大",
       "家"
     ],
     "topicIds": [
-      "personas"
+      "personas",
+      "gente"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -262,7 +381,12 @@
     "simplified": "但是",
     "traditional": "但是",
     "pinyin": "dàn shì",
-    "meaning": "pero",
+    "senses": [
+      {
+        "pos": "conjunción",
+        "text": "pero"
+      }
+    ],
     "level": 2,
     "characters": [
       "但",
@@ -278,7 +402,16 @@
     "simplified": "到",
     "traditional": "到",
     "pinyin": "dào",
-    "meaning": "llegar; hasta",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "llegar"
+      },
+      {
+        "pos": "preposición",
+        "text": "hasta"
+      }
+    ],
     "level": 2,
     "characters": [
       "到"
@@ -293,7 +426,12 @@
     "simplified": "得",
     "traditional": "得",
     "pinyin": "de",
-    "meaning": "partícula de complemento",
+    "senses": [
+      {
+        "pos": "partícula",
+        "text": "partícula de complemento"
+      }
+    ],
     "level": 2,
     "characters": [
       "得"
@@ -308,14 +446,20 @@
     "simplified": "弟弟",
     "traditional": "弟弟",
     "pinyin": "dì di",
-    "meaning": "hermano menor",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hermano menor"
+      }
+    ],
     "level": 2,
     "characters": [
       "弟",
       "弟"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -324,7 +468,12 @@
     "simplified": "第一",
     "traditional": "第一",
     "pinyin": "dì yī",
-    "meaning": "primero",
+    "senses": [
+      {
+        "pos": "numeral",
+        "text": "primero"
+      }
+    ],
     "level": 2,
     "characters": [
       "第",
@@ -340,7 +489,12 @@
     "simplified": "懂",
     "traditional": "懂",
     "pinyin": "dǒng",
-    "meaning": "entender",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "entender"
+      }
+    ],
     "level": 2,
     "characters": [
       "懂"
@@ -355,14 +509,20 @@
     "simplified": "房间",
     "traditional": "房間",
     "pinyin": "fáng jiān",
-    "meaning": "habitación",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "habitación"
+      }
+    ],
     "level": 2,
     "characters": [
       "房",
       "间"
     ],
     "topicIds": [
-      "casa"
+      "casa",
+      "vivienda"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -371,7 +531,16 @@
     "simplified": "非常",
     "traditional": "非常",
     "pinyin": "fēi cháng",
-    "meaning": "muy; sumamente",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "muy"
+      },
+      {
+        "pos": "adverbio",
+        "text": "sumamente"
+      }
+    ],
     "level": 2,
     "characters": [
       "非",
@@ -387,7 +556,12 @@
     "simplified": "服务员",
     "traditional": "服務員",
     "pinyin": "fú wù yuán",
-    "meaning": "camarero",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "camarero"
+      }
+    ],
     "level": 2,
     "characters": [
       "服",
@@ -395,7 +569,9 @@
       "员"
     ],
     "topicIds": [
-      "trabajos"
+      "trabajos",
+      "restaurante",
+      "comida"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -404,7 +580,12 @@
     "simplified": "高",
     "traditional": "高",
     "pinyin": "gāo",
-    "meaning": "alto",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "alto"
+      }
+    ],
     "level": 2,
     "characters": [
       "高"
@@ -419,7 +600,16 @@
     "simplified": "告诉",
     "traditional": "告訴",
     "pinyin": "gào su",
-    "meaning": "decir; contar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "decir"
+      },
+      {
+        "pos": "verbo",
+        "text": "contar"
+      }
+    ],
     "level": 2,
     "characters": [
       "告",
@@ -435,14 +625,20 @@
     "simplified": "哥哥",
     "traditional": "哥哥",
     "pinyin": "gē ge",
-    "meaning": "hermano mayor",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hermano mayor"
+      }
+    ],
     "level": 2,
     "characters": [
       "哥",
       "哥"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -451,7 +647,20 @@
     "simplified": "给",
     "traditional": "給",
     "pinyin": "gěi",
-    "meaning": "dar; a; para",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "dar"
+      },
+      {
+        "pos": "preposición",
+        "text": "a"
+      },
+      {
+        "pos": "preposición",
+        "text": "para"
+      }
+    ],
     "level": 2,
     "characters": [
       "给"
@@ -466,7 +675,12 @@
     "simplified": "公共汽车",
     "traditional": "公共汽車",
     "pinyin": "gōng gòng qì chē",
-    "meaning": "autobús",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "autobús"
+      }
+    ],
     "level": 2,
     "characters": [
       "公",
@@ -484,7 +698,13 @@
     "simplified": "公斤",
     "traditional": "公斤",
     "pinyin": "gōng jīn",
-    "meaning": "kilogramo (kg)",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "kilogramo",
+        "note": "kg"
+      }
+    ],
     "level": 2,
     "characters": [
       "公",
@@ -501,7 +721,12 @@
     "simplified": "公司",
     "traditional": "公司",
     "pinyin": "gōng sī",
-    "meaning": "compañía",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "compañía"
+      }
+    ],
     "level": 2,
     "characters": [
       "公",
@@ -518,13 +743,19 @@
     "simplified": "贵",
     "traditional": "貴",
     "pinyin": "guì",
-    "meaning": "caro",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "caro"
+      }
+    ],
     "level": 2,
     "characters": [
       "贵"
     ],
     "topicIds": [
-      "compras"
+      "compras",
+      "dinero"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -533,7 +764,20 @@
     "simplified": "还",
     "traditional": "還",
     "pinyin": "hái",
-    "meaning": "todavía; aún; también",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "todavía"
+      },
+      {
+        "pos": "adverbio",
+        "text": "aún"
+      },
+      {
+        "pos": "adverbio",
+        "text": "también"
+      }
+    ],
     "level": 2,
     "characters": [
       "还"
@@ -548,7 +792,16 @@
     "simplified": "孩子",
     "traditional": "孩子",
     "pinyin": "hái zi",
-    "meaning": "niño/a; hijo/a",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "niño/a"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "hijo/a"
+      }
+    ],
     "level": 2,
     "characters": [
       "孩",
@@ -556,7 +809,8 @@
     ],
     "topicIds": [
       "familia",
-      "personas"
+      "personas",
+      "gente"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -565,14 +819,20 @@
     "simplified": "好吃",
     "traditional": "好吃",
     "pinyin": "hǎo chī",
-    "meaning": "sabroso",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "sabroso"
+      }
+    ],
     "level": 2,
     "characters": [
       "好",
       "吃"
     ],
     "topicIds": [
-      "comida"
+      "comida",
+      "sabores"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -581,7 +841,16 @@
     "simplified": "黑",
     "traditional": "黑",
     "pinyin": "hēi",
-    "meaning": "negro; oscuro",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "negro"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "oscuro"
+      }
+    ],
     "level": 2,
     "characters": [
       "黑"
@@ -596,7 +865,12 @@
     "simplified": "红",
     "traditional": "紅",
     "pinyin": "hóng",
-    "meaning": "rojo",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "rojo"
+      }
+    ],
     "level": 2,
     "characters": [
       "红"
@@ -611,14 +885,25 @@
     "simplified": "欢迎",
     "traditional": "歡迎",
     "pinyin": "huān yíng",
-    "meaning": "bienvenido; dar la bienvenida",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "bienvenido"
+      },
+      {
+        "pos": "verbo",
+        "text": "dar la bienvenida"
+      }
+    ],
     "level": 2,
     "characters": [
       "欢",
       "迎"
     ],
     "topicIds": [
-      "sentimientos"
+      "sentimientos",
+      "saludos",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -627,7 +912,12 @@
     "simplified": "回答",
     "traditional": "回答",
     "pinyin": "huí dá",
-    "meaning": "responder",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "responder"
+      }
+    ],
     "level": 2,
     "characters": [
       "回",
@@ -643,7 +933,12 @@
     "simplified": "机场",
     "traditional": "機場",
     "pinyin": "jī chǎng",
-    "meaning": "aeropuerto",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "aeropuerto"
+      }
+    ],
     "level": 2,
     "characters": [
       "机",
@@ -651,7 +946,8 @@
     ],
     "topicIds": [
       "transporte",
-      "lugares"
+      "lugares",
+      "vehiculos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -660,14 +956,20 @@
     "simplified": "鸡蛋",
     "traditional": "雞蛋",
     "pinyin": "jī dàn",
-    "meaning": "huevo",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "huevo"
+      }
+    ],
     "level": 2,
     "characters": [
       "鸡",
       "蛋"
     ],
     "topicIds": [
-      "comida"
+      "comida",
+      "alimentos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -676,7 +978,12 @@
     "simplified": "件",
     "traditional": "件",
     "pinyin": "jiàn",
-    "meaning": "clasificador para prendas, objetos y asuntos",
+    "senses": [
+      {
+        "pos": "clasificador",
+        "text": "clasificador para prendas, objetos y asuntos"
+      }
+    ],
     "level": 2,
     "characters": [
       "件"
@@ -692,7 +999,12 @@
     "simplified": "教室",
     "traditional": "教室",
     "pinyin": "jiào shì",
-    "meaning": "aula",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "aula"
+      }
+    ],
     "level": 2,
     "characters": [
       "教",
@@ -700,7 +1012,9 @@
     ],
     "topicIds": [
       "escuela",
-      "lugares"
+      "lugares",
+      "vivienda",
+      "casa"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -709,7 +1023,16 @@
     "simplified": "介绍",
     "traditional": "介紹",
     "pinyin": "jiè shào",
-    "meaning": "presentar; introducir",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "presentar"
+      },
+      {
+        "pos": "verbo",
+        "text": "introducir"
+      }
+    ],
     "level": 2,
     "characters": [
       "介",
@@ -725,14 +1048,20 @@
     "simplified": "姐姐",
     "traditional": "姐姐",
     "pinyin": "jiě jie",
-    "meaning": "hermana mayor",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hermana mayor"
+      }
+    ],
     "level": 2,
     "characters": [
       "姐",
       "姐"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -741,7 +1070,12 @@
     "simplified": "近",
     "traditional": "近",
     "pinyin": "jìn",
-    "meaning": "cerca",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "cerca"
+      }
+    ],
     "level": 2,
     "characters": [
       "近"
@@ -756,7 +1090,16 @@
     "simplified": "进",
     "traditional": "進",
     "pinyin": "jìn",
-    "meaning": "entrar; avanzar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "entrar"
+      },
+      {
+        "pos": "verbo",
+        "text": "avanzar"
+      }
+    ],
     "level": 2,
     "characters": [
       "进"
@@ -771,7 +1114,20 @@
     "simplified": "就",
     "traditional": "就",
     "pinyin": "jiù",
-    "meaning": "entonces; justo; enseguida",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "entonces"
+      },
+      {
+        "pos": "adverbio",
+        "text": "justo"
+      },
+      {
+        "pos": "adverbio",
+        "text": "enseguida"
+      }
+    ],
     "level": 2,
     "characters": [
       "就"
@@ -786,7 +1142,17 @@
     "simplified": "觉得",
     "traditional": "覺得",
     "pinyin": "jué de",
-    "meaning": "creer; parecer (a alguien)",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "creer"
+      },
+      {
+        "pos": "verbo",
+        "text": "parecer",
+        "note": "a alguien"
+      }
+    ],
     "level": 2,
     "characters": [
       "觉",
@@ -802,14 +1168,20 @@
     "simplified": "咖啡",
     "traditional": "咖啡",
     "pinyin": "kā fēi",
-    "meaning": "café",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "café"
+      }
+    ],
     "level": 2,
     "characters": [
       "咖",
       "啡"
     ],
     "topicIds": [
-      "comida"
+      "comida",
+      "bebidas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -818,7 +1190,12 @@
     "simplified": "开始",
     "traditional": "開始",
     "pinyin": "kāi shǐ",
-    "meaning": "empezar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "empezar"
+      }
+    ],
     "level": 2,
     "characters": [
       "开",
@@ -834,7 +1211,16 @@
     "simplified": "考试",
     "traditional": "考試",
     "pinyin": "kǎo shì",
-    "meaning": "examen; examinarse",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "examen"
+      },
+      {
+        "pos": "verbo",
+        "text": "examinarse"
+      }
+    ],
     "level": 2,
     "characters": [
       "考",
@@ -851,7 +1237,16 @@
     "simplified": "可能",
     "traditional": "可能",
     "pinyin": "kě néng",
-    "meaning": "posible; quizá",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "posible"
+      },
+      {
+        "pos": "adverbio",
+        "text": "quizá"
+      }
+    ],
     "level": 2,
     "characters": [
       "可",
@@ -867,7 +1262,12 @@
     "simplified": "可以",
     "traditional": "可以",
     "pinyin": "kě yǐ",
-    "meaning": "poder",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "poder"
+      }
+    ],
     "level": 2,
     "characters": [
       "可",
@@ -883,7 +1283,16 @@
     "simplified": "课",
     "traditional": "課",
     "pinyin": "kè",
-    "meaning": "clase; lección",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "clase"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "lección"
+      }
+    ],
     "level": 2,
     "characters": [
       "课"
@@ -898,7 +1307,20 @@
     "simplified": "快",
     "traditional": "快",
     "pinyin": "kuài",
-    "meaning": "rápido; pronto; deprisa",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "rápido"
+      },
+      {
+        "pos": "adverbio",
+        "text": "pronto"
+      },
+      {
+        "pos": "adverbio",
+        "text": "deprisa"
+      }
+    ],
     "level": 2,
     "characters": [
       "快"
@@ -911,14 +1333,24 @@
     "simplified": "快乐",
     "traditional": "快樂",
     "pinyin": "kuài lè",
-    "meaning": "feliz; alegre",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "feliz"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "alegre"
+      }
+    ],
     "level": 2,
     "characters": [
       "快",
       "乐"
     ],
     "topicIds": [
-      "sentimientos"
+      "sentimientos",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -927,7 +1359,12 @@
     "simplified": "累",
     "traditional": "累",
     "pinyin": "lèi",
-    "meaning": "cansado",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "cansado"
+      }
+    ],
     "level": 2,
     "characters": [
       "累"
@@ -942,7 +1379,16 @@
     "simplified": "离",
     "traditional": "离",
     "pinyin": "lí",
-    "meaning": "estar a distancia de; lejos de",
+    "senses": [
+      {
+        "pos": "preposición",
+        "text": "estar a distancia de"
+      },
+      {
+        "pos": "preposición",
+        "text": "lejos de"
+      }
+    ],
     "level": 2,
     "characters": [
       "离"
@@ -957,7 +1403,12 @@
     "simplified": "两",
     "traditional": "兩",
     "pinyin": "liǎng",
-    "meaning": "dos",
+    "senses": [
+      {
+        "pos": "numeral",
+        "text": "dos"
+      }
+    ],
     "level": 2,
     "characters": [
       "两"
@@ -972,13 +1423,23 @@
     "simplified": "路",
     "traditional": "路",
     "pinyin": "lù",
-    "meaning": "camino; calle",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "camino"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "calle"
+      }
+    ],
     "level": 2,
     "characters": [
       "路"
     ],
     "topicIds": [
-      "transporte"
+      "transporte",
+      "vehiculos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -987,14 +1448,24 @@
     "simplified": "旅游",
     "traditional": "旅遊",
     "pinyin": "lǚ yóu",
-    "meaning": "viajar; turismo",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "viajar"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "turismo"
+      }
+    ],
     "level": 2,
     "characters": [
       "旅",
       "游"
     ],
     "topicIds": [
-      "transporte"
+      "transporte",
+      "turismo"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1003,7 +1474,12 @@
     "simplified": "卖",
     "traditional": "賣",
     "pinyin": "mài",
-    "meaning": "vender",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "vender"
+      }
+    ],
     "level": 2,
     "characters": [
       "卖"
@@ -1019,7 +1495,12 @@
     "simplified": "慢",
     "traditional": "慢",
     "pinyin": "màn",
-    "meaning": "lento",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "lento"
+      }
+    ],
     "level": 2,
     "characters": [
       "慢"
@@ -1032,7 +1513,12 @@
     "simplified": "忙",
     "traditional": "忙",
     "pinyin": "máng",
-    "meaning": "ocupado",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "ocupado"
+      }
+    ],
     "level": 2,
     "characters": [
       "忙"
@@ -1047,7 +1533,12 @@
     "simplified": "每",
     "traditional": "每",
     "pinyin": "měi",
-    "meaning": "cada",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "cada"
+      }
+    ],
     "level": 2,
     "characters": [
       "每"
@@ -1062,14 +1553,20 @@
     "simplified": "妹妹",
     "traditional": "妹妹",
     "pinyin": "mèi mei",
-    "meaning": "hermana menor",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hermana menor"
+      }
+    ],
     "level": 2,
     "characters": [
       "妹",
       "妹"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1078,13 +1575,19 @@
     "simplified": "门",
     "traditional": "門",
     "pinyin": "mén",
-    "meaning": "puerta",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "puerta"
+      }
+    ],
     "level": 2,
     "characters": [
       "门"
     ],
     "topicIds": [
-      "casa"
+      "casa",
+      "vivienda"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1093,14 +1596,20 @@
     "simplified": "男人",
     "traditional": "男人",
     "pinyin": "nán rén",
-    "meaning": "hombre",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hombre"
+      }
+    ],
     "level": 2,
     "characters": [
       "男",
       "人"
     ],
     "topicIds": [
-      "personas"
+      "personas",
+      "gente"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1109,13 +1618,19 @@
     "simplified": "您",
     "traditional": "您",
     "pinyin": "nín",
-    "meaning": "usted",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "usted"
+      }
+    ],
     "level": 2,
     "characters": [
       "您"
     ],
     "topicIds": [
-      "personas"
+      "personas",
+      "gente"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1124,14 +1639,20 @@
     "simplified": "牛奶",
     "traditional": "牛奶",
     "pinyin": "niú nǎi",
-    "meaning": "leche",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "leche"
+      }
+    ],
     "level": 2,
     "characters": [
       "牛",
       "奶"
     ],
     "topicIds": [
-      "comida"
+      "comida",
+      "bebidas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1140,14 +1661,20 @@
     "simplified": "女人",
     "traditional": "女人",
     "pinyin": "nǚ rén",
-    "meaning": "mujer",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "mujer"
+      }
+    ],
     "level": 2,
     "characters": [
       "女",
       "人"
     ],
     "topicIds": [
-      "personas"
+      "personas",
+      "gente"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1156,14 +1683,20 @@
     "simplified": "旁边",
     "traditional": "旁邊",
     "pinyin": "páng biān",
-    "meaning": "al lado",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "al lado"
+      }
+    ],
     "level": 2,
     "characters": [
       "旁",
       "边"
     ],
     "topicIds": [
-      "direcciones"
+      "direcciones",
+      "transporte"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1172,7 +1705,12 @@
     "simplified": "跑步",
     "traditional": "跑步",
     "pinyin": "pǎo bù",
-    "meaning": "correr",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "correr"
+      }
+    ],
     "level": 2,
     "characters": [
       "跑",
@@ -1188,7 +1726,16 @@
     "simplified": "票",
     "traditional": "票",
     "pinyin": "piào",
-    "meaning": "billete; entrada",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "billete"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "entrada"
+      }
+    ],
     "level": 2,
     "characters": [
       "票"
@@ -1204,14 +1751,20 @@
     "simplified": "妻子",
     "traditional": "妻子",
     "pinyin": "qī zi",
-    "meaning": "esposa",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "esposa"
+      }
+    ],
     "level": 2,
     "characters": [
       "妻",
       "子"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1220,14 +1773,21 @@
     "simplified": "起床",
     "traditional": "起床",
     "pinyin": "qǐ chuáng",
-    "meaning": "levantarse",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "levantarse"
+      }
+    ],
     "level": 2,
     "characters": [
       "起",
       "床"
     ],
     "topicIds": [
-      "verbos"
+      "verbos",
+      "rutina",
+      "casa"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1236,7 +1796,12 @@
     "simplified": "千",
     "traditional": "千",
     "pinyin": "qiān",
-    "meaning": "mil",
+    "senses": [
+      {
+        "pos": "numeral",
+        "text": "mil"
+      }
+    ],
     "level": 2,
     "characters": [
       "千"
@@ -1251,7 +1816,16 @@
     "simplified": "晴",
     "traditional": "晴",
     "pinyin": "qíng",
-    "meaning": "despejado; soleado",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "despejado"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "soleado"
+      }
+    ],
     "level": 2,
     "characters": [
       "晴"
@@ -1267,7 +1841,12 @@
     "simplified": "去年",
     "traditional": "去年",
     "pinyin": "qù nián",
-    "meaning": "el año pasado",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "el año pasado"
+      }
+    ],
     "level": 2,
     "characters": [
       "去",
@@ -1283,7 +1862,28 @@
     "simplified": "让",
     "traditional": "讓",
     "pinyin": "ràng",
-    "meaning": "dejar; hacer que; permitir; ceder; invitar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "dejar"
+      },
+      {
+        "pos": "verbo",
+        "text": "hacer que"
+      },
+      {
+        "pos": "verbo",
+        "text": "permitir"
+      },
+      {
+        "pos": "verbo",
+        "text": "ceder"
+      },
+      {
+        "pos": "verbo",
+        "text": "invitar"
+      }
+    ],
     "level": 2,
     "characters": [
       "让"
@@ -1298,7 +1898,12 @@
     "simplified": "上班",
     "traditional": "上班",
     "pinyin": "shàng bān",
-    "meaning": "ir a trabajar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "ir a trabajar"
+      }
+    ],
     "level": 2,
     "characters": [
       "上",
@@ -1315,7 +1920,16 @@
     "simplified": "身体",
     "traditional": "身體",
     "pinyin": "shēn tǐ",
-    "meaning": "cuerpo; salud",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "cuerpo"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "salud"
+      }
+    ],
     "level": 2,
     "characters": [
       "身",
@@ -1331,7 +1945,12 @@
     "simplified": "生病",
     "traditional": "生病",
     "pinyin": "shēng bìng",
-    "meaning": "caer enfermo",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "caer enfermo"
+      }
+    ],
     "level": 2,
     "characters": [
       "生",
@@ -1348,7 +1967,12 @@
     "simplified": "生日",
     "traditional": "生日",
     "pinyin": "shēng rì",
-    "meaning": "cumpleaños",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "cumpleaños"
+      }
+    ],
     "level": 2,
     "characters": [
       "生",
@@ -1364,7 +1988,12 @@
     "simplified": "时间",
     "traditional": "時間",
     "pinyin": "shí jiān",
-    "meaning": "tiempo",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "tiempo"
+      }
+    ],
     "level": 2,
     "characters": [
       "时",
@@ -1380,7 +2009,16 @@
     "simplified": "事情",
     "traditional": "事情",
     "pinyin": "shì qing",
-    "meaning": "asunto; cosa",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "asunto"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "cosa"
+      }
+    ],
     "level": 2,
     "characters": [
       "事",
@@ -1394,14 +2032,20 @@
     "simplified": "手表",
     "traditional": "手錶",
     "pinyin": "shǒu biǎo",
-    "meaning": "reloj de pulsera",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "reloj de pulsera"
+      }
+    ],
     "level": 2,
     "characters": [
       "手",
       "表"
     ],
     "topicIds": [
-      "ropa"
+      "ropa",
+      "casa"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1410,7 +2054,16 @@
     "simplified": "手机",
     "traditional": "手機",
     "pinyin": "shǒu jī",
-    "meaning": "teléfono móvil; celular",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "teléfono móvil"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "celular"
+      }
+    ],
     "level": 2,
     "characters": [
       "手",
@@ -1424,13 +2077,32 @@
     "simplified": "送",
     "traditional": "送",
     "pinyin": "sòng",
-    "meaning": "regalar; enviar; acompañar; llevar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "regalar"
+      },
+      {
+        "pos": "verbo",
+        "text": "enviar"
+      },
+      {
+        "pos": "verbo",
+        "text": "acompañar"
+      },
+      {
+        "pos": "verbo",
+        "text": "llevar"
+      }
+    ],
     "level": 2,
     "characters": [
       "送"
     ],
     "topicIds": [
-      "verbos"
+      "verbos",
+      "amigos",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1439,7 +2111,12 @@
     "simplified": "所以",
     "traditional": "所以",
     "pinyin": "suǒ yǐ",
-    "meaning": "por lo tanto",
+    "senses": [
+      {
+        "pos": "conjunción",
+        "text": "por lo tanto"
+      }
+    ],
     "level": 2,
     "characters": [
       "所",
@@ -1455,7 +2132,13 @@
     "simplified": "它",
     "traditional": "它",
     "pinyin": "tā",
-    "meaning": "él, ella (cosa o animal)",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "él, ella",
+        "note": "cosa o animal"
+      }
+    ],
     "level": 2,
     "characters": [
       "它"
@@ -1468,7 +2151,12 @@
     "simplified": "踢",
     "traditional": "踢",
     "pinyin": "tī",
-    "meaning": "dar patadas",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "dar patadas"
+      }
+    ],
     "level": 2,
     "characters": [
       "踢"
@@ -1483,7 +2171,20 @@
     "simplified": "题",
     "traditional": "題",
     "pinyin": "tí",
-    "meaning": "tema; pregunta; problema",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "tema"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "pregunta"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "problema"
+      }
+    ],
     "level": 2,
     "characters": [
       "题"
@@ -1498,7 +2199,12 @@
     "simplified": "跳舞",
     "traditional": "跳舞",
     "pinyin": "tiào wǔ",
-    "meaning": "bailar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "bailar"
+      }
+    ],
     "level": 2,
     "characters": [
       "跳",
@@ -1514,13 +2220,27 @@
     "simplified": "外",
     "traditional": "外",
     "pinyin": "wài",
-    "meaning": "fuera; exterior; extranjero",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "fuera"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "exterior"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "extranjero"
+      }
+    ],
     "level": 2,
     "characters": [
       "外"
     ],
     "topicIds": [
-      "direcciones"
+      "direcciones",
+      "transporte"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1529,7 +2249,12 @@
     "simplified": "完",
     "traditional": "完",
     "pinyin": "wán",
-    "meaning": "terminar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "terminar"
+      }
+    ],
     "level": 2,
     "characters": [
       "完"
@@ -1544,7 +2269,16 @@
     "simplified": "玩",
     "traditional": "玩",
     "pinyin": "wán",
-    "meaning": "jugar; divertirse",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "jugar"
+      },
+      {
+        "pos": "verbo",
+        "text": "divertirse"
+      }
+    ],
     "level": 2,
     "characters": [
       "玩"
@@ -1559,7 +2293,12 @@
     "simplified": "晚上",
     "traditional": "晚上",
     "pinyin": "wǎn shang",
-    "meaning": "noche",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "noche"
+      }
+    ],
     "level": 2,
     "characters": [
       "晚",
@@ -1575,7 +2314,16 @@
     "simplified": "为",
     "traditional": "為",
     "pinyin": "wèi",
-    "meaning": "para; por",
+    "senses": [
+      {
+        "pos": "preposición",
+        "text": "para"
+      },
+      {
+        "pos": "preposición",
+        "text": "por"
+      }
+    ],
     "level": 2,
     "characters": [
       "为"
@@ -1590,7 +2338,12 @@
     "simplified": "问",
     "traditional": "問",
     "pinyin": "wèn",
-    "meaning": "preguntar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "preguntar"
+      }
+    ],
     "level": 2,
     "characters": [
       "问"
@@ -1605,7 +2358,20 @@
     "simplified": "问题",
     "traditional": "問題",
     "pinyin": "wèn tí",
-    "meaning": "pregunta; cuestión; problema",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "pregunta"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "cuestión"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "problema"
+      }
+    ],
     "level": 2,
     "characters": [
       "问",
@@ -1621,7 +2387,16 @@
     "simplified": "希望",
     "traditional": "希望",
     "pinyin": "xī wàng",
-    "meaning": "esperar; esperanza",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "esperar"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "esperanza"
+      }
+    ],
     "level": 2,
     "characters": [
       "希",
@@ -1638,7 +2413,12 @@
     "simplified": "洗",
     "traditional": "洗",
     "pinyin": "xǐ",
-    "meaning": "lavar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "lavar"
+      }
+    ],
     "level": 2,
     "characters": [
       "洗"
@@ -1653,14 +2433,20 @@
     "simplified": "西瓜",
     "traditional": "西瓜",
     "pinyin": "xī guā",
-    "meaning": "sandía",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "sandía"
+      }
+    ],
     "level": 2,
     "characters": [
       "西",
       "瓜"
     ],
     "topicIds": [
-      "comida"
+      "comida",
+      "alimentos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1669,13 +2455,23 @@
     "simplified": "向",
     "traditional": "向",
     "pinyin": "xiàng",
-    "meaning": "hacia; dirección",
+    "senses": [
+      {
+        "pos": "preposición",
+        "text": "hacia"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "dirección"
+      }
+    ],
     "level": 2,
     "characters": [
       "向"
     ],
     "topicIds": [
-      "direcciones"
+      "direcciones",
+      "transporte"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1684,7 +2480,12 @@
     "simplified": "小时",
     "traditional": "小時",
     "pinyin": "xiǎo shí",
-    "meaning": "hora",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "hora"
+      }
+    ],
     "level": 2,
     "characters": [
       "小",
@@ -1700,14 +2501,24 @@
     "simplified": "笑",
     "traditional": "咲",
     "pinyin": "xiào",
-    "meaning": "reír; sonreír",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "reír"
+      },
+      {
+        "pos": "verbo",
+        "text": "sonreír"
+      }
+    ],
     "level": 2,
     "characters": [
       "笑"
     ],
     "topicIds": [
       "verbos",
-      "sentimientos"
+      "sentimientos",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1716,7 +2527,12 @@
     "simplified": "新",
     "traditional": "新",
     "pinyin": "xīn",
-    "meaning": "nuevo",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "nuevo"
+      }
+    ],
     "level": 2,
     "characters": [
       "新"
@@ -1729,13 +2545,23 @@
     "simplified": "姓",
     "traditional": "姓",
     "pinyin": "xìng",
-    "meaning": "apellido; apellidarse",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "apellido"
+      },
+      {
+        "pos": "verbo",
+        "text": "apellidarse"
+      }
+    ],
     "level": 2,
     "characters": [
       "姓"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1744,14 +2570,21 @@
     "simplified": "休息",
     "traditional": "休息",
     "pinyin": "xiū xi",
-    "meaning": "descansar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "descansar"
+      }
+    ],
     "level": 2,
     "characters": [
       "休",
       "息"
     ],
     "topicIds": [
-      "verbos"
+      "verbos",
+      "rutina",
+      "casa"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1760,7 +2593,12 @@
     "simplified": "雪",
     "traditional": "雪",
     "pinyin": "xuě",
-    "meaning": "nieve",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "nieve"
+      }
+    ],
     "level": 2,
     "characters": [
       "雪"
@@ -1776,7 +2614,12 @@
     "simplified": "颜色",
     "traditional": "顏色",
     "pinyin": "yán sè",
-    "meaning": "color",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "color"
+      }
+    ],
     "level": 2,
     "characters": [
       "颜",
@@ -1792,7 +2635,12 @@
     "simplified": "眼睛",
     "traditional": "眼睛",
     "pinyin": "yǎn jing",
-    "meaning": "ojos",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "ojos"
+      }
+    ],
     "level": 2,
     "characters": [
       "眼",
@@ -1808,7 +2656,12 @@
     "simplified": "羊肉",
     "traditional": "羊肉",
     "pinyin": "yáng ròu",
-    "meaning": "carne de cordero",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "carne de cordero"
+      }
+    ],
     "level": 2,
     "characters": [
       "羊",
@@ -1816,7 +2669,8 @@
     ],
     "topicIds": [
       "comida",
-      "animales"
+      "animales",
+      "alimentos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1825,7 +2679,12 @@
     "simplified": "药",
     "traditional": "葯",
     "pinyin": "yào",
-    "meaning": "medicina",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "medicina"
+      }
+    ],
     "level": 2,
     "characters": [
       "药"
@@ -1840,7 +2699,16 @@
     "simplified": "要",
     "traditional": "要",
     "pinyin": "yào",
-    "meaning": "querer; tener que",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "querer"
+      },
+      {
+        "pos": "verbo",
+        "text": "tener que"
+      }
+    ],
     "level": 2,
     "characters": [
       "要"
@@ -1853,7 +2721,12 @@
     "simplified": "也",
     "traditional": "也",
     "pinyin": "yě",
-    "meaning": "también",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "también"
+      }
+    ],
     "level": 2,
     "characters": [
       "也"
@@ -1868,7 +2741,12 @@
     "simplified": "一起",
     "traditional": "一起",
     "pinyin": "yī qǐ",
-    "meaning": "juntos",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "juntos"
+      }
+    ],
     "level": 2,
     "characters": [
       "一",
@@ -1882,7 +2760,12 @@
     "simplified": "已经",
     "traditional": "已經",
     "pinyin": "yǐ jīng",
-    "meaning": "ya",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "ya"
+      }
+    ],
     "level": 2,
     "characters": [
       "已",
@@ -1898,7 +2781,16 @@
     "simplified": "意思",
     "traditional": "意思",
     "pinyin": "yì si",
-    "meaning": "significado; idea",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "significado"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "idea"
+      }
+    ],
     "level": 2,
     "characters": [
       "意",
@@ -1912,7 +2804,12 @@
     "simplified": "因为",
     "traditional": "因為",
     "pinyin": "yīn wèi",
-    "meaning": "porque",
+    "senses": [
+      {
+        "pos": "conjunción",
+        "text": "porque"
+      }
+    ],
     "level": 2,
     "characters": [
       "因",
@@ -1928,7 +2825,12 @@
     "simplified": "阴",
     "traditional": "陰",
     "pinyin": "yīn",
-    "meaning": "nublado",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "nublado"
+      }
+    ],
     "level": 2,
     "characters": [
       "阴"
@@ -1944,7 +2846,16 @@
     "simplified": "游泳",
     "traditional": "游泳",
     "pinyin": "yóu yǒng",
-    "meaning": "nadar; natación",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "nadar"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "natación"
+      }
+    ],
     "level": 2,
     "characters": [
       "游",
@@ -1960,14 +2871,20 @@
     "simplified": "右边",
     "traditional": "右邊",
     "pinyin": "yòu bian",
-    "meaning": "lado derecho",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "lado derecho"
+      }
+    ],
     "level": 2,
     "characters": [
       "右",
       "边"
     ],
     "topicIds": [
-      "direcciones"
+      "direcciones",
+      "transporte"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -1976,7 +2893,16 @@
     "simplified": "鱼",
     "traditional": "魚",
     "pinyin": "yú",
-    "meaning": "pez; pescado",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "pez"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "pescado"
+      }
+    ],
     "level": 2,
     "characters": [
       "鱼"
@@ -1992,13 +2918,27 @@
     "simplified": "元",
     "traditional": "元",
     "pinyin": "yuán",
-    "meaning": "yuan; unidad monetaria china; primero",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "yuan"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "unidad monetaria china"
+      },
+      {
+        "pos": "numeral",
+        "text": "primero"
+      }
+    ],
     "level": 2,
     "characters": [
       "元"
     ],
     "topicIds": [
-      "compras"
+      "compras",
+      "dinero"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -2007,7 +2947,12 @@
     "simplified": "远",
     "traditional": "遠",
     "pinyin": "yuǎn",
-    "meaning": "lejos",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "lejos"
+      }
+    ],
     "level": 2,
     "characters": [
       "远"
@@ -2022,7 +2967,16 @@
     "simplified": "运动",
     "traditional": "運動",
     "pinyin": "yùn dòng",
-    "meaning": "deporte; hacer ejercicio",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "deporte"
+      },
+      {
+        "pos": "verbo",
+        "text": "hacer ejercicio"
+      }
+    ],
     "level": 2,
     "characters": [
       "运",
@@ -2036,7 +2990,16 @@
     "simplified": "再",
     "traditional": "再",
     "pinyin": "zài",
-    "meaning": "otra vez; luego",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "otra vez"
+      },
+      {
+        "pos": "adverbio",
+        "text": "luego"
+      }
+    ],
     "level": 2,
     "characters": [
       "再"
@@ -2051,7 +3014,16 @@
     "simplified": "早上",
     "traditional": "早上",
     "pinyin": "zǎo shang",
-    "meaning": "por la mañana; mañana temprano",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "por la mañana"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "mañana temprano"
+      }
+    ],
     "level": 2,
     "characters": [
       "早",
@@ -2067,7 +3039,12 @@
     "simplified": "张",
     "traditional": "張",
     "pinyin": "zhāng",
-    "meaning": "clasificador para objetos planos",
+    "senses": [
+      {
+        "pos": "clasificador",
+        "text": "clasificador para objetos planos"
+      }
+    ],
     "level": 2,
     "characters": [
       "张"
@@ -2083,7 +3060,12 @@
     "simplified": "长",
     "traditional": "長",
     "pinyin": "cháng",
-    "meaning": "largo",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "largo"
+      }
+    ],
     "level": 2,
     "characters": [
       "长"
@@ -2096,14 +3078,20 @@
     "simplified": "丈夫",
     "traditional": "丈夫",
     "pinyin": "zhàng fu",
-    "meaning": "marido",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "marido"
+      }
+    ],
     "level": 2,
     "characters": [
       "丈",
       "夫"
     ],
     "topicIds": [
-      "familia"
+      "familia",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -2112,7 +3100,12 @@
     "simplified": "找",
     "traditional": "找",
     "pinyin": "zhǎo",
-    "meaning": "buscar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "buscar"
+      }
+    ],
     "level": 2,
     "characters": [
       "找"
@@ -2127,7 +3120,12 @@
     "simplified": "着",
     "traditional": "著",
     "pinyin": "zhe",
-    "meaning": "partícula que indica acción en curso",
+    "senses": [
+      {
+        "pos": "partícula",
+        "text": "partícula que indica acción en curso"
+      }
+    ],
     "level": 2,
     "characters": [
       "着"
@@ -2142,7 +3140,20 @@
     "simplified": "真",
     "traditional": "真",
     "pinyin": "zhēn",
-    "meaning": "verdadero; realmente; muy",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "verdadero"
+      },
+      {
+        "pos": "adverbio",
+        "text": "realmente"
+      },
+      {
+        "pos": "adverbio",
+        "text": "muy"
+      }
+    ],
     "level": 2,
     "characters": [
       "真"
@@ -2157,7 +3168,13 @@
     "simplified": "正在",
     "traditional": "正在",
     "pinyin": "zhèng zài",
-    "meaning": "estar (haciendo algo)",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "estar",
+        "note": "haciendo algo"
+      }
+    ],
     "level": 2,
     "characters": [
       "正",
@@ -2173,7 +3190,16 @@
     "simplified": "知道",
     "traditional": "知道",
     "pinyin": "zhī dào",
-    "meaning": "saber; conocer",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "saber"
+      },
+      {
+        "pos": "verbo",
+        "text": "conocer"
+      }
+    ],
     "level": 2,
     "characters": [
       "知",
@@ -2189,7 +3215,12 @@
     "simplified": "准备",
     "traditional": "準備",
     "pinyin": "zhǔn bèi",
-    "meaning": "preparar",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "preparar"
+      }
+    ],
     "level": 2,
     "characters": [
       "准",
@@ -2205,7 +3236,12 @@
     "simplified": "自行车",
     "traditional": "自行車",
     "pinyin": "zì xíng chē",
-    "meaning": "bicicleta",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "bicicleta"
+      }
+    ],
     "level": 2,
     "characters": [
       "自",
@@ -2213,7 +3249,8 @@
       "车"
     ],
     "topicIds": [
-      "transporte"
+      "transporte",
+      "vehiculos"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -2222,7 +3259,20 @@
     "simplified": "走",
     "traditional": "走",
     "pinyin": "zǒu",
-    "meaning": "caminar; irse; marcharse",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "caminar"
+      },
+      {
+        "pos": "verbo",
+        "text": "irse"
+      },
+      {
+        "pos": "verbo",
+        "text": "marcharse"
+      }
+    ],
     "level": 2,
     "characters": [
       "走"
@@ -2237,7 +3287,16 @@
     "simplified": "最",
     "traditional": "最",
     "pinyin": "zuì",
-    "meaning": "el más; lo más",
+    "senses": [
+      {
+        "pos": "adverbio",
+        "text": "el más"
+      },
+      {
+        "pos": "adverbio",
+        "text": "lo más"
+      }
+    ],
     "level": 2,
     "characters": [
       "最"
@@ -2252,87 +3311,25 @@
     "simplified": "左边",
     "traditional": "左邊",
     "pinyin": "zuǒ bian",
-    "meaning": "lado izquierdo; a la izquierda",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "lado izquierdo"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "a la izquierda"
+      }
+    ],
     "level": 2,
     "characters": [
       "左",
       "边"
     ],
     "topicIds": [
-      "direcciones"
+      "direcciones",
+      "transporte"
     ],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-8e22-8db3-7403-ti-zu2-qiu2",
-    "simplified": "踢足球",
-    "traditional": "踢足球",
-    "pinyin": "tī zú qiú",
-    "meaning": "jugar al fútbol",
-    "level": 2,
-    "characters": [
-      "踢",
-      "足",
-      "球"
-    ],
-    "topicIds": [
-      "verbos"
-    ],
-    "sourceId": "asia-idiomas"
-  },
-  {
-    "id": "word-8fd9-513f-zher4",
-    "simplified": "这儿",
-    "traditional": "這兒",
-    "pinyin": "zhèr",
-    "meaning": "aquí",
-    "level": 2,
-    "characters": [
-      "这",
-      "儿"
-    ],
-    "topicIds": [
-      "direcciones"
-    ],
-    "sourceId": "asia-idiomas"
-  },
-  {
-    "id": "word-7b49-deng3",
-    "simplified": "等",
-    "traditional": "等",
-    "pinyin": "děng",
-    "meaning": "esperar; etcétera",
-    "level": 2,
-    "characters": [
-      "等"
-    ],
-    "topicIds": [],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-5bf9-dui4",
-    "simplified": "对",
-    "traditional": "對",
-    "pinyin": "duì",
-    "meaning": "correcto; hacia; par; pareja",
-    "level": 2,
-    "characters": [
-      "对"
-    ],
-    "topicIds": [],
-    "sourceId": "hsk-2-0"
-  },
-  {
-    "id": "word-8fc7-guo4",
-    "simplified": "过",
-    "traditional": "過",
-    "pinyin": "guò",
-    "meaning": "pasar; cruzar; partícula de experiencia",
-    "level": 2,
-    "characters": [
-      "过"
-    ],
-    "topicIds": [],
     "sourceId": "hsk-2-0"
   },
   {
@@ -2340,7 +3337,12 @@
     "simplified": "为什么",
     "traditional": "為什麼",
     "pinyin": "wèi shén me",
-    "meaning": "¿por qué?",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "¿por qué?"
+      }
+    ],
     "level": 2,
     "characters": [
       "为",
@@ -2357,14 +3359,24 @@
     "simplified": "着急",
     "traditional": "著急",
     "pinyin": "zháo jí",
-    "meaning": "preocuparse; estar preocupado",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "preocuparse"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "estar preocupado"
+      }
+    ],
     "level": 2,
     "characters": [
       "着",
       "急"
     ],
     "topicIds": [
-      "sentimientos"
+      "sentimientos",
+      "personas"
     ],
     "sourceId": "hsk-2-0"
   },
@@ -2373,7 +3385,12 @@
     "simplified": "作业",
     "traditional": "作業",
     "pinyin": "zuò yè",
-    "meaning": "tarea escolar",
+    "senses": [
+      {
+        "pos": "sustantivo",
+        "text": "tarea escolar"
+      }
+    ],
     "level": 2,
     "characters": [
       "作",
@@ -2383,5 +3400,130 @@
       "escuela"
     ],
     "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7b49-deng3",
+    "simplified": "等",
+    "traditional": "等",
+    "pinyin": "děng",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "esperar"
+      },
+      {
+        "pos": "partícula",
+        "text": "etcétera"
+      }
+    ],
+    "level": 2,
+    "characters": [
+      "等"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-5bf9-dui4",
+    "simplified": "对",
+    "traditional": "對",
+    "pinyin": "duì",
+    "senses": [
+      {
+        "pos": "adjetivo",
+        "text": "correcto"
+      },
+      {
+        "pos": "preposición",
+        "text": "hacia"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "par"
+      },
+      {
+        "pos": "sustantivo",
+        "text": "pareja"
+      }
+    ],
+    "level": 2,
+    "characters": [
+      "对"
+    ],
+    "topicIds": [],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8fc7-guo4",
+    "simplified": "过",
+    "traditional": "過",
+    "pinyin": "guò",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "pasar"
+      },
+      {
+        "pos": "verbo",
+        "text": "cruzar"
+      },
+      {
+        "pos": "partícula",
+        "text": "partícula de experiencia"
+      }
+    ],
+    "level": 2,
+    "characters": [
+      "过"
+    ],
+    "topicIds": [
+      "direcciones",
+      "transporte"
+    ],
+    "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-8e22-8db3-7403-ti-zu2-qiu2",
+    "simplified": "踢足球",
+    "traditional": "踢足球",
+    "pinyin": "tī zú qiú",
+    "senses": [
+      {
+        "pos": "verbo",
+        "text": "jugar al fútbol"
+      }
+    ],
+    "level": 2,
+    "characters": [
+      "踢",
+      "足",
+      "球"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-8fd9-513f-zher4",
+    "simplified": "这儿",
+    "traditional": "這兒",
+    "pinyin": "zhèr",
+    "senses": [
+      {
+        "pos": "pronombre",
+        "text": "aquí"
+      }
+    ],
+    "level": 2,
+    "characters": [
+      "这",
+      "儿"
+    ],
+    "topicIds": [
+      "direcciones",
+      "transporte"
+    ],
+    "sourceId": "asia-idiomas"
   }
 ]

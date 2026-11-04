@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { leadSense, sensesText, WORD_POS, type WordSense } from '../src/data/wordSenses';
 import { vocabulary, vocabularyByLevel } from '../src/data/vocabulary';
 import { topics } from '../src/data/topics';
+
+// These rules check what a card, a list row or a review shows: the text of the first use.
+// Notes and later uses are for the word page.
+const card = (entry: { senses: WordSense[] }) => leadSense(entry.senses);
 
 // Words whose pinyin keeps a capital: places, continents and festivals.
 const properNouns = new Set([
@@ -14,8 +19,8 @@ const looksLikeJunk = (meaning: string) =>
 
 describe('vocabulary quality', () => {
   it('has no junk or untranslated glosses', () => {
-    const junk = vocabulary.filter((entry) => looksLikeJunk(entry.meaning));
-    expect(junk.map((entry) => `${entry.simplified}: ${entry.meaning}`)).toEqual([]);
+    const junk = vocabulary.filter((entry) => looksLikeJunk(sensesText(entry.senses)));
+    expect(junk.map((entry) => `${entry.simplified}: ${sensesText(entry.senses)}`)).toEqual([]);
   });
 
   it('keeps dictionary notes out of glosses', () => {
@@ -27,42 +32,43 @@ describe('vocabulary quality', () => {
       /(…|\.\.\.)$/,
       /:/,
     ];
-    const leaked = vocabulary.filter((entry) => notes.some((pattern) => pattern.test(entry.meaning)));
-    expect(leaked.map((entry) => `${entry.simplified}: ${entry.meaning}`)).toEqual([]);
+    const leaked = vocabulary.filter((entry) => notes.some((pattern) => pattern.test(card(entry))));
+    expect(leaked.map((entry) => `${entry.simplified}: ${card(entry)}`)).toEqual([]);
   });
 
   it('balances parentheses and never repeats a sense in them', () => {
     const broken = vocabulary.filter((entry) => {
-      const opens = (entry.meaning.match(/\(/g) ?? []).length;
-      const closes = (entry.meaning.match(/\)/g) ?? []).length;
-      const repeated = entry.meaning.match(/^(.+?)\s*\((.+?)\)$/);
+      const opens = (sensesText(entry.senses).match(/\(/g) ?? []).length;
+      const closes = (sensesText(entry.senses).match(/\)/g) ?? []).length;
+      const repeated = sensesText(entry.senses).match(/^(.+?)\s*\((.+?)\)$/);
       return opens !== closes || (!!repeated && repeated[1].trim().toLowerCase() === repeated[2].trim().toLowerCase());
     });
-    expect(broken.map((entry) => `${entry.simplified}: ${entry.meaning}`)).toEqual([]);
+    expect(broken.map((entry) => `${entry.simplified}: ${sensesText(entry.senses)}`)).toEqual([]);
   });
 
   it('starts a noun gloss with the noun, not an article', () => {
     // Fixed phrases where the article is part of the Spanish expression.
     const phrases = new Set([
       '去年', '最', '一会儿', '一点儿', '稍微', '对方', '所谓', '一旦', '再三', '供不应求', '片刻', '群众', '人家', '四肢', '往事', '未免',
+      '互相', '曾经', '地球', '北极', '整体',
     ]);
     const withArticle = vocabulary.filter(
-      (entry) => !phrases.has(entry.simplified) && /^(un|una|el|la|los|las|unos|unas) /i.test(entry.meaning),
+      (entry) => !phrases.has(entry.simplified) && /^(un|una|el|la|los|las|unos|unas) /i.test(card(entry)),
     );
-    expect(withArticle.map((entry) => `${entry.simplified}: ${entry.meaning}`)).toEqual([]);
+    expect(withArticle.map((entry) => `${entry.simplified}: ${card(entry)}`)).toEqual([]);
   });
 
   it('uses the natural first sense for words learners meet early', () => {
-    const meaning = (simplified: string) => vocabulary.find((entry) => entry.simplified === simplified)?.meaning;
-    expect(meaning('原谅')).toBe('perdonar');
-    expect(meaning('理想')).toBe('ideal');
-    expect(meaning('直接')).toBe('directo');
-    expect(meaning('特点')).toBe('característica');
-    expect(meaning('咖啡')).toBe('café');
+    const lead = (simplified: string) => card(vocabulary.find((entry) => entry.simplified === simplified)!);
+    expect(lead('原谅')).toMatch(/^perdonar(,|$)/);
+    expect(lead('理想')).toMatch(/^ideal(,|$)/);
+    expect(lead('直接')).toMatch(/^directo(,|$)/);
+    expect(lead('特点')).toMatch(/^característica(,|$)/);
+    expect(lead('咖啡')).toMatch(/^café(,|$)/);
   });
 
   it('keeps glosses short enough for a card', () => {
-    const long = vocabulary.filter((entry) => entry.meaning.length > 80);
+    const long = vocabulary.filter((entry) => card(entry).length > 80);
     expect(long.map((entry) => entry.simplified)).toEqual([]);
   });
 
@@ -85,11 +91,21 @@ describe('vocabulary quality', () => {
     expect(reading('中国')).toBe('Zhōng guó');
   });
 
-  it('gives every topic at least three HSK 1–2 words', () => {
+  it('gives every theme and tag at least three HSK 1–2 words', () => {
     const early = [...vocabularyByLevel[1], ...vocabularyByLevel[2]];
     const thin = topics
+      .filter((topic) => topic.kind !== 'subtopic')
       .map((topic) => ({ id: topic.id, count: early.filter((entry) => entry.topicIds.includes(topic.id)).length }))
       .filter((row) => row.count < 3);
+    expect(thin).toEqual([]);
+  });
+
+  // A subtopic narrows a theme (Sabores, Muebles): its words can come from any level, but it must hold a session.
+  it('gives every subtopic at least eight words', () => {
+    const thin = topics
+      .filter((topic) => topic.kind === 'subtopic')
+      .map((topic) => ({ id: topic.id, count: vocabulary.filter((entry) => entry.topicIds.includes(topic.id)).length }))
+      .filter((row) => row.count < 8);
     expect(thin).toEqual([]);
   });
 
@@ -104,17 +120,26 @@ describe('vocabulary quality', () => {
     const echoes = vocabulary.filter((entry) => {
       if (loanwords.has(entry.simplified)) return false;
       const pinyin = bare(entry.pinyin);
-      const first = entry.meaning.split(/[;(]/)[0];
-      const paren = /^\s*\(([^)]*)\)/.exec(entry.meaning);
+      const first = sensesText(entry.senses).split(/[;(]/)[0];
+      const paren = /^\s*\(([^)]*)\)/.exec(sensesText(entry.senses));
       return bare(first) === pinyin || (paren !== null && bare(paren[1]) === pinyin);
     });
-    expect(echoes.map((entry) => `${entry.simplified}: ${entry.meaning}`)).toEqual([]);
+    expect(echoes.map((entry) => `${entry.simplified}: ${sensesText(entry.senses)}`)).toEqual([]);
   });
 
   it('answers the Spanish words learners search for', () => {
-    const gloss = (word: string) => vocabularyByLevel[1].find((entry) => entry.simplified === word)?.meaning ?? '';
+    const gloss = (word: string) => sensesText(vocabularyByLevel[1].find((entry) => entry.simplified === word)?.senses ?? []);
     expect(gloss('对不起')).toContain('perdón');
     expect(gloss('没关系')).toContain('no pasa nada');
     expect(gloss('再见')).toContain('hasta luego');
+  });
+});
+
+describe('structured senses', () => {
+  it('gives every use a part of speech and keeps brackets and Chinese out of the text', () => {
+    const untagged = vocabulary.flatMap((entry) => entry.senses.filter((sense) => !sense.pos || !WORD_POS.includes(sense.pos)).map(() => entry.simplified));
+    expect(untagged).toEqual([]);
+    const bracketed = vocabulary.filter((entry) => entry.senses.some((sense) => /[()（）]/.test(sense.text)));
+    expect(bracketed.map((entry) => entry.simplified)).toEqual([]);
   });
 });

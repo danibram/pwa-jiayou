@@ -1,16 +1,20 @@
 import { fireEvent, render, screen, waitFor, within } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Editor from '../Editor';
+import type { ContentSnapshot } from '../lib/model';
 
-const base = {
+const base: ContentSnapshot = {
   schemaVersion: 1,
-  vocabulary: [{ id: 'word-1', simplified: '好', traditional: '好', pinyin: 'hǎo', meaning: 'bueno', level: 1, characters: ['好'], topicIds: [], sourceId: 'hsk-2-0' }],
+  vocabulary: [{ id: 'word-1', simplified: '好', traditional: '好', pinyin: 'hǎo', senses: [{ text: 'bueno' }], level: 1, characters: ['好'], topicIds: [], sourceId: 'hsk-2-0' }],
   characters: ['好', '一', '二', '三', '四', '五'].map((character, index) => ({ character, traditional: character, pinyin: 'hǎo', definition: 'bueno', radical: '女', stroke_count: 6, hsk_level: 1, general_standard: index + 1, frequency_rank: index + 1 })),
-  topics: [{ id: 'saludos', title: 'Saludos', glyph: '好', characters: ['好', '一', '二', '三', '四'] }],
+  topics: [
+    { id: 'personas', title: 'Personas', glyph: '好', kind: 'theme', characters: ['好', '一', '二', '三', '四'] },
+    { id: 'saludos', title: 'Saludos', glyph: '好', kind: 'subtopic', parentId: 'personas', characters: ['好', '一', '二', '三', '四'] },
+  ],
 };
 const version = { version: 3, date: '2026-11-03', notes: 'Tercera.' };
 
-const mockFetch = (serverAvailable = false) => vi.fn(async (url: string, init?: RequestInit) => {
+const mockFetch = (serverAvailable = false, snapshot = base) => vi.fn(async (url: string, init?: RequestInit) => {
   if (url.includes('__content/status')) return { ok: serverAvailable, json: async () => ({ available: serverAvailable }) };
   if (url.includes('__content/plan')) return { ok: true, json: async () => ({ files: ['content/snapshot.json', 'src/data/vocabulary/hsk1.json'], version }) };
   if (url.includes('__content/promote')) {
@@ -19,7 +23,7 @@ const mockFetch = (serverAvailable = false) => vi.fn(async (url: string, init?: 
   }
   if (url.endsWith('revision.json')) return { ok: true, json: async () => ({ revision: 'rev-1' }) };
   if (url.endsWith('version.json')) return { ok: true, json: async () => version };
-  return { ok: true, json: async () => structuredClone(base) };
+  return { ok: true, json: async () => structuredClone(snapshot) };
 });
 
 beforeEach(() => {
@@ -31,40 +35,138 @@ afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); localStorage.clea
 const openWord = async (pinyin = 'hǎo') => fireEvent.click(await screen.findByRole('button', { name: new RegExp(`好.*${pinyin}`) }));
 
 describe('content editor', () => {
+  it('filters the review by proposed level, entry kind and old or new text', async () => {
+    const published = structuredClone(base);
+    published.vocabulary.push({ ...published.vocabulary[0], id: 'word-2', simplified: '佳', traditional: '佳', characters: ['佳'], pinyin: 'jiā', level: 4, senses: [{ text: 'excelente' }] });
+    published.vocabulary.push({ ...published.vocabulary[0], id: 'extra-1', simplified: '妙', traditional: '妙', characters: ['妙'], pinyin: 'miào', level: undefined, senses: [{ text: 'maravilloso' }] });
+    published.characters[0].hsk_level = 4;
+    const snapshot = structuredClone(published);
+    snapshot.vocabulary[0].level = 6;
+    snapshot.vocabulary[1].senses = [{ text: 'bueno' }, { text: 'hermoso' }];
+    snapshot.vocabulary[2].senses = [{ text: 'ingenioso' }];
+    snapshot.characters[0].definition = 'bien';
+    vi.stubGlobal('fetch', mockFetch(false, published));
+    localStorage.setItem('jiayou-content-draft-v1', JSON.stringify({ schemaVersion: 1, baseRevision: 'rev-1', snapshot }));
+    render(() => <Editor />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Revisar' }));
+    expect(screen.getByRole('article', { name: 'Cambios de 好' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'HSK 4' }));
+    expect(screen.getByText('2 cambios')).toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Cambios de 佳' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
+    expect(screen.getByRole('article', { name: 'Cambios de 好' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Siguiente' })).toBeDisabled();
+    fireEvent.change(screen.getByLabelText('Tipo de entrada'), { target: { value: 'word' } });
+    expect(screen.getByRole('article', { name: 'Cambios de 佳' })).toBeInTheDocument();
+    fireEvent.input(screen.getByLabelText('Buscar cambios'), { target: { value: 'excelente' } });
+    expect(screen.getByRole('cell', { name: 'excelente' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'bueno · hermoso' })).toBeInTheDocument();
+    fireEvent.input(screen.getByLabelText('Buscar cambios'), { target: { value: 'jia' } });
+    expect(screen.getByRole('article', { name: 'Cambios de 佳' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'HSK 1' }));
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Limpiar filtros' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Extra' }));
+    expect(screen.getByRole('article', { name: 'Cambios de 妙' })).toBeInTheDocument();
+    expect(screen.getByText(/borrador completo, con 4 cambios/)).toBeInTheDocument();
+  });
+
+  it('compares sentence and synonym edits and retains unchanged examples as context', async () => {
+    const published = structuredClone(base);
+    published.vocabulary[0].example = { chinese: '这个好。', spanish: 'Este es bueno.' };
+    published.vocabulary.push({ ...published.vocabulary[0], id: 'word-2', simplified: '佳', traditional: '佳', characters: ['佳'], pinyin: 'jiā' });
+    const snapshot = structuredClone(published);
+    snapshot.vocabulary[0].senses = [{ text: 'bueno' }, { text: 'bien' }];
+    snapshot.vocabulary[0].relations = [{ kind: 'synonym', id: 'word-2' }];
+    snapshot.vocabulary[0].example = { chinese: '你的中文很好。', spanish: 'Tu chino es muy bueno.' };
+    snapshot.vocabulary[1].senses = [{ text: 'excelente' }];
+    vi.stubGlobal('fetch', mockFetch(false, published));
+    localStorage.setItem('jiayou-content-draft-v1', JSON.stringify({ schemaVersion: 1, baseRevision: 'rev-1', snapshot }));
+    render(() => <Editor />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Revisar' }));
+    expect(screen.getByRole('columnheader', { name: 'Publicado' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Propuesta' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '这个好。' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '你的中文很好。' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'Sinónimos: 佳' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
+    expect(screen.getByRole('region', { name: 'Contenido que se conserva' })).toHaveTextContent('Este es bueno.');
+  });
+
+  it('keeps source phrases as draft references and publishes only an authored example', async () => {
+    const references = { 'word-1': { url: '/es/dictionary/好-hao', retrieved: '2026-11-04', examples: [{ chinese: '你好。', pinyin: 'Nǐ hǎo.', spanish: 'Hola.' }] } };
+    localStorage.setItem('jiayou-content-draft-v1', JSON.stringify({ schemaVersion: 1, baseRevision: 'rev-1', snapshot: base, references }));
+    render(() => <Editor />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Revisar' }));
+    expect(screen.getByText(/Referencias de /)).toBeInTheDocument();
+    expect(screen.getByText(/Esta entrada conserva/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Editar ficha' }));
+    expect(screen.getByLabelText('Frase en chino')).toHaveValue('');
+    fireEvent.input(screen.getByLabelText('Frase en chino'), { target: { value: '这个办法很好。' } });
+    fireEvent.input(screen.getByLabelText('Traducción de la frase'), { target: { value: 'Este método es muy bueno.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
+    const saved = JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!);
+    expect(saved.references).toEqual(references);
+    expect(saved.snapshot.vocabulary[0].example).toEqual({ chinese: '这个办法很好。', spanish: 'Este método es muy bueno.' });
+    expect(JSON.stringify(saved.snapshot)).not.toContain('Hola.');
+    fireEvent.click(screen.getByRole('button', { name: 'Revisar' }));
+    expect(screen.getByRole('cell', { name: 'Este método es muy bueno.' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Editar ficha' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Quitar frase' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
+    expect(JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!).snapshot.vocabulary[0].example).toBeNull();
+  });
+
   it('saves edits without changing the word ID and restores the draft', async () => {
     const view = render(() => <Editor />);
     await openWord();
     fireEvent.input(screen.getByLabelText('Sílaba de 好'), { target: { value: 'hao4' } });
-    fireEvent.input(screen.getByLabelText('Traducción'), { target: { value: 'bien' } });
+    fireEvent.input(screen.getByLabelText('Significado (el de la tarjeta)'), { target: { value: 'bien' } });
     fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
     const saved = JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!);
-    expect(saved.snapshot.vocabulary[0]).toMatchObject({ id: 'word-1', pinyin: 'hào', meaning: 'bien' });
+    expect(saved.snapshot.vocabulary[0]).toMatchObject({ id: 'word-1', pinyin: 'hào', senses: [{ text: 'bien' }] });
     view.unmount();
     render(() => <Editor />);
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Borrador guardado'));
     await openWord('hào');
-    expect(screen.getByLabelText('Traducción')).toHaveValue('bien');
+    expect(screen.getByLabelText('Significado (el de la tarjeta)')).toHaveValue('bien');
+  });
+
+  it('edits uses as rows: part of speech, text, note, order', async () => {
+    render(() => <Editor />);
+    await openWord();
+    fireEvent.change(screen.getAllByLabelText('Categoría')[0], { target: { value: 'adjetivo' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Añadir uso' }));
+    const texts = screen.getAllByLabelText(/^Significado/);
+    fireEvent.input(texts[1], { target: { value: 'bien' } });
+    fireEvent.input(screen.getAllByLabelText('Nota de uso')[1], { target: { value: 'como respuesta' } });
+    fireEvent.click(screen.getAllByRole('button', { name: 'Subir este uso' })[1]);
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
+    const saved = JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!).snapshot.vocabulary[0].senses;
+    // The new use inherits "adjetivo" from the one above it, then moves first: it becomes the card's use.
+    expect(saved[0]).toEqual({ pos: 'adjetivo', text: 'bien', note: 'como respuesta' });
+    expect(saved[1].pos).toBe('adjetivo');
   });
 
   it('shows the content version and keeps changes in memory when storage fails', async () => {
     render(() => <Editor />);
     await openWord();
     expect(screen.getByText(/contenido v3/)).toBeInTheDocument();
-    fireEvent.input(screen.getByLabelText('Traducción'), { target: { value: 'bien' } });
+    fireEvent.input(screen.getByLabelText('Significado (el de la tarjeta)'), { target: { value: 'bien' } });
     vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new Error('sin espacio'); });
     fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
     expect(screen.getByRole('alert')).toHaveTextContent('sin espacio');
-    expect(screen.getByLabelText('Traducción')).toHaveValue('bien');
+    expect(screen.getByLabelText('Significado (el de la tarjeta)')).toHaveValue('bien');
   });
 
   it('keeps focus while typing several characters and assigns filtered words to a topic', async () => {
     render(() => <Editor />);
     await openWord();
-    const input = screen.getByLabelText('Traducción') as HTMLTextAreaElement;
+    const input = screen.getByLabelText('Significado (el de la tarjeta)') as HTMLTextAreaElement;
     input.focus();
     for (const value of ['a', 'am', 'amo']) fireEvent.input(input, { target: { value } });
     expect(document.activeElement).toBe(input);
-    expect(screen.getByLabelText('Traducción')).toHaveValue('amo');
+    expect(screen.getByLabelText('Significado (el de la tarjeta)')).toHaveValue('amo');
     fireEvent.click(screen.getByRole('button', { name: 'Temas' }));
     fireEvent.click(screen.getByRole('button', { name: /好.*Saludos/ }));
     fireEvent.input(screen.getByLabelText('Buscar palabras del tema'), { target: { value: 'amo' } });
@@ -75,13 +177,13 @@ describe('content editor', () => {
   it('confirms before discarding changes and warns before leaving', async () => {
     render(() => <Editor />);
     await openWord();
-    fireEvent.input(screen.getByLabelText('Traducción'), { target: { value: 'bien' } });
+    fireEvent.input(screen.getByLabelText('Significado (el de la tarjeta)'), { target: { value: 'bien' } });
     const event = new Event('beforeunload', { cancelable: true });
     expect(window.dispatchEvent(event)).toBe(false);
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     fireEvent.click(screen.getByRole('button', { name: 'Descartar borrador' }));
     await openWord();
-    expect(screen.getByLabelText('Traducción')).toHaveValue('bueno');
+    expect(screen.getByLabelText('Significado (el de la tarjeta)')).toHaveValue('bueno');
   });
 
   it('derives a new topic id from its title and lists the change in the review', async () => {
@@ -109,7 +211,7 @@ describe('content editor', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     render(() => <Editor />);
     await openWord();
-    fireEvent.input(screen.getByLabelText('Traducción'), { target: { value: 'bien' } });
+    fireEvent.input(screen.getByLabelText('Significado (el de la tarjeta)'), { target: { value: 'bien' } });
     fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
     fireEvent.click(screen.getByRole('button', { name: 'Revisar' }));
     await screen.findByText('content/snapshot.json');
@@ -149,7 +251,7 @@ describe('content editor', () => {
       simplified: '佳',
       traditional: '佳',
       pinyin: 'jiā',
-      meaning: 'bueno; excelente',
+      senses: [{ text: 'bueno' }, { text: 'excelente' }],
       level: 1,
       characters: ['佳'],
       topicIds: [],
@@ -185,7 +287,7 @@ describe('content editor', () => {
     expect(notice).toHaveTextContent('好 ya existe.');
     expect(notice).toHaveTextContent('bueno');
     fireEvent.click(within(notice).getByRole('button', { name: 'Editar esta palabra' }));
-    expect(screen.getByLabelText('Traducción')).toHaveValue('bueno');
+    expect(screen.getByLabelText('Significado (el de la tarjeta)')).toHaveValue('bueno');
     expect(screen.queryByRole('button', { name: /Palabra nueva/ })).toBeNull();
   });
 
@@ -199,11 +301,11 @@ describe('content editor', () => {
     fireEvent.input(screen.getByLabelText('Simplificado'), { target: { value: '你好' } });
     fireEvent.input(screen.getByLabelText('Sílaba de 你'), { target: { value: 'ni3' } });
     fireEvent.input(screen.getByLabelText('Sílaba de 好'), { target: { value: 'hao3' } });
-    fireEvent.input(screen.getByLabelText('Traducción'), { target: { value: 'hola' } });
+    fireEvent.input(screen.getByLabelText('Significado (el de la tarjeta)'), { target: { value: 'hola' } });
     vi.advanceTimersByTime(1000);
     const saved = JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!);
     const word = saved.snapshot.vocabulary.find((w: { simplified: string }) => w.simplified === '你好');
-    expect(word).toMatchObject({ id: 'word-4f60-597d-ni3-hao3', level: 2, pinyin: 'nǐ hǎo', meaning: 'hola' });
+    expect(word).toMatchObject({ id: 'word-4f60-597d-ni3-hao3', level: 2, pinyin: 'nǐ hǎo', senses: [{ text: 'hola' }] });
     fireEvent.click(screen.getByRole('radio', { name: 'Extra' }));
     fireEvent.click(screen.getByRole('button', { name: 'Extra' }));
     const rows = screen.getAllByRole('button', { name: /hola|bueno/ });
@@ -219,6 +321,6 @@ describe('content editor', () => {
     fireEvent.click(within(screen.getByRole('radiogroup', { name: 'Lista' })).getByRole('radio', { name: '3' }));
     expect(screen.getByText(/Pasa de HSK 1 a HSK 3/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Revisar' }));
-    expect(screen.getByText('HSK 3')).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'HSK 3' })).toBeInTheDocument();
   });
 });

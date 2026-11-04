@@ -6,20 +6,24 @@ import Pinyin from '../components/Pinyin';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
 import ResultRow from '../components/ResultRow';
-import { StatusTag, statusWord, TopicBar, topicCountsLine, type StudyStatus, type TopicCounts } from '../components/TopicProgress';
+import { statusWord, TopicBar, topicCountsLine, type StudyStatus, type TopicCounts } from '../components/TopicProgress';
 import { rankBy, type Searchable } from '../utils/searchRank';
-import { characterRecord, searchCharacters } from '../utils/characterSearch';
-import { wordParts } from '../utils/wordParts';
+import { characterRecord, indexRowFor, searchCharacters } from '../utils/characterSearch';
+import { glossHead } from '../utils/glossDisplay';
 import { mainMeaning } from '../utils/meaning';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
-import ToneNeighbors from '../components/ToneNeighbors';
+import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
+import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';
+import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '../data/wordSenses';
+import StatusSeal from '../components/StatusSeal';
+import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
 import { progressStore as charProgress } from '../stores/progressStore';
 import { topicPlan } from '../utils/topicPlan';
 import { allWords, charactersOfExtraTopicWords, extraVocabulary, findWord, vocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
-import { topics } from '../data/topics';
+import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } from '../data/topics';
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
@@ -59,7 +63,7 @@ const charRowOf = (char: KnownCharacter): Row => ({
 const wordRowOf = (word: VocabularyEntry): Row => ({
   kind: 'word',
   word,
-  key: { hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: word.meaning },
+  key: { hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: sensesText(word.senses) },
 });
 
 const catalogRows = new Map<string, Row>([...vocabulary, ...extraVocabulary].map((word) => [word.id, wordRowOf(word)]));
@@ -69,20 +73,6 @@ const wordGlyphs = new Set(vocabulary.map((word) => word.simplified));
 
 /** Typing waits this long before the list filters, so each key stays instant. */
 const SEARCH_DEBOUNCE_MS = 180;
-
-/** Up to six other words sharing a character, lower levels first, so the detail teaches a family. */
-/** 一会儿 yíhuìr: a final 儿 read as -r is a spoken suffix, not 儿 "hijo". */
-const erhua = (word: VocabularyEntry) => word.simplified.endsWith('儿') && word.characters.length > 1 && /[^e]r$/i.test(word.pinyin.trim().normalize('NFD').replace(/\p{M}/gu, ''));
-
-const related = (word: VocabularyEntry): VocabularyEntry[] => {
-  const chars = new Set(word.characters);
-  // A shared 儿 that is only the erhua suffix in the other word teaches a false link.
-  const shares = (other: VocabularyEntry) => other.characters.some((char) => chars.has(char) && !(char === '儿' && erhua(other) && other.characters.indexOf('儿') === other.characters.length - 1));
-  return vocabulary
-    .filter((other) => other.id !== word.id && shares(other))
-    .sort((a, b) => a.level - b.level || a.characters.length - b.characters.length)
-    .slice(0, 6);
-};
 
 const Vocabulario: Component<Props> = (props) => {
   const [audioError, setAudioError] = createSignal(false);
@@ -111,17 +101,34 @@ const Vocabulario: Component<Props> = (props) => {
     const extras = extraVocabulary.filter((word) => word.topicIds.length > 0 && !seen.has(word.id));
     return extras.length ? [...selected, ...extras] : selected;
   });
-  const availableTopics = createMemo(() =>
-    topics
-      .filter((topic) => wordsForTopics().some((word) => word.topicIds.includes(topic.id)))
-      .sort((a, b) => a.title.localeCompare(b.title, 'es')),
+  const wordInScope = (word: VocabularyEntry, topicId: string) => {
+    const scope = new Set(topicScope(topicId));
+    return word.topicIds.some((id) => scope.has(id));
+  };
+  const availableThemes = createMemo(() =>
+    listedThemes().filter((topic) => wordsForTopics().some((word) => wordInScope(word, topic.id))),
+  );
+  const availableTags = createMemo(() =>
+    topicTags().filter((topic) => wordsForTopics().some((word) => word.topicIds.includes(topic.id))),
   );
   const selected = createMemo(() => (props.wordId ? findWord(props.wordId) : undefined));
   const wordRow = () => catalogRows;
   const update = (changes: Partial<VocabularyBrowseState>) => props.onBrowse({ ...props.browse, ...changes });
   /** `browse.topic` holds the one topic being practised, or '' for the whole list. */
   const chosenTopics = createMemo(() => (props.browse.topic ? [props.browse.topic] : []));
-  const inTopics = (word: VocabularyEntry, ids: string[]) => ids.length === 0 || ids.some((id) => word.topicIds.includes(id));
+  const activeTopic = createMemo(() => (props.browse.topic ? topicById(props.browse.topic) : undefined));
+  const themeSubtopics = createMemo(() => {
+    const topic = activeTopic();
+    if (!topic) return [];
+    const themeId = topic.kind === 'subtopic' ? topic.parentId : topic.kind === 'theme' ? topic.id : undefined;
+    if (!themeId) return [];
+    return subtopicsOf(themeId).filter((sub) => wordsForTopics().some((word) => word.topicIds.includes(sub.id)));
+  });
+  const inTopics = (word: VocabularyEntry, ids: string[]) => {
+    if (ids.length === 0) return true;
+    const scope = new Set(ids.flatMap((id) => topicScope(id)));
+    return word.topicIds.some((id) => scope.has(id));
+  };
   const inPlan = createMemo(() => {
     const ids = new Set(words().map((word) => word.id));
     // Topic-tagged Extra words count as part of the plan in Temas even before Extra is checked.
@@ -172,7 +179,7 @@ const Vocabulario: Component<Props> = (props) => {
     const source = listed.map((word) => wordRow().get(word.id)!);
     // Global search mixes in HSK characters; a topic also lists the pieces of its Extra words.
     if (query && ids.length === 0) source.push(...charRows());
-    else if (ids.length > 0) source.push(...extraTopicCharRows(ids, listed));
+    else if (ids.length > 0) source.push(...extraTopicCharRows(ids.flatMap((id) => topicScope(id)), listed));
     return rankBy(source, props.browse.query, (row) => row.key,
       (row) => (row.kind === 'word' ? inPlan().has(row.word.id) : charInPlan(row.char)));
   });
@@ -194,7 +201,7 @@ const Vocabulario: Component<Props> = (props) => {
     }
     return counts;
   };
-  const topicCounts = (topicId: string) => countsFor([topicId]);
+  const topicCounts = (topicId: string) => countsFor(topicScope(topicId));
   /** What the session will do today, after the daily cap, said before the tap. */
   const plan = createMemo(() => topicPlan(chosenTopics()));
   const studyLabel = () => {
@@ -205,13 +212,38 @@ const Vocabulario: Component<Props> = (props) => {
   };
   const statusOf = (id: string): StudyStatus =>
     progress.isNew(id) ? 'new' : progress.isMastered(id) ? 'mastered' : 'learning';
-  const topicTitle = (id: string) => topics.find((topic) => topic.id === id)?.title ?? id;
-  /** A topic is reached from the topic list, so leaving it goes back there. */
+  const topicTitle = (id: string) => topicById(id)?.title ?? id;
+  /** Subtopic → parent theme; theme/tag → Temas list. */
   const back = () => {
     if (selected()) return props.onSelect(undefined);
+    const current = activeTopic();
+    if (current?.kind === 'subtopic' && current.parentId) {
+      return update({ topic: current.parentId, query: '', scroll: 0 });
+    }
     if (props.browse.topic) return update({ topic: '', query: '', choosingTopic: true, scroll: 0 });
     props.onBack();
   };
+
+  const topicRow = (topic: (typeof topics)[number]) => (
+    <li class="border-b border-line">
+      <button
+        type="button"
+        class="w-full py-2.5 text-left active:bg-ink/5"
+        aria-label={`${topic.title}, ${topicCountsLine(topicCounts(topic.id), true)}`}
+        onClick={() => update({ topic: topic.id, choosingTopic: false, scroll: 0, query: '' })}
+      >
+        <span class="flex min-h-11 items-center gap-3">
+          <span class="w-8 text-center font-hanzi text-2xl" lang="zh-CN" aria-hidden="true">{topic.glyph}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate font-medium">{topic.title}</span>
+            <span class="block truncate text-xs text-ink-soft tabular-nums">{topicCountsLine(topicCounts(topic.id), true)}</span>
+          </span>
+          <Icon name="next" size={16} class="shrink-0 text-ink-faint" />
+        </span>
+        <TopicBar counts={topicCounts(topic.id)} class="ml-11 mr-6 mt-1" />
+      </button>
+    </li>
+  );
   let searchInput: HTMLInputElement | undefined;
   let list: HTMLDivElement | undefined;
   const restoreScroll = (element: HTMLDivElement) => {
@@ -233,30 +265,51 @@ const Vocabulario: Component<Props> = (props) => {
         <Show when={!props.browse.choosingTopic} fallback={
           <div class="flex min-h-0 flex-1 flex-col animate-rise [animation-delay:60ms]">
             <p class="mt-3 text-sm text-ink-soft">Elige un tema para ver sus palabras y practicarlas. Las cifras cuentan las palabras de {vocabularyStore.listLabel()}.</p>
-            <ul class="mt-2 min-h-0 flex-1 overflow-y-auto no-scrollbar" aria-label="Temas">
-              <For each={availableTopics()}>{(topic) => (
-                <li class="border-b border-line">
-                  <button
-                    type="button"
-                    class="w-full py-2.5 text-left active:bg-ink/5"
-                    aria-label={`${topic.title}, ${topicCountsLine(topicCounts(topic.id), true)}`}
-                    onClick={() => update({ topic: topic.id, choosingTopic: false, scroll: 0, query: '' })}
-                  >
-                    <span class="flex min-h-11 items-center gap-3">
-                      <span class="w-8 text-center font-hanzi text-2xl" lang="zh-CN" aria-hidden="true">{topic.glyph}</span>
-                      <span class="min-w-0 flex-1">
-                        <span class="block truncate font-medium">{topic.title}</span>
-                        <span class="block truncate text-xs text-ink-soft tabular-nums">{topicCountsLine(topicCounts(topic.id), true)}</span>
-                      </span>
-                      <Icon name="next" size={16} class="shrink-0 text-ink-faint" />
-                    </span>
-                    <TopicBar counts={topicCounts(topic.id)} class="ml-11 mr-6 mt-1" />
-                  </button>
-                </li>
-              )}</For>
-            </ul>
+            <div class="mt-2 min-h-0 flex-1 overflow-y-auto no-scrollbar">
+              <ul aria-label="Temas">
+                <For each={availableThemes()}>{(topic) => topicRow(topic)}</For>
+              </ul>
+              <Show when={availableTags().length}>
+                <p class="mt-5 text-xs font-medium uppercase tracking-wide text-ink-faint">Etiquetas</p>
+                <p class="mt-1 text-sm text-ink-soft">Se combinan con cualquier tema: una pregunta de precio también es Compras.</p>
+                <ul class="mt-2" aria-label="Etiquetas">
+                  <For each={availableTags()}>{(topic) => topicRow(topic)}</For>
+                </ul>
+              </Show>
+            </div>
           </div>
         }>
+          <Show when={themeSubtopics().length}>
+            <div class="mt-3 flex flex-wrap gap-2 animate-rise [animation-delay:40ms]" role="group" aria-label="Subtemas">
+              <button
+                type="button"
+                class="min-h-9 rounded-tile border-2 px-3 text-sm"
+                classList={{
+                  'border-ink bg-ink text-paper': activeTopic()?.kind === 'theme',
+                  'border-line bg-surface text-ink-soft': activeTopic()?.kind !== 'theme',
+                }}
+                onClick={() => {
+                  const themeId = activeTopic()?.kind === 'subtopic' ? activeTopic()!.parentId! : activeTopic()!.id;
+                  update({ topic: themeId, scroll: 0, query: '' });
+                }}
+              >
+                Todas
+              </button>
+              <For each={themeSubtopics()}>{(sub) => (
+                <button
+                  type="button"
+                  class="min-h-9 rounded-tile border-2 px-3 text-sm"
+                  classList={{
+                    'border-ink bg-ink text-paper': props.browse.topic === sub.id,
+                    'border-line bg-surface text-ink-soft': props.browse.topic !== sub.id,
+                  }}
+                  onClick={() => update({ topic: sub.id, scroll: 0, query: '' })}
+                >
+                  {sub.title}
+                </button>
+              )}</For>
+            </div>
+          </Show>
           <p class="mt-3 text-sm text-ink-soft animate-rise [animation-delay:60ms]">{vocabularyStore.listLabel()}</p>
           <label class="mt-3 block animate-rise [animation-delay:90ms]">
             <span class="sr-only">Buscar palabra, pinyin o significado</span>
@@ -311,11 +364,11 @@ const Vocabulario: Component<Props> = (props) => {
                   class="min-h-[4.5rem] py-2"
                   hanzi={word.simplified}
                   pinyin={word.pinyin}
-                  meaning={word.meaning}
+                  meaning={leadSense(word.senses)}
                   level={word.level}
                   outsidePlan={!inPlan().has(word.id)}
                   status={inPlan().has(word.id) ? statusOf(word.id) : undefined}
-                  label={`${word.simplified}, ${formatPinyinWord(word.pinyin)}, ${word.meaning}, ${word.level ? `HSK ${word.level}` : 'Extra'}${inPlan().has(word.id) ? `, ${statusWord(statusOf(word.id), true)}` : ', fuera de tus niveles'}`}
+                  label={`${word.simplified}, ${formatPinyinWord(word.pinyin)}, ${leadSense(word.senses)}, ${word.level ? `HSK ${word.level}` : 'Extra'}${inPlan().has(word.id) ? `, ${statusWord(statusOf(word.id), true)}` : ', fuera de tus niveles'}`}
                   onClick={() => props.onSelect(word.id)}
                 />
               );
@@ -362,11 +415,17 @@ const Vocabulario: Component<Props> = (props) => {
           </Show>
         </Show>
       }>
-        {(word) => (
+        {(word) => {
+          const sounds = createMemo(() => wordSoundAlikes(word(), allWords(), findWord));
+          /** Words shown in Palabras cercanas or Suena parecido stay out of the family below. */
+          const shown = createMemo(() => new Set([...linkedIds(word(), findWord, allWords()), ...sounds().map((item) => item.word.id)]));
+          const family = createMemo(() => familyByChar(word(), vocabulary, 4, shown()));
+          const single = () => word().characters.length === 1;
+          return (
           <div class="min-h-0 flex-1 overflow-y-auto pb-4 pt-2 animate-rise [animation-delay:60ms]">
-            <div class="sheet flex min-h-[22rem] flex-col items-center px-5 py-4 text-center">
+            <div class="sheet flex flex-col items-center px-5 py-4 text-center">
               <div class="grid w-full grid-cols-[2.75rem_1fr_2.75rem] items-center">
-                <span aria-hidden="true" />
+                <span class="justify-self-start"><StatusSeal state={progress.isNew(word().id) ? 'new' : progress.isDue(word().id) ? 'due' : statusOf(word().id)} /></span>
                 <p class="text-sm text-ink-soft">{word().level ? `HSK ${word().level}` : 'Extra'}</p>
                 <SpeakButton
                   word
@@ -378,11 +437,11 @@ const Vocabulario: Component<Props> = (props) => {
                 />
               </div>
               {/* Each character opens its own detail: meaning, radical, strokes. */}
-              <div class="flex w-full flex-1 items-center justify-center py-6" lang="zh-CN" role="group" aria-label={word().simplified}>
+              <div class="flex w-full flex-1 items-center justify-center py-3 min-[400px]:py-6" lang="zh-CN" role="group" aria-label={word().simplified}>
                 <For each={word().characters}>{(char, index) => (
                   <button
                     type="button"
-                    class="relative aspect-square min-w-0 flex-1 max-w-[15rem] rounded-tile transition-transform duration-150 active:scale-[0.97] hover:bg-line/20"
+                    class="relative aspect-square min-w-0 flex-1 max-w-[min(15rem,28svh)] rounded-tile transition-transform duration-150 active:scale-[0.97] hover:bg-line/20"
                     onClick={() => setCharOpen(char)}
                     aria-label={`Ver el carácter ${char}${word().characters.length > 1 ? `, ${index() + 1} de ${word().characters.length}` : ''}`}
                   >
@@ -393,31 +452,34 @@ const Vocabulario: Component<Props> = (props) => {
                   </button>
                 )}</For>
               </div>
-              {/* How the word is built: each character's own meaning, under its tile. */}
-              <Show when={wordParts(word().characters).length > 0}>
-                <div class="-mt-4 mb-3 flex w-full justify-center" aria-label="Significado de cada carácter">
-                  <For each={wordParts(word().characters)}>{(part) => (
-                    <p class="min-w-0 max-w-[15rem] flex-1 truncate px-1 text-center text-sm text-ink-soft">
-                      <Show when={part.gloss} fallback="·">{part.gloss}</Show>
-                    </p>
-                  )}</For>
-                </div>
+              {/* The card is the word itself: glyphs and sound. What it means is right below. */}
+              <Pinyin word text={word().pinyin} class="text-[1.75rem] font-medium" />
+              <Show when={word().traditional !== word().simplified}>
+                <p class="mt-2 text-xs text-ink-faint">Tradicional <span lang="zh-TW" class="font-hanzi text-base text-ink-soft">{word().traditional}</span></p>
               </Show>
-              <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-                <Pinyin word text={word().pinyin} class="text-[1.75rem] font-medium" />
-                <Show when={word().traditional !== word().simplified}>
-                  <p class="flex items-center gap-1.5 border-l border-line pl-4 text-xs text-ink-soft">Tradicional <span lang="zh-TW" class="font-hanzi text-xl text-ink">{word().traditional}</span></p>
-                </Show>
-              </div>
-              <p class="mt-1 text-[1.35rem] font-medium leading-snug text-ink first-letter:uppercase">{word().meaning}</p>
-              <p class="mt-2 flex items-center justify-center gap-2">
-                <StatusTag status={statusOf(word().id)} feminine />
-                <Show when={!progress.isNew(word().id) && progress.isDue(word().id)}>
-                  <span class="text-sm text-ink-soft">· para repasar hoy</span>
-                </Show>
-              </p>
             </div>
-            <div class="mt-4 text-center">
+            {/* Every use, right under the card: the first one leads, as on the review cards. */}
+            <section class="mt-5 text-left" aria-label="Significados">
+              <h3 class="sr-only">Significados</h3>
+              <For each={groupSenses(word().senses)}>{(group, groupIndex) => (
+                <div class="mt-3 first:mt-0" role="group" aria-label={group.pos ? WORD_POS_LABELS[group.pos] : 'Usos'}>
+                  <Show when={group.pos}>{(pos) => <p class="eyebrow">{WORD_POS_LABELS[pos()]}</p>}</Show>
+                  <ol class="mt-1 space-y-1.5">
+                    <For each={group.senses}>{(sense, index) => (
+                      <li class={`flex gap-2.5 leading-snug text-ink ${groupIndex() === 0 && index() === 0 ? 'text-[1.25rem] font-medium' : 'text-[0.9375rem]'}`}>
+                        <span class="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-ink-faint" aria-hidden="true" />
+                        <span class="min-w-0">
+                          <span class="first-letter:uppercase inline-block">{sense.text}</span>
+                          {/* How it is used reads quieter than the use itself. */}
+                          <Show when={sense.note}>{(note) => <span class="text-sm font-normal text-ink-soft"> ({note()})</span>}</Show>
+                        </span>
+                      </li>
+                    )}</For>
+                  </ol>
+                </div>
+              )}</For>
+            </section>
+            <div class="mt-5 text-center">
               <Show when={audioError()}><p role="status" class="mb-2 text-sm text-seal">No se pudo reproducir el audio. Comprueba la voz china del dispositivo.</p></Show>
               <div class="flex items-center gap-2">
                 {/* Past today's limit a new word is still one tap away, but it reads as the exception it is. */}
@@ -433,70 +495,121 @@ const Vocabulario: Component<Props> = (props) => {
               </Show>
               <Show when={!progress.isNew(word().id) && !progress.isDue(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
             </div>
-            {/* The tiles read as artwork, so the characters are also listed as rows that look tappable. */}
-            <div class="mt-6 border-t border-line pt-5 text-left">
-              <p class="text-sm text-ink-soft">Caracteres</p>
-              <ul class="mt-1">
-                <For each={[...new Set(word().characters)]}>{(char) => {
-                  const record = () => characterOrWordStub(char, characterStore.state.characters);
-                  return (
-                    <li class="border-b border-line/70 last:border-b-0">
+            <Show when={vocabularyExample(word().simplified, word().example)}>
+              {(example) => (
+                <section class="mt-6 border-t border-line pt-5 text-left" aria-label="En una frase">
+                  <h3 class="eyebrow">En una frase</h3>
+                  <figure class="mt-2 border-l-2 border-line pl-4">
+                    <p class="font-hanzi text-[1.375rem] leading-relaxed" lang="zh-CN">
+                      {/* Every character opens its drawer, so a learner can look up the rest of the sentence. */}
+                      <For each={markWord(example().chinese, word().simplified)}>{(part) => {
+                        // Buttons are inline-block, so the mark is drawn on each one: an underline would not reach them.
+                        const chars = (
+                          <For each={[...part.text]}>{(c) => (
+                            <Show when={/\p{Script=Han}/u.test(c)} fallback={c}>
+                              <button type="button" class="active:bg-ink/10" classList={{ 'border-b-2 border-ink/60': part.hit }} aria-label={`${c} en la frase`} onClick={() => setCharOpen(c)}>{c}</button>
+                            </Show>
+                          )}</For>
+                        );
+                        return (
+                          <Show when={part.hit} fallback={<span class="text-ink-soft">{chars}</span>}>
+                            <mark class="bg-transparent text-ink">{chars}</mark>
+                          </Show>
+                        );
+                      }}</For>
+                    </p>
+                    <figcaption class="mt-1 text-sm text-ink-soft">{example().spanish}</figcaption>
+                  </figure>
+                </section>
+              )}
+            </Show>
+            <WordRelations word={word()} onOpenWord={props.onSelect} />
+            <SoundAlike
+              wide
+              hint="Palabras que suenan casi igual. Al oírlas en una frase pueden confundirse."
+              items={sounds().map((item): SoundAlikeItem => ({
+                key: item.word.id,
+                hanzi: item.word.simplified,
+                pinyin: item.word.pinyin,
+                gloss: leadSense(item.word.senses),
+                match: item.match,
+                level: item.level,
+                onOpen: () => props.onSelect(item.word.id),
+              }))}
+            />
+            {/* How the word is built. A one-character word is its own hero, so its row shows what the hero does not: radical and strokes. */}
+            <section class="mt-6 border-t border-line pt-5 text-left" aria-label="Cómo se forma">
+              <h3 class="eyebrow">{single() ? 'El carácter' : 'Cómo se forma'}</h3>
+              <For each={family()}>{(block) => {
+                const record = () => characterOrWordStub(block.char, characterStore.state.characters);
+                const words = (
+                  <ul class="grid grid-cols-2 gap-2" aria-label={`Otras palabras con ${block.char}`}>
+                    <For each={block.words}>{(other) => (
+                      <li classList={{ 'col-span-2': block.words.length === 1 }}>
+                        <WordRef hanzi={other.simplified} pinyin={other.pinyin} gloss={leadSense(other.senses)} focus={block.char} row={block.words.length === 1} onOpen={() => props.onSelect(other.id)} />
+                      </li>
+                    )}</For>
+                  </ul>
+                );
+                return (
+                  <Show when={!single()} fallback={
+                    <div class="mt-3">
                       <button
                         type="button"
-                        class="flex min-h-12 w-full items-center gap-3 py-2 text-left"
-                        aria-label={record() ? `Ver el carácter ${char}, ${record()!.pinyin}, ${mainMeaning(record()!)}` : `Ver el carácter ${char}`}
-                        onClick={() => setCharOpen(char)}
+                        class="tile flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left transition-transform active:scale-[0.98]"
+                        aria-label={`Ver el carácter ${block.char}: radical${record()?.radical && record()!.radical !== block.char ? ` ${record()!.radical}` : ''} y trazos`}
+                        onClick={() => setCharOpen(block.char)}
                       >
-                        <span lang="zh-CN" class="w-20 shrink-0 font-hanzi text-xl">{char}</span>
+                        <Show
+                          when={record()?.radical && record()!.radical !== block.char ? record()!.radical : undefined}
+                          fallback={<span lang="zh-CN" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-tile bg-ink/5 font-hanzi text-[1.75rem] leading-none">{block.char}</span>}
+                        >
+                          {(radical) => <span lang="zh-CN" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-tile bg-jade-soft/60 font-hanzi text-[1.75rem] leading-none text-jade">{radical()}</span>}
+                        </Show>
+                        <span class="min-w-0 flex-1">
+                          <span class="block text-sm font-medium">Radical y trazos</span>
+                          <span class="block truncate text-xs text-ink-soft">
+                            <Show when={record()?.radical && record()!.radical !== block.char} fallback="Es un radical por sí mismo">
+                              Radical {record()!.radical}{indexRowFor(record()!.radical) ? `, ${glossHead(indexRowFor(record()!.radical)!.gloss)}` : ''}
+                            </Show>
+                            <Show when={(record()?.stroke_count ?? 0) > 0}> · {record()!.stroke_count} trazos</Show>
+                          </span>
+                        </span>
+                        <Icon name="next" size={16} class="shrink-0 text-ink-faint" />
+                      </button>
+                      <Show when={block.words.length > 0}>
+                        <p class="mt-4 text-xs font-medium text-ink-soft">Palabras con <span lang="zh-CN" class="font-hanzi text-sm">{block.char}</span></p>
+                        <div class="mt-1.5">{words}</div>
+                      </Show>
+                    </div>
+                  }>
+                    <div class="mt-3">
+                      <button
+                        type="button"
+                        class="flex min-h-14 w-full items-center gap-3 rounded-tile py-2 text-left active:bg-ink/5"
+                        aria-label={record() ? `Ver el carácter ${block.char}, ${record()!.pinyin}, ${mainMeaning(record()!)}. Radical y trazos` : `Ver el carácter ${block.char}`}
+                        onClick={() => setCharOpen(block.char)}
+                      >
+                        <span lang="zh-CN" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-tile bg-ink/5 font-hanzi text-[1.75rem] leading-none">{block.char}</span>
                         <span class="min-w-0 flex-1">
                           <Show when={record()}>{(known) => (
                             <>
                               <Pinyin text={known().pinyin} class="block text-sm" />
-                              <span class="block truncate text-xs text-ink-soft first-letter:uppercase">{mainMeaning(known())}</span>
+                              <span class="block truncate text-xs text-ink-soft first-letter:uppercase">{glossHead(mainMeaning(known()))}</span>
                             </>
                           )}</Show>
                         </span>
                         <Icon name="next" size={16} class="shrink-0 text-ink-faint" />
                       </button>
-                    </li>
-                  );
-                }}</For>
-              </ul>
-            </div>
-            <Show when={vocabularyExample(word().simplified)}>
-              {(example) => (
-                <section class="mt-6 border-t border-line pt-5 text-left" aria-label="Ejemplo de uso">
-                  <p class="text-sm text-ink-soft">Ejemplo</p>
-                  <p class="mt-2 font-hanzi text-xl" lang="zh-CN">{example().chinese}</p>
-                  <p class="mt-1 text-sm text-ink-soft">{example().spanish}</p>
-                </section>
-              )}
-            </Show>
-            <Show when={[...word().simplified].length === 1}>
-              <ToneNeighbors character={word().simplified} pinyin={word().pinyin} onOpenWord={props.onSelect} onOpenCharacter={setCharOpen} />
-            </Show>
-            <WordRelations word={word()} onOpenWord={props.onSelect} />
-            <Show when={related(word()).length > 0}>
-            <div class="mt-6 border-t border-line pt-5 text-left">
-                <p class="text-sm text-ink-soft">Otras palabras con {[...new Set(word().characters)].join(' o ')}</p>
-                <ul class="mt-1">
-                  <For each={related(word())}>{(other) => (
-                    <li class="border-b border-line/70 last:border-b-0">
-                      <button type="button" class="flex min-h-12 w-full items-center gap-3 py-2 text-left" onClick={() => props.onSelect(other.id)}>
-                        <span lang="zh-CN" class="w-20 shrink-0 font-hanzi text-xl">{other.simplified}</span>
-                        <span class="min-w-0 flex-1">
-                          <Pinyin word text={other.pinyin} class="block text-sm" />
-                          <span class="block truncate text-xs text-ink-soft first-letter:uppercase">{other.meaning.split(';')[0]}</span>
-                        </span>
-                        <span class="shrink-0 text-xs tabular-nums text-ink-faint">HSK {other.level}</span>
-                      </button>
-                    </li>
-                  )}</For>
-                </ul>
-            </div>
-            </Show>
+                      <Show when={block.words.length > 0}><div class="ml-[1.375rem] mt-1 border-l-2 border-line pl-[1.125rem]">{words}</div></Show>
+                    </div>
+                  </Show>
+                );
+              }}</For>
+            </section>
           </div>
-        )}
+          );
+        }}
       </Show>
       <Show when={openRecord()}>
         {(record) => (

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import characterLevels from '../src/data/characterLevels.json';
-import { topicGap, topicTitlesForCharacter, topics } from '../src/data/topics';
+import { listedThemes, topicGap, topicScope, topicTags, topicTitlesForCharacter, topics } from '../src/data/topics';
 import { characterStore } from '../src/stores/characterStore';
 
 const known = new Set(Object.keys(characterLevels));
@@ -16,6 +16,8 @@ describe('topics', () => {
         seen.add(char);
       }
       expect(topic.characters.length).toBeGreaterThan(4);
+      expect(['theme', 'subtopic', 'tag']).toContain(topic.kind);
+      if (topic.kind === 'subtopic') expect(topic.parentId).toBeTruthy();
     }
     expect(missing).toEqual([]);
   });
@@ -26,14 +28,23 @@ describe('topics', () => {
   });
 
   it('lists topic titles for a character', () => {
-    expect(topicTitlesForCharacter('吃')).toEqual(['Comida', 'Verbos']);
+    const titles = topicTitlesForCharacter('吃');
+    expect(titles).toContain('Comida y bebida');
+    expect(titles).toContain('Verbos');
   });
 
-  it('counts characters a topic knows about that are not installed', () => {
+  it('exposes five listed themes and combinable tags', () => {
+    expect(listedThemes().map((topic) => topic.id)).toEqual(['comida', 'personas', 'casa', 'transporte', 'compras']);
+    expect(topicTags().map((topic) => topic.id)).toEqual(['verbos', 'preguntas', 'gramatica', 'clasificadores', 'numeros', 'colores']);
+    expect(topicScope('comida')).toContain('bebidas');
+  });
+
+  it('counts characters a theme knows about that are not installed, including subtopics', () => {
     const gap = topicGap('comida', characterStore.state.characters);
     expect(gap.missing).toBeGreaterThan(0);
     expect(gap.levels.every((level) => level > 1)).toBe(true);
     const installed = new Set(characterStore.state.characters.map((row) => row.character));
-    expect(gap.missing).toBe(topics.find((topic) => topic.id === 'comida')!.characters.filter((char) => !installed.has(char)).length);
+    const glyphs = [...new Set(topicScope('comida').flatMap((id) => topics.find((topic) => topic.id === id)?.characters ?? []))];
+    expect(gap.missing).toBe(glyphs.filter((char) => !installed.has(char)).length);
   });
 });
