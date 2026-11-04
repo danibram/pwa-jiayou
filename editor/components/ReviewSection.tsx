@@ -174,7 +174,7 @@ const ReviewSection: Component = () => {
             </Show>
             <Show when={change().kind === 'word' && editor.references()?.[change().id]}>{(reference) => (
               <details class="review-references">
-                <summary>Referencias de  · {reference().examples.length} frases</summary>
+                <summary>Frases de referencia · {reference().examples.length}</summary>
                 <p class="hint">Estas frases son de la fuente. No se publican con el borrador. Redacta un ejemplo propio en Editar ficha.</p>
                 <a href={reference().url} target="_blank" rel="noreferrer">Consultar la ficha de origen</a>
                 <ul><For each={reference().examples}>{(example) => <li>

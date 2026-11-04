@@ -20,7 +20,7 @@ describe('content validation', () => {
     expect(() => validateSnapshot(snapshot)).not.toThrow();
     const draft = { schemaVersion: 1, baseRevision: 'same', snapshot, references: { one: { url: 'javascript:alert(1)', retrieved: 'today', examples: [] } } };
     expect(() => validateDraft(draft, base, 'same')).toThrow(/Referencia inválida/);
-    draft.references.one.url = '/es/dictionary/一-yi';
+    draft.references.one.url = 'https://example.com/dictionary/一-yi';
     expect(() => validateDraft(draft, base, 'same')).not.toThrow();
   });
   it('accepts corrected dictionary pinyin and words without a level', () => {

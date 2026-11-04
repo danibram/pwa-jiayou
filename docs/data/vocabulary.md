@@ -18,7 +18,11 @@ The word 东西 uses `dōng xi` for "thing", 多少 uses `duō shao` for "how ma
 
 Word list JSON is bundled with the app. Stroke and syllable audio still come from the character packs (`public/strokes`, `public/audio`, `public/packs/hskN/`).
 
-The [ importer](.md) gathers Spanish definition proposals for local HSK 4, 5 and 6 entries, plus relationships and reference sentences from a sample of HSK 2 to 6 entries. Draft references keep source URLs and retrieval dates and are not published as vocabulary examples. Authored sentences use the optional `VocabularyEntry.example` field. The licenses below describe the original vocabulary sources, not  content.
+Authored sentences use the optional `VocabularyEntry.example` field. Draft references (example sentences shown while reviewing in the editor) are not published.
+
+## Where the Spanish comes from
+
+The HSK 1 to 3 translations start from CC-CEDICT senses. The HSK 4 to 6 translations, and the HSK 4 to 6 character definitions, combine CC-CEDICT with definitions from [](). The split into uses, the parts of speech, the usage notes and the final wording are this project's. The subtopics were built with this project's own taxonomy, helped by 's thematic word lists. The licenses below describe the original vocabulary sources.
 
 ## Source license
 

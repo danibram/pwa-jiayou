@@ -104,7 +104,6 @@ node scripts/fix-traditional.mjs
 
 ### Characters
 
-`npm run scrape-` prepares Spanish translation proposals for HSK 4 to 6, with relationships and source examples from a sample of HSK 2 to 6 entries. The editor keeps source examples as references for writing original sentences. See [the  import guide](docs/data/.md) for sampling, caching and reviewing the draft.
 
 ```bash
 npm run fetch-hsk             # HSK 4 to 6 rows from hanzidb.org
