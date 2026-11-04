@@ -15,6 +15,11 @@ vi.mock('../src/data/vocabulary', () => {
     vocabularyByLevel: { 1: vocabulary, 2: [], 3: [], 4: [], 5: [], 6: [] },
     vocabularyCoverage: { edition: 'HSK 2.0', levels: [1, 2, 3, 4, 5, 6], complete: true, counts: { 1: 2, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 } },
     vocabularySources: {},
+    extraVocabulary: [],
+    isExtraWord: () => false,
+    allWords: () => vocabulary,
+    findWord: (id: string) => vocabulary.find((word) => word.id === id),
+    charactersOfExtraTopicWords: () => [],
   };
 });
 import { vocabulary } from '../src/data/vocabulary';
@@ -32,12 +37,12 @@ describe('word review', () => {
     vi.useFakeTimers();
     const view = render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} />);
     expect(screen.getByLabelText('你好')).toBeTruthy();
-    // Introductions are read, not answered: each new word brings a pick card and a recognition card.
-    expect(screen.getByText('Quedan 4')).toBeTruthy();
+    // Every card counts: two introductions, two pick cards and two recognition cards.
+    expect(screen.getByText('Quedan 6')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     // Seeing a word does not enrol it: only a graded answer does.
     expect(vocabularyProgressStore.isNew('word-one')).toBe(true);
-    expect(screen.getByText('Quedan 4')).toBeTruthy();
+    expect(screen.getByText('Quedan 5')).toBeTruthy();
     expect(screen.getByLabelText('谢谢')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     // The first recall is production: the Spanish, and the word to pick.
@@ -56,25 +61,30 @@ describe('word review', () => {
     // One wrong pick, then the right one: Casi, graded without asking.
     fireEvent.click(screen.getByRole('button', { name: '你好' }));
     fireEvent.click(screen.getByRole('button', { name: '谢谢' }));
-    expect(vocabularyProgressStore.get('word-two')?.ease).toBe(2.35);
+    // The day a word is taught, a Casi sets its review but leaves its ease alone.
+    expect(vocabularyProgressStore.get('word-two')?.ease).toBe(2.5);
     // A pick found after a wrong one waits for Continuar.
     vi.advanceTimersByTime(3000);
-    expect(screen.getByText('Casi')).toBeTruthy();
+    // The mix-up is named instead of a grade: what was tapped, and what the word is.
+    expect(screen.getAllByRole('status').some((node) => /Tocaste 你好 .*谢谢 es «gracias»/.test(node.textContent ?? ''))).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
-    // Then both come back as recognition, the first one by ear.
-    expect(screen.getByText('Escucha')).toBeTruthy();
+    // Then both come back as recognition. Never by ear on the day they were taught.
+    expect(screen.queryByText('Escucha')).toBeNull();
+    // Recognition is checked as well: the word, and its meaning to pick.
     for (let card = 0; card < 2; card++) {
-      fireEvent.click(screen.getByRole('button', { name: 'Mostrar respuesta' }));
-      fireEvent.click(screen.getByRole('button', { name: 'Bien' }));
-      vi.advanceTimersByTime(600);
+      const saved = loadVocabularySession(vocabulary)!;
+      const meaning = saved.deck[saved.position].entry.meaning;
+      fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${meaning}$`, 'i') }));
+      vi.advanceTimersByTime(1200);
     }
     // The miss comes back the way it was asked: from the Spanish, to pick.
     expect(screen.getByText('¿Cómo se dice «hola»?')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: '你好' }));
     vi.advanceTimersByTime(1200);
     expect(screen.getByRole('dialog')).toBeTruthy();
-    // Summary counts words by their worst answer: the miss stays a miss after the retry.
-    expect(screen.getByText('2 palabras en esta sesión')).toBeTruthy();
+    // Both words were taught today: the summary lists them instead of grading answers given seconds after the lesson.
+    expect(screen.getByText('2 palabras nuevas')).toBeTruthy();
+    expect(screen.queryByText(/palabras en esta sesión/)).toBeNull();
     // The retry already rescheduled the miss, so nothing is left for today.
     expect(screen.getByText('1 palabra que fallaste y luego acertaste vuelve mañana.')).toBeTruthy();
     expect(loadVocabularySession(vocabulary)).toBeNull();
@@ -91,7 +101,9 @@ describe('word review', () => {
     expect(screen.getByText('Práctica')).toBeTruthy();
     fireEvent.keyDown(window, { code: 'Space', key: ' ' });
     fireEvent.keyDown(window, { code: 'Digit1', key: '1' });
-    expect(vocabularyProgressStore.get('word-one')?.due).toBe(due);
+    // A miss in free practice keeps the interval and ease, but brings the word back tomorrow at the latest.
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0);
+    expect(vocabularyProgressStore.get('word-one')?.due).toBe(Math.min(due, tomorrow.getTime()));
     expect(vocabularyProgressStore.get('word-one')?.interval).toBe(interval);
     expect(loadVocabularySession(vocabulary, 'word-one')?.feedback).toBe('again');
     expect(localStorage.getItem('jiayou-vocabulary-session-v1')).toBe(JSON.stringify({ version: 99 }));
@@ -129,9 +141,12 @@ describe('word review', () => {
     localStorage.setItem('jiayou-vocabulary-session-v1', JSON.stringify({ version: 99 }));
     render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} practiceId="__all__" />);
     expect(screen.getByText('Repasar todo')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar respuesta' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Olvidé' }));
-    expect(vocabularyProgressStore.get('word-one')?.due).toBe(before.due);
+    // A word met once is recognised among words already met, not self-graded.
+    expect(screen.getByText('¿Qué significa?')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'No lo sé' }));
+    // A miss in free practice keeps the interval, but brings the word back tomorrow at the latest.
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0);
+    expect(vocabularyProgressStore.get('word-one')?.due).toBe(Math.min(before.due, tomorrow.getTime()));
     expect(vocabularyProgressStore.get('word-one')?.interval).toBe(before.interval);
     expect(localStorage.getItem('jiayou-vocabulary-session-v1')).toBe(JSON.stringify({ version: 99 }));
   });
@@ -159,22 +174,23 @@ describe('word review', () => {
   it('requeues a due word after an incorrect answer', () => {
     vocabularyProgressStore.grade('word-one', 'again');
     render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar respuesta' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Olvidé' }));
+    fireEvent.click(screen.getByRole('button', { name: 'No lo sé' }));
     expect(vocabularyProgressStore.get('word-one')?.wrong).toBe(2);
     expect(loadVocabularySession(vocabulary)?.deck.filter((card) => card.entry.id === 'word-one')).toHaveLength(2);
   });
 
-  it('returns to a saved revealed card after a writing excursion', () => {
+  it('does not ask an answered card again after a writing excursion', () => {
     vocabularyProgressStore.grade('word-one', 'again');
     const onStrokes = vi.fn();
     const view = render(() => <VocabularyReview onBack={vi.fn()} onStrokes={onStrokes} resume={false} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar respuesta' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Practicar trazos de 你' }));
+    fireEvent.click(screen.getByRole('button', { name: 'No lo sé' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Practicar trazos de 你/ }));
     expect(onStrokes).toHaveBeenCalledWith('你');
     view.unmount();
     render(() => <VocabularyReview onBack={vi.fn()} onStrokes={onStrokes} resume />);
-    expect(screen.getByRole('button', { name: 'Olvidé' })).toBeTruthy();
+    // A choice card is graded when answered, so the session goes on from the next card and the miss counts once.
+    expect(vocabularyProgressStore.get('word-one')?.wrong).toBe(2);
+    expect(screen.getByLabelText('谢谢')).toBeTruthy();
   });
 
   it('interleaves new words in groups of three with their recalls', () => {
@@ -188,11 +204,13 @@ describe('word review', () => {
 
   it('enrols a word the learner already knows and drops its questions', () => {
     render(() => <VocabularyReview onBack={vi.fn()} onStrokes={vi.fn()} resume={false} />);
-    expect(screen.getByText('Quedan 4')).toBeTruthy();
+    expect(screen.getByText('Quedan 6')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Ya la sé' }));
     expect(vocabularyProgressStore.isNew('word-one')).toBe(false);
     expect(vocabularyProgressStore.isDue('word-one')).toBe(false);
-    expect(screen.getByText('Quedan 2')).toBeTruthy();
+    // Known: its pick and recognition cards leave with it, and it spends none of today's new words.
+    expect(screen.getByText('Quedan 3')).toBeTruthy();
+    expect(vocabularyProgressStore.daily.introduced).toBe(0);
     expect(screen.getByLabelText('谢谢')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(screen.getByText('¿Cómo se dice «gracias»?')).toBeTruthy();

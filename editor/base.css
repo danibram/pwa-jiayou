@@ -1,0 +1,89 @@
+/* Rice paper and ink, the app's tokens, as RGB triplets. */
+:root {
+  --paper: 232 223 208;
+  --surface: 255 252 246;
+  --raised: 255 254 251;
+  --ink: 31 26 23;
+  --ink-soft: 96 86 77;
+  --ink-faint: 128 116 104;
+  --line: 198 186 168;
+  --line-soft: 222 213 198;
+  --seal: 190 52 40;
+  --seal-soft: 245 222 214;
+  --jade: 44 120 90;
+  --jade-soft: 218 236 226;
+  --gold: 176 132 58;
+  --gold-soft: 243 230 200;
+  --shadow: 74 52 30;
+  --tone-1: 31 75 153;
+  --tone-2: 107 63 160;
+  --tone-3: 78 102 32;
+  --tone-4: 154 52 96;
+  --tone-5: 31 26 23;
+  --sans: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --display: 'Fraunces', Georgia, serif;
+  --kai: 'WenKai HSK', 'Kaiti SC', STKaiti, KaiTi, serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: 18 16 14;
+    --surface: 40 35 30;
+    --raised: 58 51 44;
+    --ink: 244 237 226;
+    --ink-soft: 200 188 172;
+    --ink-faint: 160 148 134;
+    --line: 88 78 68;
+    --line-soft: 64 56 48;
+    --seal: 214 96 82;
+    --seal-soft: 82 40 34;
+    --jade: 110 190 150;
+    --jade-soft: 32 74 58;
+    --gold: 214 176 104;
+    --gold-soft: 78 62 30;
+    --shadow: 0 0 0;
+    --tone-1: 142 174 236;
+    --tone-2: 196 160 230;
+    --tone-3: 168 196 96;
+    --tone-4: 236 148 180;
+    --tone-5: 244 237 226;
+    color-scheme: dark;
+  }
+}
+
+@font-face {
+  font-family: 'WenKai HSK';
+  src: url('/base/wenkai-hsk.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgb(var(--ink));
+  background: rgb(var(--paper));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+button:disabled { cursor: default; opacity: .45; }
+h1, h2, h3, p, ul, fieldset, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+fieldset { border: 0; padding: 0; min-width: 0; }
+code, pre { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .85em; }
+:focus-visible { outline: 2px solid rgb(var(--ink)); outline-offset: 2px; border-radius: .5rem; }
+::placeholder { color: rgb(var(--ink-faint)); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* Tailwind's preflight is off, so its border utilities need the solid style it would set. Utilities load later and set the width. */
+[class*='border'] { border-style: solid; border-width: 0; }

@@ -7,15 +7,13 @@ export type StrokeFocus =
 
 export type Screen =
   | { page: 'home' }
-  | { page: 'vocabulario'; topic?: boolean; wordId?: string; returnTo?: 'home' | 'mis-palabras' }
+  | { page: 'vocabulario'; topic?: boolean; wordId?: string; returnTo?: 'home' }
   | { page: 'vocabulary-review'; resume: boolean; practiceId?: string }
   | { page: 'acerca' }
   | { page: 'opciones' }
-  | { page: 'mis-palabras' }
   | { page: 'trazos'; focus: StrokeFocus; from: Screen };
 
 export type HomeTarget =
-  | { page: 'mis-palabras' }
   | { page: 'vocabulario'; topic?: boolean; wordId?: string }
   | { page: 'vocabulary-review'; resume: boolean; practiceId?: string }
   | { page: 'acerca' }
@@ -47,10 +45,10 @@ const parseFocus = (value: Record<string, unknown>): StrokeFocus | undefined => 
 /** History state is untrusted. Returns a screen built from checked fields. */
 export const parseScreen = (value: unknown): Screen | undefined => {
   if (!isRecord(value)) return undefined;
-  if (value.page === 'home' || value.page === 'acerca' || value.page === 'opciones' || value.page === 'mis-palabras') {
+  if (value.page === 'home' || value.page === 'acerca' || value.page === 'opciones') {
     return { page: value.page };
   }
-  if (value.page === 'vocabulario') return { page: 'vocabulario', topic: value.topic === true, ...(typeof value.wordId === 'string' ? { wordId: value.wordId } : {}), ...(value.returnTo === 'home' || value.returnTo === 'mis-palabras' ? { returnTo: value.returnTo } : {}) };
+  if (value.page === 'vocabulario') return { page: 'vocabulario', topic: value.topic === true, ...(typeof value.wordId === 'string' ? { wordId: value.wordId } : {}), ...(value.returnTo === 'home' ? { returnTo: value.returnTo } : {}) };
   if (value.page === 'vocabulary-review') return { page: 'vocabulary-review', resume: true, ...(typeof value.practiceId === 'string' ? { practiceId: value.practiceId } : {}) };
   if (value.page === 'trazos') {
     if (!isRecord(value.from) || value.from.page === 'trazos') return undefined;

@@ -50,7 +50,7 @@
     "simplified": "爱好",
     "traditional": "愛好",
     "pinyin": "ài hào",
-    "meaning": "afición; gustar",
+    "meaning": "afición; pasatiempo; gustar",
     "level": 3,
     "characters": [
       "爱",
@@ -82,7 +82,7 @@
     "simplified": "把",
     "traditional": "把",
     "pinyin": "bǎ",
-    "meaning": "(marca de objeto); asir",
+    "meaning": "tomar; agarrar; (marca de objeto)",
     "level": 3,
     "characters": [
       "把"
@@ -190,7 +190,7 @@
     "simplified": "包",
     "traditional": "包",
     "pinyin": "bāo",
-    "meaning": "bolsa; envolver",
+    "meaning": "bolsa; paquete; envolver",
     "level": 3,
     "characters": [
       "包"
@@ -236,7 +236,7 @@
     "simplified": "被",
     "traditional": "被",
     "pinyin": "bèi",
-    "meaning": "(voz pasiva); manta",
+    "meaning": "partícula de voz pasiva; manta",
     "level": 3,
     "characters": [
       "被"
@@ -408,7 +408,7 @@
     "simplified": "才",
     "traditional": "才",
     "pinyin": "cái",
-    "meaning": "solo entonces; talento",
+    "meaning": "solo entonces; apenas; talento",
     "level": 3,
     "characters": [
       "才"
@@ -470,7 +470,7 @@
     "simplified": "层",
     "traditional": "層",
     "pinyin": "céng",
-    "meaning": "piso; capa",
+    "meaning": "piso; nivel; capa",
     "level": 3,
     "characters": [
       "层"
@@ -486,7 +486,7 @@
     "simplified": "差",
     "traditional": "差",
     "pinyin": "chà",
-    "meaning": "faltar; malo",
+    "meaning": "diferir; diferencia; equivocarse; faltar; malo",
     "level": 3,
     "characters": [
       "差"
@@ -708,7 +708,7 @@
     "simplified": "带",
     "traditional": "帶",
     "pinyin": "dài",
-    "meaning": "llevar; traer; cinta",
+    "meaning": "llevar; traer; cinturón; cinta",
     "level": 3,
     "characters": [
       "带"
@@ -771,7 +771,7 @@
     "simplified": "地",
     "traditional": "地",
     "pinyin": "de",
-    "meaning": "(partícula adverbial)",
+    "meaning": "partícula adverbial",
     "level": 3,
     "characters": [
       "地"
@@ -1123,7 +1123,7 @@
     "simplified": "分",
     "traditional": "分",
     "pinyin": "fēn",
-    "meaning": "minuto; dividir",
+    "meaning": "minuto; dividir; céntimo",
     "level": 3,
     "characters": [
       "分"
@@ -1560,7 +1560,7 @@
     "simplified": "坏",
     "traditional": "壞",
     "pinyin": "huài",
-    "meaning": "malo; roto",
+    "meaning": "malo; averiado; roto",
     "level": 3,
     "characters": [
       "坏"
@@ -1773,7 +1773,7 @@
     "simplified": "健康",
     "traditional": "健康",
     "pinyin": "jiàn kāng",
-    "meaning": "salud",
+    "meaning": "salud; saludable",
     "level": 3,
     "characters": [
       "健",
@@ -1805,7 +1805,7 @@
     "simplified": "角",
     "traditional": "角",
     "pinyin": "jiǎo",
-    "meaning": "esquina; ángulo; jiao (moneda)",
+    "meaning": "esquina; ángulo; jiao (décima parte de un yuan)",
     "level": 3,
     "characters": [
       "角"
@@ -1850,7 +1850,7 @@
     "simplified": "接",
     "traditional": "接",
     "pinyin": "jiē",
-    "meaning": "recibir; recoger",
+    "meaning": "recibir; recoger; conectar",
     "level": 3,
     "characters": [
       "接"
@@ -2144,7 +2144,7 @@
     "simplified": "客人",
     "traditional": "客人",
     "pinyin": "kè rén",
-    "meaning": "invitado",
+    "meaning": "invitado; visitante",
     "level": 3,
     "characters": [
       "客",
@@ -2176,7 +2176,7 @@
     "simplified": "口",
     "traditional": "口",
     "pinyin": "kǒu",
-    "meaning": "boca; entrada",
+    "meaning": "boca; entrada; clasificador para personas",
     "level": 3,
     "characters": [
       "口"
@@ -2397,7 +2397,7 @@
     "simplified": "楼",
     "traditional": "樓",
     "pinyin": "lóu",
-    "meaning": "edificio; planta",
+    "meaning": "edificio; piso (de un edificio)",
     "level": 3,
     "characters": [
       "楼"
@@ -2458,7 +2458,7 @@
     "simplified": "满意",
     "traditional": "滿意",
     "pinyin": "mǎn yì",
-    "meaning": "satisfecho",
+    "meaning": "satisfecho; contento",
     "level": 3,
     "characters": [
       "满",
@@ -2490,7 +2490,7 @@
     "simplified": "米",
     "traditional": "米",
     "pinyin": "mǐ",
-    "meaning": "metro (medida); arroz",
+    "meaning": "metro; arroz",
     "level": 3,
     "characters": [
       "米"
@@ -2538,7 +2538,7 @@
     "simplified": "明白",
     "traditional": "明白",
     "pinyin": "míng bai",
-    "meaning": "entender; claro",
+    "meaning": "entender; claro; evidente",
     "level": 3,
     "characters": [
       "明",
@@ -2675,7 +2675,7 @@
     "simplified": "努力",
     "traditional": "努力",
     "pinyin": "nǔ lì",
-    "meaning": "esforzarse",
+    "meaning": "esforzarse; trabajar duro",
     "level": 3,
     "characters": [
       "努",
@@ -2771,7 +2771,7 @@
     "simplified": "普通话",
     "traditional": "普通話",
     "pinyin": "pǔ tōng huà",
-    "meaning": "mandarín estándar",
+    "meaning": "chino mandarín estándar",
     "level": 3,
     "characters": [
       "普",
@@ -2931,7 +2931,7 @@
     "simplified": "热情",
     "traditional": "熱情",
     "pinyin": "rè qíng",
-    "meaning": "cordial; entusiasta",
+    "meaning": "cordial; entusiasta; entusiasmo",
     "level": 3,
     "characters": [
       "热",
@@ -3057,7 +3057,7 @@
     "simplified": "声音",
     "traditional": "聲音",
     "pinyin": "shēng yīn",
-    "meaning": "voz",
+    "meaning": "sonido; voz",
     "level": 3,
     "characters": [
       "声",
@@ -3071,7 +3071,7 @@
     "simplified": "使",
     "traditional": "使",
     "pinyin": "shǐ",
-    "meaning": "hacer que; usar",
+    "meaning": "hacer que; causar; usar",
     "level": 3,
     "characters": [
       "使"
@@ -3134,7 +3134,7 @@
     "simplified": "舒服",
     "traditional": "舒服",
     "pinyin": "shū fu",
-    "meaning": "cómodo",
+    "meaning": "cómodo; sentirse bien",
     "level": 3,
     "characters": [
       "舒",
@@ -3310,7 +3310,7 @@
     "simplified": "疼",
     "traditional": "疼",
     "pinyin": "téng",
-    "meaning": "doler",
+    "meaning": "doler; dolor",
     "level": 3,
     "characters": [
       "疼"
@@ -3325,7 +3325,7 @@
     "simplified": "提高",
     "traditional": "提高",
     "pinyin": "tí gāo",
-    "meaning": "mejorar; elevar",
+    "meaning": "elevar; aumentar; mejorar",
     "level": 3,
     "characters": [
       "提",
@@ -3370,7 +3370,7 @@
     "simplified": "条",
     "traditional": "條",
     "pinyin": "tiáo",
-    "meaning": "(clasificador alargado)",
+    "meaning": "clasificador para objetos largos y estrechos",
     "level": 3,
     "characters": [
       "条"
@@ -3435,7 +3435,7 @@
     "simplified": "突然",
     "traditional": "突然",
     "pinyin": "tū rán",
-    "meaning": "repentino",
+    "meaning": "de repente; repentinamente",
     "level": 3,
     "characters": [
       "突",
@@ -3484,7 +3484,7 @@
     "simplified": "完成",
     "traditional": "完成",
     "pinyin": "wán chéng",
-    "meaning": "completar",
+    "meaning": "completar; cumplir",
     "level": 3,
     "characters": [
       "完",
@@ -3559,28 +3559,11 @@
     "sourceId": "hsk-2-0"
   },
   {
-    "id": "word-4e3a-4ec0-4e48-wei4-shen2-me5",
-    "simplified": "为什么",
-    "traditional": "為什麼",
-    "pinyin": "wèi shén me",
-    "meaning": "¿por qué?",
-    "level": 3,
-    "characters": [
-      "为",
-      "什",
-      "么"
-    ],
-    "topicIds": [
-      "preguntas"
-    ],
-    "sourceId": "hsk-2-0"
-  },
-  {
     "id": "word-4f4d-wei4",
     "simplified": "位",
     "traditional": "位",
     "pinyin": "wèi",
-    "meaning": "(clasif. cortés); puesto",
+    "meaning": "clasificador cortés para personas; puesto",
     "level": 3,
     "characters": [
       "位"
@@ -3611,7 +3594,7 @@
     "simplified": "习惯",
     "traditional": "習慣",
     "pinyin": "xí guàn",
-    "meaning": "hábito",
+    "meaning": "costumbre; acostumbrarse",
     "level": 3,
     "characters": [
       "习",
@@ -3704,7 +3687,7 @@
     "simplified": "相同",
     "traditional": "相同",
     "pinyin": "xiāng tóng",
-    "meaning": "igual",
+    "meaning": "igual; idéntico",
     "level": 3,
     "characters": [
       "相",
@@ -3843,7 +3826,7 @@
     "simplified": "信",
     "traditional": "信",
     "pinyin": "xìn",
-    "meaning": "carta; creer",
+    "meaning": "carta; confiar; creer",
     "level": 3,
     "characters": [
       "信"
@@ -3905,7 +3888,7 @@
     "simplified": "需要",
     "traditional": "需要",
     "pinyin": "xū yào",
-    "meaning": "necesitar",
+    "meaning": "necesitar; hacer falta",
     "level": 3,
     "characters": [
       "需",
@@ -3921,7 +3904,7 @@
     "simplified": "选择",
     "traditional": "選擇",
     "pinyin": "xuǎn zé",
-    "meaning": "elegir; elección",
+    "meaning": "elegir; selección",
     "level": 3,
     "characters": [
       "选",
@@ -3953,7 +3936,7 @@
     "simplified": "要求",
     "traditional": "要求",
     "pinyin": "yāo qiú",
-    "meaning": "exigir; requisito",
+    "meaning": "pedir; exigir; requisito",
     "level": 3,
     "characters": [
       "要",
@@ -3983,7 +3966,7 @@
     "simplified": "一般",
     "traditional": "一般",
     "pinyin": "yī bān",
-    "meaning": "normalmente; corriente",
+    "meaning": "normalmente; corriente; general",
     "level": 3,
     "characters": [
       "一",
@@ -4015,7 +3998,7 @@
     "simplified": "一定",
     "traditional": "一定",
     "pinyin": "yī dìng",
-    "meaning": "seguramente",
+    "meaning": "seguramente; necesariamente",
     "level": 3,
     "characters": [
       "一",
@@ -4080,7 +4063,7 @@
     "simplified": "一直",
     "traditional": "一直",
     "pinyin": "yī zhí",
-    "meaning": "todo recto; siempre",
+    "meaning": "siempre; todo recto",
     "level": 3,
     "characters": [
       "一",
@@ -4128,7 +4111,7 @@
     "simplified": "以为",
     "traditional": "以為",
     "pinyin": "yǐ wéi",
-    "meaning": "creer (erróneamente)",
+    "meaning": "creer; pensar (erróneamente)",
     "level": 3,
     "characters": [
       "以",
@@ -4174,7 +4157,7 @@
     "simplified": "应该",
     "traditional": "應該",
     "pinyin": "yīng gāi",
-    "meaning": "debería",
+    "meaning": "deber; debería",
     "level": 3,
     "characters": [
       "应",
@@ -4190,7 +4173,7 @@
     "simplified": "影响",
     "traditional": "影響",
     "pinyin": "yǐng xiǎng",
-    "meaning": "influencia",
+    "meaning": "influir; afectar; influencia",
     "level": 3,
     "characters": [
       "影",
@@ -4204,7 +4187,7 @@
     "simplified": "用",
     "traditional": "用",
     "pinyin": "yòng",
-    "meaning": "usar",
+    "meaning": "usar; aplicar",
     "level": 3,
     "characters": [
       "用"
@@ -4262,7 +4245,7 @@
     "simplified": "遇到",
     "traditional": "遇到",
     "pinyin": "yù dào",
-    "meaning": "encontrarse",
+    "meaning": "encontrarse con; toparse con",
     "level": 3,
     "characters": [
       "遇",
@@ -4278,7 +4261,7 @@
     "simplified": "愿意",
     "traditional": "願意",
     "pinyin": "yuàn yì",
-    "meaning": "estar dispuesto a",
+    "meaning": "estar dispuesto a; querer",
     "level": 3,
     "characters": [
       "愿",
@@ -4342,7 +4325,7 @@
     "simplified": "站",
     "traditional": "站",
     "pinyin": "zhàn",
-    "meaning": "estar de pie; estación",
+    "meaning": "estar de pie; estación (de transporte)",
     "level": 3,
     "characters": [
       "站"
@@ -4358,7 +4341,7 @@
     "simplified": "照顾",
     "traditional": "照顧",
     "pinyin": "zhào gu",
-    "meaning": "cuidar de",
+    "meaning": "cuidar; atender",
     "level": 3,
     "characters": [
       "照",
@@ -4399,22 +4382,6 @@
     "sourceId": "hsk-2-0"
   },
   {
-    "id": "word-7740-6025-zhao2-ji2",
-    "simplified": "着急",
-    "traditional": "著急",
-    "pinyin": "zháo jí",
-    "meaning": "estar nervioso; preocuparse",
-    "level": 3,
-    "characters": [
-      "着",
-      "急"
-    ],
-    "topicIds": [
-      "sentimientos"
-    ],
-    "sourceId": "hsk-2-0"
-  },
-  {
     "id": "word-53ea-zhi3",
     "simplified": "只",
     "traditional": "只",
@@ -4435,7 +4402,7 @@
     "simplified": "中间",
     "traditional": "中間",
     "pinyin": "zhōng jiān",
-    "meaning": "medio; centro",
+    "meaning": "medio; centro; entre",
     "level": 3,
     "characters": [
       "中",
@@ -4467,7 +4434,7 @@
     "simplified": "种",
     "traditional": "種",
     "pinyin": "zhǒng",
-    "meaning": "tipo, clase; plantar",
+    "meaning": "tipo; clase; plantar",
     "level": 3,
     "characters": [
       "种"
@@ -4613,27 +4580,11 @@
     "sourceId": "hsk-2-0"
   },
   {
-    "id": "word-4f5c-4e1a-zuo4-ye4",
-    "simplified": "作业",
-    "traditional": "作業",
-    "pinyin": "zuò yè",
-    "meaning": "tarea escolar",
-    "level": 3,
-    "characters": [
-      "作",
-      "业"
-    ],
-    "topicIds": [
-      "escuela"
-    ],
-    "sourceId": "hsk-2-0"
-  },
-  {
     "id": "word-4f5c-7528-zuo4-yong4",
     "simplified": "作用",
     "traditional": "作用",
     "pinyin": "zuò yòng",
-    "meaning": "función; efecto",
+    "meaning": "función; efecto; influir",
     "level": 3,
     "characters": [
       "作",
@@ -4641,5 +4592,84 @@
     ],
     "topicIds": [],
     "sourceId": "hsk-2-0"
+  },
+  {
+    "id": "word-7535-5b50-90ae-4ef6-dian4-zi3-you2-jian4",
+    "simplified": "电子邮件",
+    "traditional": "電子郵件",
+    "pinyin": "diàn zǐ yóu jiàn",
+    "meaning": "correo electrónico; email",
+    "level": 3,
+    "characters": [
+      "电",
+      "子",
+      "邮",
+      "件"
+    ],
+    "topicIds": [],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-522e-98ce-gua-feng",
+    "simplified": "刮风",
+    "traditional": "刮風",
+    "pinyin": "guā fēng",
+    "meaning": "hacer viento; soplar el viento",
+    "level": 3,
+    "characters": [
+      "刮",
+      "风"
+    ],
+    "topicIds": [
+      "tiempo"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-5237-7259-shua-ya2",
+    "simplified": "刷牙",
+    "traditional": "刷牙",
+    "pinyin": "shuā yá",
+    "meaning": "cepillarse los dientes",
+    "level": 3,
+    "characters": [
+      "刷",
+      "牙"
+    ],
+    "topicIds": [
+      "verbos",
+      "cuerpo"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-8fd8-huan2",
+    "simplified": "还",
+    "traditional": "還",
+    "pinyin": "huán",
+    "meaning": "devolver; regresar",
+    "level": 3,
+    "characters": [
+      "还"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "asia-idiomas"
+  },
+  {
+    "id": "word-957f-zhang3",
+    "simplified": "长",
+    "traditional": "長",
+    "pinyin": "zhǎng",
+    "meaning": "crecer; mayor",
+    "level": 3,
+    "characters": [
+      "长"
+    ],
+    "topicIds": [
+      "verbos"
+    ],
+    "sourceId": "asia-idiomas"
   }
 ]

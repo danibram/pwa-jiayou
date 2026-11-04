@@ -13,8 +13,8 @@ interface ListasProps {
 
 /** The lists being studied now. A first visit starts at HSK 1. */
 const startingChoice = (): ListId[] => {
-  // Only lists that show a row, so an emptied "Mis palabras" can't stay ticked out of sight.
-  if (readInstalledLevels() || hasUsedApp()) return vocabularyStore.state.selectedLists.filter((id) => (studyList(id)?.words.length ?? 0) > 0);
+  // Extra stays ticked even while it is empty, so the words a release brings join the study plan.
+  if (readInstalledLevels() || hasUsedApp()) return vocabularyStore.state.selectedLists;
   return [DEFAULT_LIST];
 };
 
@@ -29,8 +29,11 @@ const Listas: Component<ListasProps> = (props) => {
     setChosen(current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   };
 
+  /** An empty Extra can be ticked to receive updates, but it alone gives nothing to study yet. */
+  const hasWords = () => chosen().some((id) => (studyList(id)?.words.length ?? 0) > 0);
+
   const save = () => {
-    if (chosen().length === 0) return;
+    if (!hasWords()) return;
     void applyListChoice(chosen()).catch(() => {});
     props.onDone();
   };
@@ -48,11 +51,12 @@ const Listas: Component<ListasProps> = (props) => {
           Marca uno o varios. Puedes empezar enseguida. Los trazos y audios se descargan en segundo plano para usarlos sin conexión. Puedes cambiarlo en Opciones.
         </p>
         <ul class="sheet mt-5 overflow-hidden px-4 animate-rise [animation-delay:140ms]" aria-label="Listas">
-          {/* An empty own list has nothing to study yet; it is filled from Mis palabras. */}
-          <For each={studyLists().filter((list) => list.words.length > 0)}>
+          {/* Extra shows even while empty: ticking it subscribes to the words that later releases add. */}
+          <For each={studyLists()}>
             {(list) => {
               const pack = list.hskLevel ? catalogLevel(list.hskLevel) : undefined;
-              const counts = `${list.words.length} palabras${pack ? ` · ${pack.count} caracteres` : ''}`;
+              const words = list.words.length === 1 ? '1 palabra' : `${list.words.length} palabras`;
+              const counts = list.words.length === 0 ? 'Sin palabras todavía. Llegan con las actualizaciones.' : `${words}${pack ? ` · ${pack.count} caracteres` : ''}`;
               return (
               <li class="border-t border-line first:border-t-0">
                 <Show
@@ -103,10 +107,10 @@ const Listas: Component<ListasProps> = (props) => {
           </For>
         </ul>
       </div>
-      <Show when={chosen().length === 0}>
-        <p class="mt-3 text-sm text-ink-soft">Marca al menos una lista para empezar.</p>
+      <Show when={!hasWords()}>
+        <p class="mt-3 text-sm text-ink-soft">{chosen().length === 0 ? 'Marca al menos una lista para empezar.' : 'Extra aún no tiene palabras. Marca también un nivel HSK para empezar.'}</p>
       </Show>
-      <button type="button" class="btn-ink mt-3 h-14 w-full shrink-0 text-base" disabled={chosen().length === 0} onClick={save}>
+      <button type="button" class="btn-ink mt-3 h-14 w-full shrink-0 text-base" disabled={!hasWords()} onClick={save}>
         Empezar con {startLabel()}
       </button>
     </div>
