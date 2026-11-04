@@ -33,16 +33,47 @@ describe('vocabulary screens', () => {
     vi.useRealTimers();
   });
 
-  it('opens a one-character result in the character sheet, not the word page', () => {
+  it('opens a one-character word on its word page, not the character sheet', () => {
     vi.useFakeTimers();
     const onSelect = vi.fn();
     const [browse, setBrowse] = createSignal({ query: '', topic: '', scroll: 0, choosingTopic: false });
     render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} onSelect={onSelect} onPractice={() => {}} browse={browse()} onBrowse={setBrowse} />);
-    search('是');
-    fireEvent.click(screen.getAllByText('是')[0]);
-    expect(onSelect).not.toHaveBeenCalled();
-    expect(screen.getByRole('dialog')).toBeTruthy();
+    const word = vocabulary.find((entry) => entry.simplified === '水')!;
+    search('水');
+    fireEvent.click(screen.getAllByText('水')[0]);
+    expect(onSelect).toHaveBeenCalledWith(word.id);
+    expect(screen.queryByRole('dialog')).toBeNull();
     vi.useRealTimers();
+  });
+
+  it('lists each character of a word once and opens its sheet', () => {
+    const word = vocabulary.find((entry) => entry.simplified === '爸爸')!;
+    render(() => (
+      <Vocabulario
+        onBack={() => {}}
+        onStrokes={() => {}}
+        wordId={word.id}
+        onSelect={() => {}}
+        onPractice={() => {}}
+        browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }}
+        onBrowse={() => {}}
+      />
+    ));
+    const rows = screen.getAllByRole('button', { name: /^Ver el carácter 爸, [a-zà-ü]/ });
+    expect(rows).toHaveLength(1);
+    fireEvent.click(rows[0]);
+    expect(screen.getByRole('dialog')).toBeTruthy();
+  });
+
+  it('shows a sentence and one character link on a one-character word', () => {
+    const word = vocabulary.find((entry) => entry.simplified === '喝')!;
+    render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={word.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
+    expect(screen.getByText('我想喝水。')).toBeTruthy();
+    expect(screen.getByText('Quiero beber agua.')).toBeTruthy();
+    const rows = screen.getAllByRole('button', { name: /^Ver el carácter 喝, [a-zà-ü]/ });
+    expect(rows).toHaveLength(1);
+    fireEvent.click(rows[0]);
+    expect(screen.getByRole('dialog')).toBeTruthy();
   });
 
   it('waits for a pause before filtering', () => {

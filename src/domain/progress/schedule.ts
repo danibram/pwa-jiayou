@@ -1,12 +1,12 @@
-import type { Grade } from '../../stores/progressStore';
-import type { CharProgress } from './types';
+import type { CharProgress, Grade } from './types';
 
 export const DAY_MS = 86_400_000;
 const MIN_EASE = 1.3;
 const MAX_EASE = 2.5;
 /** What a Bien gives back, so a word that recovers is not stuck with the ease of its bad week. */
 const EASE_GAIN = 0.05;
-const afterAnswer = (clean: number, grade: Grade) => grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean;
+/** Bien answers in a row after this one. A Difícil keeps the run, an Otra vez ends it. */
+export const afterAnswer = (clean: number, grade: Grade) => grade === 'again' ? 0 : grade === 'good' ? clean + 1 : clean;
 
 export interface ScheduleOptions {
   /**
