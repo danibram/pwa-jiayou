@@ -8,7 +8,7 @@ A phone-first progressive web app for Spanish speakers learning Chinese. It cove
 
 - On first launch the app asks which lists to study. HSK 1 ships in the bundle. HSK 2 to 6 download to the device when you tick them, and are dropped again when you untick them.
 - Ticking a list saves the strokes and audio its words need, including characters that belong to another level. Download runs in the background with a progress line on Home. It retries when the connection comes back.
-- "Mis palabras" is your own list. Add a word by hand, paste a list (one word per line, fields split by tab, semicolon, slash or dash), or share the list as text to another phone. Words outside HSK still get strokes, fetched from the hanzi-writer CDN.
+- "Extra" holds words outside HSK, curated in the content editor (`editor/`). It is always in the list picker, even while empty, so a learner who ticks it gets the words later releases add. Its characters outside HSK get strokes from the hanzi-writer CDN. Learners do not add or correct words in the app.
 - A word has one progress record no matter how many lists contain it.
 
 ### Daily review
@@ -22,7 +22,7 @@ A phone-first progressive web app for Spanish speakers learning Chinese. It cove
 
 ### Browse
 
-- Buscar finds words by Chinese, pinyin or Spanish, across all levels and your own words.
+- Buscar finds words by Chinese, pinyin or Spanish, across HSK 1 to 6 and Extra.
 - Temas groups characters into 22 topics (verbs, questions, family, food, …) and lets you practise one topic on its own.
 - Every word opens its characters. A character sheet shows the gloss HSK uses, the dictionary definition, radical, stroke count, an example word, and the other words that use it.
 - Home shows a word of the day.
@@ -45,7 +45,7 @@ Opciones offers three voice modes. "China continental" plays recordings by Chen 
 
 ### Backup
 
-Opciones exports a JSON file with word progress, character progress, daily counters and your own words (format version 3). Import accepts version 2 and the older character-only map. If local storage fails, a notice offers to retry, export, or recover the last saved copy.
+Opciones exports a JSON file with word progress, character progress and daily counters (format version 3). Older files that carry a `myWords` list still import; the list is ignored. Import accepts version 2 and the older character-only map. If local storage fails, a notice offers to retry, export, or recover the last saved copy.
 
 ### Look and feel
 
@@ -128,9 +128,9 @@ Two Python scripts refresh the two voice sources, and [docs/audio.md](docs/audio
 
 ```
 src/
-├── pages/          Home, Listas, Vocabulario, VocabularyReview, Trazos, MisPalabras, Opciones, Acerca
+├── pages/          Home, Listas, Vocabulario, VocabularyReview, Trazos, Opciones, Acerca
 ├── components/     StrokeCanvas (hanzi-writer), CharacterDetailSheet, GradeButtons, VoicePicker, ProgressBackup, …
-├── stores/         progressStore (schedules, daily counters), vocabularyStore (list selection), myWordsStore
+├── stores/         progressStore (schedules, daily counters), vocabularyStore (list selection)
 ├── domain/         pure logic: progress/schedule, progress/serialization, vocabulary/sessionDeck
 ├── utils/          levelPacks (downloads and cache), speech, pinyin, search, word import, theme
 ├── data/           lists, catalog, topics, vocabulary JSON, character JSON, glosses, overrides, drafts

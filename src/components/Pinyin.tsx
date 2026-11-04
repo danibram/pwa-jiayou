@@ -1,8 +1,7 @@
-import { Component, For, createMemo, createRoot } from 'solid-js';
+import { Component, For, createMemo } from 'solid-js';
 import { pinyinSyllableHighlights } from '../utils/pinyinHighlights';
 import { endsInParticle, groupPinyin } from '../utils/pinyin';
-import { vocabulary } from '../data/vocabulary';
-import { myWordsStore } from '../stores/myWordsStore';
+import { extraVocabulary, vocabulary } from '../data/vocabulary';
 
 /** Spellings of the multi-syllable words in `entries`, as space-joined lowercase pinyin. */
 const spellings = (entries: readonly { simplified: string; pinyin: string }[]) =>
@@ -13,14 +12,12 @@ const spellings = (entries: readonly { simplified: string; pinyin: string }[]) =
     .filter((pinyin) => pinyin.includes(' '));
 
 let words: Set<string> | null = null;
-/** The learner's own words, rebuilt only when the list changes, not on every call. */
-const ownSpellings = createRoot(() => createMemo(() => new Set(spellings(myWordsStore.ownWords()))));
 
-/** A run of syllables is one word when the HSK list or the learner's own words have a word spelled that way. */
+/** A run of syllables is one word when the HSK or Extra lists have a word spelled that way. */
 const isWord = (syllables: string[]) => {
-  words ??= new Set(spellings(vocabulary));
+  words ??= new Set(spellings([...vocabulary, ...extraVocabulary]));
   const spelled = syllables.join(' ').toLowerCase();
-  return words.has(spelled) || ownSpellings().has(spelled);
+  return words.has(spelled);
 };
 
 const TONE_CLASS = {

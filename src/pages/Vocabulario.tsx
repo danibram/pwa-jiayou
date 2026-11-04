@@ -6,26 +6,25 @@ import Pinyin from '../components/Pinyin';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
 import ResultRow from '../components/ResultRow';
-import Drawer from '../components/Drawer';
-import MyWordForm, { seedFromWord, type MyWordFormSeed } from '../components/MyWordForm';
 import { StatusTag, statusWord, TopicBar, topicCountsLine, type StudyStatus, type TopicCounts } from '../components/TopicProgress';
 import { rankBy, type Searchable } from '../utils/searchRank';
 import { characterRecord, searchCharacters } from '../utils/characterSearch';
+import { wordParts } from '../utils/wordParts';
 import { mainMeaning } from '../utils/meaning';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
+import ToneNeighbors from '../components/ToneNeighbors';
+import WordRelations from '../components/WordRelations';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
 import { progressStore as charProgress } from '../stores/progressStore';
 import { topicPlan } from '../utils/topicPlan';
-import { vocabulary, vocabularySources, type VocabularyEntry } from '../data/vocabulary';
+import { allWords, charactersOfExtraTopicWords, extraVocabulary, findWord, vocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
 import { topics } from '../data/topics';
-import { allWords, charactersOfOwnTopicWords, findWord, myWordsStore } from '../stores/myWordsStore';
-import { hskLevelsOf, MY_WORDS_LIST } from '../data/lists';
+import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
 import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { canLearnNew, WORD_NEW_PER_DAY } from '../stores/progressStore';
-import { saveStudyMedia } from '../utils/levelPacks';
 
 export interface VocabularyBrowseState {
   query: string;
@@ -63,7 +62,7 @@ const wordRowOf = (word: VocabularyEntry): Row => ({
   key: { hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: word.meaning },
 });
 
-const catalogRows = new Map<string, Row>(vocabulary.map((word) => [word.id, wordRowOf(word)]));
+const catalogRows = new Map<string, Row>([...vocabulary, ...extraVocabulary].map((word) => [word.id, wordRowOf(word)]));
 
 /** Characters already listed as one-character words show up as words, not twice. */
 const wordGlyphs = new Set(vocabulary.map((word) => word.simplified));
@@ -72,20 +71,21 @@ const wordGlyphs = new Set(vocabulary.map((word) => word.simplified));
 const SEARCH_DEBOUNCE_MS = 180;
 
 /** Up to six other words sharing a character, lower levels first, so the detail teaches a family. */
+/** 一会儿 yíhuìr: a final 儿 read as -r is a spoken suffix, not 儿 "hijo". */
+const erhua = (word: VocabularyEntry) => word.simplified.endsWith('儿') && word.characters.length > 1 && /[^e]r$/i.test(word.pinyin.trim().normalize('NFD').replace(/\p{M}/gu, ''));
+
 const related = (word: VocabularyEntry): VocabularyEntry[] => {
   const chars = new Set(word.characters);
+  // A shared 儿 that is only the erhua suffix in the other word teaches a false link.
+  const shares = (other: VocabularyEntry) => other.characters.some((char) => chars.has(char) && !(char === '儿' && erhua(other) && other.characters.indexOf('儿') === other.characters.length - 1));
   return vocabulary
-    .filter((other) => other.id !== word.id && other.characters.some((char) => chars.has(char)))
+    .filter((other) => other.id !== word.id && shares(other))
     .sort((a, b) => a.level - b.level || a.characters.length - b.characters.length)
     .slice(0, 6);
 };
 
 const Vocabulario: Component<Props> = (props) => {
   const [audioError, setAudioError] = createSignal(false);
-  const [myWordOpen, setMyWordOpen] = createSignal(false);
-  const [myWordSeed, setMyWordSeed] = createSignal<MyWordFormSeed | undefined>();
-  const [myWordNotice, setMyWordNotice] = createSignal('');
-  let dismissMyWord = () => {};
   /** The character opened from this word's tiles, shown in the same detail as search. */
   const [charOpen, setCharOpen] = createSignal<string>();
   const openRecord = createMemo(() => {
@@ -101,14 +101,14 @@ const Vocabulario: Component<Props> = (props) => {
   onCleanup(stopSpeech);
   const words = createMemo(() => vocabularyStore.getSelectedWords());
   /**
-   * Temas also lists own words tagged with a topic, even if «Mis palabras» is off for Hoy.
+   * Temas also lists Extra words tagged with a topic, even if the Extra list is off for Hoy.
    * Without a topic, the list stays the checked ones only.
    */
   const wordsForTopics = createMemo(() => {
     const selected = words();
-    if (vocabularyStore.isSelected(MY_WORDS_LIST)) return selected;
+    if (vocabularyStore.isSelected(EXTRA_LIST)) return selected;
     const seen = new Set(selected.map((word) => word.id));
-    const extras = myWordsStore.words().filter((word) => word.topicIds.length > 0 && !seen.has(word.id));
+    const extras = extraVocabulary.filter((word) => word.topicIds.length > 0 && !seen.has(word.id));
     return extras.length ? [...selected, ...extras] : selected;
   });
   const availableTopics = createMemo(() =>
@@ -117,23 +117,16 @@ const Vocabulario: Component<Props> = (props) => {
       .sort((a, b) => a.title.localeCompare(b.title, 'es')),
   );
   const selected = createMemo(() => (props.wordId ? findWord(props.wordId) : undefined));
-  /** The catalog's rows, plus the learner's own words, which can change while the page is open. */
-  const wordRow = createMemo(() => {
-    const own = myWordsStore.ownWords();
-    if (own.length === 0) return catalogRows;
-    const rows = new Map(catalogRows);
-    for (const word of own) rows.set(word.id, wordRowOf(word));
-    return rows;
-  });
+  const wordRow = () => catalogRows;
   const update = (changes: Partial<VocabularyBrowseState>) => props.onBrowse({ ...props.browse, ...changes });
   /** `browse.topic` holds the one topic being practised, or '' for the whole list. */
   const chosenTopics = createMemo(() => (props.browse.topic ? [props.browse.topic] : []));
   const inTopics = (word: VocabularyEntry, ids: string[]) => ids.length === 0 || ids.some((id) => word.topicIds.includes(id));
   const inPlan = createMemo(() => {
     const ids = new Set(words().map((word) => word.id));
-    // Topic-tagged own words count as part of the plan in Temas even before Mis palabras is checked.
-    if (!vocabularyStore.isSelected(MY_WORDS_LIST)) {
-      for (const word of myWordsStore.words()) {
+    // Topic-tagged Extra words count as part of the plan in Temas even before Extra is checked.
+    if (!vocabularyStore.isSelected(EXTRA_LIST)) {
+      for (const word of extraVocabulary) {
         if (word.topicIds.length) ids.add(word.id);
       }
     }
@@ -141,7 +134,7 @@ const Vocabulario: Component<Props> = (props) => {
   });
   const charInPlan = (char: KnownCharacter) => {
     if (char.hsk_level !== undefined) return hskLevelsOf(vocabularyStore.state.selectedLists).includes(char.hsk_level);
-    return myWordsStore.ownWords().some((word) => word.characters.includes(char.character) && inPlan().has(word.id));
+    return extraVocabulary.some((word) => word.characters.includes(char.character) && inPlan().has(word.id));
   };
   /** Every HSK character that is not also a word, built once rather than per keystroke. */
   const charRows = createMemo((): Row[] => {
@@ -154,9 +147,9 @@ const Vocabulario: Component<Props> = (props) => {
       return [charRowOf(char)];
     });
   });
-  /** Characters of the learner's own words in this topic, so Temas teaches the pieces too. */
-  const ownTopicCharRows = (ids: string[], listed: VocabularyEntry[]): Row[] =>
-    charactersOfOwnTopicWords(ids, listed).flatMap((glyph) => {
+  /** Characters of Extra words in this topic, so Temas teaches the pieces too. */
+  const extraTopicCharRows = (ids: string[], listed: VocabularyEntry[]): Row[] =>
+    charactersOfExtraTopicWords(ids, listed).flatMap((glyph) => {
       const char = characterOrWordStub(glyph, characterStore.state.characters);
       return char ? [charRowOf(char)] : [];
     });
@@ -177,9 +170,9 @@ const Vocabulario: Component<Props> = (props) => {
     const pool = query ? allWords() : ids.length > 0 ? wordsForTopics() : words();
     const listed = pool.filter((word) => inTopics(word, ids));
     const source = listed.map((word) => wordRow().get(word.id)!);
-    // Global search mixes in HSK characters; a topic also lists the pieces of the learner's own words.
+    // Global search mixes in HSK characters; a topic also lists the pieces of its Extra words.
     if (query && ids.length === 0) source.push(...charRows());
-    else if (ids.length > 0) source.push(...ownTopicCharRows(ids, listed));
+    else if (ids.length > 0) source.push(...extraTopicCharRows(ids, listed));
     return rankBy(source, props.browse.query, (row) => row.key,
       (row) => (row.kind === 'word' ? inPlan().has(row.word.id) : charInPlan(row.char)));
   });
@@ -290,7 +283,7 @@ const Vocabulario: Component<Props> = (props) => {
           </label>
           <Show
             when={chosenTopics().length > 0}
-            fallback={<p class="mt-3 text-xs text-ink-faint tabular-nums animate-rise [animation-delay:120ms]">{resultCount()}{props.browse.query.trim() ? (myWordsStore.ownWords().length > 0 ? ' en HSK 1 a 6 y tus palabras' : ' en HSK 1 a 6') : ''}</p>}
+            fallback={<p class="mt-3 text-xs text-ink-faint tabular-nums animate-rise [animation-delay:120ms]">{resultCount()}{props.browse.query.trim() ? (extraVocabulary.length > 0 ? ' en HSK 1 a 6 y Extra' : ' en HSK 1 a 6') : ''}</p>}
           >
             <div class="mt-3 animate-rise [animation-delay:120ms]">
               <p class="text-xs text-ink-soft tabular-nums">
@@ -314,7 +307,7 @@ const Vocabulario: Component<Props> = (props) => {
             }>{(row) => row.kind === 'word' ? (() => {
               const word = row.word;
               // A one-character HSK word opens the character sheet too; the sheet links on to the word.
-              // One outside HSK (an own word like 喱) has no record, so it keeps its own word page.
+              // One outside HSK (an Extra word like 喱) has no record, so it keeps its own word page.
               const single = word.characters.length === 1 && characterRecord(word.simplified, characterStore.state.characters);
               return (
                 <ResultRow
@@ -325,7 +318,7 @@ const Vocabulario: Component<Props> = (props) => {
                   level={word.level}
                   outsidePlan={!inPlan().has(word.id)}
                   status={inPlan().has(word.id) ? statusOf(word.id) : undefined}
-                  label={`${word.simplified}, ${formatPinyinWord(word.pinyin)}, ${word.meaning}, ${word.level ? `HSK ${word.level}` : 'tuya'}${inPlan().has(word.id) ? `, ${statusWord(statusOf(word.id), true)}` : ', fuera de tus niveles'}`}
+                  label={`${word.simplified}, ${formatPinyinWord(word.pinyin)}, ${word.meaning}, ${word.level ? `HSK ${word.level}` : 'Extra'}${inPlan().has(word.id) ? `, ${statusWord(statusOf(word.id), true)}` : ', fuera de tus niveles'}`}
                   onClick={() => (single ? setCharOpen(word.simplified) : props.onSelect(word.id))}
                 />
               );
@@ -377,7 +370,7 @@ const Vocabulario: Component<Props> = (props) => {
             <div class="sheet flex min-h-[22rem] flex-col items-center px-5 py-4 text-center">
               <div class="grid w-full grid-cols-[2.75rem_1fr_2.75rem] items-center">
                 <span aria-hidden="true" />
-                <p class="text-sm text-ink-soft">{word().level ? `HSK ${word().level}` : vocabularySources.mine.title}</p>
+                <p class="text-sm text-ink-soft">{word().level ? `HSK ${word().level}` : 'Extra'}</p>
                 <SpeakButton
                   word
                   size="sm"
@@ -403,6 +396,16 @@ const Vocabulario: Component<Props> = (props) => {
                   </button>
                 )}</For>
               </div>
+              {/* How the word is built: each character's own meaning, under its tile. */}
+              <Show when={wordParts(word().characters).length > 0}>
+                <div class="-mt-4 mb-3 flex w-full justify-center" aria-label="Significado de cada carácter">
+                  <For each={wordParts(word().characters)}>{(part) => (
+                    <p class="min-w-0 max-w-[15rem] flex-1 truncate px-1 text-center text-sm text-ink-soft">
+                      <Show when={part.gloss} fallback="·">{part.gloss}</Show>
+                    </p>
+                  )}</For>
+                </div>
+              </Show>
               <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
                 <Pinyin word text={word().pinyin} class="text-[1.75rem] font-medium" />
                 <Show when={word().traditional !== word().simplified}>
@@ -427,32 +430,25 @@ const Vocabulario: Component<Props> = (props) => {
                 >
                   <button class="btn-quiet min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>Aprender igualmente</button>
                 </Show>
-                <button
-                  type="button"
-                  class="btn-quiet flex h-14 w-14 shrink-0 items-center justify-center"
-                  classList={{
-                    'border-jade text-jade': myWordsStore.has(word().id) && !myWordsStore.isCorrection(word().id),
-                    'border-gold bg-gold/15 text-gold': myWordsStore.isCorrection(word().id),
-                  }}
-                  aria-label={myWordsStore.isCorrection(word().id) ? 'Corregir en mis palabras' : myWordsStore.has(word().id) ? 'Editar en mis palabras' : 'Añadir a mis palabras'}
-                  onClick={() => {
-                    const listed = myWordsStore.has(word().id);
-                    setMyWordSeed(seedFromWord(word(), listed));
-                    setMyWordNotice('');
-                    setMyWordOpen(true);
-                  }}
-                >
-                  <Icon name="pencil" size={22} />
-                </button>
               </div>
               <Show when={progress.isNew(word().id) && !canLearnNew('word')}>
                 <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {WORD_NEW_PER_DAY} palabras nuevas de hoy. Esta iría por encima del límite.</p>
               </Show>
               <Show when={!progress.isNew(word().id) && !progress.isDue(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
-              <Show when={myWordNotice()}>
-                <p role="status" class="mt-2 text-sm text-ink-soft">{myWordNotice()}</p>
-              </Show>
             </div>
+            <Show when={vocabularyExample(word().simplified)}>
+              {(example) => (
+                <section class="mt-6 border-t border-line pt-5 text-left" aria-label="Ejemplo de uso">
+                  <p class="text-sm text-ink-soft">Ejemplo</p>
+                  <p class="mt-2 font-hanzi text-xl" lang="zh-CN">{example().chinese}</p>
+                  <p class="mt-1 text-sm text-ink-soft">{example().spanish}</p>
+                </section>
+              )}
+            </Show>
+            <Show when={[...word().simplified].length === 1}>
+              <ToneNeighbors character={word().simplified} pinyin={word().pinyin} onOpenWord={props.onSelect} onOpenCharacter={setCharOpen} />
+            </Show>
+            <WordRelations word={word()} onOpenWord={props.onSelect} />
             <Show when={related(word()).length > 0}>
             <div class="mt-6 border-t border-line pt-5 text-left">
                 <p class="text-sm text-ink-soft">Otras palabras con {[...new Set(word().characters)].join(' o ')}</p>
@@ -481,6 +477,7 @@ const Vocabulario: Component<Props> = (props) => {
             character={record()}
             installed={charInstalled(record().character)}
             currentWordId={props.wordId}
+            onOpenCharacter={setCharOpen}
             status={charStatus(record().character)}
             onStrokes={() => {
               const char = record().character;
@@ -494,28 +491,6 @@ const Vocabulario: Component<Props> = (props) => {
             onClose={() => setCharOpen(undefined)}
           />
         )}
-      </Show>
-      <Show when={myWordOpen() && myWordSeed()}>
-        <Drawer
-          onClose={() => { setMyWordOpen(false); setMyWordSeed(undefined); }}
-          dismissRef={(dismiss) => { dismissMyWord = dismiss; }}
-          aria-labelledby="my-word-drawer-title"
-        >
-          <div class="px-4 pb-6">
-            <MyWordForm
-              seed={myWordSeed()}
-              titleId="my-word-drawer-title"
-              onDone={(message) => {
-                setMyWordNotice(message);
-                dismissMyWord();
-                if (!vocabularyStore.isSelected(MY_WORDS_LIST)) {
-                  vocabularyStore.selectLists([...vocabularyStore.state.selectedLists, MY_WORDS_LIST]);
-                }
-                void saveStudyMedia();
-              }}
-            />
-          </div>
-        </Drawer>
       </Show>
     </div>
   );
