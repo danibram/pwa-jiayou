@@ -3,6 +3,7 @@ import { vocabularyCoverage } from '../src/data/vocabulary';
 import { progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
+import './fixtures/levelWords';
 
 afterEach(() => {
   vocabularyStore.reset();

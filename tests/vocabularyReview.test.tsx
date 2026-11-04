@@ -12,9 +12,14 @@ vi.mock('../src/data/vocabulary', () => {
     { id: 'word-two', simplified: '谢谢', traditional: '謝謝', pinyin: 'xièxie', senses: [{ text: 'gracias' }], level: 1, characters: ['谢'], topicIds: [], sourceId: 'test' },
   ];
   return {
-    vocabulary,
     vocabularyLevels: [1, 2, 3, 4, 5, 6],
-    vocabularyByLevel: { 1: vocabulary, 2: [], 3: [], 4: [], 5: [], 6: [] },
+    BUNDLED_WORD_LEVEL: 1,
+    catalogWords: () => vocabulary,
+    levelWords: (level: number) => (level === 1 ? vocabulary : []),
+    wordCount: (level: number) => (level === 1 ? vocabulary.length : 0),
+    hasLevelWords: (level: number) => level === 1,
+    installLevelWords: () => {},
+    removeLevelWords: () => {},
     vocabularyCoverage: { edition: 'HSK 2.0', levels: [1, 2, 3, 4, 5, 6], complete: true, counts: { 1: 2, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 } },
     vocabularySources: {},
     extraVocabulary: [],
@@ -24,7 +29,8 @@ vi.mock('../src/data/vocabulary', () => {
     charactersOfExtraTopicWords: () => [],
   };
 });
-import { vocabulary } from '../src/data/vocabulary';
+import { catalogWords } from '../src/data/vocabulary';
+const vocabulary = catalogWords();
 
 beforeEach(() => {
   localStorage.clear();

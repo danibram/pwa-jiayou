@@ -1,8 +1,10 @@
 import { fireEvent, render, screen, within } from '@solidjs/testing-library';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 import WordRelations from '../src/components/WordRelations';
 import CharacterDetailSheet from '../src/components/CharacterDetailSheet';
-import { allWords, findWord, vocabulary, type VocabularyEntry } from '../src/data/vocabulary';
+import { allWords, findWord, type VocabularyEntry } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
+import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { characterRecord } from '../src/utils/characterSearch';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../src/utils/wordDetail';
 import { groupSenses, leadSense } from '../src/data/wordSenses';
@@ -81,6 +83,8 @@ describe('one appearance per page', () => {
 });
 
 describe('significados', () => {
+  afterEach(() => vocabularyStore.reset());
+
   it('groups uses by part of speech and opens a new group when one comes back', () => {
     expect(groupSenses([
       { pos: 'verbo', text: 'conectar' },
@@ -93,6 +97,7 @@ describe('significados', () => {
 
   it('lists every use under the card, grouped by part of speech, with its note', () => {
     const entry = vocabulary.find((row) => row.senses[0].pos === 'verbo' && row.senses.some((sense) => sense.pos === 'sustantivo') && row.senses.some((sense) => sense.note))!;
+    vocabularyStore.selectLists([`hsk-${entry.level}`]);
     render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={entry.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
     const uses = screen.getByRole('region', { name: 'Significados' });
     expect(within(uses).getByRole('group', { name: 'Verbo' })).toBeTruthy();

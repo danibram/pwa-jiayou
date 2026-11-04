@@ -1,8 +1,11 @@
 import { fireEvent, render, screen, within } from '@solidjs/testing-library';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ToneNeighbors from '../src/components/ToneNeighbors';
 import Vocabulario from '../src/pages/Vocabulario';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
+import { vocabularyStore } from '../src/stores/vocabularyStore';
+
+const ALL_HSK = ['hsk-1', 'hsk-2', 'hsk-3', 'hsk-4', 'hsk-5', 'hsk-6'];
 
 const page = (simplified: string) => {
   const word = vocabulary.find((entry) => entry.simplified === simplified)!;
@@ -10,6 +13,17 @@ const page = (simplified: string) => {
 };
 
 describe('suena parecido', () => {
+  beforeEach(() => vocabularyStore.selectLists(ALL_HSK));
+
+  it('compares only words and characters of the lists being studied', () => {
+    vocabularyStore.selectLists(['hsk-1']);
+    render(() => <ToneNeighbors character="吗" pinyin="ma" />);
+    const section = screen.getByRole('region', { name: 'Suena parecido' });
+    // 马 is HSK 3: off while only HSK 1 is studied. 妈妈 and 吗 are HSK 1.
+    expect(within(section).queryByText('马')).toBeNull();
+    expect(within(section).getByText('妈')).toBeTruthy();
+  });
+
   it('compares neutral ma with other tones in the character drawer and opens a result', () => {
     const open = vi.fn();
     render(() => <ToneNeighbors character="吗" pinyin="ma" onOpenWord={open} />);

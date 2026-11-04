@@ -4,7 +4,7 @@ import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Vocabulario from '../src/pages/Vocabulario';
 import VocabularyReview from '../src/pages/VocabularyReview';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { loadVocabularySession } from '../src/utils/vocabularySession';
 

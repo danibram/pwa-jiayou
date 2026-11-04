@@ -1,7 +1,8 @@
 import { render } from '@solidjs/testing-library';
 import { describe, expect, it, vi } from 'vitest';
 import GradeButtons from '../src/components/GradeButtons';
-import { vocabulary, type VocabularyEntry } from '../src/data/vocabulary';
+import type { VocabularyEntry } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 import { askGloss, askOrder, interleave, pickChoices } from '../src/pages/VocabularyReview';
 import { isFunctionWord } from '../src/domain/vocabulary/sessionDeck';
 

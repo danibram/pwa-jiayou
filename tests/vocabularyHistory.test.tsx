@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from '../src/App';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 import { progressStore } from '../src/stores/progressStore';
 import { discardVocabularySession, loadVocabularySession } from '../src/utils/vocabularySession';
 

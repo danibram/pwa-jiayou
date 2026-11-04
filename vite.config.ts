@@ -1,12 +1,46 @@
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 import { VitePWA } from 'vite-plugin-pwa';
-import { contentManifest } from './scripts/content-manifest.ts';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { Plugin } from 'vite';
+import { contentManifest, LEVELS, wordListPath } from './scripts/content-manifest.ts';
 import { packCacheName } from './src/domain/content/caches.ts';
 
 // Hashed from the files themselves, so a pack changed without rebuilding content.json still gets a
 // new cache. Only that pack's cache changes; the others keep what the learner already downloaded.
 const content = contentManifest(process.cwd());
+
+/** Words per HSK level, so the level pickers can say how big a list is before it is downloaded. */
+const wordCounts = Object.fromEntries([1, ...LEVELS].map((level) => {
+  const words: unknown = JSON.parse(readFileSync(join(process.cwd(), wordListPath(level)), 'utf8'));
+  return [level, Array.isArray(words) ? words.length : 0];
+}));
+
+/**
+ * HSK 2 to 6 words are not in the JavaScript. Each level's list is served at packs/hskN/words.json,
+ * inside its pack, and only downloaded when the learner activates that list.
+ */
+const levelWordFiles = (): Plugin => {
+  const wordFile = /^\/packs\/hsk(\d)\/words\.json$/;
+  return {
+    name: 'jiayou-level-words',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const level = Number(wordFile.exec((req.url ?? '').split('?')[0])?.[1]);
+        if (!LEVELS.includes(level)) return next();
+        res.setHeader('content-type', 'application/json');
+        res.end(readFileSync(join(process.cwd(), wordListPath(level))));
+      });
+    },
+    generateBundle() {
+      for (const level of LEVELS) {
+        const words = JSON.parse(readFileSync(join(process.cwd(), wordListPath(level)), 'utf8'));
+        this.emitFile({ type: 'asset', fileName: `packs/hsk${level}/words.json`, source: JSON.stringify(words) });
+      }
+    },
+  };
+};
 
 /**
  * The worker serves clips from the same per-pack cache the app saves them into. Workbox copies a
@@ -19,7 +53,7 @@ const audioRoutes = content.packs.map((pack) => ({
 }));
 
 export default defineConfig({
-  define: { __CONTENT__: JSON.stringify(content) },
+  define: { __CONTENT__: JSON.stringify(content), __WORD_COUNTS__: JSON.stringify(wordCounts) },
   build: {
     rollupOptions: {
       output: {
@@ -31,6 +65,7 @@ export default defineConfig({
   },
   plugins: [
     solid(),
+    levelWordFiles(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['*.png', '*.svg', '*.ico'],

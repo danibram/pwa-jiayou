@@ -1,6 +1,7 @@
 import { createStore } from 'solid-js/store';
-import { vocabulary, vocabularyByLevel, type VocabularyEntry } from '../data/vocabulary';
-import { DEFAULT_LIST, knownLists, listLabel, type ListId } from '../data/lists';
+import { allWords, catalogWords, levelWords, type VocabularyEntry } from '../data/vocabulary';
+import { DEFAULT_LIST, hskLevelsOf, knownLists, listLabel, type ListId } from '../data/lists';
+import type { HskLevel } from '../types';
 import { studyList, studyLists, wordsInLists } from './studyLists';
 import { dayNumber } from './characterStore';
 import { vocabularyProgressStore } from './vocabularyProgressStore';
@@ -25,6 +26,18 @@ const loadSelection = (): ListId[] => {
 const [store, setStore] = createStore<VocabularyStoreState>({
   selectedLists: loadSelection(),
 });
+
+/** The selected words and their ids, rebuilt when the selection or the words on the device change. */
+let selection: { key: string; every: VocabularyEntry[]; words: VocabularyEntry[]; byId: Map<string, VocabularyEntry> } | null = null;
+const selectedWords = () => {
+  const every = allWords();
+  const key = store.selectedLists.join('|');
+  if (!selection || selection.key !== key || selection.every !== every) {
+    const words = wordsInLists(store.selectedLists);
+    selection = { key, every, words, byId: new Map(words.map((word) => [word.id, word])) };
+  }
+  return selection;
+};
 
 const save = () => {
   try {
@@ -66,9 +79,22 @@ export const vocabularyStore = {
     return studyLists();
   },
 
-  /** The words of the checked lists, each once. */
+  /**
+   * The words of the checked lists, each once. Everything the learner sees draws from these:
+   * Hoy, Buscar, Temas, the word page and the character drawer.
+   */
   getSelectedWords(): VocabularyEntry[] {
-    return wordsInLists(store.selectedLists);
+    return selectedWords().words;
+  },
+
+  /** The HSK levels among the checked lists. Characters shown beside words come from these. */
+  studiedLevels(): HskLevel[] {
+    return hskLevelsOf(store.selectedLists);
+  },
+
+  /** A word of the checked lists by id. A word of a list that is off is not found. */
+  findSelectedWord(id: string): VocabularyEntry | undefined {
+    return selectedWords().byId.get(id);
   },
 
   /**
@@ -79,7 +105,7 @@ export const vocabularyStore = {
     const words = this.getSelectedWords();
     const learning = words.filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id));
     const fresh = words.filter((word) => vocabularyProgressStore.isNew(word.id)).slice(0, 20);
-    const list = learning.length > 0 ? learning : fresh.length > 0 ? fresh : words.length > 0 ? words : vocabularyByLevel[1].length > 0 ? vocabularyByLevel[1] : vocabulary;
+    const list = learning.length > 0 ? learning : fresh.length > 0 ? fresh : words.length > 0 ? words : levelWords(1).length > 0 ? levelWords(1) : catalogWords();
     return list[dayNumber() % list.length];
   },
 

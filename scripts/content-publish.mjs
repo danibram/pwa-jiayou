@@ -188,6 +188,12 @@ export async function promoteDraft(draft, { root = defaultRoot, notes = '', date
   await mkdir(join(root, 'content'), { recursive: true });
   await writeFile(join(root, 'content/version.json'), json(next));
   const written = [...files.map(([path]) => path), 'content/version.json'];
+  // HSK 2 to 6 words travel inside their level's pack, so a change to them gives that pack a new hash.
+  if (files.some(([path]) => path.startsWith('public/packs/') || /^src\/data\/vocabulary\/hsk[2-6]\.json$/.test(path))) {
+    const { contentManifest } = await import('./content-manifest.ts');
+    await writeFile(join(root, 'public/packs/content.json'), json(contentManifest(root)));
+    written.push('public/packs/content.json');
+  }
   const touchesCharacters = files.some(([path]) => /hsk\d\.json$/.test(path) && !path.includes('vocabulary'));
   const indexScript = join(root, 'scripts/build-search-index.mjs');
   if (touchesCharacters && existsSync(indexScript)) {

@@ -5,7 +5,7 @@ import { progressStore } from '../src/stores/progressStore';
 import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { hasStoredVocabularySession, saveVocabularySession } from '../src/utils/vocabularySession';
 import { progressReset } from '../src/utils/progressReset';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 
 const backup = (right: number) => JSON.stringify({
   version: 4,
