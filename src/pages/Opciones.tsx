@@ -3,14 +3,17 @@ import TopBar from '../components/TopBar';
 import VoicePicker from '../components/VoicePicker';
 import OfflineStatus from '../components/OfflineStatus';
 import ProgressBackup from '../components/ProgressBackup';
+import StudySettings from '../components/learning/settings/StudySettings';
+import { useLearningStore } from '../components/LearningStoreContext';
 
 interface OpcionesProps {
   onBack: () => void;
   onManageLists: () => void;
 }
 
-/** Settings: levels, voice, offline use and the progress backup. Credits live in Acerca de. */
+/** Settings: levels, study budgets, voice, offline use and the progress backup. Credits live in Acerca de. */
 const Opciones: Component<OpcionesProps> = (props) => {
+  const store = useLearningStore();
   const [scrolled, setScrolled] = createSignal(false);
   return (
     <div class="screen">
@@ -30,6 +33,10 @@ const Opciones: Component<OpcionesProps> = (props) => {
             Elegir niveles
           </button>
         </section>
+
+        <div class="animate-rise [animation-delay:90ms]">
+          <StudySettings onReset={() => store.resetLearningData()} />
+        </div>
 
         <section class="sheet mt-5 p-4 animate-rise [animation-delay:120ms]">
           <h2 class="font-display text-lg font-semibold">Voz</h2>

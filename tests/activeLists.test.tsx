@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import Vocabulario from '../src/pages/Vocabulario';
 import CharacterDetailSheet from '../src/components/CharacterDetailSheet';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
-import { topicWords } from '../src/utils/topicPlan';
 import { characterOrWordStub } from '../src/utils/wordCharacter';
 import { vocabulary } from './fixtures/levelWords';
 
@@ -51,7 +50,6 @@ describe('only the active lists', () => {
 
   it('lists only the checked levels in a topic', () => {
     vocabularyStore.selectLists(['hsk-1']);
-    expect(topicWords(['comida']).every((entry) => entry.level === 1)).toBe(true);
     page({ topic: 'comida' });
     expect(screen.queryByText(word('熬').simplified)).toBeNull();
     expect(screen.getByText('米饭')).toBeTruthy();

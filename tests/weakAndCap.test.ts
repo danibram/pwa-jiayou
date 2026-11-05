@@ -1,21 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { WORD_NEW_PER_DAY, parseProgress, progressStore } from '../src/stores/progressStore';
-import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
+import { parseProgress, progressStore } from '../src/stores/progressStore';
+
+// Word rules (weak, daily budget, Flojos) live in the learning system and its tests. These cover the
+// v4 character progress that stays until phase 5C.
 
 beforeEach(() => { localStorage.clear(); progressStore.clear(); });
 
 describe('weak items', () => {
-  it('stay weak until two Bien in a row since the last miss', () => {
-    vocabularyProgressStore.grade('w', 'again');
-    expect(vocabularyProgressStore.isWeak('w')).toBe(true);
-    vocabularyProgressStore.practice('w', 'good', false);
-    expect(vocabularyProgressStore.isWeak('w')).toBe(true);
-    vocabularyProgressStore.practice('w', 'again', false);
-    vocabularyProgressStore.practice('w', 'good', false);
-    vocabularyProgressStore.practice('w', 'good', false);
-    expect(vocabularyProgressStore.isWeak('w')).toBe(false);
-  });
-
   it('counts a character missed at first meeting', () => {
     progressStore.grade('一', 'again');
     expect(progressStore.isWeak('一')).toBe(true);
@@ -27,33 +18,10 @@ describe('weak items', () => {
   });
 });
 
-describe('daily new-item cap', () => {
-  it('shares one budget between the daily session and extra sessions', () => {
-    const words = Array.from({ length: 40 }, (_, index) => ({ id: `w${index}` }));
-    expect(vocabularyProgressStore.buildQueue(words).fresh).toHaveLength(10);
-    for (const word of words.slice(0, 15)) vocabularyProgressStore.grade(word.id, 'good');
-    expect(vocabularyProgressStore.newLeftToday()).toBe(WORD_NEW_PER_DAY - 15);
-    expect(vocabularyProgressStore.buildQueue(words, 10).fresh).toHaveLength(5);
-  });
-});
-
-describe('session checkpoint', () => {
-  it('rolls back grades, daily counts and the streak', () => {
-    const before = progressStore.checkpoint();
-    progressStore.grade('一', 'good');
-    vocabularyProgressStore.grade('w', 'again');
-    progressStore.rollback(before);
-    expect(progressStore.isNew('一')).toBe(true);
-    expect(vocabularyProgressStore.isNew('w')).toBe(true);
-    expect(progressStore.daily.reviewed).toBe(0);
-    expect(progressStore.daily.streak).toBe(0);
-  });
-});
-
 describe('activity calendar', () => {
-  it('counts answers from both kinds of session on today', () => {
+  it('counts character answers on today', () => {
     progressStore.grade('一', 'good');
-    vocabularyProgressStore.grade('w', 'good');
+    progressStore.grade('二', 'good');
     const day = new Date().toLocaleDateString('sv-SE');
     expect(progressStore.activity()[day]).toBe(2);
   });
@@ -65,26 +33,9 @@ describe('activity calendar', () => {
 });
 
 describe('flojos session recovery', () => {
-  it('takes a weak word off the list with one Bien', () => {
-    vocabularyProgressStore.grade('w', 'again');
-    expect(vocabularyProgressStore.recoverWeak('w')).toBe(true);
-    expect(vocabularyProgressStore.isWeak('w')).toBe(false);
-    expect(vocabularyProgressStore.recoverWeak('w')).toBe(false);
-  });
-
   it('takes a weak character off the list with one Bien', () => {
     progressStore.grade('一', 'again');
     expect(progressStore.recoverWeak('一')).toBe(true);
     expect(progressStore.isWeak('一')).toBe(false);
-  });
-});
-
-describe('return note', () => {
-  it('never says more come back than were missed, and names retries passed', async () => {
-    const { returnNoteText } = await import('../src/components/ScoreModal');
-    expect(returnNoteText(3, 5, 'palabra')).toBe('3 palabras falladas vuelven hoy.');
-    expect(returnNoteText(3, 1, 'palabra')).toBe('1 palabra fallada vuelve hoy. 2 palabras que fallaste y luego acertaste vuelven mañana.');
-    expect(returnNoteText(1, 0, 'carácter')).toBe('1 carácter que fallaste y luego acertaste vuelve mañana.');
-    expect(returnNoteText(0, 0, 'palabra')).toBe('A partir de mañana, según lo bien que te lo sabías.');
   });
 });

@@ -4,7 +4,6 @@ import { DEFAULT_LIST, hskLevelsOf, knownLists, listLabel, type ListId } from '.
 import type { HskLevel } from '../types';
 import { studyList, studyLists, wordsInLists } from './studyLists';
 import { dayNumber } from './characterStore';
-import { vocabularyProgressStore } from './vocabularyProgressStore';
 import { isRecord } from '../utils/parse';
 import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
@@ -99,12 +98,13 @@ export const vocabularyStore = {
 
   /**
    * From the lists being studied, seeded by the date: a word being learned, so the tile is a nudge
-   * to recall it, or one of the next new words when nothing is in progress yet.
+   * to recall it, or one of the next new words when nothing is in progress yet. `status` comes from
+   * the learning store; without it every word counts as new.
    */
-  getDailyWord(): VocabularyEntry {
+  getDailyWord(status: (wordId: string) => 'new' | 'learning' | 'mastered' = () => 'new'): VocabularyEntry {
     const words = this.getSelectedWords();
-    const learning = words.filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id));
-    const fresh = words.filter((word) => vocabularyProgressStore.isNew(word.id)).slice(0, 20);
+    const learning = words.filter((word) => status(word.id) === 'learning');
+    const fresh = words.filter((word) => status(word.id) === 'new').slice(0, 20);
     const list = learning.length > 0 ? learning : fresh.length > 0 ? fresh : words.length > 0 ? words : levelWords(1).length > 0 ? levelWords(1) : catalogWords();
     return list[dayNumber() % list.length];
   },

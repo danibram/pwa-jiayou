@@ -26,7 +26,9 @@ import {
   type ValidEvaluation,
   type VoidableEventType,
 } from '../../src/domain/learning/types';
-import { PROMPTS, type Prompt } from '../../src/utils/vocabularySession';
+// The six prompts of the retired review screen (`PROMPTS` in the removed `src/utils/vocabularySession.ts`).
+const PROMPTS = ['meaning', 'reverse', 'listen', 'pick', 'hear', 'recognize'] as const;
+type Prompt = (typeof PROMPTS)[number];
 
 type ScheduledReview = Extract<LearningEvent, { type: 'scheduled-review' }>;
 type Practice = Extract<LearningEvent, { type: 'practice' }>;

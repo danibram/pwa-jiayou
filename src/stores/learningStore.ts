@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js';
+import { topicById } from '../data/topics';
 import { allWords, findWord } from '../data/vocabulary';
 import { contentReferenceForCharacter, contentReferenceForWord } from '../domain/learning/content/revision';
 import type { ItemContent, WordEntry } from '../domain/learning/exercises';
@@ -16,7 +17,16 @@ import {
   type LocalDayRule,
   type Scheduler,
 } from '../domain/learning/scheduler';
-import { DEFAULT_SESSION_SETTINGS, itemKind, type ItemKind, type PoolItem, type SessionSettings } from '../domain/learning/sessions';
+import {
+  buildSession,
+  DEFAULT_SESSION_SETTINGS,
+  itemKind,
+  type ItemKind,
+  type PoolItem,
+  type SessionPlan,
+  type SessionScope,
+  type SessionSettings,
+} from '../domain/learning/sessions';
 import type {
   ContentReference,
   ItemId,
@@ -24,6 +34,7 @@ import type {
   LearningEvent,
   SchedulerConfig,
   SchedulerState,
+  SessionMode,
   SessionState,
   Timestamp,
 } from '../domain/learning/types';
@@ -45,6 +56,7 @@ import {
 } from '../persistence/learning';
 import { deviceIdIn } from '../persistence/deviceId';
 import { storage } from '../persistence/keyValue';
+import { learningSettings } from '../persistence/learningSettings';
 import { canSpeak } from '../utils/speech';
 import { orderForLearning } from '../utils/wordOrder';
 import { characterStore } from './characterStore';
@@ -81,7 +93,8 @@ export interface LearningStoreOptions {
   clock?: () => Timestamp;
   dayRule?: LocalDayRule;
   newId?: () => string;
-  settings?: SessionSettings;
+  /** Read at each use, so a function lets changed study settings reach the next session. */
+  settings?: SessionSettings | (() => SessionSettings);
   /** Whether speech synthesis can speak. Defaults to `canSpeak`. */
   speechAvailable?: () => boolean;
   /** The current content of an item, or null when its pack is not installed or it is retired. */
@@ -134,11 +147,19 @@ const defaultResolve = (itemId: ItemId): ItemContent | null => {
   return word ? { kind: 'word', word } : null;
 };
 
+/** A word's topic tags plus the theme of each subtopic, so a theme scope reaches its subtopics' words. */
+const withThemes = (topicIds: readonly string[]): string[] => [
+  ...new Set(topicIds.flatMap((id) => {
+    const parent = topicById(id)?.parentId;
+    return parent ? [id, parent] : [id];
+  })),
+];
+
 const defaultPool = (resolve: (itemId: ItemId) => ItemContent | null) => (): PoolItem[] => {
   const words = orderForLearning(vocabularyStore.getSelectedWords(), characterStore.state.characters.map((row) => row.character));
   return words.map((word) => {
     const itemId = wordItemId(word.id);
-    return { itemId, available: resolve(itemId) !== null, topicIds: word.topicIds };
+    return { itemId, available: resolve(itemId) !== null, topicIds: withThemes(word.topicIds) };
   });
 };
 
@@ -163,7 +184,8 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
   const clock = options.clock ?? (() => Date.now());
   const dayRule = options.dayRule ?? deviceLocalDayRule;
   const newId = options.newId ?? randomId;
-  const settings = options.settings ?? DEFAULT_SESSION_SETTINGS;
+  const settingsOption = options.settings ?? DEFAULT_SESSION_SETTINGS;
+  const currentSettings = (): SessionSettings => (typeof settingsOption === 'function' ? settingsOption() : settingsOption);
   const speechAvailable = options.speechAvailable ?? canSpeak;
   const resolveContent = options.resolveContent ?? defaultResolve;
   const pool = options.pool ?? defaultPool(resolveContent);
@@ -263,7 +285,9 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       return scheduler;
     },
     dayRule,
-    settings,
+    get settings() {
+      return currentSettings();
+    },
     clock,
     newId,
     speechAvailable,
@@ -378,6 +402,7 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       const today = dayRule.localDay(clock());
       let taught = 0;
       for (const itemId of byItem.keys()) if (itemKind(itemId) === kind && firstTeachingDay(itemId) === today) taught += 1;
+      const settings = currentSettings();
       const cap = mode === 'today' ? Math.min(settings.todayNewPerDay[kind], settings.newPerDay[kind]) : settings.newPerDay[kind];
       return Math.max(0, cap - taught);
     },
@@ -392,6 +417,58 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
     tomorrowLoadFull(kind: ItemKind = 'word-meaning'): boolean {
       version();
       return isTomorrowLoadFull(statesOf(kindPool(kind)), clock());
+    },
+
+    /** Whether Hoy shows the item as pending today. */
+    isPendingToday(itemId: ItemId): boolean {
+      version();
+      const state = states.get(itemId);
+      return state !== undefined && isPendingToday(state, clock(), dayRule);
+    },
+
+    /**
+     * The plan a session of this mode and scope would start with now, without saving anything. Screens
+     * read their counts from it so they say what the session will do. Null before `init()`.
+     */
+    previewPlan(mode: SessionMode, scope: SessionScope = { kind: 'all' }): SessionPlan | null {
+      version();
+      if (!ready()) return null;
+      return buildSession({ mode, scope, pool: pool(), states, events, now: clock(), dayRule, settings: currentSettings() });
+    },
+
+    /** The whole log, as loaded and written so far. */
+    events(): readonly LearningEvent[] {
+      version();
+      return events;
+    },
+
+    /** Exposures and attempts per local day, voided ones left out, for the activity calendar. */
+    activityByDay(): Record<string, number> {
+      version();
+      const voided = new Set(events.flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
+      const days: Record<string, number> = {};
+      for (const event of events) {
+        if (event.type === 'attempt-voided' || voided.has(event.id)) continue;
+        days[event.localDay] = (days[event.localDay] ?? 0) + 1;
+      }
+      return days;
+    },
+
+    /** The stored active session, or null. Home offers to continue it. */
+    async activeSession(): Promise<SessionState | null> {
+      const active = await init();
+      const session = await active.loadSession();
+      return session && session.status === 'active' ? session : null;
+    },
+
+    /** The session settings in force now. */
+    settings(): SessionSettings {
+      return currentSettings();
+    },
+
+    /** The store's clock. */
+    now(): Timestamp {
+      return clock();
     },
 
     /** Every exposure and attempt of the item in replay order, each marked when a void cancels it. */
@@ -459,6 +536,6 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
 export type LearningStore = ReturnType<typeof createLearningStore>;
 
 /** The app's instance. Call `learningStore.init()` from an async startup path. */
-export const learningStore = createLearningStore();
+export const learningStore = createLearningStore({ settings: learningSettings.sessionSettings });
 
 export { isLearningStorageError };

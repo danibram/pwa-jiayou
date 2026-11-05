@@ -13,8 +13,6 @@ import {
   type ExerciseSelection,
   type WordEntry,
 } from '../../../src/domain/learning/exercises';
-import { isFunctionWord as legacyIsFunctionWord } from '../../../src/domain/vocabulary/sessionDeck';
-import type { VocabularyEntry } from '../../../src/data/vocabulary';
 import type { AttemptAction, Exercise, ItemId } from '../../../src/domain/learning/types';
 import { ambiguityCases } from '../fixtures/contentCases';
 import { SEEDS, card, context, hsk1Characters, settled, vocabulary, word, wordItem } from './fixtures';
@@ -85,12 +83,6 @@ describe('scheduled and already-known cards on words', () => {
 });
 
 describe('function words (P7)', () => {
-  it('matches the isFunctionWord rule of the current session deck on the whole catalog', () => {
-    for (const entry of vocabulary) {
-      expect(isFunctionWord(entry), entry.id).toBe(legacyIsFunctionWord(entry as unknown as VocabularyEntry));
-    }
-  });
-
   it('asks for the function and reveals the editorial gloss', () => {
     for (const id of ['word-7684-de5', 'word-4e2a-ge4', 'word-5417-ma5']) {
       const entry = word(id);

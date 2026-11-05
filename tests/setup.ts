@@ -1,4 +1,6 @@
 import '@testing-library/jest-dom';
+import 'fake-indexeddb/auto';
+import { IDBFactory } from 'fake-indexeddb';
 import { readFileSync } from 'node:fs';
 import { beforeEach } from 'vitest';
 
@@ -70,6 +72,8 @@ if (typeof HTMLMediaElement !== 'undefined') {
 beforeEach(() => {
   localStorage.clear();
   history.replaceState(null, '', '/');
+  // An empty IndexedDB per test for anything that opens the app's own learning store.
+  globalThis.indexedDB = new IDBFactory();
 });
 
 // jsdom's fetch has no base URL, so stroke data under /strokes/ is read from public/ instead.

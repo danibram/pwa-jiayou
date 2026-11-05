@@ -63,17 +63,6 @@ describe('activity per device', () => {
     expect(JSON.parse(repo.read(KEYS.progress)!).activity).toEqual({ phone: { '2026-11-01': 1 } });
   });
 
-  it('undoes a discarded session in this device log only', () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(today);
-    const store = storeWith({ phone: { '2026-11-01': 1 }, laptop: { '2026-11-01': 3 } });
-    const session = store.checkpoint();
-    store.grade('一', 'good');
-    expect(store.activity()['2026-11-01']).toBe(5);
-    store.rollback(session);
-    expect(store.activity()).toEqual({ '2026-11-01': 4 });
-  });
-
   it('sums nothing to nothing', () => {
     expect(sumActivity({})).toEqual({});
   });

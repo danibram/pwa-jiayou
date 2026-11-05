@@ -194,7 +194,10 @@ const exercise = object(
     answer: nullable(revealedAnswer),
     rubric: object({ id, revision: id }),
   },
-  { stage: oneOf(['watch', 'trace', 'memory'] as const) },
+  {
+    stage: oneOf(['watch', 'trace', 'memory'] as const),
+    accepted: array(object({ id, simplified: string, traditional: string, pinyin: string, glosses: array(string) })),
+  },
 );
 
 const action = variant<unknown>('type', {

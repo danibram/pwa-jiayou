@@ -1,3 +1,4 @@
+import { regradeTypedAnswers } from '../production/grade';
 import { SESSION_MODE_RATES, type LearningEvent, type ValidEvaluation } from '../types';
 import { alreadyKnownHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules';
 import { SUPPORTED_EVALUATOR_VERSIONS } from './version';
@@ -45,6 +46,7 @@ const isValidEvaluation = (evaluation: { outcome: string } | null | undefined): 
  * depends on the item's history, which the rebuild replays.
  *
  * Event data from storage or a backup is untrusted, so the checks do not rely on the static types.
+ * Typed answers are graded again from their text, as `evaluateAttempt` does, before any check.
  */
 export const validateAttemptEvent = (event: LearningEvent): AttemptEventError[] => {
   if (event.type === 'exposure' || event.type === 'attempt-voided') return [];
@@ -66,12 +68,13 @@ export const validateAttemptEvent = (event: LearningEvent): AttemptEventError[] 
   for (const evidence of event.evidence) {
     if (!isValidEvaluation(evidence.evaluation)) fail('invalid-evidence', `Evidence ${evidence.id} has no valid evaluation`);
   }
-  if (findInvalid(event.actions)) {
+  const actions = regradeTypedAnswers(event.exercise, event.actions);
+  if (findInvalid(actions)) {
     fail('invalid-action-in-valid-event', `A ${event.type} event cannot contain an invalid answer`);
     return errors;
   }
 
-  const reading = readAttempt(event.exercise, event.actions);
+  const reading = readAttempt(event.exercise, actions);
   const outcome = firstOutcome(event.exercise, reading);
   if (!outcome) {
     fail('incomplete-actions', 'The actions decide no result');

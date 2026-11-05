@@ -1,9 +1,9 @@
-import { fireEvent, render, screen } from '@solidjs/testing-library';
+import { fireEvent, screen, waitFor } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from '../src/App';
 import { vocabulary } from './fixtures/levelWords';
 import { progressStore } from '../src/stores/progressStore';
-import { discardVocabularySession, loadVocabularySession } from '../src/utils/vocabularySession';
+import { renderWithStore } from './fixtures/learningStore';
 
 beforeEach(() => {
   localStorage.clear();
@@ -12,35 +12,31 @@ beforeEach(() => {
 });
 
 describe('vocabulary browser history', () => {
-  it('resumes a paused word review but never recreates a discarded review from history', () => {
-    render(() => <App />);
+  it('goes back to Home and forward into the same card of a word review', async () => {
+    const { store } = renderWithStore(() => <App />);
     const home = history.state;
-    fireEvent.click(screen.getByRole('button', { name: 'Aprender 10 palabras' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Aprender 10 palabras' }));
     const review = history.state;
-    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
-    const saved = loadVocabularySession(vocabulary);
-    expect(saved?.position).toBe(1);
+    fireEvent.click(await screen.findByRole('button', { name: 'Continuar' }));
+    await waitFor(() => expect(screen.getByText('Quedan 19')).toBeTruthy());
+    const second = (await store.activeSession())!;
+    const shown = second.queue[second.position].exposure!.answer.characters;
 
     window.dispatchEvent(new PopStateEvent('popstate', { state: home }));
+    expect(await screen.findByRole('button', { name: /^Continuar sesión · Hoy/ })).toBeInTheDocument();
     window.dispatchEvent(new PopStateEvent('popstate', { state: review }));
-    // New words come in teaching order, so read the second card from the saved deck.
-    expect(screen.getAllByText(saved!.deck[1].entry.simplified)[0]).toBeInTheDocument();
-    expect(loadVocabularySession(vocabulary)?.position).toBe(1);
-
-    discardVocabularySession();
-    window.dispatchEvent(new PopStateEvent('popstate', { state: home }));
-    window.dispatchEvent(new PopStateEvent('popstate', { state: review }));
-    expect(screen.getByRole('button', { name: /^Buscar/ })).toBeInTheDocument();
-    expect(loadVocabularySession(vocabulary)).toBeNull();
+    expect(await screen.findByText('Quedan 19')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: shown })).toBeInTheDocument();
+    expect(store.events()).toHaveLength(1);
   });
 
-  it('returns an expired single-word practice history entry to its word detail', () => {
-    render(() => <App />);
+  it('opens a single-word history entry as a session for that word', async () => {
+    renderWithStore(() => <App />);
+    await screen.findByRole('button', { name: /^Buscar/ });
     window.dispatchEvent(new PopStateEvent('popstate', {
       state: { jiayou: true, screen: { page: 'vocabulary-review', resume: true, practiceId: vocabulary[0].id } },
     }));
-    expect(screen.getAllByText(vocabulary[0].simplified)[0]).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Aprender palabra' })).toBeInTheDocument();
-    expect(history.state.screen.page).toBe('vocabulario');
+    expect(await screen.findByRole('img', { name: vocabulary[0].simplified })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ya la sé' })).toBeInTheDocument();
   });
 });

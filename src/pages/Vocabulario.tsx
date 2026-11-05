@@ -21,14 +21,14 @@ import WordRelations from '../components/WordRelations';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
 import { progressStore as charProgress } from '../stores/progressStore';
-import { topicPlan } from '../utils/topicPlan';
 import { charactersOfExtraTopicWords, extraVocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
 import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } from '../data/topics';
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
-import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { canLearnNew, WORD_NEW_PER_DAY } from '../stores/progressStore';
+import { wordItemId } from '../stores/learningStore';
+import { useLearningStore } from '../components/LearningStoreContext';
+import { studyStatusOf } from '../utils/progressSummary';
 
 export interface VocabularyBrowseState {
   query: string;
@@ -78,6 +78,9 @@ const wordRow = (word: VocabularyEntry): Row => {
 const SEARCH_DEBOUNCE_MS = 180;
 
 const Vocabulario: Component<Props> = (props) => {
+  const store = useLearningStore();
+  const isNew = (id: string) => store.status(wordItemId(id)) === 'new';
+  const isPending = (id: string) => store.isPendingToday(wordItemId(id));
   const [audioError, setAudioError] = createSignal(false);
   /** The character opened from this word's tiles, shown in the same detail as search. */
   const [charOpen, setCharOpen] = createSignal<string>();
@@ -204,23 +207,32 @@ const Vocabulario: Component<Props> = (props) => {
     for (const word of wordsForTopics()) {
       if (!inTopics(word, ids)) continue;
       counts.total++;
-      if (progress.isNew(word.id)) continue;
-      if (progress.isMastered(word.id)) counts.mastered++;
-      else counts.learning++;
+      const status = statusOf(word.id);
+      if (status === 'mastered') counts.mastered++;
+      else if (status === 'learning') counts.learning++;
     }
     return counts;
   };
   const topicCounts = (topicId: string) => countsFor(topicScope(topicId));
   /** What the session will do today, after the daily cap, said before the tap. */
-  const plan = createMemo(() => topicPlan(chosenTopics()));
+  const plan = createMemo(() => {
+    const preview = store.previewPlan('topic', { kind: 'topics', topicIds: chosenTopics() });
+    return {
+      fresh: preview?.counts.newItems ?? 0,
+      review: (preview?.counts.scheduled ?? 0) + (preview?.counts.practice ?? 0),
+      capped: (preview?.leftOutCounts['new-budget-day'] ?? 0) > 0,
+      waiting: (preview?.leftOutCounts['pending-elsewhere'] ?? 0) > 0,
+    };
+  });
   const studyLabel = () => {
     const { fresh, review } = plan();
     if (fresh === 0) return `Repasar ${review} de este tema`;
     const nuevas = fresh === 1 ? '1 nueva' : `${fresh} nuevas`;
     return review > 0 ? `Estudiar ${nuevas} + ${review} ${review === 1 ? 'repaso' : 'repasos'}` : `Estudiar ${nuevas}`;
   };
-  const statusOf = (id: string): StudyStatus =>
-    progress.isNew(id) ? 'new' : progress.isMastered(id) ? 'mastered' : 'learning';
+  const statusOf = (id: string): StudyStatus => studyStatusOf(store.status(wordItemId(id)));
+  const newPerDay = () => store.settings().newPerDay['word-meaning'];
+  const canLearnNew = () => store.newLeftToday('other') > 0;
   const topicTitle = (id: string) => topicById(id)?.title ?? id;
   /** Subtopic → parent theme; theme/tag → Temas list. */
   const back = () => {
@@ -409,7 +421,7 @@ const Vocabulario: Component<Props> = (props) => {
               when={plan().fresh + plan().review > 0}
               fallback={
                 <div class="mt-3 flex h-14 w-full shrink-0 items-center justify-center rounded-full border border-line bg-surface text-[0.9375rem] text-ink-soft" role="status">
-                  Nuevas mañana
+                  {plan().waiting ? 'Primero, los repasos de Hoy' : 'Nuevas mañana'}
                 </div>
               }
             >
@@ -434,7 +446,7 @@ const Vocabulario: Component<Props> = (props) => {
           <div class="min-h-0 flex-1 overflow-y-auto pb-4 pt-2 animate-rise [animation-delay:60ms]">
             <div class="sheet flex flex-col items-center px-5 py-4 text-center">
               <div class="grid w-full grid-cols-[2.75rem_1fr_2.75rem] items-center">
-                <span class="justify-self-start"><StatusSeal state={progress.isNew(word().id) ? 'new' : progress.isDue(word().id) ? 'due' : statusOf(word().id)} /></span>
+                <span class="justify-self-start"><StatusSeal state={isNew(word().id) ? 'new' : isPending(word().id) ? 'due' : statusOf(word().id)} /></span>
                 <p class="text-sm text-ink-soft">{word().level ? `HSK ${word().level}` : 'Extra'}</p>
                 <SpeakButton
                   word
@@ -493,16 +505,16 @@ const Vocabulario: Component<Props> = (props) => {
               <div class="flex items-center gap-2">
                 {/* Past today's limit a new word is still one tap away, but it reads as the exception it is. */}
                 <Show
-                  when={progress.isNew(word().id) && !canLearnNew('word')}
-                  fallback={<button class="btn-ink min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>{progress.isNew(word().id) ? 'Aprender palabra' : progress.isDue(word().id) ? 'Repasar palabra' : 'Practicar palabra'}</button>}
+                  when={isNew(word().id) && !canLearnNew()}
+                  fallback={<button class="btn-ink min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>{isNew(word().id) ? 'Aprender palabra' : isPending(word().id) ? 'Repasar palabra' : 'Practicar palabra'}</button>}
                 >
                   <button class="btn-quiet min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>Aprender igualmente</button>
                 </Show>
               </div>
-              <Show when={progress.isNew(word().id) && !canLearnNew('word')}>
-                <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {WORD_NEW_PER_DAY} palabras nuevas de hoy. Esta iría por encima del límite.</p>
+              <Show when={isNew(word().id) && !canLearnNew()}>
+                <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {newPerDay()} palabras nuevas de hoy. Esta iría por encima del límite.</p>
               </Show>
-              <Show when={!progress.isNew(word().id) && !progress.isDue(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
+              <Show when={!isNew(word().id) && !isPending(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
             </div>
             <Show when={vocabularyExample(word().simplified, word().example)}>
               {(example) => (

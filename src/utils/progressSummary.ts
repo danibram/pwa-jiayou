@@ -1,11 +1,13 @@
-import { isWeakProgress, type CharProgress } from '../stores/progressStore';
+import { addLocalDays } from '../domain/learning/scheduler';
+import type { ItemId, LocalDay } from '../domain/learning/types';
+import type { ItemStatus, LearningStore } from '../stores/learningStore';
 
 export interface ProgressSummary {
   total: number;
   fresh: number;
   learning: number;
   mastered: number;
-  /** Missed at some point and not yet answered Bien twice in a row since. */
+  /** A scheduled Again in the last 30 days not yet followed by two passes. */
   weak: number;
   /** Comes due later today, not counting what is due now. */
   laterToday: number;
@@ -17,13 +19,6 @@ export interface ProgressSummary {
   metElsewhere: number;
 }
 
-interface ProgressReader {
-  get(key: string): CharProgress | undefined;
-  isNew(key: string): boolean;
-  isDue(key: string, now?: number): boolean;
-  isMastered(key: string): boolean;
-}
-
 const endOfDay = (now: number, days: number) => {
   const end = new Date(now);
   end.setDate(end.getDate() + days);
@@ -31,33 +26,41 @@ const endOfDay = (now: number, days: number) => {
   return end.getTime();
 };
 
-export const summarizeProgress = (
-  keys: string[],
-  store: ProgressReader,
-  now = Date.now(),
-  metElsewhere: (key: string) => boolean = () => false,
-): ProgressSummary => {
+/** Noon of a local day, so a weekday label never slips across midnight. */
+const noonOf = (day: LocalDay) => new Date(`${day}T12:00:00`).getTime();
+
+/**
+ * The Home bar and the next-review line for these items, from the learning store. Weak items also
+ * count as learning; a word taught today and waiting for its first rating counts for the day it
+ * becomes eligible.
+ */
+export const summarizeLearning = (itemIds: readonly ItemId[], store: LearningStore, now = store.now()): ProgressSummary => {
   const endToday = endOfDay(now, 0);
   const endTomorrow = endOfDay(now, 1);
-  const summary: ProgressSummary = { total: keys.length, fresh: 0, learning: 0, mastered: 0, weak: 0, laterToday: 0, tomorrow: 0, nextDay: null, metElsewhere: 0 };
+  const today = new Date(now).toLocaleDateString('sv-SE') as LocalDay;
+  const tomorrowDay = addLocalDays(today, 1);
+  const summary: ProgressSummary = { total: itemIds.length, fresh: 0, learning: 0, mastered: 0, weak: 0, laterToday: 0, tomorrow: 0, nextDay: null, metElsewhere: 0 };
   const later: number[] = [];
-  for (const key of keys) {
-    if (store.isNew(key)) {
-      if (metElsewhere(key)) {
-        summary.learning++;
-        summary.metElsewhere++;
-      } else summary.fresh++;
+  for (const itemId of itemIds) {
+    const status = store.status(itemId);
+    if (status === 'new') {
+      summary.fresh++;
       continue;
     }
-    if (store.isMastered(key)) summary.mastered++;
+    if (status === 'mastered') summary.mastered++;
     else summary.learning++;
-    const p = store.get(key);
-    if (!p) continue;
-    if (isWeakProgress(p)) summary.weak++;
-    if (store.isDue(key, now)) continue;
-    if (p.due <= endToday) summary.laterToday++;
-    else if (p.due <= endTomorrow) summary.tomorrow++;
-    else later.push(p.due);
+    if (status === 'weak') summary.weak++;
+    if (store.isPendingToday(itemId)) continue;
+    const state = store.state(itemId);
+    if (!state) continue;
+    if (state.state === 'new') {
+      if (state.eligibleFrom === tomorrowDay) summary.tomorrow++;
+      else if (state.eligibleFrom !== null && state.eligibleFrom > tomorrowDay) later.push(noonOf(state.eligibleFrom));
+      continue;
+    }
+    if (state.dueAt <= endToday) summary.laterToday++;
+    else if (state.dueAt <= endTomorrow) summary.tomorrow++;
+    else later.push(state.dueAt);
   }
   if (summary.laterToday === 0 && summary.tomorrow === 0 && later.length > 0) {
     const first = Math.min(...later);
@@ -66,6 +69,26 @@ export const summarizeProgress = (
   }
   return summary;
 };
+
+/**
+ * Reviews waiting by the end of tomorrow: rated items due by then, and words taught and practised
+ * today, whose first rating comes tomorrow. What a session summary calls "Mañana".
+ */
+export const dueByEndOfTomorrow = (itemIds: readonly ItemId[], store: LearningStore, now = store.now()): number => {
+  const end = endOfDay(now, 1);
+  const tomorrowDay = addLocalDays(new Date(now).toLocaleDateString('sv-SE') as LocalDay, 1);
+  let count = 0;
+  for (const itemId of itemIds) {
+    const state = store.state(itemId);
+    if (!state) continue;
+    if (state.state === 'new' ? state.eligibleFrom !== null && state.eligibleFrom <= tomorrowDay : state.dueAt <= end) count++;
+  }
+  return count;
+};
+
+/** The three statuses Home and the word list show: weak and review words are still learning. */
+export const studyStatusOf = (status: ItemStatus): 'new' | 'learning' | 'mastered' =>
+  status === 'new' ? 'new' : status === 'mastered' ? 'mastered' : 'learning';
 
 const WEEKDAYS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 

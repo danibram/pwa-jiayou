@@ -1,7 +1,12 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { deviceLocalDayRule } from '../src/domain/learning/scheduler';
 import { activityStreak, progressStore } from '../src/stores/progressStore';
-import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
-import { nextReviewsLabel, summarizeProgress, type ProgressSummary } from '../src/utils/progressSummary';
+import { nextReviewsLabel, summarizeLearning, type ProgressSummary } from '../src/utils/progressSummary';
+import { mergeActivity } from '../src/utils/wordSessions';
+import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from './learning/stores/fixtures';
+
+let env: Env | undefined;
+afterEach(() => env?.closeAll());
 
 const day = (offset: number) => {
   const date = new Date(2026, 10, 2, 12);
@@ -24,31 +29,30 @@ describe('the streak', () => {
 
   it('is one on day one after a word session and a character session', () => {
     progressStore.clear();
-    vocabularyProgressStore.introduce('w1');
-    vocabularyProgressStore.grade('w1', 'good');
     progressStore.introduce('一', { free: true });
     progressStore.grade('二', 'good', { free: true });
-    expect(progressStore.daily.streak).toBe(1);
-    expect(vocabularyProgressStore.daily.streak).toBe(1);
+    const today = new Date().toLocaleDateString('sv-SE');
+    expect(activityStreak(mergeActivity(progressStore.activity(), { [today]: 20 }))).toBe(1);
+    progressStore.clear();
   });
 });
 
-describe('a word missed before its first graded answer', () => {
-  beforeEach(() => progressStore.clear());
+describe('Home counts from the learning log', () => {
+  it('counts taught words for tomorrow, then a missed review as weak', async () => {
+    env = environment();
+    const store = env.store({ dayRule: deviceLocalDayRule });
+    const items = POOL_WORDS.map(itemOf);
+    await finish(await env.session(store, { mode: 'today' }));
+    const day0 = summarizeLearning(items, store);
+    expect(day0).toMatchObject({ total: 12, fresh: 2, learning: 10, mastered: 0, weak: 0, tomorrow: 10 });
+    expect(nextReviewsLabel(day0, store.now())).toBe('Mañana: 10 repasos');
 
-  it('shows as flojo on Home even when its recall is right', () => {
-    vocabularyProgressStore.practice('w2', 'again', false);
-    vocabularyProgressStore.grade('w2', 'good');
-    expect(vocabularyProgressStore.isWeak('w2')).toBe(true);
-    expect(summarizeProgress(['w2'], vocabularyProgressStore).weak).toBe(1);
-  });
-
-  it('leaves no trace after a discard', () => {
-    const checkpoint = progressStore.checkpoint();
-    vocabularyProgressStore.practice('w3', 'again', false);
-    progressStore.rollback(checkpoint);
-    vocabularyProgressStore.grade('w3', 'good');
-    expect(vocabularyProgressStore.isWeak('w3')).toBe(false);
+    env.clock.advance(DAY);
+    await finish(await env.session(store, { mode: 'today' }), (session) =>
+      session.view.selection?.itemId === items[0] ? 'wrong' : 'right');
+    const day1 = summarizeLearning(items, store);
+    expect(day1.weak).toBe(1);
+    expect(store.status(items[0])).toBe('weak');
   });
 });
 
@@ -62,17 +66,5 @@ describe('when the next reviews come', () => {
     const thursday = new Date(2026, 10, 5, 9).getTime();
     expect(nextReviewsLabel({ ...base, nextDay: { date: thursday, count: 4 } }, now)).toBe('El jueves: 4 repasos');
     expect(nextReviewsLabel(base)).toBe('');
-  });
-
-  it('counts a card due this evening as due from the morning, not later today or tomorrow', () => {
-    progressStore.clear();
-    vocabularyProgressStore.introduce('w4');
-    const p = vocabularyProgressStore.get('w4')!;
-    const due = new Date(p.due);
-    const morning = new Date(due.getFullYear(), due.getMonth(), due.getDate(), 0, 30).getTime();
-    expect(vocabularyProgressStore.isDue('w4', morning)).toBe(true);
-    const summary = summarizeProgress(['w4'], vocabularyProgressStore, morning);
-    expect(summary.laterToday).toBe(0);
-    expect(summary.tomorrow).toBe(0);
   });
 });

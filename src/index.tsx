@@ -8,6 +8,7 @@ import { OfflineDownloadNotice } from './components/OfflineStatus';
 import { initTheme } from './utils/theme';
 import { initAnalytics } from './analytics';
 import { loadSelectedWords } from './utils/levelPacks';
+import { learningStore } from './stores/learningStore';
 
 initAnalytics();
 initTheme();
@@ -18,6 +19,11 @@ document.documentElement.addEventListener('pointerdown', () => {
 document.documentElement.addEventListener('keydown', (event) => {
   if (event.key === 'Tab') delete document.documentElement.dataset.pointer;
 });
+
+// The learning log opens in the background. No top-level await: the FSRS-7 model loads with a
+// dynamic import that imports this entry chunk back, so awaiting here would never settle. Word
+// screens wait for `learningStore.ready()` and show a retry if IndexedDB fails.
+void learningStore.init().catch(() => {});
 
 const root = document.getElementById('root');
 

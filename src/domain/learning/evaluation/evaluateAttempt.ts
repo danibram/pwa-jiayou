@@ -1,4 +1,5 @@
 import { observeAttempt } from '../evidence/observe';
+import { regradeTypedAnswers } from '../production/grade';
 import { SESSION_MODE_RATES } from '../types';
 import {
   IncompleteAttemptError,
@@ -20,14 +21,18 @@ import { evaluatorVersion } from './version';
  * check or an item the scheduler does not find eligible make it `practice`; anything else is a
  * `scheduled-review` whose rating comes from the actions. Response times never count.
  *
+ * Typed answers on automatic free-recall exercises are graded again from their text with
+ * `regradeTypedAnswers`; the evaluation the screen recorded does not count.
+ *
  * Throws `IncompleteAttemptError` when a valid attempt has no action that decides its result. That
  * is a session bug, and calling it invalid would hide it.
  */
 export const evaluateAttempt = (
-  attempt: AttemptInput,
+  submitted: AttemptInput,
   exercise: EvaluableExercise,
   context: EvaluationContext,
 ): EvaluationResult => {
+  const attempt: AttemptInput = { ...submitted, actions: regradeTypedAnswers(exercise, submitted.actions) };
   const invalid = context.invalidation ?? findInvalid(attempt.actions);
   if (invalid) return { kind: 'invalid-attempt', evaluation: invalid, evidence: [], evaluatorVersion };
 

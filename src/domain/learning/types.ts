@@ -139,6 +139,18 @@ export interface RevealedAnswer {
   meaning: string;
 }
 
+/** One entry a typed answer may name, copied onto the exercise when it is built. */
+export interface AcceptedAnswer {
+  /** The entry's content id. */
+  id: string;
+  simplified: string;
+  traditional: string;
+  /** The catalog reading. */
+  pinyin: string;
+  /** Every sense text, in catalog order. */
+  glosses: readonly string[];
+}
+
 export interface Exercise {
   id: string;
   skill: Skill;
@@ -155,6 +167,8 @@ export interface Exercise {
   answer: RevealedAnswer | null;
   /** Immutable reference to the accepted answers or assessment rubric. */
   rubric: { id: string; revision: string };
+  /** Typed-answer exercises only: every entry the answer may name. Grading reads only this list. */
+  accepted?: readonly AcceptedAnswer[];
 }
 
 /** A teaching card or an "already known" claim: shown, not answered. */

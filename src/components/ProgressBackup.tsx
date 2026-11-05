@@ -1,13 +1,59 @@
 import { createSignal, Show } from 'solid-js';
-import { parseProgress, progressStore } from '../stores/progressStore';
-import { notifyProgressReset } from '../utils/progressReset';
-import { discardAllVocabularySessions } from '../utils/vocabularySession';
+import {
+  legacyCharactersToProgressFile,
+  parseLegacyProgressFile,
+  parseUserBackup,
+  serializeCombinedBackup,
+} from '../domain/learning/backup';
+import { progressStore } from '../stores/progressStore';
+import type { LearningStore } from '../stores/learningStore';
+import LearningBackup, { type BackupWriteResult } from './learning/backup/LearningBackup';
+import { useLearningStore } from './LearningStoreContext';
 
-/** The progress file. Files from before Extra may carry a `myWords` list, which import ignores. */
-const backupFile = () => progressStore.exportBackup();
+/**
+ * The backup file until phase 5C: the learning log for words, and the v4 records for characters,
+ * which still live in `progressStore`.
+ */
+export const exportCombinedBackup = async (store: LearningStore): Promise<string> => {
+  const legacy = parseLegacyProgressFile(progressStore.exportBackup());
+  if (!legacy.ok) throw new Error('The character progress could not be read');
+  return serializeCombinedBackup({ learning: await store.exportBackup(), legacyCharacters: legacy.value.legacyCharacters });
+};
 
-const downloadBackup = () => {
-  const url = URL.createObjectURL(new Blob([backupFile()], { type: 'application/json' }));
+/**
+ * Applies a backup file. The learning half goes first, through the learning store, which rejects an
+ * invalid log whole and changes nothing. The character half then goes through `progressStore`, which
+ * only fails when localStorage refuses the write; the words stay imported and a warning says so.
+ * Merge adds, replace swaps; a file without one half leaves that half of this device alone.
+ */
+export const applyCombinedBackup = async (store: LearningStore, raw: string, replace: boolean): Promise<BackupWriteResult> => {
+  const parsed = parseUserBackup(raw);
+  if (!parsed.ok) return { ok: false, errors: parsed.error };
+  const backup = parsed.value;
+  const warnings = backup.warnings.map((warning) => warning.message);
+  let added = 0;
+  if (backup.learning) {
+    if (replace) added = (await store.replaceBackup(backup.learning)).events;
+    else added = (await store.mergeBackup(backup.learning)).added;
+  }
+  if (backup.legacyCharacters) {
+    const file = legacyCharactersToProgressFile(backup.legacyCharacters);
+    // Characters this device has never studied: the merge's new records.
+    const fresh = Object.keys(backup.legacyCharacters.chars).filter((char) => !progressStore.get(char)).length;
+    try {
+      if (replace) progressStore.importBackup(file);
+      else progressStore.mergeBackup(file);
+      added += fresh;
+    } catch (error) {
+      if (!backup.learning) throw error;
+      warnings.push('No se pudo guardar el progreso de los caracteres en este dispositivo. El de las palabras sí se ha guardado.');
+    }
+  }
+  return { ok: true, added, warnings };
+};
+
+const download = (text: string) => {
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
   const link = document.createElement('a');
   link.href = url;
   link.download = 'jiayou-progreso.json';
@@ -15,33 +61,33 @@ const downloadBackup = () => {
   setTimeout(() => URL.revokeObjectURL(url), 0);
 };
 
-const signalProgressReplaced = () => {
-  discardAllVocabularySessions();
-  notifyProgressReset();
-};
-
+/** Shown over every screen when the character progress cannot be saved in localStorage. */
 export function ProgressStorageNotice() {
+  const store = useLearningStore();
   const [confirmRecovery, setConfirmRecovery] = createSignal(false);
+  const [exportFailed, setExportFailed] = createSignal(false);
   const recoverStored = () => {
-    if (progressStore.recoverStoredProgress()) {
-      signalProgressReplaced();
-      setConfirmRecovery(false);
-    }
+    if (progressStore.recoverStoredProgress()) setConfirmRecovery(false);
+  };
+  const exportNow = () => {
+    setExportFailed(false);
+    exportCombinedBackup(store).then(download, () => setExportFailed(true));
   };
   return (
     <Show when={progressStore.storageError()}>
       {(error) => (
         <aside role="alert" class="sheet fixed inset-x-4 top-4 z-50 mx-auto max-w-md p-4 text-ink">
           <p class="font-semibold">Problema al guardar el progreso</p>
-          <p class="mt-1 text-sm text-ink-soft">{typeof error() === 'string' ? error() : 'No se pudieron guardar tus palabras. Exporta una copia antes de cerrar la app.'}</p>
+          <p class="mt-1 text-sm text-ink-soft">{typeof error() === 'string' ? error() : 'No se pudo guardar el progreso de los caracteres. Exporta una copia antes de cerrar la app.'}</p>
           <div class="mt-3 flex flex-wrap gap-2">
             <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => progressStore.retrySave()}>Reintentar</button>
-            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={downloadBackup}>Exportar copia</button>
-            <Show when={progressStore.storageError()}><button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(true)}>Recuperar progreso guardado</button></Show>
+            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={exportNow}>Exportar copia</button>
+            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(true)}>Recuperar progreso guardado</button>
           </div>
+          <Show when={exportFailed()}><p class="mt-2 text-sm text-seal">No se pudo exportar la copia.</p></Show>
           <Show when={confirmRecovery()}>
             <div class="mt-3 border-t border-line pt-3">
-              <p class="text-sm text-ink-soft">Esto reemplazará el progreso actual con los datos guardados. Exporta el progreso actual primero si quieres conservarlo.</p>
+              <p class="text-sm text-ink-soft">Esto reemplazará el progreso actual de los caracteres con los datos guardados. Exporta primero si quieres conservarlo.</p>
               <div class="mt-2 flex gap-2">
                 <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={recoverStored}>Usar progreso guardado</button>
                 <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setConfirmRecovery(false)}>Cancelar</button>
@@ -54,71 +100,14 @@ export function ProgressStorageNotice() {
   );
 }
 
+/** The backup section of Opciones: one file with words and characters. */
 export default function ProgressBackup() {
-  const [message, setMessage] = createSignal('');
-  const [pending, setPending] = createSignal<string>();
-  const [backupCounts, setBackupCounts] = createSignal({ chars: 0, words: 0 });
-  let readRequest = 0;
-  const chooseFile = async (input: HTMLInputElement) => {
-    const file = input.files?.[0];
-    input.value = '';
-    const requestId = ++readRequest;
-    setPending(undefined);
-    setMessage('');
-    if (!file) return;
-    try {
-      const text = await file.text();
-      if (requestId !== readRequest) return;
-      // Validate before asking the user to replace their progress.
-      const parsed = parseProgress(text);
-      setBackupCounts({ chars: Object.keys(parsed.chars).length, words: Object.keys(parsed.words).length });
-      setPending(text);
-      setMessage('');
-    } catch {
-      if (requestId !== readRequest) return;
-      setPending(undefined);
-      setMessage('No se pudo leer la copia. Comprueba que sea un archivo de progreso válido.');
-    }
-  };
-  /** `merge`: keep the later copy of each word and character. Otherwise the file replaces everything. */
-  const restore = (merge: boolean) => {
-    const raw = pending();
-    if (!raw) return;
-    try {
-      if (merge) progressStore.mergeBackup(raw);
-      else progressStore.importBackup(raw);
-      signalProgressReplaced();
-      setMessage(merge ? 'Copia combinada con tu progreso.' : 'Copia restaurada.');
-      setPending(undefined);
-    } catch {
-      setMessage('No se pudo guardar la copia. Tu progreso actual sigue disponible.');
-    }
-  };
+  const store = useLearningStore();
   return (
-    <section class="sheet mt-5 p-4">
-      <h2 class="font-display text-lg font-semibold">Copia de seguridad</h2>
-      <p class="mt-2 text-sm leading-relaxed text-ink-soft">Guarda tu historial de aprendizaje en un archivo para recuperarlo más adelante.</p>
-      <div class="mt-3 flex flex-wrap gap-2">
-        <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={downloadBackup}>Exportar progreso</button>
-        <label class="btn-quiet relative inline-flex h-11 cursor-pointer items-center px-4 text-sm focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink">
-          Importar copia
-          <input type="file" accept="application/json,.json" class="absolute inset-0 h-full w-full cursor-pointer opacity-0" onChange={(event) => {
-            const input = event.currentTarget;
-            if (input instanceof HTMLInputElement) void chooseFile(input);
-          }} />
-        </label>
-      </div>
-      <Show when={pending()}>
-        <div class="mt-3">
-          <p class="text-sm text-ink-soft">La copia contiene {backupCounts().chars} {backupCounts().chars === 1 ? 'registro' : 'registros'} de caracteres y {backupCounts().words} de palabras. Combinarla conserva, de cada carácter y palabra, lo último que estudiaste en cualquiera de los dos. Reemplazar borra el progreso actual; expórtalo primero si quieres conservarlo.</p>
-          <div class="mt-2 flex flex-wrap gap-2">
-            <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => restore(true)}>Combinar con mi progreso</button>
-            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => restore(false)}>Reemplazar progreso</button>
-            <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setPending(undefined)}>Cancelar</button>
-          </div>
-        </div>
-      </Show>
-      <Show when={message()}><p role="status" class="mt-3 text-sm">{message()}</p></Show>
-    </section>
+    <LearningBackup
+      exportBackup={() => exportCombinedBackup(store)}
+      mergeBackup={(raw) => applyCombinedBackup(store, raw, false)}
+      replaceBackup={(raw) => applyCombinedBackup(store, raw, true)}
+    />
   );
 }

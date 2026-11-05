@@ -11,38 +11,24 @@ import {
   isWeakProgress,
   MASTERED_INTERVAL,
   newLeftToday,
-  WORD_NEW_PER_DAY,
 } from '../domain/progress/queue';
 import type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
 import { sumActivity } from '../domain/progress/activity';
 import { mergeProgress } from '../domain/sync/merge';
-import { openCheckpoint, restoreCheckpoint, type ProgressCheckpoint } from '../domain/progress/checkpoint';
 import { emptyProgress, emptyState, progressDocument, serialize, type ProgressDocument } from './progressState';
-import { vocabularyProgressStore } from './vocabularyProgressStore';
 export { parseProgress } from '../domain/progress/serialization';
 export type { CharProgress, DailyLog, Grade } from '../domain/progress/types';
 export { GRADES } from '../domain/progress/types';
-export {
-  activityStreak,
-  CHAR_NEW_PER_DAY,
-  CLEAN_TO_RECOVER,
-  isWeakProgress,
-  KNOWN_PER_SESSION,
-  NEW_PER_DAY,
-  SESSION_SIZE,
-  WORD_NEW_PER_DAY,
-} from '../domain/progress/queue';
+export { activityStreak, CHAR_NEW_PER_DAY, isWeakProgress } from '../domain/progress/queue';
 
 const DAY_MS = 86_400_000;
-export const DAILY_GOAL = 20;
-/** The daily cap in words, for Home and word detail to explain it. */
-export const DAILY_NEW_RULE_TEXT = `${WORD_NEW_PER_DAY} palabras y ${CHAR_NEW_PER_DAY} caracteres nuevos al día`;
 
-export type { ProgressCheckpoint } from '../domain/progress/checkpoint';
+// Word learning lives in the learning store (IndexedDB). This store keeps the v4 character records,
+// their daily counts and the character half of the activity calendar until phase 5C.
 
 /** The character store over `doc`. Tests pass a document of their own to start from clean progress. */
 export const createProgressStore = (doc: ProgressDocument) => {
-  const { deviceId, state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, openCheckpoints, logActivity, missedBeforeEnrolment, save } = doc;
+  const { state, setState, storageError, setStorageError, isLoadBlocked, setLoadBlocked, readStored, writeStored, writeRecord, logActivity, save } = doc;
   const update = (char: string, fn: (p: CharProgress) => CharProgress) => {
     writeRecord('chars', char, fn(state.chars[char] ?? emptyProgress()));
   };
@@ -51,40 +37,11 @@ export const createProgressStore = (doc: ProgressDocument) => {
     storageError,
 
     /**
-     * Starts noting what a session changes, so "descartar" can undo it. Words and characters share
-     * one document, so one checkpoint covers both. Close it when the session leaves the screen.
-     */
-    checkpoint(): ProgressCheckpoint {
-      return this.resumeCheckpoint(openCheckpoint(state, deviceId));
-    },
-
-    /** Keeps noting changes into a checkpoint saved with a paused session. */
-    resumeCheckpoint(checkpoint: ProgressCheckpoint): ProgressCheckpoint {
-      openCheckpoints.add(checkpoint);
-      return checkpoint;
-    },
-
-    closeCheckpoint(checkpoint: ProgressCheckpoint): void {
-      openCheckpoints.delete(checkpoint);
-    },
-
-    /**
      * Answers and first looks per local day ("2026-11-01" → 34), every device's added up. Each
      * device keeps at most 120 days.
      */
     activity(): Record<string, number> {
       return sumActivity(state.activity);
-    },
-
-    /**
-     * Puts the records the session changed, daily counts and the calendar back as they were at
-     * `checkpoint()`. Records it never touched keep whatever they hold now.
-     */
-    rollback(checkpoint: ProgressCheckpoint): void {
-      openCheckpoints.delete(checkpoint);
-      missedBeforeEnrolment.clear();
-      setState(reconcile(restoreCheckpoint(unwrap(state), checkpoint, deviceId)));
-      save();
     },
 
     exportBackup(): string {
@@ -101,7 +58,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
     },
 
     /**
-     * Merges a backup into the current progress: of each character or word, the later copy stays,
+     * Merges a backup into the current progress: of each character, the later copy stays,
      * and the calendar keeps every device's days. Throws before changing anything if the file is bad.
      */
     mergeBackup(raw: string): void {
@@ -119,7 +76,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
           const recovered = readStored();
           if (recovered !== null) {
             // Do not discard progress made in memory while storage was unavailable.
-            if (Object.keys(state.chars).length > 0 || Object.keys(state.words).length > 0) {
+            if (Object.keys(state.chars).length > 0) {
               setStorageError('El progreso actual y el guardado difieren. Exporta el actual antes de restaurar el guardado.');
               return false;
             }
@@ -276,7 +233,7 @@ export const createProgressStore = (doc: ProgressDocument) => {
       return buildCharQueue(chars, state.chars, state.daily, extraNew, prefer);
     },
 
-    /** Days in a row with any practice. The same number for words and characters. */
+    /** Days in a row with character practice. Home adds the word days from the learning log. */
     streak(): number {
       return activityStreak(this.activity());
     },
@@ -286,7 +243,6 @@ export const createProgressStore = (doc: ProgressDocument) => {
     },
 
     clear() {
-      missedBeforeEnrolment.clear();
       setState(emptyState());
       save();
     },
@@ -295,6 +251,3 @@ export const createProgressStore = (doc: ProgressDocument) => {
 
 export const progressStore = createProgressStore(progressDocument);
 
-/** Whether today's cap still allows a new word or character. */
-export const canLearnNew = (kind: 'word' | 'char'): boolean =>
-  (kind === 'word' ? vocabularyProgressStore.newLeftToday() : progressStore.newLeftToday()) > 0;

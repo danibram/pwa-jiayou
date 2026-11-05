@@ -3,7 +3,6 @@ import { KEYS } from '../src/persistence/keys';
 import { createMemoryKeyValue } from '../src/persistence/keyValue';
 import { createProgressStore, progressStore } from '../src/stores/progressStore';
 import { createProgressState } from '../src/stores/progressState';
-import { createVocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 
 describe('progress store factory', () => {
   it('starts from clean progress, apart from the app instance', () => {
@@ -11,14 +10,13 @@ describe('progress store factory', () => {
     const repo = createMemoryKeyValue();
     const doc = createProgressState(repo);
     const chars = createProgressStore(doc);
-    const words = createVocabularyProgressStore(doc);
     expect(chars.isNew('好')).toBe(true);
     chars.grade('一', 'good');
-    words.grade('word-1', 'again');
+    chars.grade('二', 'again');
     expect(progressStore.isNew('一')).toBe(true);
-    // Both stores write one shared document to their repo, under the usual key.
-    expect(JSON.parse(repo.read(KEYS.progress)!)).toMatchObject({ chars: { 一: { right: 1 } }, words: { 'word-1': { wrong: 1 } } });
-    expect(words.isWeak('word-1')).toBe(true);
+    // The store writes its document to its repo, under the usual key. Words are not in it any more.
+    expect(JSON.parse(repo.read(KEYS.progress)!)).toMatchObject({ chars: { 一: { right: 1 } }, words: {} });
+    expect(chars.isWeak('二')).toBe(true);
     expect(chars.streak()).toBe(1);
     progressStore.clear();
   });

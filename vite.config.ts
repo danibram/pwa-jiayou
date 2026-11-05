@@ -59,6 +59,10 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('/node_modules/posthog-js/') || id.includes('/node_modules/@posthog/')) return 'posthog';
+          // ts-fsrs loads its FSRS-7 model with a dynamic import, and Vite would put that model in a
+          // chunk that imports the entry chunk back. One chunk for the library and srs-kit has no such
+          // cycle, and `globPatterns` below precaches it, so the first review works offline.
+          if (/\/node_modules\/(ts-fsrs|@open-spaced-repetition\/srs-kit)\//.test(id)) return 'fsrs';
         },
       },
     },

@@ -1,26 +1,26 @@
 import { leadSense } from '../data/wordSenses';
-import { Component, createMemo, createSignal, For, Show, untrack } from 'solid-js';
+import { Component, createMemo, createResource, createSignal, For, Show, untrack } from 'solid-js';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';
 import ThemeToggle from '../components/ThemeToggle';
 import HomeProgress from '../components/HomeProgress';
 import LevelChips from '../components/LevelChips';
-import { summarizeProgress } from '../utils/progressSummary';
+import { studyStatusOf, summarizeLearning } from '../utils/progressSummary';
 import { readHomeSnapshot, rememberHomeSnapshot } from '../utils/homeSnapshot';
 import { agree, countNoun, type NounKind } from '../utils/countNoun';
-import { canLearnNew, DAILY_NEW_RULE_TEXT, progressStore, SESSION_SIZE, WORD_NEW_PER_DAY } from '../stores/progressStore';
+import { progressStore } from '../stores/progressStore';
+import { activityStreak } from '../domain/progress/queue';
 import ActivityCalendar from '../components/ActivityCalendar';
 import Pinyin from '../components/Pinyin';
-import { createDialogFocus } from '../utils/dialog';
 import type { HomeTarget } from '../screen';
 import { levelWords, wordCount } from '../data/vocabulary';
-import { allWords } from '../data/vocabulary';
-import { vocabularyProgressStore } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
+import { wordItemId } from '../stores/learningStore';
+import { useLearningStore } from '../components/LearningStoreContext';
 import { prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
 import type { HskLevel } from '../types';
-import { discardVocabularySession, findPausedPractice, hasStoredVocabularySession, loadVocabularySession } from '../utils/vocabularySession';
+import { ALL_ID, mergeActivity, MORE_ID, practiceIdOf, WEAK_ID } from '../utils/wordSessions';
 
 interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
@@ -74,49 +74,53 @@ const CapNote: Component<{ limit: number; kind: NounKind }> = (props) => {
       </p>
       <Show when={open()}>
         <p class="mt-1.5 text-xs leading-relaxed">
-          Lo nuevo se fija repasándolo en los días siguientes: cada palabra vuelve unas cinco veces en el primer mes. Con {DAILY_NEW_RULE_TEXT}, los repasos no se acumulan y se te queda más.
+          Lo nuevo se fija repasándolo en los días siguientes. Con {countNoun(props.limit, props.kind)} {agree(props.limit, props.kind, 'nuev')} al día, los repasos no se acumulan y se te queda más.
         </p>
       </Show>
     </div>
   );
 };
 
-/** Word sessions Home can start, saved under vocabularySession's practice keys. A single word's practice is not one. */
-const HOME_PRACTICE = /^(__more__|__weak__|__all__|topic:.+)$/;
-
 const Home: Component<HomeProps> = (props) => {
+  const store = useLearningStore();
   const words = createMemo(() => vocabularyStore.getSelectedWords());
-  const wordSession = loadVocabularySession(words());
-  const [unreadableWordSession, setUnreadableWordSession] = createSignal(!wordSession && hasStoredVocabularySession());
-  const [confirmWordDiscard, setConfirmWordDiscard] = createSignal(false);
-  const [wordDiscardError, setWordDiscardError] = createSignal(false);
-  let wordDialog: HTMLDivElement | undefined;
-  createDialogFocus(confirmWordDiscard, () => wordDialog, () => setConfirmWordDiscard(false));
-  /** Today's session covers the checked levels. A topic is practised from Temas, never as a filter on this. */
-  const wordQueue = createMemo(() => vocabularyProgressStore.buildQueue(words()));
-  const wordDaily = createMemo(() => vocabularyStore.getDailyWord());
-  const wordPending = () => wordQueue().due.length + wordQueue().fresh.length;
+  const itemIds = createMemo(() => words().map((word) => wordItemId(word.id)));
+  /** Hoy as it would start now. Its counts are the session's own, so the button says what the session does. */
+  const today = createMemo(() => store.previewPlan('today'));
+  const moreWords = createMemo(() => store.previewPlan('more-words'));
+  const statusOf = (wordId: string) => studyStatusOf(store.status(wordItemId(wordId)));
+  const wordDaily = createMemo(() => vocabularyStore.getDailyWord(statusOf));
+  const dueN = () => today()?.counts.scheduled ?? 0;
+  const freshN = () => today()?.counts.newItems ?? 0;
+  const wordPending = () => today()?.cards.length ?? 0;
   /** The chips show the HSK lists. */
   const wordLevels = vocabularyStore.getLists().flatMap((list) => list.hskLevel ?? []);
   const levelOn = (lvl: HskLevel) => vocabularyStore.isSelected(hskListId(lvl));
-  const streak = () => progressStore.streak();
-  const wordSummary = createMemo(() => summarizeProgress(words().map((word) => word.id), vocabularyProgressStore));
+  /** Words and characters share one calendar: word days come from the learning log. */
+  const activity = createMemo(() => mergeActivity(progressStore.activity(), store.activityByDay()));
+  const streak = () => activityStreak(activity(), new Date(store.now()));
+  const wordSummary = createMemo(() => summarizeLearning(itemIds(), store));
   const wordScope = () => [...vocabularyStore.state.selectedLists].sort().join(',');
   const previousWords = readHomeSnapshot('vocabulary', untrack(wordScope));
   rememberHomeSnapshot('vocabulary', untrack(wordScope), untrack(wordSummary));
-  const pausedWord = wordSession
-    ? { id: undefined as string | undefined, title: wordSession.heading }
-    : findPausedPractice(allWords, (id) => HOME_PRACTICE.test(id));
-  const wordClosed = () => !unreadableWordSession() && !pausedWord && wordPending() === 0;
+  /** The stored session still has cards: Home offers to continue it. */
+  const [paused] = createResource(() => store.ready(), async () => {
+    const session = await store.activeSession();
+    return session ? practiceIdOf(session) : null;
+  });
+  const pausedWord = () => (paused.state === 'ready' ? paused() : null);
+  const wordClosed = () => !pausedWord() && wordPending() === 0;
+  const unseen = () => words().filter((word) => statusOf(word.id) === 'new').length;
+  const newPerDay = () => store.settings().newPerDay['word-meaning'];
+  /** The whole day's budget is spent, not only Hoy's share. */
+  const capReached = () => store.newLeftToday('other') === 0;
 
-  /** What the CTA offers once nothing is pending today. The daily cap decides whether "more" is possible. */
+  /** What the CTA offers once nothing is pending today. Más palabras' own plan decides whether "more" is possible. */
   const wordNext = (): Step => {
-    const unseen = words().filter((word) => vocabularyProgressStore.isNew(word.id)).length;
-    // Tomorrow's reviews are already heavy: more new words today would pile them higher.
-    const n = vocabularyProgressStore.canLearnMore(words()) ? Math.min(10, unseen, vocabularyProgressStore.newLeftToday()) : 0;
+    const n = moreWords()?.counts.newItems ?? 0;
     if (n > 0) return { kind: 'more', n };
     if (wordSummary().weak > 0) return { kind: 'weak', n: wordSummary().weak };
-    if (unseen === 0) return { kind: 'all' };
+    if (unseen() === 0) return { kind: 'all' };
     return { kind: 'done' };
   };
 
@@ -126,41 +130,45 @@ const Home: Component<HomeProps> = (props) => {
     return 'Hecho por hoy.';
   };
 
-  /** Studied today and how many of them were new, from the progress itself, so the line only grows. */
-  const studiedToday = (keys: string[], get: (key: string) => { lastSeen: number } | undefined) => {
-    const start = new Date().setHours(0, 0, 0, 0);
-    return keys.filter((key) => (get(key)?.lastSeen ?? 0) >= start).length;
+  /** Words answered or taught today, and how many of them were new, from the log, so the line only grows. */
+  const wordToday = () => {
+    const day = new Date(store.now()).toLocaleDateString('sv-SE');
+    const voided = new Set(store.events().flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
+    const studied = new Set(store.events().filter((event) => event.type !== 'attempt-voided' && event.localDay === day && !voided.has(event.id)).map((event) => event.itemId));
+    return {
+      studied: itemIds().filter((id) => studied.has(id)).length,
+      fresh: today()?.counts.taughtToday ?? 0,
+      noun: ['palabra', 'palabras'] as [string, string],
+    };
   };
-  const wordToday = () => ({
-    studied: studiedToday(words().map((word) => word.id), (key) => vocabularyProgressStore.get(key)),
-    fresh: vocabularyProgressStore.daily.introduced,
-    noun: ['palabra', 'palabras'] as [string, string],
-  });
 
   const wordLevelLabel = () => vocabularyStore.listLabel();
   /** About eight seconds a card: a review is one card, a new word three (lesson, pick, recognition). */
-  const sessionMinutes = () => Math.max(1, Math.round(((wordQueue().due.length + wordQueue().fresh.length * 3) * 8) / 60));
-  const practisedToday = () => (progressStore.activity()[new Date().toLocaleDateString('sv-SE')] ?? 0) > 0;
+  /** About eight seconds a card; a new word is two cards, the lesson and its practice. */
+  const sessionMinutes = () => Math.max(1, Math.round((wordPending() * 8) / 60));
+  const practisedToday = () => (activity()[new Date(store.now()).toLocaleDateString('sv-SE')] ?? 0) > 0;
 
   const wordTodayLine = () => {
-    const dueN = wordQueue().due.length;
-    const freshN = wordQueue().fresh.length;
-    if (dueN === 0 && freshN === 0) return restLine(wordNext(), true);
-    const total = wordQueue().dueTotal;
-    // The session takes twenty at a time; the line says how many are really waiting.
-    const review = total > dueN ? `${dueN} de ${total} repasos` : dueN === 1 ? '1 repaso' : `${dueN} repasos`;
-    const fresh = `${freshN} ${agree(freshN, 'word', 'nuev')}`;
-    if (dueN === 0) return `Hoy: ${fresh}.`;
-    if (freshN === 0) return `Hoy: ${review}.`;
-    return `Hoy: ${review} y ${fresh}.`;
+    const due = dueN();
+    const fresh = freshN();
+    if (wordPending() === 0) return restLine(wordNext(), true);
+    if (due === 0 && fresh === 0) return `Hoy: ${countNoun(wordPending(), 'word')}.`;
+    const total = store.pendingToday();
+    // A session takes a limited number of cards; the line says how many are really waiting.
+    const review = total > due ? `${due} de ${total} repasos` : due === 1 ? '1 repaso' : `${due} repasos`;
+    const freshText = `${fresh} ${agree(fresh, 'word', 'nuev')}`;
+    if (due === 0) return `Hoy: ${freshText}.`;
+    if (fresh === 0) return `Hoy: ${review}.`;
+    return `Hoy: ${review} y ${freshText}.`;
   };
 
   const wordTodayAction = () => {
-    const dueN = wordQueue().due.length;
-    const freshN = wordQueue().fresh.length;
-    if (dueN === 0) return `Aprender ${countNoun(freshN, 'word')}`;
-    if (freshN === 0) return `Repasar ${countNoun(dueN, 'word')}`;
-    return `Repasar ${dueN} y aprender ${freshN}`;
+    const due = dueN();
+    const fresh = freshN();
+    if (due === 0 && fresh === 0) return 'Empezar';
+    if (due === 0) return `Aprender ${countNoun(fresh, 'word')}`;
+    if (fresh === 0) return `Repasar ${countNoun(due, 'word')}`;
+    return `Repasar ${due} y aprender ${fresh}`;
   };
 
   const wordModes = [
@@ -180,7 +188,7 @@ const Home: Component<HomeProps> = (props) => {
       glyph: '练',
       title: 'Repasar todo',
       body: 'Las palabras elegidas',
-      go: () => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: '__all__' }),
+      go: () => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: ALL_ID }),
     },
     {
       glyph: '设',
@@ -191,10 +199,10 @@ const Home: Component<HomeProps> = (props) => {
   ];
 
   const masteredWordsIn = (lvl: (typeof wordLevels)[number]) =>
-    levelWords(lvl).filter((word) => vocabularyProgressStore.isMastered(word.id)).length;
+    levelWords(lvl).filter((word) => statusOf(word.id) === 'mastered').length;
 
   const learningWordsIn = (lvl: (typeof wordLevels)[number]) =>
-    levelWords(lvl).filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id)).length;
+    levelWords(lvl).filter((word) => statusOf(word.id) === 'learning').length;
 
   /** A newly ticked level downloads its words, then their strokes and audio, behind the page. */
   const [mediaSave, setMediaSave] = createSignal<{ done: number; total: number }>();
@@ -225,15 +233,15 @@ const Home: Component<HomeProps> = (props) => {
   const startWords = () => {
     if (wordPending() > 0) return wordPractice();
     const next = wordNext();
-    wordPractice(next.kind === 'more' ? '__more__' : next.kind === 'weak' ? '__weak__' : next.kind === 'all' ? '__all__' : undefined);
+    wordPractice(next.kind === 'more' ? MORE_ID : next.kind === 'weak' ? WEAK_ID : next.kind === 'all' ? ALL_ID : undefined);
   };
   const wordStart = () => (
     <Show
       when={wordPending() > 0}
       fallback={<NextAction
         next={wordNext()}
-        onMore={() => wordPractice('__more__')}
-        onAll={() => wordPractice('__all__')}
+        onMore={() => wordPractice(MORE_ID)}
+        onAll={() => wordPractice(ALL_ID)}
       />}
     >
       <button type="button" class="btn-ink h-14 w-full text-base" onClick={() => wordPractice()}>
@@ -278,7 +286,7 @@ const Home: Component<HomeProps> = (props) => {
           <Show when={streak() > 0 && !practisedToday()}>
             <p class="mt-1 text-sm font-medium text-ink">Practica hoy para llegar a {streak() + 1} días seguidos.</p>
           </Show>
-          <HomeProgress summary={wordSummary()} feminine previous={previousWords} today={wordToday()} onWeak={() => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: '__weak__' })} />
+          <HomeProgress summary={wordSummary()} feminine previous={previousWords} today={wordToday()} onWeak={() => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: WEAK_ID })} />
           <div class="mt-4">
             <LevelChips
               levels={wordLevels}
@@ -303,15 +311,15 @@ const Home: Component<HomeProps> = (props) => {
               </p>
             </Show>
           </div>
-          <Show when={!canLearnNew('word') && words().some((word) => vocabularyProgressStore.isNew(word.id))}>
-            <CapNote limit={WORD_NEW_PER_DAY} kind="word" />
+          <Show when={capReached() && unseen() > 0}>
+            <CapNote limit={newPerDay()} kind="word" />
           </Show>
-          <Show when={canLearnNew('word') && wordQueue().dueTotal >= SESSION_SIZE && words().some((word) => vocabularyProgressStore.isNew(word.id))}>
+          <Show when={!capReached() && freshN() === 0 && unseen() > 0 && ((today()?.leftOutCounts['work-limit'] ?? 0) > 0 || (today()?.leftOutCounts['tomorrow-load'] ?? 0) > 0)}>
             <p class="mt-3 rounded-tile bg-line/30 px-3 py-2.5 text-sm text-ink-soft">
               Hoy toca ponerse al día. Las palabras nuevas vuelven cuando bajen los repasos.
             </p>
           </Show>
-          <Show when={wordPending() === 0 && words().some((word) => vocabularyProgressStore.isNew(word.id)) === false}>
+          <Show when={wordPending() === 0 && unseen() === 0}>
             <p class="mt-4 text-sm text-ink-soft">
               Has visto todas las palabras de esta lista.
               {wordLevels.some((level) => !levelOn(level))
@@ -321,7 +329,7 @@ const Home: Component<HomeProps> = (props) => {
           </Show>
         </section>
 
-        <ActivityCalendar activity={progressStore.activity()} />
+        <ActivityCalendar activity={activity()} today={new Date(store.now())} />
 
         <button
           type="button"
@@ -374,52 +382,30 @@ const Home: Component<HomeProps> = (props) => {
         </button>
 
         <div class={wordClosed() ? 'mt-auto pt-2' : 'pointer-events-none sticky bottom-0 z-10 -mx-4 mt-auto bg-gradient-to-t from-paper from-70% to-paper/0 px-4 pt-6 lg:static lg:mx-0 lg:bg-none lg:px-0 lg:pt-4 [&>*]:pointer-events-auto'} style={{ 'padding-bottom': 'max(env(safe-area-inset-bottom), 1rem)' }}>
-          <Show when={unreadableWordSession()} fallback={
-            <Show when={pausedWord} fallback={wordStart()}>
-              {(paused) => (
-                <>
-                  <button
-                    type="button"
-                    class="btn-ink h-14 w-full text-base"
-                    onClick={() => props.onNavigate({ page: 'vocabulary-review', resume: true, ...(paused().id ? { practiceId: paused().id } : {}) })}
-                  >
-                    Continuar sesión · {paused().title}
-                    <Icon name="next" size={18} />
-                  </button>
-                  <button
-                    type="button"
-                    class="mx-auto mt-1 flex h-11 items-center px-4 text-sm text-ink-soft underline decoration-ink/30 underline-offset-4"
-                    aria-label="Empezar otra sesión"
-                    onClick={startWords}
-                  >
-                    o empezar otra
-                  </button>
-                </>
-              )}
-            </Show>
-          }>
-            <p class="mb-2 text-sm text-ink-soft">Hay una sesión de palabras que esta versión no puede abrir.</p>
-            <button type="button" class="btn-quiet h-14 w-full" onClick={() => setConfirmWordDiscard(true)}>
-              Descartar sesión guardada
-            </button>
+          <Show when={pausedWord()} fallback={wordStart()}>
+            {(session) => (
+              <>
+                <button
+                  type="button"
+                  class="btn-ink h-14 w-full text-base"
+                  onClick={() => props.onNavigate({ page: 'vocabulary-review', resume: true, ...(session().practiceId ? { practiceId: session().practiceId } : {}) })}
+                >
+                  Continuar sesión · {session().title}
+                  <Icon name="next" size={18} />
+                </button>
+                <button
+                  type="button"
+                  class="mx-auto mt-1 flex h-11 items-center px-4 text-sm text-ink-soft underline decoration-ink/30 underline-offset-4"
+                  aria-label="Empezar otra sesión"
+                  onClick={startWords}
+                >
+                  o empezar otra
+                </button>
+              </>
+            )}
           </Show>
         </div>
     </div>
-    <Show when={confirmWordDiscard()}>
-      <div class="fixed inset-0 z-40 flex items-end justify-center bg-black/55">
-        <div ref={wordDialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="word-discard-title" class="sheet w-full max-w-[40rem] px-4 pt-5 pb-6">
-          <h2 id="word-discard-title" class="text-center font-display text-xl font-semibold">¿Descartar la sesión guardada?</h2>
-          <p class="mt-2 text-center text-sm text-ink-soft">Se perderá esa sesión. El progreso guardado se conservará.</p>
-          <button class="btn-ink mt-4 h-14 w-full" onClick={() => {
-            if (!discardVocabularySession()) { setWordDiscardError(true); return; }
-            setUnreadableWordSession(false);
-            setConfirmWordDiscard(false);
-          }}>Descartar sesión</button>
-          <Show when={wordDiscardError()}><p role="alert" class="mt-2 text-center text-sm text-seal">No se pudo borrar la sesión.</p></Show>
-          <button class="mt-1 h-11 w-full text-sm text-ink-soft" onClick={() => setConfirmWordDiscard(false)}>Cancelar</button>
-        </div>
-      </div>
-    </Show>
     </div>
   );
 };

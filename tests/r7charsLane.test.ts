@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { CHAR_NEW_PER_DAY, KNOWN_PER_SESSION, progressStore } from '../src/stores/progressStore';
+import { KNOWN_PER_SESSION } from '../src/domain/progress/queue';
+import { CHAR_NEW_PER_DAY, progressStore } from '../src/stores/progressStore';
 
 describe('the character day', () => {
   beforeEach(() => progressStore.clear());
