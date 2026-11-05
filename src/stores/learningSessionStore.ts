@@ -84,6 +84,8 @@ export interface LearningSessionView {
    * today's claims stay under `STUDY_RULES.alreadyKnownPerDay`.
    */
   canClaimKnown: boolean;
+  /** The first teaching of a word, with today's "Ya la sé" claims used up. */
+  claimsUsedUp: boolean;
 }
 
 /**
@@ -141,6 +143,8 @@ export interface LearningSessionItemResult {
 export interface LearningSessionSummary {
   /** Events this session wrote that still count, by type. */
   recorded: Record<RecordedKind, number>;
+  /** "Ya la sé" claims among the session's exposures. */
+  alreadyKnown: number;
   items: readonly LearningSessionItemResult[];
   /** Items of the session with a due time, soonest first. */
   nextReviews: readonly { itemId: ItemId; dueAt: Timestamp }[];
@@ -314,6 +318,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     inputError: null,
     canUndo: false,
     canClaimKnown: false,
+    claimsUsedUp: false,
   });
 
   let rt: LearningRuntime;
@@ -413,13 +418,12 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     return rt.events().filter((event) => event.type === 'exposure' && event.card.reason === 'already-known' && event.localDay === today).length;
   };
 
-  /** Only the first teaching of a word, never a reteach or a character, and within the daily cap. */
-  const claimAvailable = (entry: QueueEntry | null): boolean =>
-    !!entry &&
-    entry.intent === 'teach' &&
-    entry.reason === 'new' &&
-    itemKind(entry.itemId) === 'word-meaning' &&
-    claimsToday() < STUDY_RULES.alreadyKnownPerDay;
+  /** Only the first teaching of a word, never a reteach or a character. */
+  const claimable = (entry: QueueEntry | null): entry is QueueEntry =>
+    !!entry && entry.intent === 'teach' && entry.reason === 'new' && itemKind(entry.itemId) === 'word-meaning';
+
+  /** A claimable card while today's claims stay under the daily cap. */
+  const claimAvailable = (entry: QueueEntry | null): boolean => claimable(entry) && claimsToday() < STUDY_RULES.alreadyKnownPerDay;
 
   const show = (state: LearningSessionState, index: number) => {
     shownToken += 1;
@@ -435,6 +439,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       error: null,
       inputError: null,
       canClaimKnown: state === 'presenting' && claimAvailable(entry),
+      claimsUsedUp: state === 'presenting' && claimable(entry) && !claimAvailable(entry),
     });
     if (state !== 'feedback') setView('feedback', null);
   };
@@ -480,7 +485,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         session = done;
         run(() => rt.repo.saveAttemptDraft(done), false);
       }
-      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null, canClaimKnown: false });
+      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null, canClaimKnown: false, claimsUsedUp: false });
       return;
     }
     attempt = null;
@@ -1011,17 +1016,21 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
 
   const summary = (): LearningSessionSummary => {
     const recorded: Record<RecordedKind, number> = { 'scheduled-review': 0, practice: 0, 'invalid-attempt': 0, exposure: 0 };
-    if (!session) return { recorded, items: [], nextReviews: [] };
+    if (!session) return { recorded, alreadyKnown: 0, items: [], nextReviews: [] };
     const id = session.id;
     const own = rt.events().filter((event) => event.sessionId === id);
     const voided = new Set(rt.events().flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
+    let alreadyKnown = 0;
     const items = new Map<ItemId, { content: ContentReference; results: LearningSessionItemResult['results'][number][] }>();
     for (const event of [...own].sort((a, b) => a.sequence - b.sequence)) {
       if (event.type === 'attempt-voided' || voided.has(event.id)) continue;
       recorded[event.type] += 1;
       const entry = items.get(event.itemId) ?? { content: event.content, results: [] };
       items.set(event.itemId, entry);
-      if (event.type === 'exposure') continue;
+      if (event.type === 'exposure') {
+        if (event.card.reason === 'already-known') alreadyKnown += 1;
+        continue;
+      }
       entry.results.push({
         recorded: event.type,
         outcome: event.evaluation.outcome === 'invalid' ? 'invalid' : event.evaluation.outcome === 'unanswered' ? 'incorrect' : event.evaluation.outcome,
@@ -1036,7 +1045,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     const nextReviews = list
       .flatMap((item) => (item.dueAt === null ? [] : [{ itemId: item.itemId, dueAt: item.dueAt }]))
       .sort((a, b) => a.dueAt - b.dueAt);
-    return { recorded, items: list, nextReviews };
+    return { recorded, alreadyKnown, items: list, nextReviews };
   };
 
   const idle = async (): Promise<void> => {

@@ -61,7 +61,13 @@ describe('session summary', () => {
     render(() => <SessionSummary {...props()} />);
     expect(screen.getByText('Mañana').parentElement).toHaveTextContent('3 repasos');
     expect(screen.getByText('Próximo repaso').parentElement).toHaveTextContent('mañana');
-    expect(screen.getByText('Palabras nuevas hoy').parentElement).toHaveTextContent('7 de 20');
+    expect(screen.getByText('Nuevas enseñadas hoy').parentElement).toHaveTextContent('7 de 20');
+  });
+
+  it('counts "Ya la sé" claims apart from lessons', () => {
+    render(() => <SessionSummary {...props({ alreadyKnown: 2, recorded: { 'scheduled-review': 2, practice: 0, exposure: 3, 'invalid-attempt': 0 } })} />);
+    expect(screen.getByText('Lecciones vistas').parentElement).toHaveTextContent('1');
+    expect(screen.getByTestId('summary-already-known')).toHaveTextContent('Ya la sabías2 palabras');
   });
 
   it('reads a lesson-only session as words for tomorrow', () => {

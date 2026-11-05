@@ -1,7 +1,13 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { STUDY_RULES, type LearningEvent } from '../../../src/domain/learning/types';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
 import { advanceTo, environment, type Env } from './fixtures';
+
+// The fixture pool has twelve words, fewer than the real cap, so the cap is lowered here.
+vi.mock('../../../src/domain/learning/types', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../../src/domain/learning/types')>();
+  return { ...actual, STUDY_RULES: { ...actual.STUDY_RULES, alreadyKnownPerDay: 3 } };
+});
 
 let env: Env;
 afterEach(() => env?.closeAll());
@@ -52,6 +58,7 @@ describe('"Ya la sé"', () => {
     await advanceTo(session, (s) => s.card()?.reason === 'teach-again' && s.card()?.intent === 'teach');
     expect(session.card()?.canClaimKnown).toBe(false);
     expect(session.view.canClaimKnown).toBe(false);
+    expect(session.view.claimsUsedUp).toBe(false);
     const before = store.events().length;
     session.actions.knowIt();
     await session.idle();
@@ -73,6 +80,7 @@ describe('"Ya la sé"', () => {
     await advanceTo(more, isTeach);
     expect(more.card()).toMatchObject({ reason: 'new', canClaimKnown: false });
     expect(more.view.canClaimKnown).toBe(false);
+    expect(more.view.claimsUsedUp).toBe(true);
     const before = store.events().length;
     more.actions.knowIt();
     await more.idle();

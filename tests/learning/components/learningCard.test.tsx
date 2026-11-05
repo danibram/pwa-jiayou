@@ -63,9 +63,16 @@ describe('teach card', () => {
     expect(speakWord).not.toHaveBeenCalled();
   });
 
+  it('says why "Ya la sé" is gone once the day\'s claims are used up', () => {
+    mount(view({ selection: teachSelection(), canClaimKnown: false, claimsUsedUp: true }));
+    expect(screen.getByTestId('claims-used-up').textContent).toContain('«Ya la sé»');
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
+  });
+
   it('shows the lesson at once, with Continuar only, when no claim is open', () => {
     const selection = teachSelection();
     const { actions } = mount(view({ selection, canClaimKnown: false }));
+    expect(screen.queryByTestId('claims-used-up')).toBeNull();
     expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
     expect(speakWord).toHaveBeenCalledOnce();
     expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();

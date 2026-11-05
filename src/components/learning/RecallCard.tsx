@@ -39,7 +39,7 @@ const RecallCard: Component<RecallCardProps> = (props) => {
 
   return (
     <>
-      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:justify-center">
+      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:[justify-content:safe_center]">
         <Show when={EYEBROW[cue()]}>{(label) => <p class="eyebrow mb-3">{label()}</p>}</Show>
 
         <Show when={cue() === 'gloss' && !showAnswer()}>

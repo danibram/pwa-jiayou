@@ -32,7 +32,9 @@ export interface SessionSummaryProps {
   /** Events the session wrote that still count, by type. */
   recorded: Record<SummaryRecordedKind, number>;
   items: readonly SummaryItemResult[];
-  /** Reviews due by the end of tomorrow. */
+  /** "Ya la sé" claims in the session, shown apart from the lessons. */
+  alreadyKnown?: number;
+  /** What Hoy will hold tomorrow if nothing more is studied today. */
   dueTomorrow: number;
   /** The soonest due time among the session's items, or null when none has a rating yet. */
   nextDueAt: number | null;
@@ -121,6 +123,8 @@ const SessionSummary: Component<SessionSummaryProps> = (props) => {
   const practice = () => props.recorded.practice;
   const invalid = () => props.recorded['invalid-attempt'];
   const exposures = () => props.recorded.exposure;
+  const claimed = () => props.alreadyKnown ?? 0;
+  const lessons = () => exposures() - claimed();
   const answered = () => scheduled() + practice();
 
   const ratings = () => {
@@ -207,10 +211,16 @@ const SessionSummary: Component<SessionSummaryProps> = (props) => {
                 <span class="font-semibold text-ink">{plural(practice(), 'respuesta', 'respuestas')}</span>
               </div>
             </Show>
-            <Show when={exposures() > 0}>
+            <Show when={lessons() > 0}>
               <div class="flex items-center justify-between gap-3 py-2.5 tabular-nums">
                 <span class="text-ink-soft">Lecciones vistas</span>
-                <span class="font-semibold text-ink">{exposures()}</span>
+                <span class="font-semibold text-ink">{lessons()}</span>
+              </div>
+            </Show>
+            <Show when={claimed() > 0}>
+              <div class="flex items-center justify-between gap-3 py-2.5 tabular-nums" data-testid="summary-already-known">
+                <span class="text-ink-soft">Ya la sabías</span>
+                <span class="font-semibold text-ink">{plural(claimed(), 'palabra', 'palabras')}</span>
               </div>
             </Show>
             <Show when={invalid() > 0}>
@@ -220,7 +230,7 @@ const SessionSummary: Component<SessionSummaryProps> = (props) => {
               </div>
             </Show>
             <div class="flex items-center justify-between gap-3 py-2.5 tabular-nums">
-              <span class="text-ink-soft">Palabras nuevas hoy</span>
+              <span class="text-ink-soft">Nuevas enseñadas hoy</span>
               <span class="font-semibold text-ink">{props.newWords.taught} de {props.newWords.budget}</span>
             </div>
             <div class="flex items-center justify-between gap-3 py-2.5 tabular-nums">

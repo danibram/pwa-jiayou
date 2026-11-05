@@ -57,6 +57,18 @@ export const tomorrowLoad = (states: Iterable<SchedulerState>, now: Timestamp, r
   return load;
 };
 
+/**
+ * What Hoy will hold tomorrow if nothing more is studied today: items pending at the last instant
+ * of the next local day, today's leftovers included. The session summary's "Mañana" reads it, so
+ * the figure does not move as the day goes on, unlike the rolling window of `tomorrowLoad`.
+ */
+export const pendingTomorrow = (states: Iterable<SchedulerState>, now: Timestamp, rule: LocalDayRule): number => {
+  const endOfTomorrow = rule.nextLocalMidnight(rule.nextLocalMidnight(now)) - 1;
+  let count = 0;
+  for (const state of states) if (pendingToday(state, endOfTomorrow, rule)) count += 1;
+  return count;
+};
+
 /** New words wait while tomorrow's load reaches the limit. */
 export const tomorrowLoadFull = (states: Iterable<SchedulerState>, now: Timestamp, rule: LocalDayRule): boolean =>
   tomorrowLoad(states, now, rule) >= STUDY_RULES.tomorrowLoadLimit;

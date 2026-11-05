@@ -8,6 +8,7 @@ import {
   isMastered,
   isWeak,
   pendingToday,
+  pendingTomorrow,
   tomorrowLoad,
   tomorrowLoadFull,
   type LocalDayRule,
@@ -123,6 +124,23 @@ describe('isMastered', () => {
     expect(isMastered(newWord('2026-01-02'))).toBe(false);
     expect(isMastered(reviewed({ stability: 20.99 }))).toBe(false);
     expect(isMastered(reviewed({ stability: 21 }))).toBe(true);
+  });
+});
+
+describe('pendingTomorrow', () => {
+  it("counts what Hoy will hold tomorrow, today's leftovers included, the same all day", () => {
+    const today = utcRule.localDay(at(10));
+    const states = [
+      reviewed({ state: 'review', dueAt: at(9, 12) }),
+      reviewed({ state: 'review', dueAt: at(11, 23) }),
+      reviewed({ state: 'review', dueAt: at(12, 1) }),
+      newWord(addLocalDays(today, 1)),
+      newWord(today),
+      newWord(null),
+      newWord(addLocalDays(today, 2)),
+    ];
+    expect(pendingTomorrow(states, at(10, 8), utcRule)).toBe(4);
+    expect(pendingTomorrow(states, at(10, 23), utcRule)).toBe(4);
   });
 });
 

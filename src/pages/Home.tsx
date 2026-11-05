@@ -150,7 +150,11 @@ const Home: Component<HomeProps> = (props) => {
   const wordLevelLabel = () => vocabularyStore.listLabel();
   /** About eight seconds a card: a review is one card, a new word three (lesson, pick, recognition). */
   /** About eight seconds a card; a new word is two cards, the lesson and its practice. */
-  const sessionMinutes = () => Math.max(1, Math.round((wordPending() * 8) / 60));
+  /**
+   * About 12 seconds a card: a lesson or a self-assessed recall takes longer than a pick, and the plan
+   * leaves out the cards a miss adds back. Simulated runs of Hoy ended 10 to 20% above the plan.
+   */
+  const sessionMinutes = () => Math.max(1, Math.round((wordPending() * 12) / 60));
   const practisedToday = () => (activity()[new Date(store.now()).toLocaleDateString('sv-SE')] ?? 0) > 0;
 
   const wordTodayLine = () => {

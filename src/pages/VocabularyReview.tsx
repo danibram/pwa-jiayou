@@ -195,7 +195,8 @@ const VocabularyReview: Component<Props> = (props) => {
               open
               recorded={session.summary().recorded}
               items={summaryItems()}
-              dueTomorrow={store.dueByTomorrow('word-meaning')}
+              alreadyKnown={session.summary().alreadyKnown}
+              dueTomorrow={store.pendingTomorrow('word-meaning')}
               nextDueAt={session.summary().nextReviews[0]?.dueAt ?? null}
               newWords={newWords()}
               now={store.now()}

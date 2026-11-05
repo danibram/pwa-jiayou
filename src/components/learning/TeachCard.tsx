@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, JSX, on, onCleanup, Show } from 'solid-js';
-import type { ExposureCard } from '../../domain/learning/types';
+import { STUDY_RULES, type ExposureCard } from '../../domain/learning/types';
 import { speakWord } from '../../utils/speech';
 import { AnswerPanel, HanziBlock } from './parts';
 import type { LearningSessionActions, LearningSessionView } from './types';
@@ -43,8 +43,11 @@ const TeachCard: Component<TeachCardProps> = (props) => {
   }));
   return (
     <>
-      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:justify-center">
+      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:[justify-content:safe_center]">
         <p class="eyebrow mb-3">{props.card.reason === 'teaching' ? 'Palabra nueva' : 'Ya la sabías'}</p>
+        <Show when={props.card.reason === 'teaching' && props.view.claimsUsedUp}>
+          <p class="mb-3 text-xs text-ink-soft" data-testid="claims-used-up">Hoy ya has usado los {STUDY_RULES.alreadyKnownPerDay} «Ya la sé». Mañana vuelven.</p>
+        </Show>
         <HanziBlock characters={props.card.answer.characters} />
         <Show when={!gated()} fallback={<p class="mt-4 text-sm text-ink-soft">¿Ya sabes qué significa?</p>}>
           <AnswerPanel

@@ -25,6 +25,8 @@ export interface LearningSessionView {
   inputError: string | null;
   /** The teaching card offers "Ya la sé" before showing the answer. */
   canClaimKnown: boolean;
+  /** A new word's first teaching, shown in full because today's "Ya la sé" claims are used up. */
+  claimsUsedUp: boolean;
 }
 
 /** What the screen reports. The controller evaluates, rates and saves; the components never do. */

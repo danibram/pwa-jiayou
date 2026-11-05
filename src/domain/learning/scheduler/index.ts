@@ -24,4 +24,4 @@ export {
   rebuildItem,
   type SchedulerRegistry,
 } from './rebuild';
-export { isDue, isMastered, isWeak, pendingToday, tomorrowLoad, tomorrowLoadFull } from './rules';
+export { isDue, isMastered, isWeak, pendingToday, pendingTomorrow, tomorrowLoad, tomorrowLoadFull } from './rules';

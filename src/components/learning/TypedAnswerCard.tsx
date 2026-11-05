@@ -90,7 +90,7 @@ const TypedAnswerCard: Component<TypedAnswerCardProps> = (props) => {
 
   return (
     <>
-      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:justify-center">
+      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:[justify-content:safe_center]">
         <p class="eyebrow mb-3">{EYEBROW[cue()]}</p>
 
         <Show when={cue() === 'gloss' && !answered()}>

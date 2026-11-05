@@ -227,7 +227,7 @@ export const STUDY_RULES = {
   /** After Again, the word comes back this many cards later, as practice. */
   requeueGap: 4,
   /** "Ya la sé" claims per local day. Past it a new word is always taught. */
-  alreadyKnownPerDay: 10,
+  alreadyKnownPerDay: 20,
 } as const;
 
 /** One observation inside an attempt event; the item, content and attempt are the event's. */

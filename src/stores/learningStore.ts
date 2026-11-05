@@ -13,6 +13,7 @@ import {
   isWeak,
   pendingToday as isPendingToday,
   tomorrowLoad as countTomorrowLoad,
+  pendingTomorrow as countPendingTomorrow,
   tomorrowLoadFull as isTomorrowLoadFull,
   type LocalDayRule,
   type Scheduler,
@@ -487,12 +488,17 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
 
     /**
      * Tomorrow's load (`tomorrowLoad`): items falling due in the next 24 hours, overdue ones excluded,
-     * and items taught today whose first rating opens tomorrow. The gate on new items and the
-     * session summary's "Mañana" read this same figure.
+     * and items taught today whose first rating opens tomorrow. The gate on new items reads it.
      */
     dueByTomorrow(kind: ItemKind = 'word-meaning'): number {
       version();
       return countTomorrowLoad(statesOf(kindPool(kind)), clock(), dayRule);
+    },
+
+    /** What Hoy will hold tomorrow if nothing more is studied today (`pendingTomorrow`). */
+    pendingTomorrow(kind: ItemKind = 'word-meaning'): number {
+      version();
+      return countPendingTomorrow(statesOf(kindPool(kind)), clock(), dayRule);
     },
 
     /** No new items while tomorrow's load reaches the limit. */
