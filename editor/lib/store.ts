@@ -93,6 +93,7 @@ export const diffSnapshots = (current: ContentSnapshot, original: ContentSnapsho
       const format = key === 'topicIds' ? (value: unknown) => titles(value as string[]) : key === 'level' ? (value: unknown) => (value ? `HSK ${String(value)}` : 'Extra') : key === 'relations' ? relationText : key === 'senses' ? (value: unknown) => formatSenses(value as WordSense[] | undefined) : show;
       fields.push({ name, before: before ? format(a) : '', after: format(b) });
     }
+    if (before && !!before.retired !== !!word.retired) fields.push({ name: 'Retirada', before: before.retired ? 'sí' : 'no', after: word.retired ? 'sí' : 'no' });
     const priorExample = before && exampleFor(before);
     const nextExample = exampleFor(word);
     for (const [key, name] of [['chinese', 'Frase en chino'], ['spanish', 'Traducción de la frase']] as const) {
@@ -328,7 +329,10 @@ export function createEditorStore() {
   const isNewTopic = (id: string) => !base()?.topics.some((t) => t.id === id);
   const isNewWord = (id: string) => !base()?.vocabulary.some((w) => w.id === id);
 
-  /** A new word takes the catalog id rule (hanzi then reading) until it is promoted; a published id never moves. */
+  /**
+   * A new word takes the catalog id rule (hanzi then reading) until it is promoted; a published id never moves.
+   * Retired words stay in the snapshot, so their ids count as taken and a new word gets the next suffix.
+   */
   const catalogId = (s: ContentSnapshot, item: VocabularyEntry) => {
     if (!item.simplified || !item.pinyin.trim()) return item.id;
     const stem = wordId(item.simplified, item.pinyin);
@@ -430,6 +434,26 @@ export function createEditorStore() {
     });
     if (selected() === id) setSelected('');
   };
+  /**
+   * Retiring a published word takes it out of the app's lists but keeps its row and id, so no other
+   * entry can take the id. Live words drop their links to it. Clearing the flag publishes it again.
+   */
+  const setWordRetired = (id: string, retired: boolean) => {
+    if (isNewWord(id)) return;
+    edit((s) => {
+      const item = s.vocabulary.find((w) => w.id === id);
+      if (!item) return;
+      if (!retired) { delete item.retired; return; }
+      item.retired = true;
+      for (const word of s.vocabulary) {
+        if (!word.relations?.length) continue;
+        const next = word.relations.filter((row) => row.id !== id);
+        if (next.length === word.relations.length) continue;
+        if (next.length) word.relations = next;
+        else delete word.relations;
+      }
+    });
+  };
 
   const updateCharacter = (field: keyof HSKCharacter, value: string) => edit((s) => {
     const item = s.characters.find((c) => c.character === selected());
@@ -512,7 +536,7 @@ export function createEditorStore() {
   return {
     base, snapshot, ready, revision, version, section, selected, setSelected, status, error, setError, storageBlocked, dirty, rawStored, server, promotion, references, updateWordExample, removeWordExample,
     load, edit, draft, save, exportDraft, downloadStored, publication, importDraft, resetDraft, changes, changesDeferred, plan, promote, switchSection,
-    word, character, topic, isNewTopic, isNewWord, updateWord, updateSense, addSense, removeSense, moveSense, setWordLevel, toggleWordTopic, setWordRelation, addWord, removeWord, updateCharacter, updateExample,
+    word, character, topic, isNewTopic, isNewWord, updateWord, updateSense, addSense, removeSense, moveSense, setWordLevel, toggleWordTopic, setWordRelation, addWord, removeWord, setWordRetired, updateCharacter, updateExample,
     addTopic, updateTopic, setTopicCharacters, removeTopic, moveTopic, assignWords,
   };
 }

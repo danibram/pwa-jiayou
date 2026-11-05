@@ -143,11 +143,13 @@ export interface Exercise {
   id: string;
   skill: Skill;
   format: 'free-recall' | 'multiple-choice' | 'writing' | 'other';
+  /** Strokes only: watching and tracing show the character, memory does not. Only memory rates. */
+  stage?: 'watch' | 'trace' | 'memory';
   /** Self-assessment: the learner reveals the answer and rates. Automatic: the evaluator decides. */
   grading: 'self-assessment' | 'automatic';
   cue: Cue;
   prompt: string;
-  options: readonly { id: string; text: string }[];
+  options: readonly { id: string; text: string; contentId?: string | null }[];
   context: string | null;
   audio: SpeechAudio | null;
   answer: RevealedAnswer | null;
@@ -218,6 +220,12 @@ export interface SkillEvidence {
   skill: Skill;
   recordedAt: Timestamp;
   evaluation: ValidEvaluation;
+  /** A hint that gave the answer away came before the first answer (any hint, for writing). */
+  assisted: boolean;
+  /** Wrong options selected, in order, with the content each showed. */
+  confusions: readonly { optionId: string; contentId: string | null }[];
+  /** Stroke mistakes on the first drawing; null without a drawing. */
+  mistakes: number | null;
 }
 
 /** Computed on the fly from the evidence of non-voided events. Not persisted. */
@@ -334,6 +342,47 @@ export const EXERCISE_ROLES = {
   recognize: { role: 'practice', skill: 'meaning', cue: 'characters', format: 'multiple-choice', grading: 'automatic' },
 } as const satisfies Record<LegacyPrompt, ExerciseRole>;
 
+/**
+ * What a planned card asks of the learner. Package 3B turns it into an Exercise:
+ * - `scheduled`: the item is pending today and the mode rates, so the card may write a scheduled review;
+ * - `teach`: an exposure that shows the answer and is not answered;
+ * - `practice`: answered, never rated;
+ * - `already-known-check`: a recall without options right after an `already-known` exposure (P4).
+ */
+export type CardIntent = 'scheduled' | 'teach' | 'practice' | 'already-known-check';
+
+/** Why the card is in the session. 3B and the summary may read it; the policy keys its bounds on it. */
+export type CardReason =
+  /** Learning or relearning step whose time has come. */
+  | 'learning-step'
+  /** Review due before the next local midnight. */
+  | 'due-review'
+  /** New item whose `eligibleFrom` has arrived: its first FSRS rating (P1). */
+  | 'first-rating'
+  /** First teaching of an item never taught. Spends the new-item budget. */
+  | 'new'
+  /** The practice that follows a `new` or `reteach` card. Failing it brings a reteach (P1). */
+  | 'new-practice'
+  /** Teaching again an item taught before that has no correct practice yet. Free. */
+  | 'reteach'
+  /** A practice card added `requeueGap` cards after an Again. */
+  | 'requeue'
+  /**
+   * Added after a failed first practice (P1) or a failed "Ya la sé": a teach card and, later, its
+   * practice. Failing that practice brings another pair, within the requeue limits.
+   */
+  | 'teach-again'
+  /** An item the learner probably knows (Trazos: a character met in words). Outside the budget. */
+  | 'likely-known'
+  /** "Ya la sé" turned a teach card into a check. */
+  | 'claimed-known'
+  /** Practice on a weak item (Flojos). */
+  | 'weak'
+  /** Practice on a seen item that is not pending. */
+  | 'seen'
+  /** The one item a single-word session was opened for, when it is neither pending nor new. */
+  | 'chosen';
+
 export interface SessionAttempt {
   id: string;
   /** The id its attempt event will be written with, fixed when the attempt opens. */
@@ -349,10 +398,19 @@ export interface SessionAttempt {
 export interface SessionState {
   schemaVersion: 1;
   id: string;
-  mode: 'scheduled' | 'practice';
+  mode: SessionMode;
   status: 'active' | 'completed' | 'abandoned';
   startedAt: Timestamp;
-  queue: readonly { itemId: ItemId; content: ContentReference; exercise: Exercise; evaluatorVersion: string }[];
+  /** A teach card carries an exposure and no exercise; every other card carries an exercise. */
+  queue: readonly {
+    itemId: ItemId;
+    intent: CardIntent;
+    reason: CardReason;
+    content: ContentReference;
+    exercise: Exercise | null;
+    exposure: ExposureCard | null;
+    evaluatorVersion: string;
+  }[];
   position: number;
   attempts: readonly SessionAttempt[];
 }

@@ -4,6 +4,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSyn
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { characterRevision, wordRevision } from '../../src/domain/learning/content/revision';
 
 const root = existsSync(join(process.cwd(), 'scripts/content-publish.mjs')) ? process.cwd() : resolve(process.cwd(), '..');
 const dirs: string[] = [];
@@ -23,6 +24,8 @@ const setup = () => {
   copyFileSync(join(root, 'scripts/build-search-index.mjs'), join(dir, 'scripts/build-search-index.mjs'));
   writeFileSync(join(dir, 'content/version.json'), json({ version: 1, date: '2026-11-03', notes: 'Primera versión.' }));
   copyFileSync(join(root, 'editor/lib/model.ts'), join(dir, 'editor/lib/model.ts'));
+  // Publication bundles the app's revision code to compute each entry's revision.
+  for (const path of ['src/domain/learning/content', 'src/domain/learning/types.ts', 'src/utils/pinyin.ts', 'shared/pinyin']) cpSync(join(root, path), join(dir, path), { recursive: true });
   symlinkSync(join(root, 'node_modules'), join(dir, 'node_modules'), 'dir');
   writeFileSync(join(dir, 'content/snapshot.json'), json(base));
   writeFileSync(join(dir, 'src/data/topics.ts'), 'export const topics: Topic[] = [\n];\n');
@@ -39,8 +42,8 @@ const setupReal = () => {
 const run = (dir: string, ...args: string[]) => {
   try {
     return execFileSync(process.execPath, [join(dir, 'scripts/content-publish.mjs'), ...args], { cwd: dir, stdio: 'pipe' });
-  } catch {
-    throw new Error('El generador rechazó el borrador.');
+  } catch (error) {
+    throw new Error(`El generador rechazó el borrador: ${(error as { stderr?: Buffer }).stderr?.toString() ?? ''}`);
   }
 };
 afterEach(() => { for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true }); });
@@ -151,6 +154,11 @@ describe('standalone content export', () => {
     expect(JSON.parse(base.toString())).toEqual(snapshot);
     expect(JSON.parse(readFileSync(join(dir, 'editor/public/base/revision.json'), 'utf8')).revision).toBe(hash(base.toString()));
     expect(JSON.parse(readFileSync(join(dir, 'editor/public/base/version.json'), 'utf8')).version).toBe(2);
+    // The new gloss changes what the stroke page shows, so 的 gets a new published revision.
+    expect(output).toContain('src/data/vocabulary/published-ids.json');
+    const registry = JSON.parse(readFileSync(join(dir, 'src/data/vocabulary/published-ids.json'), 'utf8'));
+    expect(registry.characters['char-7684'].revisions).toHaveLength(2);
+    expect(registry.characters['char-7684'].revisions[1]).toBe(characterRevision(entry));
   });
   it('refuses to promote a draft with no changes', () => {
     const dir = setup();
@@ -158,5 +166,50 @@ describe('standalone content export', () => {
     writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(base)), snapshot: base }));
     expect(() => run(dir, 'promote', draftPath)).toThrow();
     expect(JSON.parse(readFileSync(join(dir, 'content/version.json'), 'utf8')).version).toBe(1);
+  });
+  it('keeps ids through a corrected reading, a move to Extra and a retirement, and publishes each revision', () => {
+    const dir = setupReal();
+    const baseSnapshot = JSON.parse(readFileSync(join(dir, 'content/snapshot.json'), 'utf8'));
+    const before = JSON.parse(readFileSync(join(dir, 'src/data/vocabulary/published-ids.json'), 'utf8'));
+    type Row = { id: string; level?: number; pinyin: string; retired?: true; relations?: { id: string }[] };
+    const snapshot = structuredClone(baseSnapshot) as { vocabulary: Row[] };
+    const row = (id: string) => snapshot.vocabulary.find((item) => item.id === id)!;
+    row('word-7231-ai4').pinyin = 'ǎi';
+    delete row('word-8fd8-hai2').level;
+    row('word-8fd8-huan2').retired = true;
+    for (const item of snapshot.vocabulary) {
+      if (!item.relations) continue;
+      item.relations = item.relations.filter((link) => link.id !== 'word-8fd8-huan2');
+      if (!item.relations.length) delete item.relations;
+    }
+    const draftPath = join(dir, 'draft.json');
+    writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(baseSnapshot)), snapshot }));
+    run(dir, 'import', draftPath);
+    const out = (path: string) => JSON.parse(readFileSync(join(dir, 'editor/export', path), 'utf8'));
+    const registry = out('src/data/vocabulary/published-ids.json');
+    expect(Object.keys(registry.words)).toEqual(Object.keys(before.words));
+    expect(Object.keys(registry.characters)).toEqual(Object.keys(before.characters));
+    // The published revision is computed on the row the app will read.
+    const hsk1 = out('src/data/vocabulary/hsk1.json') as Row[];
+    const ai = hsk1.find((item) => item.id === 'word-7231-ai4')!;
+    expect(ai.pinyin).toBe('ǎi');
+    expect(registry.words['word-7231-ai4']).toEqual({ status: 'available', list: 'hsk1', revisions: [...before.words['word-7231-ai4'].revisions, wordRevision(ai as never)] });
+    const extra = out('src/data/vocabulary/extra.json') as Row[];
+    expect(extra.map((item) => item.id)).toEqual(['word-8fd8-hai2']);
+    expect(registry.words['word-8fd8-hai2']).toEqual({ ...before.words['word-8fd8-hai2'], list: 'extra' });
+    expect(registry.words['word-8fd8-huan2']).toEqual({ ...before.words['word-8fd8-huan2'], status: 'retired' });
+    const huanList = `src/data/vocabulary/${before.words['word-8fd8-huan2'].list}.json`;
+    expect((out(huanList) as Row[]).some((item) => item.id === 'word-8fd8-huan2')).toBe(false);
+    expect((out('content/snapshot.json').vocabulary as Row[]).find((item) => item.id === 'word-8fd8-huan2')?.retired).toBe(true);
+  });
+  it('refuses a new word that takes an id the registry already published', () => {
+    const dir = setup();
+    const registry = { schemaVersion: 2, words: { 'word-1': { status: 'available', list: 'hsk1', revisions: ['w1:0'] }, 'word-2': { status: 'retired', list: 'hsk1', revisions: ['w1:1'] } }, characters: {} };
+    writeFileSync(join(dir, 'src/data/vocabulary/published-ids.json'), json(registry));
+    const snapshot = structuredClone(base);
+    snapshot.vocabulary.push({ ...base.vocabulary[0], id: 'word-2', simplified: '二', traditional: '二', characters: ['二'], pinyin: 'èr' });
+    const draftPath = join(dir, 'draft.json');
+    writeFileSync(draftPath, json({ schemaVersion: 1, baseRevision: hash(json(base)), snapshot }));
+    expect(() => run(dir, 'import', draftPath)).toThrow(/ya se publicó/);
   });
 });

@@ -2,6 +2,8 @@
 //   generate            copy content/snapshot.json into editor/public/base/ with its revision hash
 //   import <draft>      write the files a draft changes into editor/export/ for manual review
 //   promote <draft>     write those files into the repo, bump content/version.json, rebuild the search index
+// Every draft that changes content also updates the published id registry (REGISTRY_PATH), which keeps
+// each word and character id forever, its status and every revision the client has computed for it.
 // The editor dev server imports promoteDraft/planDraft; the CLI below only runs when the file is executed.
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -29,6 +31,82 @@ const model = async (root) => {
   validators = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
   return validators;
 };
+
+const revisionModules = new Map();
+/**
+ * The client's own src/domain/learning/content/revision.ts, bundled with esbuild so plain node can run
+ * it: a published revision is the value the app computes, not a copy of the rule.
+ */
+export async function loadRevisions(root = defaultRoot) {
+  if (revisionModules.has(root)) return revisionModules.get(root);
+  const { build } = await import('esbuild');
+  const result = await build({
+    entryPoints: [join(root, 'src/domain/learning/content/revision.ts')],
+    bundle: true, write: false, format: 'esm', platform: 'neutral', logLevel: 'silent',
+  });
+  const loaded = import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`);
+  revisionModules.set(root, loaded);
+  return loaded;
+}
+
+export const REGISTRY_PATH = 'src/data/vocabulary/published-ids.json';
+export const REGISTRY_SCHEMA = 2;
+
+/** The list a word row is filed under: hsk1 to hsk6, or extra when it has no level. */
+export const listOf = (row) => (row.level === undefined ? 'extra' : `hsk${row.level}`);
+
+const sortedEntries = (record) => Object.fromEntries(Object.entries(record).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+
+/**
+ * The registry after publishing `words` and `characters`. Pure, so tests can pass revision functions.
+ * - An id never leaves the registry. A word row missing from `words` is an error: retire it instead
+ *   (row.retired), which keeps the row in the snapshot and its id taken.
+ * - A word is "available" or "retired"; `list` says where it ships (hsk2 to hsk6 come with their pack).
+ * - `revisions` lists every revision published for the id, oldest first. A changed revision is
+ *   appended, so attempts saved against an older one can still be told apart from a missing id.
+ * The first registry was a bare array of HSK ids; those ids are read as published words.
+ */
+export function updateRegistry(previous, { words, characters }, revise) {
+  const legacy = Array.isArray(previous);
+  const prior = legacy
+    ? { words: Object.fromEntries(previous.map((id) => [id, { revisions: [] }])), characters: {} }
+    : previous ?? { words: {}, characters: {} };
+  const entry = (before, revision, fields) => {
+    const revisions = [...(before?.revisions ?? [])];
+    if (revisions[revisions.length - 1] !== revision) revisions.push(revision);
+    return { ...fields, revisions };
+  };
+  const nextWords = {};
+  for (const row of words) {
+    if (nextWords[row.id]) throw new Error(`Id de palabra duplicado: ${row.id}.`);
+    nextWords[row.id] = entry(prior.words[row.id], revise.wordRevision(row), { status: row.retired ? 'retired' : 'available', list: listOf(row) });
+  }
+  const gone = Object.keys(prior.words).filter((id) => !nextWords[id]);
+  if (gone.length) throw new Error(`Faltan palabras publicadas: ${gone.join(', ')}. Retíralas en lugar de borrarlas; su id no se puede reutilizar.`);
+  const nextCharacters = {};
+  for (const row of characters) {
+    const id = revise.characterContentId(row.character);
+    if (nextCharacters[id]) throw new Error(`Carácter duplicado: ${row.character}.`);
+    nextCharacters[id] = entry(prior.characters[id], revise.characterRevision(row), { status: 'available', list: `hsk${row.hsk_level}` });
+  }
+  const goneChars = Object.keys(prior.characters).filter((id) => !nextCharacters[id]);
+  if (goneChars.length) throw new Error(`Faltan caracteres publicados: ${goneChars.join(', ')}.`);
+  return { schemaVersion: REGISTRY_SCHEMA, words: sortedEntries(nextWords), characters: sortedEntries(nextCharacters) };
+}
+
+/** One id per line, so a promotion's diff shows exactly the entries it touched. */
+export const registryJson = (registry) => {
+  const block = (record) => {
+    const rows = Object.entries(record).map(([id, value]) => `    ${JSON.stringify(id)}: ${JSON.stringify(value)}`);
+    return rows.length ? `{\n${rows.join(',\n')}\n  }` : '{}';
+  };
+  return `{\n  "schemaVersion": ${registry.schemaVersion},\n  "words": ${block(registry.words)},\n  "characters": ${block(registry.characters)}\n}\n`;
+};
+
+export const readRegistry = (root = defaultRoot) => readOptional(join(root, REGISTRY_PATH), null);
+
+/** The ids a draft may not hand to a new word: every id the registry has ever published. */
+const publishedWordIds = (registry) => (Array.isArray(registry) ? registry : Object.keys(registry?.words ?? {}));
 
 export const snapshotRevision = (snapshot) => hash(json(snapshot));
 
@@ -89,14 +167,17 @@ export async function planDraft(draft, root = defaultRoot) {
   // validateSnapshot fills a missing topic kind, so hash the file as written first.
   const revision = snapshotRevision(base);
   validateSnapshot(base);
-  validateDraft(draft, base, revision);
+  const registry = await readRegistry(root);
+  validateDraft(draft, base, revision, publishedWordIds(registry));
   const snapshot = draft.snapshot;
   const files = [];
+  // A retired word stays in the snapshot, so its id stays taken, but leaves the lists the app reads.
+  const listed = (rows, level) => rows.filter((row) => row.level === level && !row.retired);
   if (!equal(snapshot, base)) files.push(['content/snapshot.json', json(snapshot)]);
   if (!equal(snapshot.topics, base.topics)) files.push(await topicsSource(root, snapshot.topics));
   for (let n = 1; n <= 6; n++) {
-    const words = snapshot.vocabulary.filter((row) => row.level === n);
-    if (!equal(words, base.vocabulary.filter((row) => row.level === n))) files.push([`src/data/vocabulary/hsk${n}.json`, json(words)]);
+    const words = listed(snapshot.vocabulary, n);
+    if (!equal(words, listed(base.vocabulary, n))) files.push([`src/data/vocabulary/hsk${n}.json`, json(words)]);
     const characters = snapshot.characters.filter((row) => row.hsk_level === n);
     const old = base.characters.filter((row) => row.hsk_level === n);
     if (equal(characters, old)) continue;
@@ -139,8 +220,14 @@ export async function planDraft(draft, root = defaultRoot) {
       if (curated) files.push([curatedPath, json(curated)]);
     }
   }
-  const extra = snapshot.vocabulary.filter((row) => row.level === undefined);
-  if (!equal(extra, base.vocabulary.filter((row) => row.level === undefined))) files.push(['src/data/vocabulary/extra.json', json(extra)]);
+  const extra = listed(snapshot.vocabulary, undefined);
+  if (!equal(extra, listed(base.vocabulary, undefined))) files.push(['src/data/vocabulary/extra.json', json(extra)]);
+  // The registry follows the content: an unchanged draft writes nothing, not even a registry refresh.
+  if (files.length) {
+    const nextRegistry = registryJson(updateRegistry(registry, { words: snapshot.vocabulary, characters: snapshot.characters }, await loadRevisions(root)));
+    const stored = await readFile(join(root, REGISTRY_PATH), 'utf8').catch((error) => { if (error.code === 'ENOENT') return null; throw error; });
+    if (nextRegistry !== stored) files.push([REGISTRY_PATH, nextRegistry]);
+  }
   const version = await readOptional(join(root, 'content/version.json'), { version: 0, date: '', notes: '' });
   return { files, version };
 }

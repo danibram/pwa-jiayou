@@ -1,7 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { sensesText } from '../src/data/wordSenses';
 import { vocabulary, vocabularyByLevel } from './fixtures/levelWords';
 import {
+  extraVocabulary,
   vocabularyCoverage,
   officialCounts,
   vocabularySources,
@@ -14,18 +16,38 @@ import hsk3 from '../src/data/vocabulary/hsk3.json';
 import hsk4 from '../src/data/vocabulary/hsk4.json';
 import hsk5 from '../src/data/vocabulary/hsk5.json';
 import hsk6 from '../src/data/vocabulary/hsk6.json';
-import publishedIds from '../src/data/vocabulary/published-ids.json';
+import extra from '../src/data/vocabulary/extra.json';
+import publishedRegistry from '../src/data/vocabulary/published-ids.json';
 import { wordId } from '../src/utils/pinyin';
 import { topics } from '../src/data/topics';
+import { parseCharacterList } from '../src/stores/characterStore';
+import type { HskLevel } from '../src/types';
+import { characterContentId, characterRevision, wordRevision } from '../src/domain/learning/content/revision';
+import { listOf, updateRegistry, type ContentRegistry } from '../scripts/content-publish.mjs';
 
-type RawWord = { id: string; simplified: string; pinyin: string };
+type RawWord = (typeof hsk1)[number] & { level?: number; retired?: true };
 /** Raw JSON readings, so the expected ids do not depend on runtime tone sandhi. */
-const rawWords: RawWord[] = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6].flat();
+const rawWords: RawWord[] = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra as RawWord[]].flat();
+const registry = publishedRegistry as unknown as ContentRegistry;
+const revise = { wordRevision, characterRevision, characterContentId };
 
 const hanziHex = (simplified: string) => [...simplified].map((char) => char.codePointAt(0)!.toString(16));
 
 /** The app's own rule, so the ids the build scripts wrote and the ones it makes for new words agree. */
-const expectedId = ({ simplified, pinyin }: RawWord) => wordId(simplified, pinyin);
+const expectedId = ({ simplified, pinyin }: Pick<RawWord, 'simplified' | 'pinyin'>) => wordId(simplified, pinyin);
+
+/**
+ * Ids that break the catalog rule. A published id is permanent and is never checked against the
+ * current hanzi or reading, so a corrected entry keeps it. Only a candidate the registry has not
+ * published must be wordId(simplified, pinyin), or that id plus the editor's collision suffix
+ * (catalogId in editor/lib/store.ts adds -2, -3...).
+ */
+const unpublishedIdProblems = (rows: readonly RawWord[], published: ContentRegistry) =>
+  rows.filter((row) => {
+    if (published.words[row.id]) return false;
+    const stem = expectedId(row);
+    return row.id !== stem && !(row.id.startsWith(`${stem}-`) && /^([2-9]|[1-9]\d+)$/.test(row.id.slice(stem.length + 1)));
+  }).map((row) => `${row.simplified} ${row.pinyin}: ${row.id}`);
 
 const rawWordFor = (simplified: string) => {
   const word = rawWords.find((entry) => entry.simplified === simplified);
@@ -79,7 +101,8 @@ describe('HSK 2.0 vocabulary', () => {
       expect(vocabularyByLevel[level]).toHaveLength(vocabularyCoverage.counts[level]);
       for (const entry of vocabularyByLevel[level]) {
         expect(entry.level).toBe(level);
-        expect(entry.id.startsWith(`word-${hanziHex(entry.simplified).join('-')}-`)).toBe(true);
+        // A published id keeps the hanzi it was first published with, even after a correction.
+        if (!registry.words[entry.id]) expect(entry.id.startsWith(`word-${hanziHex(entry.simplified).join('-')}-`)).toBe(true);
         expect(entry.sourceId in vocabularySources).toBe(true);
         expect(sensesText(entry.senses)).toBeTruthy();
         expect(entry.traditional).toBeTruthy();
@@ -88,8 +111,8 @@ describe('HSK 2.0 vocabulary', () => {
     }
   });
 
-  it('derives every word id from the hanzi and the raw reading', () => {
-    for (const word of rawWords) expect(word.id, word.simplified).toBe(expectedId(word));
+  it('derives every unpublished word id from the hanzi and the raw reading', () => {
+    expect(unpublishedIdProblems(rawWords, registry)).toEqual([]);
     expect(new Set(rawWords.map((word) => word.id)).size).toBe(rawWords.length);
   });
 
@@ -133,26 +156,108 @@ describe('HSK 2.0 vocabulary', () => {
   });
 });
 
-describe('published word ids', () => {
+describe('published id registry', () => {
   const catalogIds = new Set(rawWords.map((word) => word.id));
+  const entries = Object.entries(registry.words);
 
-  it('keeps every published id in the catalog', () => {
-    const gone = publishedIds.filter((id) => !catalogIds.has(id));
+  it('keeps every available id in the catalog', () => {
+    const gone = entries.filter(([id, entry]) => entry.status === 'available' && !catalogIds.has(id)).map(([id]) => id);
     expect(
       gone,
-      'Saved progress points at these ids and would be orphaned. Restore the entry or its reading in ' +
-        'src/data/vocabulary/hsk*.json; a corrected reading needs a migration of saved progress first. ' +
+      'Saved progress points at these ids and would be orphaned. Restore the entry in src/data/vocabulary/*.json, ' +
+        'keeping its id even if you corrected its hanzi, reading or senses. To retire it, set retired: true on its row in ' +
+        'content/snapshot.json and run `npm run published-ids`. ' +
         'Do not edit published-ids.json to make this pass.',
     ).toEqual([]);
   });
 
-  it('lists every catalog id as published', () => {
-    const published = new Set(publishedIds);
-    const unlisted = [...catalogIds].filter((id) => !published.has(id));
+  it('keeps retired ids out of the lists the app reads', () => {
+    const listed = entries.filter(([id, entry]) => entry.status === 'retired' && catalogIds.has(id)).map(([id]) => id);
+    expect(listed, 'A retired id cannot come back as a listed word. To publish the same entry again, remove retired: true from its row in content/snapshot.json.').toEqual([]);
+  });
+
+  it('lists every catalog id as published, under the list that ships it', () => {
+    const unlisted = [...catalogIds].filter((id) => !registry.words[id]);
     expect(
       unlisted,
       'Ids not published yet. For new vocabulary run `npm run published-ids` and commit published-ids.json. ' +
         'If one replaces a published id, fix that failure first.',
     ).toEqual([]);
+    for (const word of rawWords) expect(registry.words[word.id]?.list, word.id).toBe(listOf(word));
+  });
+
+  it('matches the snapshot the editor publishes from', () => {
+    const snapshot = JSON.parse(readFileSync('content/snapshot.json', 'utf8')) as { vocabulary: RawWord[]; characters: { character: string }[] };
+    expect(Object.keys(registry.words).sort()).toEqual(snapshot.vocabulary.map((row) => row.id).sort());
+    for (const row of snapshot.vocabulary) expect(registry.words[row.id].status, row.id).toBe(row.retired ? 'retired' : 'available');
+    expect(Object.keys(registry.characters).sort()).toEqual(snapshot.characters.map((row) => characterContentId(row.character)).sort());
+  });
+
+  it('publishes the revision the app computes for every word and character', () => {
+    // Words as the app parses them (reading with tone sandhi), characters as the stroke page reads them.
+    const words = [...vocabulary, ...extraVocabulary];
+    expect(words).toHaveLength(rawWords.length);
+    const stale = words.filter((word) => registry.words[word.id]?.revisions.at(-1) !== wordRevision(word)).map((word) => word.id);
+    const characters = [
+      ...parseCharacterList(JSON.parse(readFileSync('src/data/hsk1.json', 'utf8')), 1),
+      ...([2, 3, 4, 5, 6] as HskLevel[]).flatMap((level) =>
+        parseCharacterList(JSON.parse(readFileSync(`public/packs/hsk${level}.json`, 'utf8')), level),
+      ),
+    ];
+    expect(characters).toHaveLength(Object.keys(registry.characters).length);
+    for (const character of characters) {
+      const id = characterContentId(character.character);
+      if (registry.characters[id]?.revisions.at(-1) !== characterRevision(character)) stale.push(id);
+    }
+    expect(stale, 'Published revisions differ from what the app computes. Run `npm run published-ids` and commit published-ids.json.').toEqual([]);
+  });
+});
+
+describe('id permanence', () => {
+  const ai = rawWords.find((word) => word.id === 'word-7231-ai4')!;
+  const hai = rawWords.find((word) => word.id === 'word-8fd8-hai2')!;
+  const characters = [{ character: '爱', pinyin: 'ài', definition: 'amar', hsk_level: 1 }];
+  const first = updateRegistry(null, { words: [ai, hai], characters }, revise);
+
+  it('keeps the id after a corrected reading or corrected senses', () => {
+    const reading = { ...ai, pinyin: 'ǎi' };
+    const senses = { ...ai, senses: [{ pos: 'verbo', text: 'querer' }] };
+    // The corrected reading no longer derives the id, which is fine once the id is published.
+    expect(unpublishedIdProblems([reading], first)).toEqual([]);
+    expect(unpublishedIdProblems([reading], updateRegistry(null, { words: [], characters: [] }, revise))).toHaveLength(1);
+    let next = first;
+    for (const corrected of [reading, senses]) {
+      next = updateRegistry(next, { words: [corrected, hai], characters }, revise);
+      expect(next.words[ai.id]).toMatchObject({ status: 'available', list: 'hsk1' });
+      expect(next.words[ai.id].revisions.at(-1)).toBe(wordRevision(corrected));
+    }
+    // Every revision stays, oldest first, so attempts made against the old card remain readable.
+    expect(next.words[ai.id].revisions).toEqual([wordRevision(ai), wordRevision(reading), wordRevision(senses)]);
+  });
+
+  it('keeps id and revision when a word moves between HSK and Extra', () => {
+    const { level: _level, ...asExtra } = ai;
+    const toExtra = updateRegistry(first, { words: [asExtra as RawWord, hai], characters }, revise);
+    expect(toExtra.words[ai.id]).toEqual({ ...first.words[ai.id], list: 'extra' });
+    const back = updateRegistry(toExtra, { words: [{ ...ai, level: 3 }, hai], characters }, revise);
+    expect(back.words[ai.id]).toEqual({ ...first.words[ai.id], list: 'hsk3' });
+  });
+
+  it('keeps a retired id and never lets it go', () => {
+    const retired = updateRegistry(first, { words: [{ ...ai, retired: true }, hai], characters }, revise);
+    expect(retired.words[ai.id]).toEqual({ ...first.words[ai.id], status: 'retired' });
+    // Dropping the row instead of retiring it would free the id for another entry.
+    expect(() => updateRegistry(retired, { words: [hai], characters }, revise)).toThrow(/word-7231-ai4/);
+    expect(() => updateRegistry(first, { words: [hai], characters }, revise)).toThrow(/Retíralas/);
+    // Clearing the retirement publishes the same entry again under its id.
+    expect(updateRegistry(retired, { words: [ai, hai], characters }, revise).words[ai.id]).toEqual(first.words[ai.id]);
+  });
+
+  it('accepts the editor collision suffix only on unpublished ids', () => {
+    const stem = expectedId(ai);
+    const empty = updateRegistry(null, { words: [], characters: [] }, revise);
+    expect(unpublishedIdProblems([{ ...ai, id: `${stem}-2` }, { ...ai, id: `${stem}-10` }], empty)).toEqual([]);
+    expect(unpublishedIdProblems([{ ...ai, id: `${stem}-1` }], empty)).toHaveLength(1);
+    expect(unpublishedIdProblems([{ ...ai, id: `${stem}-x` }], empty)).toHaveLength(1);
   });
 });

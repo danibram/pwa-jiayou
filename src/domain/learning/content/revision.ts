@@ -1,7 +1,8 @@
 import type { ContentReference } from '../types';
 import { withToneSandhi } from '../../../utils/pinyin';
 
-// Provisional per-entry content revisions, computed on the device until publishing writes them (phase 2C).
+// Per-entry content revisions. Publishing (scripts/content-publish.mjs) writes the same values to
+// src/data/vocabulary/published-ids.json, and tests/vocabularyData.test.ts checks they match.
 // A revision hashes a versioned canonical form that holds only what a question shows or grades.
 // Changing what goes into a form means a new prefix (w2, c2), never an edit to w1 or c1:
 // attempts already saved keep pointing at the old revisions.

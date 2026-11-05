@@ -32,7 +32,7 @@ Promover publica el borrador completo, aunque la lista de revisión esté filtra
 "Revisar" muestra cada cambio campo a campo, los archivos del repo que se escribirán y la versión actual del contenido junto a la siguiente. Escribe qué cambia en esta versión y pulsa "Promover a la versión N". El servidor de desarrollo entonces:
 
 1. Valida el borrador contra `content/snapshot.json` (identificadores, niveles, temas, ejemplos).
-2. Escribe los archivos afectados en sus rutas del repo: `src/data/vocabulary/hskN.json`, `src/data/topics.ts`, `src/data/hsk1.json`, `public/packs/hskN.json`, `src/data/hskN.json`, las glosas de `src/data/glosses/` y `content/snapshot.json`.
+2. Escribe los archivos afectados en sus rutas del repo: `src/data/vocabulary/hskN.json`, `src/data/topics.ts`, `src/data/hsk1.json`, `public/packs/hskN.json`, `src/data/hskN.json`, las glosas de `src/data/glosses/`, `content/snapshot.json` y el registro de identificadores `src/data/vocabulary/published-ids.json`, con la revisión de cada entrada.
 3. Sube `content/version.json` (número, fecha y notas) y regenera `src/data/searchIndex.json` si cambió algún carácter.
 4. Refresca `editor/public/base/` y vacía el borrador local, de modo que el editor parte de la nueva base.
 

@@ -1,21 +1,12 @@
 import type { ActivityByDevice, DayLog } from '../progress/activity';
 import type { DailyLog, ProgressState } from '../progress/types';
+import { canonicalJson as canonical } from '../learning/scheduler/configId';
 
 /** A record that can be merged: its last write's time and device. */
 export interface Stamped {
   updatedAt: number;
   deviceId: string;
 }
-
-/** JSON with keys sorted, so two equal records compare equal whatever order their keys were written in. */
-const canonical = (value: unknown): string => {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
-  if (value && typeof value === 'object') {
-    const entries = Object.entries(value).filter(([, item]) => item !== undefined).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
-    return `{${entries.map(([key, item]) => `${JSON.stringify(key)}:${canonical(item)}`).join(',')}}`;
-  }
-  return JSON.stringify(value);
-};
 
 /**
  * The copy that wins: the later write, then the larger device id. Two writes with the same time and

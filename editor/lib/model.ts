@@ -8,9 +8,15 @@ const isWordRelationKind = (value: unknown): boolean => typeof value === 'string
 /** Keep in sync with WORD_POS in src/data/wordSenses.ts, inlined for the same reason. */
 const WORD_POS = new Set(['sustantivo', 'verbo', 'adjetivo', 'adverbio', 'clasificador', 'pronombre', 'numeral', 'preposición', 'conjunción', 'partícula', 'interjección', 'expresión']);
 
+/**
+ * A retired word keeps its row, so its id stays taken and its history readable, but publication leaves
+ * it out of the lists the app reads. Clearing the flag publishes the same entry again under its id.
+ */
+export type SnapshotWord = VocabularyEntry & { retired?: true };
+
 export interface ContentSnapshot {
   schemaVersion: 1;
-  vocabulary: VocabularyEntry[];
+  vocabulary: SnapshotWord[];
   characters: HSKCharacter[];
   topics: Topic[];
 }
@@ -32,7 +38,11 @@ const unique = (ids: string[], label: string) => {
   if (new Set(ids).size !== ids.length) fail(`${label} duplicado.`);
 };
 
-export function validateSnapshot(value: unknown, base?: ContentSnapshot): asserts value is ContentSnapshot {
+/**
+ * `published` is every word id the registry has ever published. A word that is new to `base` may not
+ * take one of them: the id would start pointing at another entry and inherit its saved progress.
+ */
+export function validateSnapshot(value: unknown, base?: ContentSnapshot, published: Iterable<string> = []): asserts value is ContentSnapshot {
   if (!object(value) || value.schemaVersion !== 1 || !Array.isArray(value.vocabulary) || !Array.isArray(value.characters) || !Array.isArray(value.topics)) {
     return fail('Formato de contenido inválido.');
   }
@@ -66,7 +76,8 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot): assert
   }
   for (const word of words) {
     if (!object(word) || !text(word.id) || !text(word.simplified) || !text(word.traditional) || !text(word.pinyin) || !(Array.isArray(word.senses) || (!base && text(word.meaning))) || !text(word.sourceId) || (word.level !== undefined && !level(word.level)) || !Array.isArray(word.characters) || !word.characters.every(han) || !strings(word.topicIds)) fail('Palabra inválida.');
-    const row = word as unknown as VocabularyEntry;
+    const row = word as unknown as SnapshotWord;
+    if (row.retired !== undefined && row.retired !== true) fail(`Estado de retirada inválido en ${row.simplified}.`);
     if (row.example !== undefined && row.example !== null && (!object(row.example) || !text(row.example.chinese) || !text(row.example.spanish))) fail(`Frase incompleta en ${row.simplified}.`);
     // Published bases before senses carry a single meaning string; a draft always has senses.
     if (Array.isArray(row.senses)) {
@@ -93,12 +104,15 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot): assert
       }
     }
   }
-  const wordRows = words as VocabularyEntry[];
+  const wordRows = words as SnapshotWord[];
   unique(wordRows.map((row) => row.id), 'Id de palabra');
   const wordIds = new Set(wordRows.map((row) => row.id));
+  const retiredIds = new Set(wordRows.filter((row) => row.retired).map((row) => row.id));
   for (const row of wordRows) {
     for (const link of row.relations ?? []) {
       if (!wordIds.has(link.id)) fail(`Palabra desconocida en las relaciones de ${row.simplified}.`);
+      // The app never loads a retired word, so a live word cannot point at one.
+      if (!row.retired && retiredIds.has(link.id)) fail(`${row.simplified} se relaciona con una palabra retirada.`);
     }
   }
   for (const char of chars) {
@@ -123,8 +137,10 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot): assert
     preserve(base.characters.map((row) => row.character), charRows.map((row) => row.character), 'un carácter');
     preserve(base.topics.map((row) => row.id), topicRows.map((row) => row.id), 'un tema');
     const oldWords = new Map(base.vocabulary.map((row) => [row.id, row]));
+    const publishedIds = new Set(published);
     // Words can move between HSK lists and Extra. The app keys progress by id, so a move keeps it.
     for (const row of wordRows) {
+      if (!oldWords.has(row.id) && publishedIds.has(row.id)) fail(`El identificador ${row.id} ya se publicó para otra palabra.`);
       if (!oldWords.has(row.id) && row.level !== undefined && !/^word-/.test(row.id)) fail(`La palabra nueva ${row.simplified} necesita un identificador de catálogo.`);
     }
     const oldChars = new Map(base.characters.map((row) => [row.character, row]));
@@ -132,10 +148,10 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot): assert
   }
 }
 
-export function validateDraft(value: unknown, base: ContentSnapshot, revision: string): asserts value is ContentDraft {
+export function validateDraft(value: unknown, base: ContentSnapshot, revision: string, published: Iterable<string> = []): asserts value is ContentDraft {
   if (!object(value) || value.schemaVersion !== 1 || typeof value.baseRevision !== 'string') return fail('Formato de borrador inválido.');
   if (value.baseRevision !== revision) fail('El borrador parte de una versión anterior.');
-  validateSnapshot(value.snapshot, base);
+  validateSnapshot(value.snapshot, base, published);
   if (value.references !== undefined) {
     if (!object(value.references)) return fail('Referencias inválidas.');
     const ids = new Set(value.snapshot.vocabulary.map((word) => word.id));

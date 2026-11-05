@@ -34,6 +34,8 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@types/node": "^20.10.5",
     "autoprefixer": "^10.4.16",
+    "esbuild": "0.21.5",
+    "fake-indexeddb": "6.2.7",
     "hanzi-writer-data": "^2.0.1",
     "jsdom": "^23.0.1",
     "postcss": "^8.4.32",
