@@ -125,7 +125,7 @@ La app actual usa el día del calendario local del dispositivo, que empieza a me
 Los contratos nuevos adoptan la misma regla para los presupuestos, la pantalla Hoy y la elegibilidad para programar:
 
 - Cada evento guarda `localDay`, calculado al escribirlo con la regla de `dayKey`. Los presupuestos diarios cuentan los eventos cuyo `localDay` coincide con el día local actual. Cambiar de zona horaria no mueve eventos ya escritos de un día a otro.
-- Un elemento en estado `review` está pendiente hoy, y es elegible, si `dueAt` es anterior a la próxima medianoche local.
+- Un elemento en estado `review` está pendiente hoy, y es elegible, si `dueAt` es anterior a la próxima medianoche local y su `lastReviewAt` cae en un día local anterior a hoy. El día del cambio de horario de otoño dura 25 horas, y un intervalo de un día puede vencer antes de su medianoche; sin la segunda condición, la misma palabra recibiría dos notas ese día.
 - Un elemento en `learning` o `relearning` está pendiente, y es elegible, cuando `dueAt` es menor o igual que el instante actual, porque sus pasos cortos respetan su hora.
 - El día anterior se obtiene restando un día al calendario local, no 24 horas.
 

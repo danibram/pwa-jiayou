@@ -9,7 +9,8 @@ export const isDue = (state: SchedulerState, now: Timestamp): boolean => state.s
 /**
  * Whether Hoy shows the item as pending, which is also whether a `meaning` card may write a
  * `scheduled-review` with `basis: 'due'` ("Inicio del día" in contracts.md):
- * - review: due before the next local midnight;
+ * - review: due before the next local midnight and last rated on an earlier local day, so a day that
+ *   lasts 25 hours (autumn DST) cannot rate it twice when a one-day interval ends before its midnight;
  * - learning and relearning: due now, since short steps keep their time;
  * - new: `eligibleFrom` has arrived.
  */
@@ -18,7 +19,7 @@ export const pendingToday = (state: SchedulerState, now: Timestamp, rule: LocalD
     case 'new':
       return state.eligibleFrom !== null && state.eligibleFrom <= rule.localDay(now);
     case 'review':
-      return state.dueAt < rule.nextLocalMidnight(now);
+      return state.dueAt < rule.nextLocalMidnight(now) && rule.localDay(state.lastReviewAt) < rule.localDay(now);
     default:
       return state.dueAt <= now;
   }

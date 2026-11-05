@@ -84,7 +84,7 @@ describe('work is counted in cards', () => {
 });
 
 describe('priority', () => {
-  it('puts learning steps first, then first ratings, then reviews by due time', () => {
+  it('puts learning steps first, then reviews by due time, then first ratings', () => {
     const plan = buildSession(input({
       pool: poolOf([word(1), word(2), word(3), word(4), word(5)]),
       states: statesOf(
@@ -98,10 +98,51 @@ describe('priority', () => {
     }));
     expect(plan.cards).toEqual([
       { itemId: word(3), intent: 'scheduled', reason: 'learning-step' },
-      { itemId: word(4), intent: 'scheduled', reason: 'first-rating' },
       { itemId: word(2), intent: 'scheduled', reason: 'due-review' },
       { itemId: word(1), intent: 'scheduled', reason: 'due-review' },
+      { itemId: word(4), intent: 'scheduled', reason: 'first-rating' },
     ]);
+  });
+
+  it('a full session leaves out first ratings before overdue reviews', () => {
+    const overdue = words(1, 20);
+    const firsts = words(100, 15);
+    const plan = buildSession(input({
+      pool: poolOf([...firsts, ...overdue]),
+      states: statesOf(...overdue.map((id) => reviewed(id, on(8, -1))), ...firsts.map((id) => fresh(id, TODAY))),
+    }));
+    expect(plan.cards.filter((card) => card.reason === 'due-review')).toHaveLength(20);
+    expect(plan.cards.filter((card) => card.reason === 'first-rating')).toHaveLength(10);
+    expect(plan.leftOut.every((left) => firsts.includes(left.itemId) && left.reason === 'work-limit')).toBe(true);
+  });
+
+  it('a topic or Más palabras teaches nothing while a pending word is left out of the plan', () => {
+    const inTopic = words(1, 2);
+    const outside = word(50);
+    const unseen = words(100, 3);
+    const pool = [...poolOf([...inTopic, ...unseen], { topicIds: ['comida'] }), ...poolOf([outside], { topicIds: ['viajes'] })];
+    const states = statesOf(...inTopic.map((id) => reviewed(id, on(7))), reviewed(outside, on(7)));
+    const topic = buildSession(input({ mode: 'topic', scope: { kind: 'topics', topicIds: ['comida'] }, pool, states }));
+    // Its own pending words still come first.
+    expect(topic.cards).toEqual(inTopic.map((itemId) => ({ itemId, intent: 'scheduled', reason: 'due-review' })));
+    expect(topic.leftOut).toEqual(unseen.map((itemId) => ({ itemId, reason: 'pending-elsewhere' })));
+
+    // Más palabras covers everything pending, so with room it teaches.
+    const more = buildSession(input({ mode: 'more-words', pool, states }));
+    expect(more.counts).toMatchObject({ scheduled: 3, newItems: 3 });
+    // When the room runs out before the pending words do, it teaches nothing.
+    const crowded = buildSession(input({ mode: 'more-words', pool, states, settings: { ...DEFAULT_SESSION_SETTINGS, workLimit: 2 } }));
+    expect(crowded.counts).toMatchObject({ scheduled: 2, newItems: 0 });
+    expect(crowded.leftOutCounts['pending-elsewhere']).toBe(3);
+
+    // Once the outside word is no longer pending, the topic teaches again.
+    const cleared = buildSession(input({
+      mode: 'topic',
+      scope: { kind: 'topics', topicIds: ['comida'] },
+      pool,
+      states: statesOf(...inTopic.map((id) => reviewed(id, on(7))), reviewed(outside, on(9, 3))),
+    }));
+    expect(cleared.counts.newItems).toBe(3);
   });
 
   it('a topic does not displace due reviews to introduce new words', () => {

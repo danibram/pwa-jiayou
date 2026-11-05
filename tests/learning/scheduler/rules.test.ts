@@ -10,6 +10,7 @@ import {
   pendingToday,
   tomorrowLoad,
   tomorrowLoadFull,
+  type LocalDayRule,
   type ReviewedSchedulerState,
   type Scheduler,
 } from '../../../src/domain/learning/scheduler';
@@ -51,6 +52,24 @@ describe('isDue and pendingToday', () => {
     expect(pendingToday(lateToday, noon, utcRule)).toBe(true);
     expect(isDue(lateToday, noon)).toBe(false);
     expect(pendingToday(reviewed({ state: 'review', dueAt: at(11) }), noon, utcRule)).toBe(false);
+  });
+
+  it('does not take a review again on the day it was rated, even on a 25-hour day', () => {
+    // 2026-01-11 lasts 25 hours, as the autumn change day does in Europe.
+    const start = at(10);
+    const end = start + 25 * 3_600_000;
+    const longDay: LocalDayRule = {
+      localDay: (now) => (now < start ? '2026-01-10' : now < end ? '2026-01-11' : '2026-01-12'),
+      nextLocalMidnight: (now) => (now < start ? start : now < end ? end : end + DAY),
+    };
+    // Rated Good at 00:30 with a one-day interval: due at 23:30 the same local day.
+    const ratedAt = at(10, 0.5);
+    const state = reviewed({ state: 'review', lastReviewAt: ratedAt, dueAt: ratedAt + DAY });
+    expect(state.state !== 'new' && state.dueAt < end).toBe(true);
+    expect(pendingToday(state, at(10, 23.75), longDay)).toBe(false);
+    expect(pendingToday(state, end + 60_000, longDay)).toBe(true);
+    // Rated on an earlier day, the same due time is pending.
+    expect(pendingToday(reviewed({ state: 'review', lastReviewAt: at(9, 12), dueAt: ratedAt + DAY }), at(10, 23.75), longDay)).toBe(true);
   });
 
   it('keeps the hour of a learning or relearning step', () => {

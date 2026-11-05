@@ -93,9 +93,12 @@ const interleave = (
 const scheduledReason = (state: SchedulerState): CardReason =>
   state.state === 'new' ? 'first-rating' : state.state === 'review' ? 'due-review' : 'learning-step';
 
-/** Steps first, by due time; then first ratings, oldest eligibility first; then reviews, most overdue first. */
+/**
+ * Steps first, by due time; then reviews, most overdue first; then first ratings, oldest eligibility
+ * first. A full session leaves out first ratings before it leaves out an overdue review.
+ */
 const scheduledOrder = (a: Candidate, b: Candidate): number => {
-  const rank = (state: SchedulerState) => (state.state === 'learning' || state.state === 'relearning' ? 0 : state.state === 'new' ? 1 : 2);
+  const rank = (state: SchedulerState) => (state.state === 'learning' || state.state === 'relearning' ? 0 : state.state === 'review' ? 1 : 2);
   const sa = a.state as SchedulerState;
   const sb = b.state as SchedulerState;
   const byRank = rank(sa) - rank(sb);
@@ -112,6 +115,7 @@ const LEFT_OUT_REASONS: readonly LeftOutReason[] = [
   'new-budget-day',
   'new-budget-session',
   'tomorrow-load',
+  'pending-elsewhere',
   'practice-limit',
   'already-known-limit',
 ];
@@ -278,7 +282,16 @@ export const buildSession = (input: SessionInput): SessionPlan => {
       takeScheduled(pending);
       // New: never rated and not waiting for tomorrow's first rating.
       const unrated = candidates.filter((c) => !isPending(c) && (c.state === null || (c.state.state === 'new' && c.state.eligibleFrom === null)));
-      takeNew(unrated);
+      // A topic or Más palabras teaches nothing while a pending item stays out of this plan: the
+      // learner should clear those first (old `canLearnMore`). Hoy has no room left in that case anyway.
+      const scheduledHere = new Set(reviews.map((card) => card.itemId));
+      const blocksNew = mode === 'topic' || mode === 'more-words' || scope.kind === 'topics';
+      const pendingOutside = blocksNew && kindPool.some((item) => {
+        const state = states.get(item.itemId);
+        return item.available && state !== undefined && !scheduledHere.has(item.itemId) && pendingToday(state, now, dayRule);
+      });
+      if (pendingOutside) for (const c of unrated) leave(c.item.itemId, 'pending-elsewhere');
+      else takeNew(unrated);
       // A scoped session goes on with practice of what the learner has met; Hoy and Más palabras stop.
       if (scope.kind !== 'all') {
         const rest = candidates.filter((c) => c.seen && !isPending(c) && !unrated.includes(c));

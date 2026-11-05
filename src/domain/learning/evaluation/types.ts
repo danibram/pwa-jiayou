@@ -8,16 +8,8 @@ import type {
   ValidEvaluation,
 } from '../types';
 
-/**
- * `Exercise.options` with the content each option stands for. Local until `types.ts` adds
- * `contentId` to options; a plain `Exercise` is assignable because the field is optional.
- */
-export interface ExerciseOption {
-  id: string;
-  text: string;
-  /** The published content id the option shows. Null or absent for distractors with no content. */
-  contentId?: string | null;
-}
+/** One of `Exercise.options`, with the published content it shows. */
+export type ExerciseOption = Exercise['options'][number];
 
 export type EvaluableExercise = Omit<Exercise, 'options'> & { options: readonly ExerciseOption[] };
 

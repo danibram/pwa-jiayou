@@ -80,6 +80,8 @@ export type LeftOutReason =
   | 'new-budget-session'
   /** New, but tomorrow's load reached `STUDY_RULES.tomorrowLoadLimit`. */
   | 'tomorrow-load'
+  /** New, but a pending item is not in this topic or Más palabras plan. Those come first. */
+  | 'pending-elsewhere'
   /** Practice candidate beyond `practiceLimit` or the room left. */
   | 'practice-limit'
   /** Likely known, beyond `alreadyKnownPerSession`. */
