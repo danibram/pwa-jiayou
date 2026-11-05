@@ -8,7 +8,7 @@ A phone-first progressive web app for Spanish speakers learning Chinese. It cove
 
 - On first launch the app asks which lists to study. HSK 1 ships in the bundle. HSK 2 to 6 download to the device when you tick them, and are dropped again when you untick them.
 - Ticking a list saves the strokes and audio its words need, including characters that belong to another level. Download runs in the background with a progress line on Home. It retries when the connection comes back.
-- "Extra" holds words outside HSK, curated in the content editor (`editor/`). It is always in the list picker, even while empty, so a learner who ticks it gets the words later releases add. Its characters outside HSK get strokes from the hanzi-writer CDN. Learners do not add or correct words in the app.
+- "Extra" holds words outside HSK, curated in the content editor (`apps/editor/`). It is always in the list picker, even while empty, so a learner who ticks it gets the words later releases add. Its characters outside HSK get strokes from the hanzi-writer CDN. Learners do not add or correct words in the app.
 - A word has one progress record no matter how many lists contain it.
 
 ### Daily review
@@ -59,13 +59,13 @@ Opciones exports a JSON file with word progress, character progress and daily co
 | Level | Words | Characters | Where |
 | --- | --- | --- | --- |
 | HSK 1 | 151 | 174 | bundled |
-| HSK 2 | 147 | 173 | `public/packs/hsk2` |
-| HSK 3 | 298 | 270 | `public/packs/hsk3` |
-| HSK 4 | 598 | 444 | `public/packs/hsk4` |
-| HSK 5 | 1298 | 619 | `public/packs/hsk5` |
-| HSK 6 | 2500 | 970 | `public/packs/hsk6` |
+| HSK 2 | 147 | 173 | `apps/web/public/packs/hsk2` |
+| HSK 3 | 298 | 270 | `apps/web/public/packs/hsk3` |
+| HSK 4 | 598 | 444 | `apps/web/public/packs/hsk4` |
+| HSK 5 | 1298 | 619 | `apps/web/public/packs/hsk5` |
+| HSK 6 | 2500 | 970 | `apps/web/public/packs/hsk6` |
 
-Word lists live in `src/data/vocabulary/hskN.json`. HSK 1 is bundled; HSK 2 to 6 are served as `packs/hskN/words.json` (see `vite.config.ts`) and download when the list is ticked. Character lists are `src/data/hsk1.json` and `public/packs/hskN.json`. Each character pack folder holds its stroke JSON, syllable clips and a `manifest.json` with counts and missing files. `src/data/searchIndex.json` holds all 2650 characters for search.
+Word lists live in `apps/web/src/data/vocabulary/hskN.json`. HSK 1 is bundled; HSK 2 to 6 are served as `packs/hskN/words.json` (see `apps/web/vite.config.ts`) and download when the list is ticked. Character lists are `apps/web/src/data/hsk1.json` and `apps/web/public/packs/hskN.json`. Each character pack folder holds its stroke JSON, syllable clips and a `manifest.json` with counts and missing files. `apps/web/src/data/searchIndex.json` holds all 2650 characters for search.
 
 Word levels come from the HSK 2.0 exclusive lists and do not describe the level of each character. HSK 1 has the 150 official words plus 你好. Sources, licences and the reading rules are in [docs/data/vocabulary.md](docs/data/vocabulary.md).
 
@@ -83,10 +83,11 @@ npm run dev
 ```
 
 ```bash
-npm test              # vitest, watch mode
-npm run typecheck     # tsc --noEmit
-npm run build         # typecheck, then vite build
-npm run check         # tests once, then build
+npm test              # app tests, watch mode
+npm run typecheck     # tsc --noEmit in the app and the editor
+npm run build         # app: typecheck, then vite build into apps/web/dist
+npm run check         # app tests and build, then editor tests and typecheck
+npm run editor        # content editor at http://127.0.0.1:4318
 ```
 
 ## Content pipelines
@@ -108,9 +109,9 @@ node scripts/fix-traditional.mjs
 ```bash
 npm run fetch-hsk             # HSK 4 to 6 rows from hanzidb.org
 npm run localize-hsk          # Spanish glosses and examples for HSK 4 to 6
-npm run search-index          # rebuild src/data/searchIndex.json
-npm run strokes               # HSK 1 stroke data into public/strokes/
-npm run media-packs           # strokes, clips and manifest per level into public/packs/hskN/
+npm run search-index          # rebuild apps/web/src/data/searchIndex.json
+npm run strokes               # HSK 1 stroke data into apps/web/public/strokes/
+npm run media-packs           # strokes, clips and manifest per level into apps/web/public/packs/hskN/
 ```
 
 ### Audio
@@ -119,27 +120,36 @@ Two Python scripts refresh the two voice sources, and [docs/audio.md](docs/audio
 
 ### Font
 
-`scripts/hanzi-chars.mjs` prints every character the app can display. Feed it to pyftsubset to rebuild `public/fonts/wenkai-hsk.woff2`. The script header has the exact command.
+`scripts/hanzi-chars.mjs` prints every character the app can display. Feed it to pyftsubset to rebuild `apps/web/public/fonts/wenkai-hsk.woff2`. The script header has the exact command.
 
 ### Content editor
 
-See [editor/README.md](editor/README.md) for editing and publishing content.
+See [apps/editor/README.md](apps/editor/README.md) for editing and publishing content.
 
 ## Project layout
 
+An npm workspaces monorepo. Run every command from the repository root. Packages ship as TypeScript source with `.ts` relative imports, so Vite, Vitest and Node 24 scripts import them without a build step.
+
 ```
-src/
-├── pages/          Home, Listas, Vocabulario, VocabularyReview, Trazos, Opciones, Acerca
-├── components/     StrokeCanvas (hanzi-writer), CharacterDetailSheet, GradeButtons, VoicePicker, ProgressBackup, …
-├── stores/         progressStore (schedules, daily counters), vocabularyStore (list selection)
-├── domain/         pure logic: progress/schedule, progress/serialization, vocabulary/sessionDeck
-├── utils/          levelPacks (downloads and cache), speech, pinyin, search, word import, theme
-├── data/           lists, catalog, topics, vocabulary JSON, character JSON, glosses, overrides, drafts
-└── index.css       design tokens for light and dark
-editor/             local content editor
-scripts/            data pipelines
-tests/              vitest, jsdom
-docs/               audio, vocabulary data, specs, vision, research
+apps/
+├── web/                   the PWA (Solid, Vite, Workbox)
+│   ├── src/
+│   │   ├── pages/         Home, Listas, Vocabulario, VocabularyReview, Trazos, Opciones, Acerca
+│   │   ├── components/    StrokeCanvas (hanzi-writer), learning cards, CharacterDetailSheet, ProgressBackup, …
+│   │   ├── stores/        learningStore and the session controller, vocabularyStore, characterStore
+│   │   ├── persistence/   IndexedDB learning log, settings, device id
+│   │   ├── utils/         levelPacks (downloads and cache), speech, search, theme
+│   │   └── data/          lists, catalog, topics, vocabulary JSON, character JSON, glosses, overrides, drafts
+│   ├── public/            packs, audio, strokes, fonts, icons
+│   └── tests/             vitest, jsdom
+└── editor/                local content editor
+packages/
+├── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
+├── content/               @jiayou/content: content types, word and snapshot checks, revisions, pack manifest
+└── learning/              @jiayou/learning: FSRS-7, event log rules, sessions, evaluation, backup, progress
+content/                   published content snapshot and version
+scripts/                   data pipelines
+docs/                      audio, vocabulary data, specs, vision, research
 ```
 
 ## Analytics
@@ -155,7 +165,7 @@ Production builds send screen views and exceptions to PostHog (EU host), cookiel
 - Chen Wang voice from [audio-cmn](https://github.com/hugolpz/audio-cmn), CC BY-SA 3.0, copied unchanged.
 - Font LXGW WenKai, SIL Open Font License (`docs/licenses/LXGW-WenKai-OFL.txt`).
 
-The full attribution text for the audio is in `public/audio/NOTICE.txt` and in the app under Acerca de.
+The full attribution text for the audio is in `apps/web/public/audio/NOTICE.txt` and in the app under Acerca de.
 
 ## License
 

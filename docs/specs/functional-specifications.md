@@ -80,9 +80,9 @@ interface HSKCharacter {
 ### 3.2 Character Database
 
 Data is distributed across JSON files:
-- **HSK 1**: `src/data/hsk1.json` (174 characters)
-- **HSK 2**: `src/data/hsk2.json` (173 characters)
-- **HSK 3**: `src/data/hsk3.json` (270 characters)
+- **HSK 1**: `apps/web/src/data/hsk1.json` (174 characters)
+- **HSK 2**: `apps/web/src/data/hsk2.json` (173 characters)
+- **HSK 3**: `apps/web/src/data/hsk3.json` (270 characters)
 - **Total**: 617 characters
 
 Data source: http://hanzidb.org
@@ -232,7 +232,7 @@ const handleRootClick = () => {
 
 ### 5.1 SwipeDetector Class
 
-**File**: `src/utils/swipeDetection.ts`
+**File**: `apps/web/src/utils/swipeDetection.ts`
 
 **Responsibilities**:
 - Detect swipe gestures (touch and mouse)
@@ -273,7 +273,7 @@ element.style.touchAction = 'pan-y';  // Vertical scroll only
 
 ## 6. Pleco Integration
 
-**File**: `src/utils/plecoIntegration.ts`
+**File**: `apps/web/src/utils/plecoIntegration.ts`
 
 **Function**:
 ```typescript

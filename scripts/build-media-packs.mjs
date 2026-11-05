@@ -21,17 +21,17 @@ const strokeSource = join(root, 'node_modules/hanzi-writer-data');
 const VOICES = ['f', 'm', 'c'];
 
 const listPath = (level) => {
-  if (level === 1) return join(root, 'src/data/hsk1.json');
-  const pack = join(root, `public/packs/hsk${level}.json`);
+  if (level === 1) return join(root, 'apps/web/src/data/hsk1.json');
+  const pack = join(root, `apps/web/public/packs/hsk${level}.json`);
   if (existsSync(pack)) return pack;
-  const data = join(root, `src/data/hsk${level}.json`);
+  const data = join(root, `apps/web/src/data/hsk${level}.json`);
   if (existsSync(data)) return data;
   return null;
 };
 
 const ensureCharacterPack = (level, rows) => {
   if (level === 1) return;
-  const dest = join(root, `public/packs/hsk${level}.json`);
+  const dest = join(root, `apps/web/public/packs/hsk${level}.json`);
   writeFileSync(dest, `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
 };
 
@@ -44,7 +44,7 @@ const buildLevel = (level) => {
   const rows = JSON.parse(readFileSync(path, 'utf8'));
   ensureCharacterPack(level, rows);
 
-  const packRoot = join(root, `public/packs/hsk${level}`);
+  const packRoot = join(root, `apps/web/public/packs/hsk${level}`);
   const strokeDir = join(packRoot, 'strokes');
   const audioRoot = join(packRoot, 'audio');
   mkdirSync(strokeDir, { recursive: true });
@@ -58,7 +58,7 @@ const buildLevel = (level) => {
   }
 
   const wanted = syllableKeysForRows(rows);
-  const globalAudio = join(root, 'public/audio');
+  const globalAudio = join(root, 'apps/web/public/audio');
   // List a syllable only when the Taiwan voices exist. Chen Wang (c) is optional:
   // speech.ts falls back to the woman. Listing a missing key makes the app fetch
   // Vite’s HTML shell (200) and cache it as “mp3”, so every gap sounds the same.
@@ -100,8 +100,8 @@ const buildLevel = (level) => {
   );
 };
 
-mkdirSync(join(root, 'public/packs'), { recursive: true });
+mkdirSync(join(root, 'apps/web/public/packs'), { recursive: true });
 for (const level of [2, 3, 4, 5, 6]) buildLevel(level);
 // Written last, over the files just built. Each pack's hash changes only when its own files do.
-writeFileSync(join(root, 'public/packs/content.json'), `${JSON.stringify(contentManifest(root), null, 2)}\n`, 'utf8');
-console.log('public/packs/content.json updated');
+writeFileSync(join(root, 'apps/web/public/packs/content.json'), `${JSON.stringify(contentManifest(join(root, 'apps/web')), null, 2)}\n`, 'utf8');
+console.log('apps/web/public/packs/content.json updated');

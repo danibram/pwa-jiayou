@@ -8,7 +8,7 @@ La app de estudio conserva su código, navegación y comportamiento. Los datos s
 
 ## Implementación
 
-1. Crear el editor en `editor/`, con entrada, estilos, configuración y comandos propios. Reutilizar las dependencias instaladas del repo.
+1. Crear el editor en `apps/editor/`, con entrada, estilos, configuración y comandos propios. Reutilizar las dependencias instaladas del repo.
 2. Cargar una copia editorial de los datos base. Mantener identificadores y lecturas originales al corregir traducciones.
 3. Ofrecer búsqueda y formularios de vocabulario, caracteres y temas, con asignaciones independientes para palabras y caracteres.
 4. Guardar borradores en el navegador y permitir exportarlos e importarlos. Mostrar las diferencias campo a campo y los errores antes de promover.

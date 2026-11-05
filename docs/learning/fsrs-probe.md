@@ -2,7 +2,7 @@
 
 La prueba aislada usa `ts-fsrs@6.0.0` con `DefaultScheduler({ version: 'FSRS-7' })` y no cambia la programación de la aplicación. `npm view ts-fsrs dist-tags` del 5 de noviembre de 2026 devuelve `6.0.0` como `latest` y `6.0.0-beta.15` como `beta`. El paquete declara `engines.node >=24` y depende de `@open-spaced-repetition/srs-kit@1.0.0`, que contiene el núcleo del scheduler.
 
-Todo lo que sigue se comprobó el 5 de noviembre de 2026 leyendo las declaraciones y el código publicados en `node_modules` y ejecutando la prueba. Los archivos son `src/domain/learning/fsrsProbe.ts`, `tests/learning/fsrsProbe.test.ts` y `scripts/probe-fsrs-browser.mjs`.
+Todo lo que sigue se comprobó el 5 de noviembre de 2026 leyendo las declaraciones y el código publicados en `node_modules` y ejecutando la prueba. Los archivos son `packages/learning/src/fsrsProbe.ts`, `apps/web/tests/learning/fsrsProbe.test.ts` y `scripts/probe-fsrs-browser.mjs`.
 
 ## Configuración usada
 

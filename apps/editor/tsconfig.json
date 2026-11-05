@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "../web/src/vite-env.d.ts"
+  ],
+  "exclude": [
+    "dist"
+  ],
+  "references": []
+}

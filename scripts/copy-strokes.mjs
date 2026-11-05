@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(root, 'node_modules/hanzi-writer-data');
-const target = join(root, 'public/strokes');
+const target = join(root, 'apps/web/public/strokes');
 mkdirSync(target, { recursive: true });
 
 const chars = new Set();
@@ -14,7 +14,7 @@ const addFile = (path) => {
   const data = JSON.parse(readFileSync(path, 'utf8'));
   for (const entry of data) chars.add(entry.character);
 };
-addFile(join(root, 'src/data/hsk1.json'));
+addFile(join(root, 'apps/web/src/data/hsk1.json'));
 // Levels 2–6 ship strokes inside public/packs/hskN/strokes/ (see build-media-packs.mjs).
 
 const missing = [];

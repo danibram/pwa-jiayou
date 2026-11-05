@@ -20,7 +20,7 @@ Este documento coordinó la implementación por fases. Todas las pantallas usan 
 
 - En Trazos no se ofrece "Ya la sé". Un carácter siempre se ve y se calca antes de escribirlo de memoria.
 - Un carácter fuera del catálogo HSK, fuera de los niveles elegidos o sin descargar solo muestra sus trazos. No entra en ninguna sesión, porque su glosa sale de la palabra que lo usa y no tiene una revisión c1 estable.
-- No existe `src/domain/learning/introduction/`. La enseñanza vive en el constructor de sesiones (`sessions/requeue.ts`) y en el selector de ejercicios (`exposureCard`).
+- No existe `packages/learning/src/introduction/`. La enseñanza vive en el constructor de sesiones (`sessions/requeue.ts`) y en el selector de ejercicios (`exposureCard`).
 - La copia combinada de la fase 4, con eventos de vocabulario y progreso v4 de caracteres, duró hasta la fase 5C. Ahora se exporta solo el registro de eventos. Las copias v4 y combinadas se siguen leyendo, pero su progreso antiguo no se importa y la pantalla lo avisa.
 - Las sesiones guardadas empezaron siendo una sola para toda la app. En 7A pasó a haber una por modo, para que abrir Trazos no borre una sesión de palabras en pausa.
 - La rúbrica de escritura cita las versiones de `hanzi-writer` y `hanzi-writer-data` (`STROKE_RUBRIC_REVISION`), fijadas con versión exacta en `package.json`. Un test comprueba que coinciden con las instaladas.
@@ -79,15 +79,15 @@ Se tomaron tras la revisión de la fase 0 y sustituyen el comportamiento actual 
 
 | Paquete | Entrega | Alcance |
 | --- | --- | --- |
-| 0A | [Contratos](learning/contracts.md) y `src/domain/learning/types.ts` | Entidades, eventos, evaluación, sesión, copia y papel de cada ejercicio existente |
+| 0A | [Contratos](learning/contracts.md) y `packages/learning/src/types.ts` | Entidades, eventos, evaluación, sesión, copia y papel de cada ejercicio existente |
 | 0B | [Prueba FSRS](learning/fsrs-probe.md) y prueba ejecutable | Paquete real, Node 24, navegador sin conexión, serialización y repetición determinista |
-| 0C | [Identidad del contenido](learning/content-identity.md) y `src/domain/learning/content/` | IDs, revisión por entrada, retiradas y preguntas ambiguas |
+| 0C | [Identidad del contenido](learning/content-identity.md) y `packages/learning/src/content/` | IDs, revisión por entrada, retiradas y preguntas ambiguas |
 
 La prueba técnica debe comprobar el artefacto publicado. La documentación web por sí sola no confirma que una versión o API esté disponible en npm. Cualquier diferencia se registra antes de fijar el adaptador.
 
 Las decisiones de producto que la revisión dejó abiertas están en la sección "Decisiones pendientes" de los [contratos](learning/contracts.md). Se resuelven antes de abrir la fase 1.
 
-La prueba de Chrome necesita `playwright-core` fuera del repositorio y no corre en CI. La fase 7B la convierte en una prueba de navegador repetible. La fase termina cuando la prueba FSRS-7 pasa en Chrome sin conexión, los tests de `tests/learning` y la comprobación de tipos pasan con Node 24, y los contratos representan las seis modalidades actuales.
+La prueba de Chrome necesita `playwright-core` fuera del repositorio y no corre en CI. La fase 7B la convierte en una prueba de navegador repetible. La fase termina cuando la prueba FSRS-7 pasa en Chrome sin conexión, los tests de `apps/web/tests/learning` y la comprobación de tipos pasan con Node 24, y los contratos representan las seis modalidades actuales.
 
 ## Fases de implementación
 
@@ -97,8 +97,8 @@ Depende de la fase 0.
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 1A | `src/domain/learning/scheduler/` | Crear, evaluar y restaurar estados FSRS con reloj explícito. Reconstruir un elemento desde sus eventos y obtener el mismo estado que la aplicación incremental |
-| 1B | `src/domain/learning/evaluation/` y `src/domain/learning/evidence/` | Evaluar primer intento, ayudas y anulación; Hard exige recuerdo correcto. Registrar evidencia por habilidad sin alterar la planificación |
+| 1A | `packages/learning/src/scheduler/` | Crear, evaluar y restaurar estados FSRS con reloj explícito. Reconstruir un elemento desde sus eventos y obtener el mismo estado que la aplicación incremental |
+| 1B | `packages/learning/src/evaluation/` y `packages/learning/src/evidence/` | Evaluar primer intento, ayudas y anulación; Hard exige recuerdo correcto. Registrar evidencia por habilidad sin alterar la planificación |
 
 Evaluación y evidencia comparten tipos y casos de prueba, por eso van en un mismo encargo. 1B es dueño de `evaluatorVersion` y de cuándo cambia. 1A publica primero su interfaz, porque la fase 2 la necesita para reconstruir elementos. El scheduler se crea al iniciar la app y `review` es síncrono, así que nunca se espera a una promesa dentro de una transacción de IndexedDB. El dominio no importa componentes, almacenamiento ni el reloj global. El evaluador devuelve una unión discriminada que indica si puede actualizarse FSRS. Los tests cubren fallo seguido de acierto, pistas, audio fallido, pregunta ambigua, práctica complementaria y anulación de un repaso intermedio.
 
@@ -108,11 +108,11 @@ Depende de la fase 0 y de la interfaz publicada por 1A. Puede avanzar en paralel
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 2A | `src/persistence/learning/` | Registro de eventos e índices en IndexedDB, cachés derivadas, idempotencia y bloqueo entre pestañas |
-| 2B | `src/domain/learning/backup/` | Exportar, fusionar por unión de eventos y restaurar sustituyendo. Una copia inválida no modifica nada |
-| 2C | `editor/`, `scripts/published-ids.mjs`, `scripts/content-publish.mjs` y `tests/vocabularyData.test.ts` | Registro de IDs con HSK y Extra, retiradas, revisión por entrada publicada y test de IDs aplicado solo a candidatos nuevos |
+| 2A | `apps/web/src/persistence/learning/` | Registro de eventos e índices en IndexedDB, cachés derivadas, idempotencia y bloqueo entre pestañas |
+| 2B | `packages/learning/src/backup/` | Exportar, fusionar por unión de eventos y restaurar sustituyendo. Una copia inválida no modifica nada |
+| 2C | `apps/editor/`, `scripts/published-ids.mjs`, `scripts/content-publish.mjs` y `apps/web/tests/vocabularyData.test.ts` | Registro de IDs con HSK y Extra, retiradas, revisión por entrada publicada y test de IDs aplicado solo a candidatos nuevos |
 
-La misma transacción añade el evento y actualiza la caché del elemento y la posición de la sesión. Cerrar conserva respuestas confirmadas. Las escrituras de aprendizaje pasan por `navigator.locks`, y un `BroadcastChannel` avisa a las otras pestañas para que recarguen el estado. Las pruebas de interrupción, repetición y dos pestañas viven en `tests/learning/persistence/` y las escribe el responsable de 2A. El coordinador conecta la inicialización y controla el reinicio explícito del progreso de desarrollo.
+La misma transacción añade el evento y actualiza la caché del elemento y la posición de la sesión. Cerrar conserva respuestas confirmadas. Las escrituras de aprendizaje pasan por `navigator.locks`, y un `BroadcastChannel` avisa a las otras pestañas para que recarguen el estado. Las pruebas de interrupción, repetición y dos pestañas viven en `apps/web/tests/learning/persistence/` y las escribe el responsable de 2A. El coordinador conecta la inicialización y controla el reinicio explícito del progreso de desarrollo.
 
 ### Fase 3. Sesiones y ejercicios
 
@@ -120,9 +120,9 @@ Depende de las fases 1 y 2.
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 3A | `src/domain/learning/sessions/` | Presupuesto de trabajo, pendientes, nuevas y repetición acotada |
-| 3B | `src/domain/learning/exercises/` | Formatos, disponibilidad de audio, opciones equivalentes y ambigüedad |
-| 3C | `tests/learning/simulations/` | Estudio regular, ausencias, carga acumulada y listas pequeñas. Empieza cuando 3A publique su interfaz |
+| 3A | `packages/learning/src/sessions/` | Presupuesto de trabajo, pendientes, nuevas y repetición acotada |
+| 3B | `packages/learning/src/exercises/` | Formatos, disponibilidad de audio, opciones equivalentes y ambigüedad |
+| 3C | `packages/learning/tests/simulations/` | Estudio regular, ausencias, carga acumulada y listas pequeñas. Empieza cuando 3A publique su interfaz |
 
 Hoy, Temas, Flojos y la práctica individual comparten política. Los pasos cortos respetan su hora; los repasos de días usan la regla de inicio del día fijada en la fase 0. Diez palabras nuevas no cuentan como diez ejercicios. Un tema no desplaza los pendientes para introducir nuevas. Las opciones auditivas no presentan homófonos como respuestas excluyentes sin contexto.
 
@@ -132,8 +132,8 @@ Depende de la fase 3.
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 4A | `src/stores/learningSessionStore.ts` | Presentar, responder, guardar, pausar, reanudar y deshacer |
-| 4B | `src/components/learning/` | Ejercicios, ayudas, autoevaluación y feedback; no calcula notas ni intervalos |
+| 4A | `apps/web/src/stores/learningSessionStore.ts` | Presentar, responder, guardar, pausar, reanudar y deshacer |
+| 4B | `apps/web/src/components/learning/` | Ejercicios, ayudas, autoevaluación y feedback; no calcula notas ni intervalos |
 | 4C | Componentes acordados de ajustes y resumen | Presupuesto configurable, resultados y próximos repasos |
 
 El coordinador es dueño de VocabularyReview, Home, navegación, `ProgressBackup.tsx` y `vite.config.ts`. Hasta la fase 5C la copia de seguridad de la interfaz exporta e importa las dos partes: eventos de vocabulario y progreso v4 de caracteres. En `vite.config.ts` una regla `manualChunks` agrupa `ts-fsrs` y `@open-spaced-repetition/srs-kit`, y la precarga incluye el chunk de FSRS-7. Al conectar la sesión nueva, el coordinador retira la planificación, las sesiones y los contadores antiguos del vocabulario. Las funciones de caracteres siguen en uso hasta la fase 5. No hay usuarios que migrar, así que no conviven dos planificadores de vocabulario. La fase termina con una sesión completa offline y con reanudación después de un error de almacenamiento, provocado en los tests mediante un repositorio falso que falla en la escritura elegida. Los intentos parciales y las pistas sobreviven a la recarga.
@@ -144,7 +144,7 @@ Depende de la fase 4.
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 5A | `src/domain/learning/introduction/` y componentes asignados | Enseñar, retirar ayudas y comprobar "Ya la sé" sin inventar respuestas anteriores |
+| 5A | `packages/learning/src/introduction/` y componentes asignados | Enseñar, retirar ayudas y comprobar "Ya la sé" sin inventar respuestas anteriores |
 | 5B | Evaluadores y componentes asignados de producción y escucha | Definir y versionar la política de pinyin (números, marcas, `ü`/`v`, tono neutro, sandhi), aceptar equivalencias y utilizar contexto editorial |
 | 5C | Trazos y adaptador de escritura | Registrar pistas explícitas y automáticas, separar ejecución de recuerdo y retirar la planificación antigua de caracteres |
 
@@ -158,9 +158,9 @@ Depende de la fase 5 y de varias semanas de eventos reales. Antes de eso solo ha
 
 | Paquete | Archivos propios | Trabajo y aceptación |
 | --- | --- | --- |
-| 6A | `src/domain/learning/confusions/` | Considerar oportunidades, errores, habilidad y fechas; comprobar resolución diferida |
-| 6B | `src/domain/learning/metrics/` | Retención por habilidad, esfuerzo, carga y calibración de FSRS |
-| 6C | `src/components/learning/progress/` | Historial por palabra, evidencia y motivos de selección |
+| 6A | `packages/learning/src/confusions/` | Considerar oportunidades, errores, habilidad y fechas; comprobar resolución diferida |
+| 6B | `packages/learning/src/metrics/` | Retención por habilidad, esfuerzo, carga y calibración de FSRS |
+| 6C | `apps/web/src/components/learning/progress/` | Historial por palabra, evidencia y motivos de selección |
 
 Las métricas separan primer intento de corrección, práctica de repaso, respuesta asistida de autónoma y recuerdo inmediato de diferido. Cada indicador se puede rastrear hasta eventos. No se entrena FSRS personalmente sin datos suficientes y una evaluación comparativa.
 

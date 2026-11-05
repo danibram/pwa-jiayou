@@ -112,9 +112,9 @@ function main(args) {
     : readFileSync(args[1], 'utf8');
   const { rows, unresolved } = extractRows(content);
   if (!rows.length) throw new Error('No se encontraron filas. Comprueba el PDF o el texto extraído.');
-  const catalog = [1, 2, 3, 4, 5, 6].flatMap((level) => JSON.parse(readFileSync(resolve(root, `src/data/vocabulary/hsk${level}.json`), 'utf8')));
-  catalog.push(...JSON.parse(readFileSync(resolve(root, 'src/data/vocabulary/extra.json'), 'utf8')));
-  const levels = JSON.parse(readFileSync(resolve(root, 'src/data/characterLevels.json'), 'utf8'));
+  const catalog = [1, 2, 3, 4, 5, 6].flatMap((level) => JSON.parse(readFileSync(resolve(root, `apps/web/src/data/vocabulary/hsk${level}.json`), 'utf8')));
+  catalog.push(...JSON.parse(readFileSync(resolve(root, 'apps/web/src/data/vocabulary/extra.json'), 'utf8')));
+  const levels = JSON.parse(readFileSync(resolve(root, 'apps/web/src/data/characterLevels.json'), 'utf8'));
   const results = compare(rows, catalog, levels);
   const counts = Object.fromEntries(['found', 'missing', 'outside-hsk1-3'].map((status) => [status, results.filter((row) => row.status === status).length]));
   const seen = new Set();

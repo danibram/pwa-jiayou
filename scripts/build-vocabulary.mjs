@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { wordId } from './syllable-keys.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = join(root, 'src/data/vocabulary');
+const outDir = join(root, 'apps/web/src/data/vocabulary');
 const SOURCE_BASE =
   'https://raw.githubusercontent.com/drkameleon/complete-hsk-vocabulary/main/wordlists/exclusive/old';
 const SOURCE_ID = 'hsk-2-0';
@@ -112,7 +112,7 @@ for (const level of LEVELS) {
   const entries = await fetchLevel(level);
   const path = join(outDir, `hsk${level}.json`);
   writeFileSync(path, `${JSON.stringify(entries, null, 2)}\n`, 'utf8');
-  summary.push({ level, count: entries.length, path: `src/data/vocabulary/hsk${level}.json` });
+  summary.push({ level, count: entries.length, path: `apps/web/src/data/vocabulary/hsk${level}.json` });
   console.log(`HSK ${level}: ${entries.length} palabras → ${path}`);
 }
 

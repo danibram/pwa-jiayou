@@ -1,17 +1,23 @@
 {
-  "name": "hsk-flashcards",
+  "name": "jiayou",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "npm run typecheck && vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
+    "dev": "npm run dev -w @jiayou/web",
+    "build": "npm run build -w @jiayou/web",
+    "preview": "npm run preview -w @jiayou/web",
+    "test": "npm run test -w @jiayou/web",
+    "editor": "npm run dev -w @jiayou/editor",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "check": "npm run check -w @jiayou/web && npm test -w @jiayou/editor && npm test -w @jiayou/chinese -w @jiayou/content -w @jiayou/learning && npm run typecheck",
     "strokes": "node scripts/copy-strokes.mjs",
     "search-index": "node scripts/build-search-index.mjs",
     "fetch-hsk": "node scripts/fetch-hsk-from-hanzidb.mjs",
@@ -19,32 +25,11 @@
     "localize-hsk": "node scripts/localize-hsk456.mjs",
     "build-vocabulary": "node scripts/build-vocabulary.mjs",
     "localize-vocabulary": "node scripts/localize-vocabulary.mjs",
-    "published-ids": "node scripts/published-ids.mjs",
-    "typecheck": "tsc --noEmit",
-    "check": "npm run test -- --run && npm run build"
-  },
-  "dependencies": {
-    "hanzi-writer": "3.7.3",
-    "posthog-js": "^1.444.4",
-    "solid-js": "^1.8.7",
-    "ts-fsrs": "6.0.0"
+    "published-ids": "node scripts/published-ids.mjs"
   },
   "devDependencies": {
-    "@solidjs/testing-library": "^0.8.5",
-    "@testing-library/jest-dom": "^6.1.5",
-    "@types/node": "^20.10.5",
-    "autoprefixer": "^10.4.16",
-    "esbuild": "0.21.5",
-    "fake-indexeddb": "6.2.7",
-    "hanzi-writer-data": "2.0.1",
-    "jsdom": "^23.0.1",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.8",
-    "vite-plugin-pwa": "^0.17.4",
-    "vite-plugin-solid": "^2.8.2",
-    "vitest": "^1.1.0",
-    "workbox-window": "^7.0.0"
+    "@jiayou/content": "*",
+    "@jiayou/chinese": "*",
+    "typescript": "^5.9.3"
   }
 }

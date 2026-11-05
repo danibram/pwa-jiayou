@@ -40,7 +40,7 @@ const normalise = (text) => [...text].map((char) => VARIANT_FIX[char] ?? char).j
 let wordChanges = 0;
 const votes = new Map();
 for (const level of levels) {
-  const path = join(root, `src/data/vocabulary/hsk${level}.json`);
+  const path = join(root, `apps/web/src/data/vocabulary/hsk${level}.json`);
   const words = readJson(path);
   for (const word of words) {
     if (typeof word.traditional !== 'string') continue;
@@ -89,8 +89,8 @@ const fixCharacters = (path) => {
 };
 
 for (const level of levels) {
-  fixCharacters(join(root, `src/data/hsk${level}.json`));
-  if (level > 1) fixCharacters(join(root, `public/packs/hsk${level}.json`));
+  fixCharacters(join(root, `apps/web/src/data/hsk${level}.json`));
+  if (level > 1) fixCharacters(join(root, `apps/web/public/packs/hsk${level}.json`));
 }
 
 console.log(`traditional forms: ${wordChanges} words, ${charChanges} characters changed`);

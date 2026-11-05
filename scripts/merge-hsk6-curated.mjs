@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = join(root, 'src/data/glosses/curated');
+const outDir = join(root, 'apps/web/src/data/glosses/curated');
 const parts = ['hsk6-a.json', 'hsk6-b.json', 'hsk6-c.json'];
 const merged = {};
 

@@ -1,6 +1,6 @@
 # Arquitectura para crecer hacia API, cuentas y sincronización
 
-Fecha: 3 de noviembre de 2026. Revisión hecha sobre el commit `f21b01c`; todas las referencias `archivo:línea` apuntan a ese commit. La PR #8 ya tocó `src/pages/Vocabulario.tsx`, así que las líneas de ese archivo pueden haberse movido.
+Fecha: 3 de noviembre de 2026. Revisión hecha sobre el commit `f21b01c`; todas las referencias `archivo:línea` apuntan a ese commit. La PR #8 ya tocó `apps/web/src/pages/Vocabulario.tsx`, así que las líneas de ese archivo pueden haberse movido.
 
 El objetivo es que el salto a una API con cuentas y sincronización entre dispositivos sea barato, sin reescribir la app. Este informe respeta lo ya decidido en otros documentos:
 
@@ -28,14 +28,14 @@ El objetivo es que el salto a una API con cuentas y sincronización entre dispos
 
 | Capa | Archivos | Qué hace |
 | --- | --- | --- |
-| Arranque | `src/index.tsx` | Analítica, tema, `render` de `App` y avisos globales |
-| Navegación | `src/screen.ts`, `src/createScreenHistory.ts`, `src/App.tsx` | Unión `Screen`, historial del navegador y reglas de "volver" |
-| Páginas | `src/pages/*.tsx` | Pantallas. Algunas construyen sesiones y deciden reglas de repaso |
-| Componentes | `src/components/*.tsx` | UI reutilizable. `ProgressBackup.tsx` también coordina importar y descartar sesiones |
-| Stores | `src/stores/*.ts` | Estado reactivo de Solid y, a la vez, persistencia en localStorage |
-| Dominio puro | `src/domain/progress/*.ts`, `src/domain/vocabulary/sessionDeck.ts` | Calendario de repaso, parseo del progreso, armado de mazos |
-| Contenido | `src/data/*.ts` y JSON, `public/packs/`, `public/audio/`, `public/strokes/` | Vocabulario, caracteres, glosas, temas, packs por nivel |
-| Utilidades con estado | `src/utils/levelPacks.ts`, `src/utils/vocabularySession.ts`, `src/utils/sessionStore.ts` | Descargas, Cache Storage y sesiones guardadas |
+| Arranque | `apps/web/src/index.tsx` | Analítica, tema, `render` de `App` y avisos globales |
+| Navegación | `apps/web/src/screen.ts`, `apps/web/src/createScreenHistory.ts`, `apps/web/src/App.tsx` | Unión `Screen`, historial del navegador y reglas de "volver" |
+| Páginas | `apps/web/src/pages/*.tsx` | Pantallas. Algunas construyen sesiones y deciden reglas de repaso |
+| Componentes | `apps/web/src/components/*.tsx` | UI reutilizable. `ProgressBackup.tsx` también coordina importar y descartar sesiones |
+| Stores | `apps/web/src/stores/*.ts` | Estado reactivo de Solid y, a la vez, persistencia en localStorage |
+| Dominio puro | `apps/web/src/domain/progress/*.ts`, `apps/web/src/domain/vocabulary/sessionDeck.ts` | Calendario de repaso, parseo del progreso, armado de mazos |
+| Contenido | `apps/web/src/data/*.ts` y JSON, `apps/web/public/packs/`, `apps/web/public/audio/`, `apps/web/public/strokes/` | Vocabulario, caracteres, glosas, temas, packs por nivel |
+| Utilidades con estado | `apps/web/src/utils/levelPacks.ts`, `apps/web/src/utils/vocabularySession.ts`, `apps/web/src/utils/sessionStore.ts` | Descargas, Cache Storage y sesiones guardadas |
 
 ### Quién depende de quién
 
@@ -55,11 +55,11 @@ Dependencias al revés:
 
 ### Lo que está bien y no hay que tocar
 
-- `schedule` es una función pura con `now` como parámetro (`src/domain/progress/schedule.ts:7`). Es la pieza que permite reproducir y fusionar progreso sin efectos.
-- Todo lo que entra desde almacenamiento o historial se parsea como dato no confiable: `parseProgress` (`src/domain/progress/serialization.ts:60`), `parseScreen` (`src/screen.ts:48`), `parseData` de Mis palabras (`src/stores/myWordsStore.ts:112`), `parseCharacterList` (`src/stores/characterStore.ts:115`). Las respuestas de una API necesitarán exactamente esto.
-- `importBackup` escribe en disco antes de tocar la memoria, así que un fallo deja todo como estaba (`src/stores/progressStore.ts:160-167`).
-- Los fallos de almacenamiento se muestran al usuario con salida (exportar, reintentar, recuperar) en vez de perder datos en silencio (`src/components/ProgressBackup.tsx:27-58`).
-- `tests/setup.ts:4-13` ya define un `Storage` en memoria. Es el adaptador de pruebas que necesitará la capa de persistencia.
+- `schedule` es una función pura con `now` como parámetro (`apps/web/src/domain/progress/schedule.ts:7`). Es la pieza que permite reproducir y fusionar progreso sin efectos.
+- Todo lo que entra desde almacenamiento o historial se parsea como dato no confiable: `parseProgress` (`apps/web/src/domain/progress/serialization.ts:60`), `parseScreen` (`apps/web/src/screen.ts:48`), `parseData` de Mis palabras (`apps/web/src/stores/myWordsStore.ts:112`), `parseCharacterList` (`apps/web/src/stores/characterStore.ts:115`). Las respuestas de una API necesitarán exactamente esto.
+- `importBackup` escribe en disco antes de tocar la memoria, así que un fallo deja todo como estaba (`apps/web/src/stores/progressStore.ts:160-167`).
+- Los fallos de almacenamiento se muestran al usuario con salida (exportar, reintentar, recuperar) en vez de perder datos en silencio (`apps/web/src/components/ProgressBackup.tsx:27-58`).
+- `apps/web/tests/setup.ts:4-13` ya define un `Storage` en memoria. Es el adaptador de pruebas que necesitará la capa de persistencia.
 
 ### Dónde se mezclan responsabilidades
 
@@ -68,8 +68,8 @@ Dependencias al revés:
 3. Una utilidad orquesta stores. `levelPacks.ts:4-5` importa `characterStore` y `vocabularyStore` y los muta en `loadInstalledPacks` (`:270-276`) y `applyListChoice` (`:325-345`). `levelPacks.ts:20` (`USED_KEYS`) conoce claves de otros tres módulos.
 4. Las páginas calculan dominio. `VocabularyReview.tsx:130-160` decide modo, mazo y cabecera de la sesión, y `:279` decide cuándo una respuesta mueve el calendario. Es lógica de repaso que hoy solo se prueba montando la página.
 5. `progressStore.ts` mezcla persistencia, reglas de cola (`buildQueue`, `:329-347` y `:430-437`), límites diarios y dos stores en un archivo (`progressStore` en `:136`, `vocabularyProgressStore` en `:372`). `vocabularyProgressStore.ts` es solo un reexport. Hay código duplicado: `currentDaily` (`:122-131`) y `currentWordDaily` (`:366-370`), y `afterAnswer` existe en `schedule.ts:5` y en `progressStore.ts:54`.
-6. Hay código muerto. `loadSession`, `saveSession`, `missedInWriting` y `recordWriting` de `src/utils/sessionStore.ts` no tienen llamadas en `src/` ni en `tests/`; solo se usa `discardSession` (`ProgressBackup.tsx:6`). El modo entrenamiento de `characterStore.ts:282-316` solo lo usan sus tests.
-7. El contenido entra como JSON estático en el bundle. `src/data/vocabulary.ts:3-8` importa las seis listas (unos 1,45 MB sin comprimir), `src/utils/characterSearch.ts:1` importa `searchIndex.json` (658 KB), y `characterStore.ts:4` y `:89` importan HSK 1 y todas las glosas al cargar el módulo.
+6. Hay código muerto. `loadSession`, `saveSession`, `missedInWriting` y `recordWriting` de `apps/web/src/utils/sessionStore.ts` no tienen llamadas en `apps/web/src/` ni en `apps/web/tests/`; solo se usa `discardSession` (`ProgressBackup.tsx:6`). El modo entrenamiento de `characterStore.ts:282-316` solo lo usan sus tests.
+7. El contenido entra como JSON estático en el bundle. `apps/web/src/data/vocabulary.ts:3-8` importa las seis listas (unos 1,45 MB sin comprimir), `apps/web/src/utils/characterSearch.ts:1` importa `searchIndex.json` (658 KB), y `characterStore.ts:4` y `:89` importan HSK 1 y todas las glosas al cargar el módulo.
 
 ## 2. Persistencia y modelo de datos
 
@@ -89,17 +89,17 @@ Dependencias al revés:
 | `jiayou-theme` | `theme.ts:6` | Tema | Preferencia del dispositivo |
 | `hsk-voice-mode` | `speech.ts:18` | Voz | Preferencia del dispositivo |
 
-Cada registro de progreso es un `CharProgress` (`src/domain/progress/types.ts:2-19`) con contadores, intervalo, facilidad, `due` y `lastSeen` en milisegundos. Palabras y caracteres usan el mismo tipo.
+Cada registro de progreso es un `CharProgress` (`apps/web/src/domain/progress/types.ts:2-19`) con contadores, intervalo, facilidad, `due` y `lastSeen` en milisegundos. Palabras y caracteres usan el mismo tipo.
 
 Con las 2.650 entradas de `characterLevels.json` y las 4.992 palabras, un progreso completo ocupa del orden de 1,3 MB de JSON. Cada sesión pausada guarda también una copia entera de ese progreso en su `checkpoint` (`vocabularySession.ts:26`, `VocabularyReview.tsx:154`). Tres o cuatro sesiones pausadas con el progreso lleno rozan los 5 MB que suelen dar los navegadores a localStorage.
 
 ### Los identificadores están bien como están
 
 - Un carácter se identifica por su glifo (`progressStore.ts:118`).
-- Una palabra se identifica por `wordId(simplified, pinyin)` (`src/utils/pinyin.ts:112-116`), por ejemplo `word-7231-ai4` para 爱.
+- Una palabra se identifica por `wordId(simplified, pinyin)` (`apps/web/src/utils/pinyin.ts:112-116`), por ejemplo `word-7231-ai4` para 爱.
 - Una corrección del usuario se guarda bajo el id de la palabra del catálogo, así que el progreso sigue con la palabra (`myWordsStore.ts:20-28` y `:123`).
 
-Estos ids sirven tal cual como clave primaria en un servidor. Lo que falta es protegerlos. `tests/vocabularyData.test.ts:62-63` comprueba que cada id sale de la regla, pero si alguien corrige el pinyin de una palabra del catálogo el id cambia, el test sigue pasando y el progreso de esa palabra queda huérfano. Propongo un archivo de ids publicados (`src/data/vocabulary/published-ids.json`) y un test que falle si un id desaparece.
+Estos ids sirven tal cual como clave primaria en un servidor. Lo que falta es protegerlos. `apps/web/tests/vocabularyData.test.ts:62-63` comprueba que cada id sale de la regla, pero si alguien corrige el pinyin de una palabra del catálogo el id cambia, el test sigue pasando y el progreso de esa palabra queda huérfano. Propongo un archivo de ids publicados (`apps/web/src/data/vocabulary/published-ids.json`) y un test que falle si un id desaparece.
 
 ### Qué falta para que el mismo estado viva detrás de una API
 
@@ -144,7 +144,7 @@ Recomiendo last-write-wins por registro, con `activity` como contador por dispos
 
 Todos los stores se crean de forma síncrona al importar el módulo: `createStore(load())` en `progressStore.ts:69`, `myWordsStore.ts:148`, `characterStore.ts:144` y `vocabularyStore.ts:23`. Las páginas leen en su creación, por ejemplo `Home.tsx:126` carga la sesión guardada antes del primer render. Un repositorio asíncrono obligaría a una fase de carga en toda la app.
 
-La propuesta es un repositorio síncrono que lee de memoria, con un adaptador que puede hidratarse de forma asíncrona una sola vez antes de `render` en `src/index.tsx:29`. Las páginas no cambian.
+La propuesta es un repositorio síncrono que lee de memoria, con un adaptador que puede hidratarse de forma asíncrona una sola vez antes de `render` en `apps/web/src/index.tsx:29`. Las páginas no cambian.
 
 ### Interfaz propuesta
 
@@ -182,9 +182,9 @@ Hoy `ProgressRepository` tiene una implementación sobre `KeyValueStore` con loc
 1. lee la cola de ids cambiados que deja `save`;
 2. envía esos registros y recibe los del servidor posteriores a su cursor;
 3. fusiona con la función pura del dominio;
-4. aplica el resultado con `reconcile`, por el mismo camino que ya usa `importBackup`, y avisa con la señal de `src/utils/progressReset.ts`, renombrada a algo como `stateReplaced`. `VocabularyReview.tsx:224` ya reacciona a esa señal saliendo de la sesión.
+4. aplica el resultado con `reconcile`, por el mismo camino que ya usa `importBackup`, y avisa con la señal de `apps/web/src/utils/progressReset.ts`, renombrada a algo como `stateReplaced`. `VocabularyReview.tsx:224` ya reacciona a esa señal saliendo de la sesión.
 
-Para que los stores no dependan del repositorio concreto, cada store pasa a exportar una fábrica (`createProgressStore(repo)`) y una instancia por defecto con el mismo nombre que hoy. Las páginas siguen importando `progressStore`. Los tests crean instancias nuevas en vez de compartir el estado del módulo entre casos, que es lo que pasa ahora. `tests/setup.ts:52` limpia localStorage pero no la memoria de los stores.
+Para que los stores no dependan del repositorio concreto, cada store pasa a exportar una fábrica (`createProgressStore(repo)`) y una instancia por defecto con el mismo nombre que hoy. Las páginas siguen importando `progressStore`. Los tests crean instancias nuevas en vez de compartir el estado del módulo entre casos, que es lo que pasa ahora. `apps/web/tests/setup.ts:52` limpia localStorage pero no la memoria de los stores.
 
 ### Local-first con cola de sincronización
 
@@ -206,19 +206,19 @@ IndexedDB no hace falta hoy. Con el checkpoint acotado, el progreso completo cab
 
 | Contenido | Dónde | Cómo llega |
 | --- | --- | --- |
-| Vocabulario HSK 1 a 6 | `src/data/vocabulary/hsk1-6.json` | Bundle, importación estática (`vocabulary.ts:3-8`) |
-| Índice de búsqueda | `src/data/searchIndex.json` | Bundle (`characterSearch.ts:1`) |
-| Caracteres HSK 1 y glosas | `src/data/hsk1.json`, `src/data/glosses/*.json` | Bundle (`characterStore.ts:4` y `:89`) |
-| Nivel de cada carácter | `src/data/characterLevels.json` | Bundle (`catalog.ts:3`) |
-| Temas | `src/data/topics.ts` | Código |
-| Caracteres HSK 2 a 6 | `public/packs/hskN.json` | Pack descargable (`levelPacks.ts:234-252`) |
-| Trazos | `public/strokes/` (HSK 1), `public/packs/hskN/strokes/` | Precaché y packs |
-| Audio por sílaba | `public/audio/` (34 MB), `public/packs/hskN/audio/` | Caché de medios |
+| Vocabulario HSK 1 a 6 | `apps/web/src/data/vocabulary/hsk1-6.json` | Bundle, importación estática (`vocabulary.ts:3-8`) |
+| Índice de búsqueda | `apps/web/src/data/searchIndex.json` | Bundle (`characterSearch.ts:1`) |
+| Caracteres HSK 1 y glosas | `apps/web/src/data/hsk1.json`, `apps/web/src/data/glosses/*.json` | Bundle (`characterStore.ts:4` y `:89`) |
+| Nivel de cada carácter | `apps/web/src/data/characterLevels.json` | Bundle (`catalog.ts:3`) |
+| Temas | `apps/web/src/data/topics.ts` | Código |
+| Caracteres HSK 2 a 6 | `apps/web/public/packs/hskN.json` | Pack descargable (`levelPacks.ts:234-252`) |
+| Trazos | `apps/web/public/strokes/` (HSK 1), `apps/web/public/packs/hskN/strokes/` | Precaché y packs |
+| Audio por sílaba | `apps/web/public/audio/` (34 MB), `apps/web/public/packs/hskN/audio/` | Caché de medios |
 
 Este reparto tiene tres problemas.
 
 1. El reparto es desigual. Las 4.992 palabras van en el JS desde el primer arranque, pero los caracteres de HSK 2 a 6 se descargan por nivel. Resuelto el 4 de noviembre de 2026, solo HSK 1 va en el JS ([como-funciona.md](como-funciona.md)).
-2. La versión de la caché de medios es un único hash de todo `public/packs` y `public/audio` (`vite.config.ts:8-18`). Cambiar un MP3 invalida todos los packs de todos los usuarios. `previousCopy` (`levelPacks.ts:101-114`) lo compensa copiando la versión vieja marcada con `x-jiayou-stale`.
+2. La versión de la caché de medios es un único hash de todo `apps/web/public/packs` y `apps/web/public/audio` (`vite.config.ts:8-18`). Cambiar un MP3 invalida todos los packs de todos los usuarios. `previousCopy` (`levelPacks.ts:101-114`) lo compensa copiando la versión vieja marcada con `x-jiayou-stale`.
 3. Los `manifest.json` de cada pack (`scripts/build-media-packs.mjs:83-92`) tienen recuentos pero no versión ni hash, y la app no los lee.
 
 ### Qué empaquetar y qué servir
@@ -247,9 +247,9 @@ Como cadena editorial, sí, y conviene conservarla. Como API de usuarios, no. Ca
 
 Hay duplicados que hay que juntar antes de que existan dos backends:
 
-- `syllableKey` está tres veces: `src/utils/pinyin.ts:95`, `api/src/syllableKey.ts:21` y `scripts/syllable-keys.mjs:23`.
-- `wordId` está en `src/utils/pinyin.ts:112` y en `scripts/syllable-keys.mjs` (lo importa `scripts/build-vocabulary.mjs:7`). Como los ids son la clave del progreso, una divergencia entre las dos copias deja progreso huérfano.
-- `HSKCharacter` está en `src/types.ts:5-18` y en `api/src/types.ts:9-21`.
+- `syllableKey` está tres veces: `apps/web/src/utils/pinyin.ts:95`, `api/src/syllableKey.ts:21` y `scripts/syllable-keys.mjs:23`.
+- `wordId` está en `apps/web/src/utils/pinyin.ts:112` y en `scripts/syllable-keys.mjs` (lo importa `scripts/build-vocabulary.mjs:7`). Como los ids son la clave del progreso, una divergencia entre las dos copias deja progreso huérfano.
+- `HSKCharacter` está en `apps/web/src/types.ts:5-18` y en `api/src/types.ts:9-21`.
 
 ### Forma propuesta
 
@@ -302,13 +302,13 @@ Para el inicio de sesión hay dos caminos razonables:
 
 Recomiendo el primero con cookie del mismo origen, porque el cliente solo necesita `fetch` con credenciales y la PWA no guarda secretos.
 
-La analítica hoy no identifica a nadie (`src/analytics.ts:8-17`, `cookieless_mode` y `person_profiles: 'never'`). Con cuentas habrá que decidir si se identifica al usuario en PostHog; propongo no hacerlo por defecto.
+La analítica hoy no identifica a nadie (`apps/web/src/analytics.ts:8-17`, `cookieless_mode` y `person_profiles: 'never'`). Con cuentas habrá que decidir si se identifica al usuario en PostHog; propongo no hacerlo por defecto.
 
 ## 6. Navegación y estado de pantalla
 
 ### Cómo funciona
 
-`Screen` es una unión de siete pantallas (`src/screen.ts:8-15`). `createScreenHistory` guarda la pantalla en `history.state` con `pushState` y URL vacía (`src/createScreenHistory.ts:23` y `:52`), y la restaura en `popstate` validándola con `parseScreen`. El botón atrás funciona. La URL no cambia nunca.
+`Screen` es una unión de siete pantallas (`apps/web/src/screen.ts:8-15`). `createScreenHistory` guarda la pantalla en `history.state` con `pushState` y URL vacía (`apps/web/src/createScreenHistory.ts:23` y `:52`), y la restaura en `popstate` validándola con `parseScreen`. El botón atrás funciona. La URL no cambia nunca.
 
 Eso tiene cuatro consecuencias.
 
@@ -343,22 +343,22 @@ No recomiendo una librería de rutas. Las reglas de "volver" viven en `App.tsx:8
 
 ### Qué existe
 
-- 40 archivos de test en `tests/` con Vitest y jsdom (`vite.config.ts`, bloque `test`), unas 3.400 líneas, y `api/src/merge.test.ts` con Bun.
+- 40 archivos de test en `apps/web/tests/` con Vitest y jsdom (`vite.config.ts`, bloque `test`), unas 3.400 líneas, y `api/src/merge.test.ts` con Bun.
 - Dominio y stores, en `progressStore`, `vocabularyProgress`, `weakAndCap`, `characterStore`, `myWords`, `vocabularyStore`, `progressBackup`.
 - Calidad de datos, en `vocabularyData`, `vocabularyQuality`, `traditionalForms`, `topics`.
 - Utilidades, en `pinyin`, `searchRank`, `speech`, `theme`, `levelPacks`, `strokeData`, `wordOrder`, `wordListImport`, `screen`, `serviceWorker`.
 - UI, en `vocabularyReview`, `misPalabrasUi`, `progressBackupUi`, `accessibility` y los de rondas `r7*` y `r8*`.
 - `npm run check` ejecuta los tests de Vitest y el build con `tsc` (`package.json`). Los tests del `api/` quedan fuera.
 
-`tests/progressBackup.test.ts:13` ya prueba la ida y vuelta de la copia, y `tests/vocabularyData.test.ts:62` la regla de ids. Es una buena base.
+`apps/web/tests/progressBackup.test.ts:13` ya prueba la ida y vuelta de la copia, y `apps/web/tests/vocabularyData.test.ts:62` la regla de ids. Es una buena base.
 
 ### Qué tests de contrato hacen falta
 
-1. Fixtures congeladas de cada formato persistido (progreso, Mis palabras, sesión de vocabulario) en `tests/fixtures/`, con un test que las parsea. Si un cambio rompe el parseo de una copia, falla aquí y no en el móvil de alguien.
+1. Fixtures congeladas de cada formato persistido (progreso, Mis palabras, sesión de vocabulario) en `apps/web/tests/fixtures/`, con un test que las parsea. Si un cambio rompe el parseo de una copia, falla aquí y no en el móvil de alguien.
 2. Ids publicados congelados (sección 2).
 3. Tests de propiedades de la fusión sobre registros generados al azar, que comprueben que `merge(a, b)` es igual a `merge(b, a)`, que `merge(a, a)` es igual a `a` y que la fusión es asociativa.
 4. Un servidor falso en memoria que implementa el contrato de `/v1/sync` con los tipos de `shared/contracts`, y tests del `SyncEngine` contra él: sin red, red que vuelve, conflicto, rechazo.
-5. Un test de esquema de packs en el que cada `public/packs/*.json` valida contra el esquema compartido y el manifiesto coincide con los archivos.
+5. Un test de esquema de packs en el que cada `apps/web/public/packs/*.json` valida contra el esquema compartido y el manifiesto coincide con los archivos.
 6. Los tests del `api/` dentro de `npm run check`, para que un cambio en `shared/` no rompa la herramienta editorial sin avisar.
 7. Un test del checkpoint acotado. Descartar una sesión restaura los registros tocados y deja intacto un registro cambiado por fuera durante la sesión.
 
@@ -370,8 +370,8 @@ Cada paso es una PR. Al terminar cada una, la app se comporta igual que hoy salv
 
 | PR | Archivos | Riesgo | Desbloquea |
 | --- | --- | --- | --- |
-| 0.1 Borrar código muerto | `src/utils/sessionStore.ts` (dejar `discardSession` o quitarlo con su clave), `characterStore.ts:282-316`, `tests/characterStore.test.ts`, `levelPacks.ts:20` | Bajo | Menos superficie que migrar |
-| 0.2 Claves y adaptador de almacenamiento | Nuevos `src/persistence/keys.ts` y `keyValue.ts`; cambiar `progressStore.ts`, `myWordsStore.ts`, `characterStore.ts`, `vocabularyStore.ts`, `vocabularySession.ts`, `levelPacks.ts`, `theme.ts`, `speech.ts`, `Home.tsx` | Bajo, muchos archivos con cambios mecánicos | Un solo punto que toca localStorage; inventario de lo que se guarda |
+| 0.1 Borrar código muerto | `apps/web/src/utils/sessionStore.ts` (dejar `discardSession` o quitarlo con su clave), `characterStore.ts:282-316`, `apps/web/tests/characterStore.test.ts`, `levelPacks.ts:20` | Bajo | Menos superficie que migrar |
+| 0.2 Claves y adaptador de almacenamiento | Nuevos `apps/web/src/persistence/keys.ts` y `keyValue.ts`; cambiar `progressStore.ts`, `myWordsStore.ts`, `characterStore.ts`, `vocabularyStore.ts`, `vocabularySession.ts`, `levelPacks.ts`, `theme.ts`, `speech.ts`, `Home.tsx` | Bajo, muchos archivos con cambios mecánicos | Un solo punto que toca localStorage; inventario de lo que se guarda |
 | 0.3 Sacar lecturas de almacenamiento de Home | `Home.tsx:88-122` a `vocabularySession.ts` (listar sesiones pausadas) y a un util para la foto de Home | Bajo | El prefijo de sesión deja de estar duplicado |
 | 0.4 Dependencias al derecho | `Grade` y `GRADES` a `domain/progress/types.ts`; `data/lists.ts` recibe las palabras propias como parámetro o pasa a `stores/` | Bajo | `domain` y `data` sin imports de stores |
 | 0.5 Separar reglas de cola del store | `buildQueue`, límites diarios y `currentDaily` a `domain/progress/queue.ts`; un archivo por store; quitar el reexport `vocabularyProgressStore.ts` | Medio. Lo cubren `progressStore.test.ts` y `weakAndCap.test.ts` | Reglas probables sin store; menos duplicado |
@@ -388,8 +388,8 @@ Cada paso es una PR. Al terminar cada una, la app se comporta igual que hoy salv
 | 1.5 Fusión pura y "combinar copia" | Nuevo `domain/sync/merge.ts`; opción en `ProgressBackup.tsx` de combinar en vez de reemplazar | Bajo. Es una función nueva con tests de propiedades | Sincronización manual entre dispositivos con el archivo de copia, útil ya; prueba en uso real la fusión que usará la API |
 | 1.6 URL y pantalla | `screen.ts`, `createScreenHistory.ts`, `App.tsx:30`, nuevo `navigation.ts` | Medio. Recargar deja de volver a Home, que es un cambio visible y deseado | Compartir una palabra, el duelo por enlace, volver tras login |
 | 1.7 Manifiesto y packs versionados | `scripts/build-media-packs.mjs`, `vite.config.ts:8-18`, `levelPacks.ts` | Medio. Toca el service worker y la caché | Actualizar un pack sin invalidar los demás; servir packs desde CDN o API |
-| 1.8 Código compartido | Nuevo `shared/pinyin` y `shared/contracts`; `src/utils/pinyin.ts`, `api/src/syllableKey.ts`, `api/src/types.ts`, `scripts/syllable-keys.mjs`; tests del `api/` en `npm run check` | Bajo | Una sola regla de ids; contrato común app y servidor |
-| 1.9 Ids publicados congelados | Nuevo `src/data/vocabulary/published-ids.json`, test en `tests/vocabularyData.test.ts` | Bajo | Corregir contenido sin dejar progreso huérfano |
+| 1.8 Código compartido | Nuevo `shared/pinyin` y `shared/contracts`; `apps/web/src/utils/pinyin.ts`, `api/src/syllableKey.ts`, `api/src/types.ts`, `scripts/syllable-keys.mjs`; tests del `api/` en `npm run check` | Bajo | Una sola regla de ids; contrato común app y servidor |
+| 1.9 Ids publicados congelados | Nuevo `apps/web/src/data/vocabulary/published-ids.json`, test en `apps/web/tests/vocabularyData.test.ts` | Bajo | Corregir contenido sin dejar progreso huérfano |
 
 ### Fase 2. Cuando exista la API
 
@@ -397,7 +397,7 @@ Cada paso es una PR. Al terminar cada una, la app se comporta igual que hoy salv
 | --- | --- | --- | --- |
 | 2.1 Separar `api/` en `content/` y añadir `http.ts` | `api/src/*` | Bajo | Sitio para `sync/` y `auth/` |
 | 2.2 Autenticación | `api/src/auth/`, pantalla de inicio de sesión, vuelta con `screenToUrl` | Medio | Cuentas |
-| 2.3 Sincronización | `api/src/sync/`, `src/sync/syncEngine.ts`, cola de ids en el repositorio, señal `stateReplaced` | Medio. La app sigue funcionando sin red porque el motor solo fusiona | Progreso compartido entre dispositivos |
+| 2.3 Sincronización | `api/src/sync/`, `apps/web/src/sync/syncEngine.ts`, cola de ids en el repositorio, señal `stateReplaced` | Medio. La app sigue funcionando sin red porque el motor solo fusiona | Progreso compartido entre dispositivos |
 | 2.4 Adoptar datos al primer inicio de sesión | `syncEngine.ts` | Bajo, es un envío más | Usuarios actuales no pierden nada al crear cuenta |
 | 2.5 Vocabulario 4 a 6 en packs | `data/vocabulary.ts`, `myWordsStore.ts:34` y `:300-308`, `characterSearch.ts`, `levelPacks.ts` | Alto. Hay que convertir lecturas síncronas del catálogo en carga por nivel | Bundle inicial menor; contenido servido desde la API |
 

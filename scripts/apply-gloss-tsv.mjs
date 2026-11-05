@@ -29,13 +29,13 @@ for (const line of readFileSync(tsvPath, 'utf8').split('\n')) {
 
 const dataPath =
   level === 1
-    ? join(root, 'src/data/hsk1.json')
+    ? join(root, 'apps/web/src/data/hsk1.json')
     : level <= 3
-      ? join(root, `public/packs/hsk${level}.json`)
-      : join(root, `src/data/hsk${level}.json`);
+      ? join(root, `apps/web/public/packs/hsk${level}.json`)
+      : join(root, `apps/web/src/data/hsk${level}.json`);
 
 const rows = JSON.parse(readFileSync(dataPath, 'utf8'));
-const sidecarPath = join(root, `src/data/glosses/hsk${level}.json`);
+const sidecarPath = join(root, `apps/web/src/data/glosses/hsk${level}.json`);
 const sidecar = existsSync(sidecarPath) ? JSON.parse(readFileSync(sidecarPath, 'utf8')) : {};
 let applied = 0;
 const missing = [];
@@ -57,10 +57,10 @@ mkdirSync(dirname(sidecarPath), { recursive: true });
 writeFileSync(sidecarPath, `${JSON.stringify(sidecar, null, 2)}\n`, 'utf8');
 writeFileSync(dataPath, `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
 if (level >= 4) {
-  writeFileSync(join(root, `public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
+  writeFileSync(join(root, `apps/web/public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
 }
 writeFileSync(
-  join(root, `src/data/glosses/curated/hsk${level}.json`),
+  join(root, `apps/web/src/data/glosses/curated/hsk${level}.json`),
   `${JSON.stringify(curated, null, 2)}\n`,
   'utf8',
 );
