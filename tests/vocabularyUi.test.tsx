@@ -1,12 +1,12 @@
-import { fireEvent, render, screen, within } from '@solidjs/testing-library';
+import { fireEvent, render, screen, waitFor, within } from '@solidjs/testing-library';
 import { sensesText } from '../src/data/wordSenses';
 import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Vocabulario from '../src/pages/Vocabulario';
 import VocabularyReview from '../src/pages/VocabularyReview';
-import { vocabulary } from '../src/data/vocabulary';
+import { vocabulary } from './fixtures/levelWords';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
-import { loadVocabularySession } from '../src/utils/vocabularySession';
+import { renderWithStore } from './fixtures/learningStore';
 
 vi.mock('../src/utils/levelPacks', async (original) => ({ ...(await original<object>()), saveStudyMedia: async () => [] }));
 
@@ -96,10 +96,12 @@ describe('vocabulary screens', () => {
     vi.useRealTimers();
   });
 
-  it('teaches a new word before asking and saves the session', () => {
-    render(() => <VocabularyReview onBack={() => {}} onStrokes={() => {}} resume={false} />);
-    expect(screen.getByText('Continuar')).toBeTruthy();
-    fireEvent.click(screen.getByText('Continuar'));
-    expect(loadVocabularySession(vocabulary)?.deck.some((card) => card.kind === 'recall')).toBe(true);
+  it('teaches a new word before asking and saves the lesson', async () => {
+    const { store } = renderWithStore(() => <VocabularyReview onBack={() => {}} onStrokes={() => {}} resume={false} />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Enséñamela' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    await waitFor(() => expect(store.events().map((event) => event.type)).toEqual(['exposure']));
+    const session = await store.activeSession('today');
+    expect(session?.queue.some((entry) => entry.intent === 'practice')).toBe(true);
   });
 });

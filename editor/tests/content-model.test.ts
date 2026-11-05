@@ -94,4 +94,31 @@ describe('content validation', () => {
     badKind.vocabulary[0].relations = [{ kind: 'cousin' as 'synonym', id: 'one' }];
     expect(() => validateSnapshot(badKind)).toThrow(/Relación inválida/);
   });
+  it('keeps published ids: retires instead of deleting and never hands an id to a new entry', () => {
+    const retired = copy();
+    retired.vocabulary[0].retired = true;
+    expect(() => validateSnapshot(retired, base)).not.toThrow();
+    const deleted = copy();
+    deleted.vocabulary = [];
+    expect(() => validateSnapshot(deleted, base)).toThrow(/No se puede borrar/);
+    const bad = copy() as unknown as { vocabulary: { retired: unknown }[] };
+    bad.vocabulary[0].retired = false;
+    expect(() => validateSnapshot(bad)).toThrow(/Estado de retirada/);
+    // A retired row keeps its id, so a new word cannot take it.
+    const taken = structuredClone(retired);
+    taken.vocabulary.push({ ...base.vocabulary[0], senses: [{ text: 'otra cosa' }] });
+    expect(() => validateSnapshot(taken, retired)).toThrow(/duplicado/);
+    // An id the registry published but the base lost is still not free.
+    const reused = copy();
+    reused.vocabulary.push({ ...base.vocabulary[0], id: 'word-4e8c-er4', simplified: '二', traditional: '二', characters: ['二'], pinyin: 'èr' });
+    expect(() => validateSnapshot(reused, base, ['one', 'word-4e8c-er4'])).toThrow(/ya se publicó/);
+    expect(() => validateDraft({ schemaVersion: 1, baseRevision: 'r', snapshot: reused }, base, 'r', ['word-4e8c-er4'])).toThrow(/ya se publicó/);
+    expect(() => validateSnapshot(reused, base, ['one'])).not.toThrow();
+  });
+  it('keeps live words from linking to a retired one', () => {
+    const next = copy();
+    next.vocabulary.push({ ...next.vocabulary[0], id: 'word-4e8c-er4', simplified: '二', traditional: '二', characters: ['二'], pinyin: 'èr', retired: true });
+    next.vocabulary[0].relations = [{ kind: 'antonym', id: 'word-4e8c-er4' }];
+    expect(() => validateSnapshot(next, base)).toThrow(/palabra retirada/);
+  });
 });

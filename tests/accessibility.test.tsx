@@ -1,10 +1,13 @@
 import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
 import { describe, expect, it, vi } from 'vitest';
-import ScoreModal from '../src/components/ScoreModal';
-import { HSKCharacter } from '../src/types';
+import SessionSummary from '../src/components/learning/summary/SessionSummary';
 
-const summary = { again: 1, hard: 0, good: 1, total: 2, percentage: 50, streak: 0 };
+const recorded = { 'scheduled-review': 2, practice: 1, 'invalid-attempt': 0, exposure: 0 };
+const items = [
+  { itemId: 'word-meaning:a', label: '你', results: [{ recorded: 'scheduled-review' as const, outcome: 'correct' as const, rating: 'good' as const }] },
+  { itemId: 'word-meaning:b', label: '好', results: [{ recorded: 'scheduled-review' as const, outcome: 'incorrect' as const, rating: 'again' as const }] },
+];
 
 describe('accessibility behavior', () => {
   it('traps modal focus, dismisses on Escape, and restores focus and inert state', async () => {
@@ -16,15 +19,11 @@ describe('accessibility behavior', () => {
     document.body.append(host);
     const background = document.createElement('div');
     document.body.append(background);
-    const missed = ['你', '好'].map((character) => ({
-      character, traditional: character, pinyin: 'hǎo', definition: '', radical: '',
-      stroke_count: 1, hsk_level: 1, general_standard: 0, frequency_rank: 0,
-    })) satisfies HSKCharacter[];
     const dispose = render(() => {
       const [open, setOpen] = createSignal(false);
       return <>
         <button onClick={() => setOpen(true)}>Reopen</button>
-        <ScoreModal summary={open() ? summary : null} missed={missed} practised={[]} onReviewMissed={() => {}} onOpenStrokes={() => {}} onGoHome={() => { onGoHome(); setOpen(false); }} />
+        <SessionSummary open={open()} recorded={recorded} items={items} dueTomorrow={1} nextDueAt={null} newWords={{ taught: 0, budget: 20 }} onClose={() => { onGoHome(); setOpen(false); }} />
       </>;
     }, host);
     const trigger = host.querySelector('button')!;
@@ -33,10 +32,10 @@ describe('accessibility behavior', () => {
     await new Promise<void>((resolve) => queueMicrotask(() => resolve()));
     const dialog = host.querySelector('[role="dialog"]')!;
     const buttons = dialog.querySelectorAll('button');
-    expect(buttons.length).toBeGreaterThan(2);
+    expect(buttons.length).toBeGreaterThan(0);
     expect(buttons[0]).toHaveFocus();
     expect(background).toHaveAttribute('inert');
-    buttons[buttons.length - 1].focus();
+    // The summary has one button, so Tab and Shift+Tab both stay on it.
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
     expect(buttons[0]).toHaveFocus();
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));

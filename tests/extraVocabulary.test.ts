@@ -7,7 +7,8 @@ vi.mock('../src/data/vocabulary/extra.json', () => ({
   ],
 }));
 
-const { extraVocabulary, isExtraWord, vocabulary } = await import('../src/data/vocabulary');
+const { extraVocabulary, isExtraWord, catalogWords } = await import('../src/data/vocabulary');
+const vocabulary = catalogWords();
 const { EXTRA_LIST, listLabel, studyList, studyLists } = await import('../src/data/lists');
 const { allWords, findWord } = await import('../src/data/vocabulary');
 

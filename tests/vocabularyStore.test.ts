@@ -1,12 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { vocabularyCoverage } from '../src/data/vocabulary';
-import { progressStore } from '../src/stores/progressStore';
-import { vocabularyProgressStore } from '../src/stores/vocabularyProgressStore';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
+import './fixtures/levelWords';
 
 afterEach(() => {
   vocabularyStore.reset();
-  progressStore.clear();
   localStorage.clear();
 });
 
@@ -43,7 +41,6 @@ describe('vocabularyStore', () => {
     const daily = vocabularyStore.getDailyWord();
     expect(daily.level).toBe(2);
     const word = vocabularyStore.getSelectedWords()[5];
-    vocabularyProgressStore.grade(word.id, 'good');
-    expect(vocabularyStore.getDailyWord().id).toBe(word.id);
+    expect(vocabularyStore.getDailyWord((id) => (id === word.id ? 'learning' : 'new')).id).toBe(word.id);
   });
 });

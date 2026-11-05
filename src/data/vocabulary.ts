@@ -1,14 +1,12 @@
+import { createSignal } from 'solid-js';
 import type { HskLevel } from '../types';
 import { withToneSandhi } from '../utils/pinyin';
 import type { WordRelation } from './wordRelations';
 import { isWordRelationKind } from './wordRelations';
 import { parseSenses, type WordSense } from './wordSenses';
+// Only HSK 1 ships inside the app. HSK 2 to 6 arrive with their level's pack (packs/hskN/words.json)
+// when the learner activates the list, through installLevelWords.
 import hsk1 from './vocabulary/hsk1.json';
-import hsk2 from './vocabulary/hsk2.json';
-import hsk3 from './vocabulary/hsk3.json';
-import hsk4 from './vocabulary/hsk4.json';
-import hsk5 from './vocabulary/hsk5.json';
-import hsk6 from './vocabulary/hsk6.json';
 import extra from './vocabulary/extra.json';
 import examples from './vocabulary/examples.json';
 
@@ -138,25 +136,10 @@ const parseList = (value: unknown, level: HskLevel): CatalogEntry[] => {
   return entries;
 };
 
-export const vocabularyByLevel: Record<HskLevel, CatalogEntry[]> = {
-  1: parseList(hsk1, 1),
-  2: parseList(hsk2, 2),
-  3: parseList(hsk3, 3),
-  4: parseList(hsk4, 4),
-  5: parseList(hsk5, 5),
-  6: parseList(hsk6, 6),
-};
-
-export const vocabulary: CatalogEntry[] = [
-  ...vocabularyByLevel[1],
-  ...vocabularyByLevel[2],
-  ...vocabularyByLevel[3],
-  ...vocabularyByLevel[4],
-  ...vocabularyByLevel[5],
-  ...vocabularyByLevel[6],
-];
-
 export const vocabularyLevels: HskLevel[] = [1, 2, 3, 4, 5, 6];
+
+/** The HSK level whose words ship inside the app. The others download with their pack. */
+export const BUNDLED_WORD_LEVEL: HskLevel = 1;
 
 /** Words the content editor files outside the HSK lists. They arrive with app updates and form the «Extra» list. */
 export const extraVocabulary: VocabularyEntry[] = (Array.isArray(extra) ? extra : []).map((raw) => {
@@ -168,13 +151,52 @@ export const EXTRA_SOURCE = 'curated-extra';
 /** True for a word of the Extra list. */
 export const isExtraWord = (word: VocabularyEntry): boolean => !word.level;
 
-/** Every word the app knows: HSK 1 to 6, then Extra. All of it comes from the content editor's releases. */
-const everyWord: VocabularyEntry[] = [...vocabulary, ...extraVocabulary];
-const wordsById = new Map(everyWord.map((word) => [word.id, word]));
+/** The words of each level on the device. Reading it inside a memo re-runs the memo when a level arrives or leaves. */
+const [loadedLevels, setLoadedLevels] = createSignal<Partial<Record<HskLevel, CatalogEntry[]>>>({
+  [BUNDLED_WORD_LEVEL]: parseList(hsk1, BUNDLED_WORD_LEVEL),
+});
 
-export const allWords = (): VocabularyEntry[] => everyWord;
+let index: { every: VocabularyEntry[]; byId: Map<string, VocabularyEntry> } | null = null;
+const wordIndex = () => {
+  const levels = loadedLevels();
+  if (!index) {
+    const every = [...vocabularyLevels.flatMap((level) => levels[level] ?? []), ...extraVocabulary];
+    index = { every, byId: new Map(every.map((word) => [word.id, word])) };
+  }
+  return index;
+};
 
-export const findWord = (id: string): VocabularyEntry | undefined => wordsById.get(id);
+/** Parse a level's word list and make it available. Throws if the list is not that level's. */
+export const installLevelWords = (level: HskLevel, raw: unknown) => {
+  const words = parseList(raw, level);
+  index = null;
+  setLoadedLevels((current) => ({ ...current, [level]: words }));
+};
+
+/** Forget a downloaded level. HSK 1 always stays. */
+export const removeLevelWords = (level: HskLevel) => {
+  if (level === BUNDLED_WORD_LEVEL || !loadedLevels()[level]) return;
+  index = null;
+  setLoadedLevels((current) => {
+    const next = { ...current };
+    delete next[level];
+    return next;
+  });
+};
+
+export const hasLevelWords = (level: HskLevel): boolean => !!loadedLevels()[level];
+
+/** The words of `level` on the device, or none until its pack is downloaded. */
+export const levelWords = (level: HskLevel): CatalogEntry[] => loadedLevels()[level] ?? [];
+
+/** Every HSK word on the device, HSK 1 first. Not the learner's selection: see vocabularyStore.getSelectedWords. */
+export const catalogWords = (): CatalogEntry[] => vocabularyLevels.flatMap(levelWords);
+
+/** Every word on the device: the HSK levels downloaded, then Extra. */
+export const allWords = (): VocabularyEntry[] => wordIndex().every;
+
+/** A word on the device by id. Words of a level that is not downloaded are not found. */
+export const findWord = (id: string): VocabularyEntry | undefined => wordIndex().byId.get(id);
 
 /**
  * Characters of Extra words in these topics that are not a one-character word in `words`,
@@ -196,6 +218,11 @@ export const charactersOfExtraTopicWords = (topicIds: readonly string[], words: 
   return out;
 };
 
+/** How many words a level has, whether or not it is downloaded. */
+export function wordCount(level: HskLevel): number {
+  return typeof __WORD_COUNTS__ === 'object' ? __WORD_COUNTS__[level] ?? 0 : levelWords(level).length;
+}
+
 /** Word counts in the original HSK 2.0 source, before editorial additions and level changes. */
 export const officialCounts: Record<HskLevel, number> = { 1: 150, 2: 147, 3: 298, 4: 598, 5: 1298, 6: 2500 };
 
@@ -204,6 +231,7 @@ export const vocabularyCoverage = {
   levels: [1, 2, 3, 4, 5, 6] as const satisfies readonly HskLevel[],
   complete: true,
   description: 'Vocabulario HSK 2.0 completo, con ajustes editoriales por nivel',
-  // Read from the lists, since the content editor can file new words under a level (HSK 1 has 你好 on top of the 150).
-  counts: Object.fromEntries(vocabularyLevels.map((level) => [level, vocabularyByLevel[level].length])) as Record<HskLevel, number>,
+  // Counted from the lists at build time (vite.config.ts), since the content editor can file new words
+  // under a level (HSK 1 has 你好 on top of the 150) and most lists are not on the device.
+  counts: Object.fromEntries(vocabularyLevels.map((level) => [level, wordCount(level)])) as Record<HskLevel, number>,
 };

@@ -20,15 +20,14 @@ import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
-import { progressStore as charProgress } from '../stores/progressStore';
-import { topicPlan } from '../utils/topicPlan';
-import { allWords, charactersOfExtraTopicWords, extraVocabulary, findWord, vocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
+import { charactersOfExtraTopicWords, extraVocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
 import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } from '../data/topics';
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
-import { vocabularyProgressStore as progress } from '../stores/vocabularyProgressStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { canLearnNew, WORD_NEW_PER_DAY } from '../stores/progressStore';
+import { characterItemId, wordItemId } from '../stores/learningStore';
+import { useLearningStore } from '../components/LearningStoreContext';
+import { studyStatusOf } from '../utils/progressSummary';
 
 export interface VocabularyBrowseState {
   query: string;
@@ -66,15 +65,21 @@ const wordRowOf = (word: VocabularyEntry): Row => ({
   key: { hanzi: [word.simplified, word.traditional], pinyin: word.pinyin, gloss: sensesText(word.senses) },
 });
 
-const catalogRows = new Map<string, Row>([...vocabulary, ...extraVocabulary].map((word) => [word.id, wordRowOf(word)]));
-
-/** Characters already listed as one-character words show up as words, not twice. */
-const wordGlyphs = new Set(vocabulary.map((word) => word.simplified));
+/** Search rows are built once per word, not per keystroke or per selection change. */
+const rowCache = new WeakMap<VocabularyEntry, Row>();
+const wordRow = (word: VocabularyEntry): Row => {
+  let row = rowCache.get(word);
+  if (!row) rowCache.set(word, (row = wordRowOf(word)));
+  return row;
+};
 
 /** Typing waits this long before the list filters, so each key stays instant. */
 const SEARCH_DEBOUNCE_MS = 180;
 
 const Vocabulario: Component<Props> = (props) => {
+  const store = useLearningStore();
+  const isNew = (id: string) => store.status(wordItemId(id)) === 'new';
+  const isPending = (id: string) => store.isPendingToday(wordItemId(id));
   const [audioError, setAudioError] = createSignal(false);
   /** The character opened from this word's tiles, shown in the same detail as search. */
   const [charOpen, setCharOpen] = createSignal<string>();
@@ -84,12 +89,20 @@ const Vocabulario: Component<Props> = (props) => {
   });
   const installedByChar = createMemo(() => new Map(characterStore.state.characters.map((row) => [row.character, row])));
   const charInstalled = (char: string) => installedByChar().has(char);
+  /** Writing status from the learning log. Undefined for a character outside HSK or never taught. */
   const charStatus = (char: string): StudyStatus | undefined => {
-    if (!charInstalled(char) || charProgress.isNew(char)) return undefined;
-    return charProgress.isMastered(char) ? 'mastered' : 'learning';
+    if (!charInstalled(char)) return undefined;
+    const status = store.status(characterItemId(char));
+    return status === 'new' ? undefined : studyStatusOf(status);
   };
   onCleanup(stopSpeech);
+  /** The checked lists. Buscar, Temas, the word page and its sections draw only from these. */
   const words = createMemo(() => vocabularyStore.getSelectedWords());
+  /** A word of the checked lists, or a topic-tagged Extra word, which Temas lists even with Extra off. */
+  const findWord = (id: string) =>
+    vocabularyStore.findSelectedWord(id) ?? extraVocabulary.find((word) => word.id === id && word.topicIds.length > 0);
+  /** Characters already listed as one-character words show up as words, not twice. */
+  const wordGlyphs = createMemo(() => new Set(words().map((word) => word.simplified)));
   /**
    * Temas also lists Extra words tagged with a topic, even if the Extra list is off for Hoy.
    * Without a topic, the list stays the checked ones only.
@@ -112,7 +125,6 @@ const Vocabulario: Component<Props> = (props) => {
     topicTags().filter((topic) => wordsForTopics().some((word) => word.topicIds.includes(topic.id))),
   );
   const selected = createMemo(() => (props.wordId ? findWord(props.wordId) : undefined));
-  const wordRow = () => catalogRows;
   const update = (changes: Partial<VocabularyBrowseState>) => props.onBrowse({ ...props.browse, ...changes });
   /** `browse.topic` holds the one topic being practised, or '' for the whole list. */
   const chosenTopics = createMemo(() => (props.browse.topic ? [props.browse.topic] : []));
@@ -143,14 +155,15 @@ const Vocabulario: Component<Props> = (props) => {
     if (char.hsk_level !== undefined) return hskLevelsOf(vocabularyStore.state.selectedLists).includes(char.hsk_level);
     return extraVocabulary.some((word) => word.characters.includes(char.character) && inPlan().has(word.id));
   };
-  /** Every HSK character that is not also a word, built once rather than per keystroke. */
+  /** The characters of the levels being studied that are not also a word, built once rather than per keystroke. */
   const charRows = createMemo((): Row[] => {
     const installed = installedByChar();
+    const glyphs = wordGlyphs();
     return searchCharacters('', characterStore.state.characters).flatMap((hit) => {
       const glyph = hit.kind === 'device' ? hit.character.character : hit.row.character;
-      if (wordGlyphs.has(glyph)) return [];
+      if (glyphs.has(glyph)) return [];
       const char = hit.kind === 'device' ? hit.character : installed.get(glyph) ?? characterRecord(glyph, []);
-      if (!char) return [];
+      if (!char || !charInPlan(char)) return [];
       return [charRowOf(char)];
     });
   });
@@ -173,10 +186,10 @@ const Vocabulario: Component<Props> = (props) => {
   const rows = createMemo((): Row[] => {
     const query = normalize(props.browse.query.trim());
     const ids = chosenTopics();
-    // A search reaches every level; a topic browse uses the topic pool so own tagged words appear.
-    const pool = query ? allWords() : ids.length > 0 ? wordsForTopics() : words();
+    // A search reaches the checked lists only; a topic browse uses the topic pool so tagged Extra words appear.
+    const pool = ids.length > 0 ? wordsForTopics() : words();
     const listed = pool.filter((word) => inTopics(word, ids));
-    const source = listed.map((word) => wordRow().get(word.id)!);
+    const source = listed.map(wordRow);
     // Global search mixes in HSK characters; a topic also lists the pieces of its Extra words.
     if (query && ids.length === 0) source.push(...charRows());
     else if (ids.length > 0) source.push(...extraTopicCharRows(ids.flatMap((id) => topicScope(id)), listed));
@@ -195,23 +208,32 @@ const Vocabulario: Component<Props> = (props) => {
     for (const word of wordsForTopics()) {
       if (!inTopics(word, ids)) continue;
       counts.total++;
-      if (progress.isNew(word.id)) continue;
-      if (progress.isMastered(word.id)) counts.mastered++;
-      else counts.learning++;
+      const status = statusOf(word.id);
+      if (status === 'mastered') counts.mastered++;
+      else if (status === 'learning') counts.learning++;
     }
     return counts;
   };
   const topicCounts = (topicId: string) => countsFor(topicScope(topicId));
   /** What the session will do today, after the daily cap, said before the tap. */
-  const plan = createMemo(() => topicPlan(chosenTopics()));
+  const plan = createMemo(() => {
+    const preview = store.previewPlan('topic', { kind: 'topics', topicIds: chosenTopics() });
+    return {
+      fresh: preview?.counts.newItems ?? 0,
+      review: (preview?.counts.scheduled ?? 0) + (preview?.counts.practice ?? 0),
+      capped: (preview?.leftOutCounts['new-budget-day'] ?? 0) > 0,
+      waiting: (preview?.leftOutCounts['pending-elsewhere'] ?? 0) > 0,
+    };
+  });
   const studyLabel = () => {
     const { fresh, review } = plan();
     if (fresh === 0) return `Repasar ${review} de este tema`;
     const nuevas = fresh === 1 ? '1 nueva' : `${fresh} nuevas`;
     return review > 0 ? `Estudiar ${nuevas} + ${review} ${review === 1 ? 'repaso' : 'repasos'}` : `Estudiar ${nuevas}`;
   };
-  const statusOf = (id: string): StudyStatus =>
-    progress.isNew(id) ? 'new' : progress.isMastered(id) ? 'mastered' : 'learning';
+  const statusOf = (id: string): StudyStatus => studyStatusOf(store.status(wordItemId(id)));
+  const newPerDay = () => store.settings().newPerDay['word-meaning'];
+  const canLearnNew = () => store.newLeftToday('other') > 0;
   const topicTitle = (id: string) => topicById(id)?.title ?? id;
   /** Subtopic → parent theme; theme/tag → Temas list. */
   const back = () => {
@@ -336,7 +358,7 @@ const Vocabulario: Component<Props> = (props) => {
           </label>
           <Show
             when={chosenTopics().length > 0}
-            fallback={<p class="mt-3 text-xs text-ink-faint tabular-nums animate-rise [animation-delay:120ms]">{resultCount()}{props.browse.query.trim() ? (extraVocabulary.length > 0 ? ' en HSK 1 a 6 y Extra' : ' en HSK 1 a 6') : ''}</p>}
+            fallback={<p class="mt-3 text-xs text-ink-faint tabular-nums animate-rise [animation-delay:120ms]">{resultCount()}{props.browse.query.trim() ? ` en ${vocabularyStore.listLabel()}` : ''}</p>}
           >
             <div class="mt-3 animate-rise [animation-delay:120ms]">
               <p class="text-xs text-ink-soft tabular-nums">
@@ -400,7 +422,7 @@ const Vocabulario: Component<Props> = (props) => {
               when={plan().fresh + plan().review > 0}
               fallback={
                 <div class="mt-3 flex h-14 w-full shrink-0 items-center justify-center rounded-full border border-line bg-surface text-[0.9375rem] text-ink-soft" role="status">
-                  Nuevas mañana
+                  {plan().waiting ? 'Primero, los repasos de Hoy' : 'Nuevas mañana'}
                 </div>
               }
             >
@@ -416,16 +438,16 @@ const Vocabulario: Component<Props> = (props) => {
         </Show>
       }>
         {(word) => {
-          const sounds = createMemo(() => wordSoundAlikes(word(), allWords(), findWord));
+          const sounds = createMemo(() => wordSoundAlikes(word(), words(), findWord));
           /** Words shown in Palabras cercanas or Suena parecido stay out of the family below. */
-          const shown = createMemo(() => new Set([...linkedIds(word(), findWord, allWords()), ...sounds().map((item) => item.word.id)]));
-          const family = createMemo(() => familyByChar(word(), vocabulary, 4, shown()));
+          const shown = createMemo(() => new Set([...linkedIds(word(), findWord, words()), ...sounds().map((item) => item.word.id)]));
+          const family = createMemo(() => familyByChar(word(), words(), 4, shown()));
           const single = () => word().characters.length === 1;
           return (
           <div class="min-h-0 flex-1 overflow-y-auto pb-4 pt-2 animate-rise [animation-delay:60ms]">
             <div class="sheet flex flex-col items-center px-5 py-4 text-center">
               <div class="grid w-full grid-cols-[2.75rem_1fr_2.75rem] items-center">
-                <span class="justify-self-start"><StatusSeal state={progress.isNew(word().id) ? 'new' : progress.isDue(word().id) ? 'due' : statusOf(word().id)} /></span>
+                <span class="justify-self-start"><StatusSeal state={isNew(word().id) ? 'new' : isPending(word().id) ? 'due' : statusOf(word().id)} /></span>
                 <p class="text-sm text-ink-soft">{word().level ? `HSK ${word().level}` : 'Extra'}</p>
                 <SpeakButton
                   word
@@ -484,16 +506,16 @@ const Vocabulario: Component<Props> = (props) => {
               <div class="flex items-center gap-2">
                 {/* Past today's limit a new word is still one tap away, but it reads as the exception it is. */}
                 <Show
-                  when={progress.isNew(word().id) && !canLearnNew('word')}
-                  fallback={<button class="btn-ink min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>{progress.isNew(word().id) ? 'Aprender palabra' : progress.isDue(word().id) ? 'Repasar palabra' : 'Practicar palabra'}</button>}
+                  when={isNew(word().id) && !canLearnNew()}
+                  fallback={<button class="btn-ink min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>{isNew(word().id) ? 'Aprender palabra' : isPending(word().id) ? 'Repasar palabra' : 'Practicar palabra'}</button>}
                 >
                   <button class="btn-quiet min-h-14 flex-1 px-6" onClick={() => props.onPractice(word().id)}>Aprender igualmente</button>
                 </Show>
               </div>
-              <Show when={progress.isNew(word().id) && !canLearnNew('word')}>
-                <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {WORD_NEW_PER_DAY} palabras nuevas de hoy. Esta iría por encima del límite.</p>
+              <Show when={isNew(word().id) && !canLearnNew()}>
+                <p class="mt-2 text-xs text-ink-soft">Ya aprendiste las {newPerDay()} palabras nuevas de hoy. Esta iría por encima del límite.</p>
               </Show>
-              <Show when={!progress.isNew(word().id) && !progress.isDue(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
+              <Show when={!isNew(word().id) && !isPending(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
             </div>
             <Show when={vocabularyExample(word().simplified, word().example)}>
               {(example) => (

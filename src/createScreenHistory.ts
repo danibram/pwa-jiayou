@@ -1,17 +1,13 @@
 import { createEffect, onCleanup, onMount, type Accessor, type Setter } from 'solid-js';
-import { allWords, findWord } from './data/vocabulary';
-import { loadVocabularySession } from './utils/vocabularySession';
 import { screenToUrl, urlToScreen } from './navigation';
 import { homeScreen, parseScreen, type Screen } from './screen';
 
-/** A review only exists while its session is saved. Without one, show its word or Home instead. */
-const reviewOrFallback = (screen: Screen): Screen => {
-  if (screen.page !== 'vocabulary-review') return screen;
-  if (loadVocabularySession(allWords(), screen.practiceId)) return { ...screen, resume: true };
-  return screen.practiceId && findWord(screen.practiceId)
-    ? { page: 'vocabulario', wordId: screen.practiceId }
-    : homeScreen;
-};
+/**
+ * A review in the URL or in history continues its stored session when the learning store still has
+ * one for that mode and scope; otherwise the page plans a new one. Either way nothing is lost.
+ */
+const reviewOrFallback = (screen: Screen): Screen =>
+  screen.page === 'vocabulary-review' ? { ...screen, resume: true } : screen;
 
 /**
  * A reload keeps history.state and the URL, so the saved screen wins when both agree: it still knows

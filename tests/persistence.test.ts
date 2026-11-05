@@ -1,22 +1,19 @@
 import { describe, expect, it, vi } from 'vitest';
-import { homeLastKey, KEYS, practiceSessionKey } from '../src/persistence/keys';
+import { homeLastKey, KEYS } from '../src/persistence/keys';
 import { storage } from '../src/persistence/keyValue';
 
 describe('storage keys', () => {
   it('keep the names already saved on devices', () => {
     expect(KEYS).toEqual({
-      progress: 'hsk-flashcards-stats',
       myWords: 'jiayou-my-words',
       studyLists: 'jiayou-study-lists',
       characterDeck: 'hsk-flashcards-progress',
       installedLevels: 'hsk-installed-levels',
-      wordSession: 'jiayou-vocabulary-session-v1',
       deviceId: 'jiayou-device-id',
       theme: 'jiayou-theme',
       voiceMode: 'hsk-voice-mode',
       legacyVoice: 'hsk-voice',
     });
-    expect(practiceSessionKey('__weak__')).toBe('jiayou-vocabulary-session-v1:practice:__weak__');
     expect(homeLastKey('vocabulary')).toBe('jiayou-home-last-vocabulary');
   });
 });
@@ -33,12 +30,12 @@ describe('key-value adapter', () => {
   });
 
   it('lists keys by prefix', () => {
-    localStorage.setItem('jiayou-vocabulary-session-v1', '{}');
-    localStorage.setItem(practiceSessionKey('a'), '{}');
+    localStorage.setItem('jiayou-home-last-vocabulary', '{}');
+    localStorage.setItem('jiayou-home-last-characters', '{}');
     localStorage.setItem('jiayou-theme', 'dark');
-    expect(storage.keys('jiayou-vocabulary-session-v1').sort()).toEqual([
-      'jiayou-vocabulary-session-v1',
-      'jiayou-vocabulary-session-v1:practice:a',
+    expect(storage.keys('jiayou-home-last-').sort()).toEqual([
+      'jiayou-home-last-characters',
+      'jiayou-home-last-vocabulary',
     ]);
   });
 

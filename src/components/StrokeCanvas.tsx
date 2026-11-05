@@ -37,6 +37,13 @@ interface StrokeCanvasProps {
   /** Edge-to-edge board, without a side border or rounded corners. */
   bleed?: boolean;
   onHint?: () => void;
+  /**
+   * Misses on one stroke before the canvas shows where it goes. Defaults to 2. Writing from memory
+   * passes 3, so two misses on a stroke can still end as Difícil.
+   */
+  hintAfterMisses?: number;
+  /** The canvas showed a stroke by itself after `hintAfterMisses` misses on it. Once per stroke. */
+  onAutoHint?: (strokeNum: number) => void;
   onReady?: (strokeCount: number) => void;
   onAnimating?: (animating: boolean) => void;
   onStroke?: (done: number, mistakes: number) => void;
@@ -81,7 +88,9 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
   const [hinted, setHinted] = createSignal<number | null>(null);
   let inkTimer: ReturnType<typeof setTimeout> | undefined;
   let ceilingStrokes = new Set<number>();
+  let helpedStrokes = new Set<number>();
   let totalCeilingHit = false;
+  const hintAfter = () => Math.max(1, props.hintAfterMisses ?? 2);
   const keepInk = (points: { x: number; y: number }[]) => {
     if (points.length >= 2) setDrawn((list) => [...list, pathOf(points)]);
   };
@@ -113,6 +122,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     setHinted(null);
     clearTimeout(inkTimer);
     ceilingStrokes = new Set();
+    helpedStrokes = new Set();
     totalCeilingHit = false;
     setQuizActive(true);
     armIdle();
@@ -122,7 +132,7 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
     if (props.showOutline) writer.showOutline({ duration: 0 });
     else writer.hideOutline({ duration: 0 });
     writer.quiz({
-      showHintAfterMisses: 2,
+      showHintAfterMisses: hintAfter(),
       leniency: 1.1,
       onCorrectStroke: (s) => {
         keepInk(s.drawnPath.points);
@@ -137,10 +147,14 @@ const StrokeCanvas: Component<StrokeCanvasProps> = (props) => {
         quizMistakes = s.totalMistakes;
         showMiss(s.drawnPath.points);
         keepInk(s.drawnPath.points);
-        if (s.mistakesOnStroke >= 2 && !stuck()) {
+        if (s.mistakesOnStroke >= hintAfter() && !stuck()) {
           setStuck(true);
           setCueHidden(false);
           writer?.highlightStroke(s.strokeNum);
+        }
+        if (s.mistakesOnStroke >= hintAfter() && !helpedStrokes.has(s.strokeNum)) {
+          helpedStrokes.add(s.strokeNum);
+          props.onAutoHint?.(s.strokeNum);
         }
         props.onMistake?.(s.strokeNum, quizMistakes);
         if (s.mistakesOnStroke >= STROKE_CEILING && !ceilingStrokes.has(s.strokeNum)) {

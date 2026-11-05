@@ -1,4 +1,5 @@
-import { allWords } from '../data/vocabulary';
+import { extraVocabulary } from '../data/vocabulary';
+import { vocabularyStore } from '../stores/vocabularyStore';
 import { leadSense } from '../data/wordSenses';
 import type { HSKCharacter } from '../types';
 import { characterRecord } from './characterSearch';
@@ -8,13 +9,15 @@ import { pinyinParts } from './pinyin';
 export type KnownCharacter = Omit<HSKCharacter, 'hsk_level'> & { hsk_level?: HSKCharacter['hsk_level'] };
 
 /**
- * The record of an HSK character, or a stub built from the first word that uses it: the syllable
+ * The record of an HSK character, or a stub built from the first studied word that uses it: the syllable
  * at its position and a meaning that names that word ("en 咖喱: curry"). Undefined when neither knows it.
  */
 export const characterOrWordStub = (char: string, installed: readonly HSKCharacter[]): KnownCharacter | undefined => {
   const record = characterRecord(char, installed);
   if (record) return record;
-  const word = allWords().find((entry) => entry.characters.includes(char));
+  // Words of the checked lists, then topic-tagged Extra words, which Temas shows even with Extra off.
+  const uses = (entry: { characters: string[] }) => entry.characters.includes(char);
+  const word = vocabularyStore.getSelectedWords().find(uses) ?? extraVocabulary.find((entry) => entry.topicIds.length > 0 && uses(entry));
   if (!word) return undefined;
   const index = word.characters.indexOf(char);
   return {

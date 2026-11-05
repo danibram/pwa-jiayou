@@ -43,7 +43,9 @@ describe('pinyin of Extra words', () => {
 });
 
 describe('a character outside HSK', () => {
+  // Extra words count once the Extra list is checked; topic-tagged ones also show in Temas without it.
   it('has a stub from the word that uses it, without level or radical', () => {
+    vocabularyStore.selectLists(['hsk-1', EXTRA_LIST]);
     const stub = characterOrWordStub('喱', [])!;
     expect(stub).toMatchObject({ character: '喱', pinyin: 'lí', gloss: 'en 咖喱: curry', radical: '', stroke_count: 0 });
     expect(stub.hsk_level).toBeUndefined();
@@ -51,6 +53,7 @@ describe('a character outside HSK', () => {
 
   it('opens a sheet from the word page, with its meaning, other words and strokes', () => {
     const onStrokes = vi.fn();
+    vocabularyStore.selectLists(['hsk-1', EXTRA_LIST]);
     page({ wordId: 'word-5496-55b1-ka-li2', onStrokes });
     fireEvent.click(screen.getByRole('button', { name: 'Ver el carácter 喱, 2 de 2' }));
     const sheet = screen.getByRole('dialog');
@@ -73,6 +76,7 @@ describe('a character outside HSK', () => {
   it('opens a one-character Extra word on its word page from search', () => {
     vi.useFakeTimers();
     const onSelect = vi.fn();
+    vocabularyStore.selectLists(['hsk-1', EXTRA_LIST]);
     page({ onSelect, query: '喱' });
     fireEvent.click(screen.getAllByText('喱')[0]);
     expect(onSelect).toHaveBeenCalledWith('word-55b1-li2');
@@ -88,6 +92,13 @@ describe('a character outside HSK', () => {
     expect(screen.getByLabelText(/Carácter 喱/)).toBeTruthy();
     fireEvent.click(screen.getByLabelText(/Carácter 喱/));
     expect(screen.getByRole('dialog').textContent).toContain('en 咖喱: curry');
+  });
+
+  it('leaves Extra words out of search while the Extra list is off', () => {
+    vi.useFakeTimers();
+    page({ query: '喱' });
+    expect(screen.queryAllByText('喱')).toHaveLength(0);
+    vi.useRealTimers();
   });
 
   it('shows an Extra topic word in Temas even when Extra is not checked', () => {

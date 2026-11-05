@@ -482,19 +482,6 @@ export const topicTags = (): Topic[] => topics.filter((topic) => topic.kind === 
 export const subtopicsOf = (themeId: string): Topic[] =>
   topics.filter((topic) => topic.kind === 'subtopic' && topic.parentId === themeId);
 
-export const charactersInTopic = (id: string, all: HSKCharacter[]): HSKCharacter[] => {
-  const topic = topicById(id);
-  if (!topic) return [];
-  const byChar = new Map(all.map((char) => [char.character, char]));
-  const glyphs = topic.kind === 'theme'
-    ? [...new Set(topicScope(id).flatMap((scopeId) => topicById(scopeId)?.characters ?? []))]
-    : topic.characters;
-  return glyphs.flatMap((char) => {
-    const found = byChar.get(char);
-    return found ? [found] : [];
-  });
-};
-
 /** Characters the topic lists that are not on this device, and the levels they belong to. */
 export const topicGap = (id: string, installed: HSKCharacter[]): { missing: number; levels: HskLevel[] } => {
   const topic = topicById(id);

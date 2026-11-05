@@ -19,3 +19,14 @@ export const deviceIdIn = (repo: KeyValueStore): string => {
   try { repo.write(KEYS.deviceId, id); } catch { /* Kept in memory only. */ }
   return id;
 };
+
+/**
+ * Gives this device a new id in `repo`. The development reset calls it before deleting the learning
+ * database: the new log starts its `sequence` at 0 again, and under the old id those numbers would
+ * repeat ones a backup of the old log already holds.
+ */
+export const renewDeviceIdIn = (repo: KeyValueStore): string => {
+  const id = randomId();
+  try { repo.write(KEYS.deviceId, id); } catch { /* The next run makes another, which is also new. */ }
+  return id;
+};

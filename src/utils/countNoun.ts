@@ -18,6 +18,3 @@ export const pronoun = (n: number, kind: NounKind): string => {
 /** Picks the ending that agrees with the noun: agree(n, kind, 'recuperad') gives "recuperadas" or "recuperado". */
 export const agree = (n: number, kind: NounKind, stem: string): string =>
   `${stem}${NOUNS[kind].feminine ? 'a' : 'o'}${n === 1 ? '' : 's'}`;
-
-/** Callers that only pass the singular noun ("palabra") get its kind back. */
-export const nounKind = (one: string): NounKind => (one === NOUNS.word.one ? 'word' : 'char');

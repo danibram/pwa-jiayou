@@ -31,10 +31,10 @@ export const isInSearchIndex = (character: string) => indexByChar.has(character)
 /** Pinyin and gloss of any HSK 1-6 character, whether or not its list is on the device. */
 export const indexRowFor = (character: string): SearchIndexRow | undefined => indexByChar.get(character);
 
-/** HSK characters built on `radical`, lower levels first, without `except` or the radical itself. */
-export const charactersWithRadical = (radical: string, except: string): SearchIndexRow[] =>
+/** HSK characters of `levels` built on `radical`, lower levels first, without `except` or the radical itself. */
+export const charactersWithRadical = (radical: string, except: string, levels: readonly HskLevel[]): SearchIndexRow[] =>
   indexRows
-    .filter((row) => row.radical === radical && row.character !== except && row.character !== radical)
+    .filter((row) => row.radical === radical && row.character !== except && row.character !== radical && levels.includes(row.hsk_level))
     .sort((a, b) => a.hsk_level - b.hsk_level);
 
 const allHits = (installed: readonly HSKCharacter[]): SearchHit[] => {

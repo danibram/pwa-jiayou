@@ -1,9 +1,9 @@
 import { createStore } from 'solid-js/store';
-import { vocabulary, vocabularyByLevel, type VocabularyEntry } from '../data/vocabulary';
-import { DEFAULT_LIST, knownLists, listLabel, type ListId } from '../data/lists';
+import { allWords, BUNDLED_WORD_LEVEL, catalogWords, hasLevelWords, levelWords, type VocabularyEntry } from '../data/vocabulary';
+import { DEFAULT_LIST, hskListId, hskLevelsOf, knownLists, listLabel, type ListId } from '../data/lists';
+import type { HskLevel } from '../types';
 import { studyList, studyLists, wordsInLists } from './studyLists';
 import { dayNumber } from './characterStore';
-import { vocabularyProgressStore } from './vocabularyProgressStore';
 import { isRecord } from '../utils/parse';
 import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
@@ -25,6 +25,18 @@ const loadSelection = (): ListId[] => {
 const [store, setStore] = createStore<VocabularyStoreState>({
   selectedLists: loadSelection(),
 });
+
+/** The selected words and their ids, rebuilt when the selection or the words on the device change. */
+let selection: { key: string; every: VocabularyEntry[]; words: VocabularyEntry[]; byId: Map<string, VocabularyEntry> } | null = null;
+const selectedWords = () => {
+  const every = allWords();
+  const key = store.selectedLists.join('|');
+  if (!selection || selection.key !== key || selection.every !== every) {
+    const words = wordsInLists(store.selectedLists);
+    selection = { key, every, words, byId: new Map(words.map((word) => [word.id, word])) };
+  }
+  return selection;
+};
 
 const save = () => {
   try {
@@ -66,20 +78,48 @@ export const vocabularyStore = {
     return studyLists();
   },
 
-  /** The words of the checked lists, each once. */
+  /**
+   * The words of the checked lists, each once. Everything the learner sees draws from these:
+   * Hoy, Buscar, Temas, the word page and the character drawer.
+   */
   getSelectedWords(): VocabularyEntry[] {
-    return wordsInLists(store.selectedLists);
+    return selectedWords().words;
+  },
+
+  /** The HSK levels among the checked lists. Characters shown beside words come from these. */
+  studiedLevels(): HskLevel[] {
+    return hskLevelsOf(store.selectedLists);
+  },
+
+  /**
+   * HSK levels among the checked lists whose words are not on the device: the download failed, or
+   * the pack was deleted. Their words are in no screen or session until it arrives.
+   */
+  missingLevels(): HskLevel[] {
+    return hskLevelsOf(store.selectedLists).filter((level) => level !== BUNDLED_WORD_LEVEL && !hasLevelWords(level));
+  },
+
+  /** "HSK 2", "HSK 2 y 3": the levels `missingLevels` returns, or '' when none. */
+  missingLabel(): string {
+    const missing = this.missingLevels();
+    return missing.length > 0 ? listLabel(missing.map(hskListId)) : '';
+  },
+
+  /** A word of the checked lists by id. A word of a list that is off is not found. */
+  findSelectedWord(id: string): VocabularyEntry | undefined {
+    return selectedWords().byId.get(id);
   },
 
   /**
    * From the lists being studied, seeded by the date: a word being learned, so the tile is a nudge
-   * to recall it, or one of the next new words when nothing is in progress yet.
+   * to recall it, or one of the next new words when nothing is in progress yet. `status` comes from
+   * the learning store; without it every word counts as new.
    */
-  getDailyWord(): VocabularyEntry {
+  getDailyWord(status: (wordId: string) => 'new' | 'learning' | 'mastered' = () => 'new'): VocabularyEntry {
     const words = this.getSelectedWords();
-    const learning = words.filter((word) => !vocabularyProgressStore.isNew(word.id) && !vocabularyProgressStore.isMastered(word.id));
-    const fresh = words.filter((word) => vocabularyProgressStore.isNew(word.id)).slice(0, 20);
-    const list = learning.length > 0 ? learning : fresh.length > 0 ? fresh : words.length > 0 ? words : vocabularyByLevel[1].length > 0 ? vocabularyByLevel[1] : vocabulary;
+    const learning = words.filter((word) => status(word.id) === 'learning');
+    const fresh = words.filter((word) => status(word.id) === 'new').slice(0, 20);
+    const list = learning.length > 0 ? learning : fresh.length > 0 ? fresh : words.length > 0 ? words : levelWords(1).length > 0 ? levelWords(1) : catalogWords();
     return list[dayNumber() % list.length];
   },
 

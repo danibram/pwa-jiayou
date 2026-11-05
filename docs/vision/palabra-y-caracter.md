@@ -2,6 +2,8 @@
 
 La app tiene dos fichas de consulta. La página de palabra (`/palabras/<id>`) y el drawer de carácter, que se abre desde una palabra, la búsqueda o Trazos. Cada una responde a una pregunta distinta y no repite la de la otra.
 
+Qué se descarga y qué lee cada pantalla está en [como-funciona.md](como-funciona.md).
+
 ## Normas comunes
 
 1. Una sección aparece solo si tiene datos. Nunca se muestra "sin sinónimos" ni una lista vacía.
@@ -12,6 +14,7 @@ La app tiene dos fichas de consulta. La página de palabra (`/palabras/<id>`) y 
 6. Los datos editoriales (relaciones y frases del editor) y los calculados (familia, sílabas parecidas, radical) van en secciones separadas. La única excepción es Fácil de confundir, que se suma a Suena parecido con borde sello.
 7. Cada tipo de relación tiene su forma visual. Una lista de filas idénticas para cosas distintas no enseña la diferencia.
 8. Una palabra aparece una sola vez por página. Si ya está en Palabras cercanas, no se repite en Suena parecido.
+9. Las dos vistas solo enseñan palabras de las listas activas y caracteres de los niveles HSK activos. Una palabra de una lista apagada no sale en ninguna sección, aunque esté descargada, y su página no se abre. En esta página, "catálogo" quiere decir lo que el alumno estudia ahora.
 
 ## Página de palabra
 
@@ -26,8 +29,8 @@ Orden fijo:
 | 3 | Acción | Aprender, Repasar o Practicar | Progreso |
 | 4 | En una frase | Frase con la palabra en tinta plena y subrayada, el resto en tinta tenue, y su traducción. Cada carácter abre su drawer | Editor |
 | 5 | Palabras cercanas | Sinónimos (≈ delante del hanzi), antónimos como pareja (esta palabra en tinta tenue y sin glosa ↔ la contraria con su glosa), clasificador como la frase que se dice (一 本 书) y relacionadas como fichas | Editor |
-| 6 | Suena parecido | Palabras del catálogo con las mismas sílabas sin tono, hasta nueve, en fichas pequeñas centradas de tres columnas. La forma no cambia con el número de fichas y no se parece a la de la familia. Grupos en este orden: Fácil de confundir (editor), Suena igual, Otro tono | Calculado y editor |
-| 7 | Cómo se forma | Por cada carácter, una fila (glifo, pinyin, glosa) que abre su drawer y, debajo, colgando de una línea, hasta cuatro palabras HSK que lo comparten. No cuentan la palabra que es solo ese carácter ni las que ya salen más arriba. En una palabra de un carácter la ficha ya es el carácter: la sección se llama El carácter y su fila muestra lo que la ficha no dice (el radical en jade, su significado y el número de trazos) antes de la lista Palabras con X | Calculado |
+| 6 | Suena parecido | Palabras de las listas activas con las mismas sílabas sin tono, hasta nueve, en fichas pequeñas centradas de tres columnas. La forma no cambia con el número de fichas y no se parece a la de la familia. Grupos en este orden: Fácil de confundir (editor), Suena igual, Otro tono | Calculado y editor |
+| 7 | Cómo se forma | Por cada carácter, una fila (glifo, pinyin, glosa) que abre su drawer y, debajo, colgando de una línea, hasta cuatro palabras de las listas activas que lo comparten. No cuentan la palabra que es solo ese carácter ni las que ya salen más arriba. En una palabra de un carácter la ficha ya es el carácter: la sección se llama El carácter y su fila muestra lo que la ficha no dice (el radical en jade, su significado y el número de trazos) antes de la lista Palabras con X | Calculado |
 
 La ficha muestra la forma tradicional de la palabra entera. El radical, los trazos y la forma tradicional de cada carácter están en el drawer, a un toque.
 
@@ -40,16 +43,16 @@ Orden fijo:
 | # | Sección | Contenido |
 | - | ------- | --------- |
 | 1 | Cabecera | Glifo animado con el radical en jade, pinyin con audio, glosa, sentidos secundarios, estado si ya lo estudias, trazos y forma tradicional |
-| 2 | Radical | Tarjeta con el glifo del radical, su pinyin y significado, y hasta seis caracteres HSK que lo llevan, de nivel más bajo primero |
-| 3 | Palabras con X | Hasta seis palabras en una tarjeta: la propia palabra primero, después las de los niveles que estudias. Sin la palabra desde la que se abrió |
-| 4 | Suena parecido | Caracteres con la misma sílaba: hasta seis con el mismo tono y ocho con otro tono, como fichas pequeñas |
+| 2 | Radical | Tarjeta con el glifo del radical, su pinyin y significado, y hasta seis caracteres de los niveles HSK activos que lo llevan, de nivel más bajo primero |
+| 3 | Palabras con X | Hasta seis palabras de las listas activas en una tarjeta: la propia palabra primero, después las de nivel más bajo. Sin la palabra desde la que se abrió |
+| 4 | Suena parecido | Caracteres de los niveles activos con la misma sílaba: hasta seis con el mismo tono y ocho con otro tono, como fichas pequeñas |
 | 5 | Acción | Ver trazos y escribirlo, o descargar el nivel |
 
 El drawer no muestra relaciones de palabra ni frases. Un sinónimo es una propiedad de la palabra, no del carácter.
 
 ## Suena parecido en las dos vistas
 
-Es el mismo concepto con dos alcances. En la página de palabra compara palabras del catálogo con el mismo número de sílabas (时间 y 实践). En el drawer compara caracteres sueltos, incluidos los que no son palabra por sí solos (必, 毕). En una palabra de un carácter las dos listas se parecen. La página enseña las palabras que se pueden confundir al oír una frase; el drawer enseña los caracteres que se pueden confundir al escribir pinyin.
+Es el mismo concepto con dos alcances. En la página de palabra compara palabras de las listas activas con el mismo número de sílabas (时间 y 实践). En el drawer compara caracteres sueltos, incluidos los que no son palabra por sí solos (必, 毕). En una palabra de un carácter las dos listas se parecen. La página enseña las palabras que se pueden confundir al oír una frase; el drawer enseña los caracteres que se pueden confundir al escribir pinyin.
 
 ## Pendiente
 
