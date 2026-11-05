@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DefaultScheduler } from 'ts-fsrs';
 import {
@@ -16,7 +16,7 @@ const withChange = (change: Record<string, unknown>) => ({ ...DEFAULT_SCHEDULER_
 
 describe('scheduler config', () => {
   it('pins the installed ts-fsrs version', () => {
-    const installed = JSON.parse(readFileSync('node_modules/ts-fsrs/package.json', 'utf8')) as { version: string };
+    const installed = JSON.parse(readFileSync(['node_modules/ts-fsrs/package.json', '../../node_modules/ts-fsrs/package.json'].find((path) => existsSync(path))!, 'utf8')) as { version: string };
     expect(INSTALLED_TS_FSRS_VERSION).toBe(installed.version);
     expect(DEFAULT_SCHEDULER_CONFIG.packageVersion).toBe(installed.version);
   });

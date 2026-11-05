@@ -7,9 +7,9 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const vocabDir = join(root, 'src/data/vocabulary');
+const vocabDir = join(root, 'apps/web/src/data/vocabulary');
 const curatedDir = join(vocabDir, 'curated');
-const glossDir = join(root, 'src/data/glosses');
+const glossDir = join(root, 'apps/web/src/data/glosses');
 const cachePath = join(vocabDir, '.translate-cache.json');
 const args = process.argv.slice(2);
 const levelArg = args.find((a) => a.startsWith('--level='))?.split('=')[1] ?? args[args.indexOf('--level') + 1];
@@ -49,7 +49,7 @@ const loadCharacterGlosses = () => {
     }
   }
   for (const level of [1, 2, 3, 4, 5, 6]) {
-    for (const rel of [`src/data/hsk${level}.json`, `public/packs/hsk${level}.json`]) {
+    for (const rel of [`apps/web/src/data/hsk${level}.json`, `apps/web/public/packs/hsk${level}.json`]) {
       const path = join(root, rel);
       if (!existsSync(path)) continue;
       const rows = loadJson(path, []);

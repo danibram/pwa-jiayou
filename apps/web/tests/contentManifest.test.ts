@@ -2,7 +2,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { contentManifest } from '../scripts/content-manifest';
+import { contentManifest } from '../../../scripts/content-manifest';
 import { packCacheName } from '../src/domain/content/caches';
 import { PACK_SCHEMA, usablePacks } from '../src/domain/content/manifest';
 

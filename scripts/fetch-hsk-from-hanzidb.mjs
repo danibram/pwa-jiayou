@@ -113,10 +113,10 @@ const poolMap = async (items, limit, fn) => {
 
 const existingLevels = () => {
   const map = {};
-  const hsk1 = JSON.parse(readFileSync(join(root, 'src/data/hsk1.json'), 'utf8'));
+  const hsk1 = JSON.parse(readFileSync(join(root, 'apps/web/src/data/hsk1.json'), 'utf8'));
   for (const row of hsk1) map[row.character] = row.hsk_level;
   for (const level of [2, 3]) {
-    const pack = JSON.parse(readFileSync(join(root, `public/packs/hsk${level}.json`), 'utf8'));
+    const pack = JSON.parse(readFileSync(join(root, `apps/web/public/packs/hsk${level}.json`), 'utf8'));
     for (const row of pack) map[row.character] = row.hsk_level;
   }
   return map;
@@ -129,16 +129,16 @@ for (const level of [4, 5, 6]) {
   const enriched = listOnly
     ? rows.map((row) => ({ ...row, general_standard: 0, frequency_rank: 0 }))
     : await poolMap(rows, 5, enrichEntry);
-  writeFileSync(join(root, `src/data/hsk${level}.json`), `${JSON.stringify(enriched, null, 4)}\n`, 'utf8');
+  writeFileSync(join(root, `apps/web/src/data/hsk${level}.json`), `${JSON.stringify(enriched, null, 4)}\n`, 'utf8');
   console.log(`wrote src/data/hsk${level}.json`);
 }
 
 const levels = existingLevels();
 for (const level of [4, 5, 6]) {
-  for (const row of JSON.parse(readFileSync(join(root, `src/data/hsk${level}.json`), 'utf8'))) {
+  for (const row of JSON.parse(readFileSync(join(root, `apps/web/src/data/hsk${level}.json`), 'utf8'))) {
     levels[row.character] = row.hsk_level;
   }
 }
 const sorted = Object.fromEntries(Object.entries(levels).sort(([a], [b]) => a.localeCompare(b, 'zh')));
-writeFileSync(join(root, 'src/data/characterLevels.json'), `${JSON.stringify(sorted, null, 2)}\n`, 'utf8');
+writeFileSync(join(root, 'apps/web/src/data/characterLevels.json'), `${JSON.stringify(sorted, null, 2)}\n`, 'utf8');
 console.log(`characterLevels: ${Object.keys(sorted).length} characters`);

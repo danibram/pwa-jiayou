@@ -1,6 +1,6 @@
-import type { VocabularyEntry } from '../../src/data/vocabulary';
-import type { Topic } from '../../src/data/topics';
-import type { HSKCharacter } from '../../src/types';
+import type { VocabularyEntry } from '../../web/src/data/vocabulary';
+import type { Topic } from '../../web/src/data/topics';
+import type { HSKCharacter } from '../../web/src/types';
 
 /** Keep in sync with WORD_RELATION_KINDS in src/data/wordRelations.ts. Inlined so content-publish can load this file as a data URL. */
 const RELATION_KINDS = new Set(['synonym', 'antonym', 'related', 'classifier', 'confused']);
@@ -51,7 +51,8 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot, publish
   const chars = value.characters as unknown[];
   const kinds = new Set(['theme', 'subtopic', 'tag']);
   for (const topic of topics) {
-    if (!object(topic) || !text(topic.id) || !/^[a-z]+$/.test(topic.id) || !text(topic.title) || !han(topic.glyph) || !Array.isArray(topic.characters) || !topic.characters.every(han)) fail('Tema inválido.');
+    if (!object(topic)) return fail('Tema inválido.');
+    if (!text(topic.id) || !/^[a-z]+$/.test(topic.id) || !text(topic.title) || !han(topic.glyph) || !Array.isArray(topic.characters) || !topic.characters.every(han)) fail('Tema inválido.');
     // Published bases before the theme/subtopic split omit kind; treat them as themes.
     if (topic.kind === undefined) topic.kind = 'theme';
     if (!kinds.has(topic.kind as string)) fail(`Tipo de tema inválido en ${(topic as { title?: string }).title ?? topic.id}.`);

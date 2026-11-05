@@ -1,7 +1,7 @@
 import { Component, For, Show, createMemo, createResource, createSignal } from 'solid-js';
-import { sensesText } from '../../src/data/wordSenses';
+import { sensesText } from '../../web/src/data/wordSenses';
 import { exampleFor, message, useEditor, type Change } from '../lib/store';
-import { formatWordRelations } from '../../src/data/wordRelations';
+import { formatWordRelations } from '../../web/src/data/wordRelations';
 import { EntryList } from './EntryList';
 import { Hanzi, LevelTag } from './text';
 

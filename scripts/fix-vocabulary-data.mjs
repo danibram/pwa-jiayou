@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { wordId } from './syllable-keys.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dataDir = join(root, 'src/data/vocabulary');
+const dataDir = join(root, 'apps/web/src/data/vocabulary');
 const curatedDir = join(dataDir, 'curated');
 const LEVELS = [1, 2, 3, 4, 5, 6];
 
@@ -60,7 +60,7 @@ for (const [topicId, words] of Object.entries(handTopics)) {
 }
 
 // Character lists per topic, read from src/data/topics.ts.
-const topicsSource = readFileSync(join(root, 'src/data/topics.ts'), 'utf8');
+const topicsSource = readFileSync(join(root, 'apps/web/src/data/topics.ts'), 'utf8');
 const charTopics = new Map();
 for (const match of topicsSource.matchAll(/id: '([a-z]+)'[\s\S]*?characters: \[([\s\S]*?)\]/g)) {
   for (const char of match[2].match(/'([^']+)'/g) ?? []) {

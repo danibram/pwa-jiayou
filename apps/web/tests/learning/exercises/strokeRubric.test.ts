@@ -1,10 +1,11 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { STROKE_RUBRIC_REVISION } from '../../../src/domain/learning/exercises';
 
-// Vitest runs from the repository root, as tests/setup.ts assumes.
+// Vitest runs from apps/web, as tests/setup.ts assumes. npm workspaces install packages at the repository root.
 const read = (path: string): unknown => JSON.parse(readFileSync(`${process.cwd()}/${path}`, 'utf8'));
-const versionOf = (name: string): string => (read(`node_modules/${name}/package.json`) as { version: string }).version;
+const installed = (name: string) => [`node_modules/${name}`, `../../node_modules/${name}`].find((dir) => existsSync(`${process.cwd()}/${dir}`));
+const versionOf = (name: string): string => (read(`${installed(name)}/package.json`) as { version: string }).version;
 const manifest = read('package.json') as {
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;

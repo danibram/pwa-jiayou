@@ -1,17 +1,31 @@
 {
-  "name": "jiayou-content-editor",
+  "name": "@jiayou/editor",
   "private": true,
   "type": "module",
   "scripts": {
-    "data": "node ../scripts/content-publish.mjs generate",
-    "export": "node ../scripts/content-publish.mjs import",
-    "promote": "node ../scripts/content-publish.mjs promote",
+    "data": "node ../../scripts/content-publish.mjs generate",
+    "export": "node ../../scripts/content-publish.mjs import",
+    "promote": "node ../../scripts/content-publish.mjs promote",
     "predev": "npm run data",
     "dev": "vite --config vite.config.ts",
     "prebuild": "npm run data",
     "build": "tsc --noEmit -p tsconfig.json && vite build --config vite.config.ts",
     "preview": "vite preview --config vite.config.ts --host 127.0.0.1 --port 4318",
     "pretest": "npm run data",
-    "test": "vitest run --config vitest.config.ts"
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.7"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "^0.8.5",
+    "@testing-library/jest-dom": "^6.1.5",
+    "jsdom": "^23.0.1",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-solid": "^2.8.2",
+    "vitest": "^1.1.0"
   }
 }

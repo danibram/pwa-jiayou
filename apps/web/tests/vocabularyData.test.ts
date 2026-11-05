@@ -23,7 +23,7 @@ import { topics } from '../src/data/topics';
 import { parseCharacterList } from '../src/stores/characterStore';
 import type { HskLevel } from '../src/types';
 import { characterContentId, characterRevision, wordRevision } from '../src/domain/learning/content/revision';
-import { listOf, updateRegistry, type ContentRegistry } from '../scripts/content-publish.mjs';
+import { listOf, updateRegistry, type ContentRegistry } from '../../../scripts/content-publish.mjs';
 
 type RawWord = (typeof hsk1)[number] & { level?: number; retired?: true };
 /** Raw JSON readings, so the expected ids do not depend on runtime tone sandhi. */
@@ -187,7 +187,7 @@ describe('published id registry', () => {
   });
 
   it('matches the snapshot the editor publishes from', () => {
-    const snapshot = JSON.parse(readFileSync('content/snapshot.json', 'utf8')) as { vocabulary: RawWord[]; characters: { character: string }[] };
+    const snapshot = JSON.parse(readFileSync('../../content/snapshot.json', 'utf8')) as { vocabulary: RawWord[]; characters: { character: string }[] };
     expect(Object.keys(registry.words).sort()).toEqual(snapshot.vocabulary.map((row) => row.id).sort());
     for (const row of snapshot.vocabulary) expect(registry.words[row.id].status, row.id).toBe(row.retired ? 'retired' : 'available');
     expect(Object.keys(registry.characters).sort()).toEqual(snapshot.characters.map((row) => characterContentId(row.character)).sort());

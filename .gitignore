@@ -35,7 +35,7 @@ workbox-*.js.map
 .scratchpad
 
 # Vocabulary EN→ES scratch cache
-src/data/vocabulary/.translate-cache.json
+apps/web/src/data/vocabulary/.translate-cache.json
 
 # Python
 __pycache__/

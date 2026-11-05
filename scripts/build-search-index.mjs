@@ -8,22 +8,22 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const sources = [
-  join(root, 'src/data/hsk1.json'),
-  join(root, 'public/packs/hsk2.json'),
-  join(root, 'public/packs/hsk3.json'),
-  join(root, 'src/data/hsk4.json'),
-  join(root, 'src/data/hsk5.json'),
-  join(root, 'src/data/hsk6.json'),
+  join(root, 'apps/web/src/data/hsk1.json'),
+  join(root, 'apps/web/public/packs/hsk2.json'),
+  join(root, 'apps/web/public/packs/hsk3.json'),
+  join(root, 'apps/web/src/data/hsk4.json'),
+  join(root, 'apps/web/src/data/hsk5.json'),
+  join(root, 'apps/web/src/data/hsk6.json'),
 ];
 
-const hsk1GlossPath = join(root, 'src/data/glosses/hsk1.json');
+const hsk1GlossPath = join(root, 'apps/web/src/data/glosses/hsk1.json');
 const hsk1Glosses = existsSync(hsk1GlossPath)
   ? JSON.parse(readFileSync(hsk1GlossPath, 'utf8'))
   : {};
 
 const glossSidecars = {};
 for (const level of [4, 5, 6]) {
-  const path = join(root, `src/data/glosses/hsk${level}.json`);
+  const path = join(root, `apps/web/src/data/glosses/hsk${level}.json`);
   if (existsSync(path)) glossSidecars[level] = JSON.parse(readFileSync(path, 'utf8'));
 }
 
@@ -72,7 +72,7 @@ for (const path of sources) {
 }
 
 writeFileSync(
-  join(root, 'src/data/searchIndex.json'),
+  join(root, 'apps/web/src/data/searchIndex.json'),
   `${JSON.stringify(rows, null, 2)}\n`,
   'utf8',
 );

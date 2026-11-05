@@ -1,4 +1,4 @@
-import raw from '../../content/version.json';
+import raw from '../../../../content/version.json';
 
 /** The editorial release the app was built with. The editor bumps it when a draft is promoted. */
 export interface ContentVersion {

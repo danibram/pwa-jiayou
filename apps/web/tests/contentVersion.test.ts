@@ -4,7 +4,7 @@ import { contentVersion, contentVersionLabel, formatContentDate } from '../src/d
 
 describe('content version', () => {
   it('reads a positive version with a date from content/version.json', () => {
-    const raw = JSON.parse(readFileSync('content/version.json', 'utf8'));
+    const raw = JSON.parse(readFileSync('../../content/version.json', 'utf8'));
     expect(contentVersion.version).toBe(raw.version);
     expect(contentVersion.version).toBeGreaterThan(0);
     expect(contentVersion.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);

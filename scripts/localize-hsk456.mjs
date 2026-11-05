@@ -108,8 +108,8 @@ const fetchExample = async (character) => {
   return { word, pinyin };
 };
 
-const glossPath = (level) => join(root, `src/data/glosses/hsk${level}.json`);
-const dataPath = (level) => join(root, `src/data/hsk${level}.json`);
+const glossPath = (level) => join(root, `apps/web/src/data/glosses/hsk${level}.json`);
+const dataPath = (level) => join(root, `apps/web/src/data/hsk${level}.json`);
 
 const loadGlossSidecar = (level) => {
   const path = glossPath(level);
@@ -196,7 +196,7 @@ const localizeLevel = async (level) => {
 
   saveGlossSidecar(level, sidecar);
   writeFileSync(path, `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
-  writeFileSync(join(root, `public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
+  writeFileSync(join(root, `apps/web/public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
   console.log(`HSK ${level}: listo (${Object.keys(sidecar).length}/${rows.length} en sidecar)`);
   if (needsCurated.length) {
     console.warn(`HSK ${level}: sin traducción (${needsCurated.length}): ${needsCurated.slice(0, 12).join(' ')}${needsCurated.length > 12 ? '…' : ''}`);

@@ -26,7 +26,7 @@ const readOptional = async (path, fallback) => {
 let validators;
 const model = async (root) => {
   if (validators) return validators;
-  const source = await readFile(join(root, 'editor/lib/model.ts'), 'utf8');
+  const source = await readFile(join(root, 'apps/editor/lib/model.ts'), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 } }).outputText;
   validators = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
   return validators;
@@ -41,7 +41,7 @@ export async function loadRevisions(root = defaultRoot) {
   if (revisionModules.has(root)) return revisionModules.get(root);
   const { build } = await import('esbuild');
   const result = await build({
-    entryPoints: [join(root, 'src/domain/learning/content/revision.ts')],
+    entryPoints: [join(root, 'apps/web/src/domain/learning/content/revision.ts')],
     bundle: true, write: false, format: 'esm', platform: 'neutral', logLevel: 'silent',
   });
   const loaded = import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`);
@@ -49,7 +49,7 @@ export async function loadRevisions(root = defaultRoot) {
   return loaded;
 }
 
-export const REGISTRY_PATH = 'src/data/vocabulary/published-ids.json';
+export const REGISTRY_PATH = 'apps/web/src/data/vocabulary/published-ids.json';
 export const REGISTRY_SCHEMA = 2;
 
 /** The list a word row is filed under: hsk1 to hsk6, or extra when it has no level. */
@@ -116,21 +116,21 @@ export const todayIso = () => new Date().toISOString().slice(0, 10);
 export async function writeBase(snapshot, root = defaultRoot) {
   const { validateSnapshot } = await model(root);
   validateSnapshot(snapshot);
-  const baseDir = join(root, 'editor/public/base');
+  const baseDir = join(root, 'apps/editor/public/base');
   const body = json(snapshot);
   await mkdir(baseDir, { recursive: true });
   await writeFile(join(baseDir, 'snapshot.json'), body);
   await writeFile(join(baseDir, 'revision.json'), json({ revision: hash(body) }));
   const version = await readOptional(join(root, 'content/version.json'), { version: 0, date: '', notes: '' });
   await writeFile(join(baseDir, 'version.json'), json(version));
-  const font = join(root, 'public/fonts/wenkai-hsk.woff2');
+  const font = join(root, 'apps/web/public/fonts/wenkai-hsk.woff2');
   if (existsSync(font)) await copyFile(font, join(baseDir, 'wenkai-hsk.woff2'));
 }
 
 const quote = (value) => `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n')}'`;
 
 const topicsSource = async (root, topics) => {
-  const path = 'src/data/topics.ts';
+  const path = 'apps/web/src/data/topics.ts';
   const source = await readFile(join(root, path), 'utf8');
   const pattern = /export const topics: Topic\[\] = \[[\s\S]*?\n\];/;
   if (!pattern.test(source)) throw new Error('No se encuentra la lista de temas.');
@@ -177,11 +177,11 @@ export async function planDraft(draft, root = defaultRoot) {
   if (!equal(snapshot.topics, base.topics)) files.push(await topicsSource(root, snapshot.topics));
   for (let n = 1; n <= 6; n++) {
     const words = listed(snapshot.vocabulary, n);
-    if (!equal(words, listed(base.vocabulary, n))) files.push([`src/data/vocabulary/hsk${n}.json`, json(words)]);
+    if (!equal(words, listed(base.vocabulary, n))) files.push([`apps/web/src/data/vocabulary/hsk${n}.json`, json(words)]);
     const characters = snapshot.characters.filter((row) => row.hsk_level === n);
     const old = base.characters.filter((row) => row.hsk_level === n);
     if (equal(characters, old)) continue;
-    const charPath = n === 1 ? 'src/data/hsk1.json' : `public/packs/hsk${n}.json`;
+    const charPath = n === 1 ? 'apps/web/src/data/hsk1.json' : `apps/web/public/packs/hsk${n}.json`;
     const stored = await readOptional(join(root, charPath), null);
     const storedByChar = new Map((Array.isArray(stored) ? stored : old).map((row) => [row.character, row]));
     const previous = new Map(old.map((row) => [row.character, row]));
@@ -200,10 +200,10 @@ export async function planDraft(draft, root = defaultRoot) {
     });
     const body = json(outputRows, 4);
     files.push([charPath, body]);
-    if (n >= 4) files.push([`src/data/hsk${n}.json`, body]);
+    if (n >= 4) files.push([`apps/web/src/data/hsk${n}.json`, body]);
     if (![1, 4, 5, 6].includes(n)) continue;
-    const sidePath = `src/data/glosses/hsk${n}.json`;
-    const curatedPath = `src/data/glosses/curated/hsk${n}.json`;
+    const sidePath = `apps/web/src/data/glosses/hsk${n}.json`;
+    const curatedPath = `apps/web/src/data/glosses/curated/hsk${n}.json`;
     const side = await readOptional(join(root, sidePath), {});
     const curated = n >= 4 ? await readOptional(join(root, curatedPath), {}) : null;
     let changedSide = false;
@@ -221,7 +221,7 @@ export async function planDraft(draft, root = defaultRoot) {
     }
   }
   const extra = listed(snapshot.vocabulary, undefined);
-  if (!equal(extra, listed(base.vocabulary, undefined))) files.push(['src/data/vocabulary/extra.json', json(extra)]);
+  if (!equal(extra, listed(base.vocabulary, undefined))) files.push(['apps/web/src/data/vocabulary/extra.json', json(extra)]);
   // The registry follows the content: an unchanged draft writes nothing, not even a registry refresh.
   if (files.length) {
     const nextRegistry = registryJson(updateRegistry(registry, { words: snapshot.vocabulary, characters: snapshot.characters }, await loadRevisions(root)));
@@ -235,7 +235,7 @@ export async function planDraft(draft, root = defaultRoot) {
 /** Writes the changed files into editor/export/ for manual review. Refuses to clobber files it did not generate. */
 export async function exportDraft(draft, root = defaultRoot) {
   const { files } = await planDraft(draft, root);
-  const exportDir = join(root, 'editor/export');
+  const exportDir = join(root, 'apps/editor/export');
   const marker = join(exportDir, '.generated-files.json');
   const previous = await readOptional(marker, []);
   if (!Array.isArray(previous) || previous.some((path) => typeof path !== 'string' || !resolve(exportDir, path).startsWith(`${resolve(exportDir)}${sep}`))) throw new Error('Registro de exportación inválido.');
@@ -276,16 +276,16 @@ export async function promoteDraft(draft, { root = defaultRoot, notes = '', date
   await writeFile(join(root, 'content/version.json'), json(next));
   const written = [...files.map(([path]) => path), 'content/version.json'];
   // HSK 2 to 6 words travel inside their level's pack, so a change to them gives that pack a new hash.
-  if (files.some(([path]) => path.startsWith('public/packs/') || /^src\/data\/vocabulary\/hsk[2-6]\.json$/.test(path))) {
+  if (files.some(([path]) => path.startsWith('apps/web/public/packs/') || /^apps\/web\/src\/data\/vocabulary\/hsk[2-6]\.json$/.test(path))) {
     const { contentManifest } = await import('./content-manifest.ts');
-    await writeFile(join(root, 'public/packs/content.json'), json(contentManifest(root)));
-    written.push('public/packs/content.json');
+    await writeFile(join(root, 'apps/web/public/packs/content.json'), json(contentManifest(join(root, 'apps/web'))));
+    written.push('apps/web/public/packs/content.json');
   }
   const touchesCharacters = files.some(([path]) => /hsk\d\.json$/.test(path) && !path.includes('vocabulary'));
   const indexScript = join(root, 'scripts/build-search-index.mjs');
   if (touchesCharacters && existsSync(indexScript)) {
     execFileSync(process.execPath, [indexScript], { cwd: root, stdio: 'pipe' });
-    written.push('src/data/searchIndex.json');
+    written.push('apps/web/src/data/searchIndex.json');
   }
   await writeBase(draft.snapshot, root);
   return { version: next, files: written, revision: snapshotRevision(draft.snapshot) };
@@ -300,7 +300,7 @@ if (isMain) {
   } else if (action === 'import') {
     if (!input) throw new Error('Indica el archivo de borrador.');
     const paths = await exportDraft(await readJson(input));
-    console.log(paths.length ? `${paths.length} archivos en ${join(defaultRoot, 'editor/export')}` : 'Sin cambios para exportar.');
+    console.log(paths.length ? `${paths.length} archivos en ${join(defaultRoot, 'apps/editor/export')}` : 'Sin cambios para exportar.');
   } else if (action === 'promote') {
     if (!input) throw new Error('Indica el archivo de borrador.');
     const notesIndex = rest.indexOf('--notes');

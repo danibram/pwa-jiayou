@@ -1,17 +1,17 @@
 import { Component, For, Show, createMemo, createSignal } from 'solid-js';
-import PinyinEditor from '../../src/components/PinyinEditor';
-import SegmentedPicker from '../../src/components/SegmentedPicker';
-import type { HskLevel } from '../../src/types';
-import type { VocabularyEntry } from '../../src/data/vocabulary';
+import PinyinEditor from '../../web/src/components/PinyinEditor';
+import SegmentedPicker from '../../web/src/components/SegmentedPicker';
+import type { HskLevel } from '../../web/src/types';
+import type { VocabularyEntry } from '../../web/src/data/vocabulary';
 import {
   SYMMETRIC_RELATION_KINDS,
   WORD_RELATION_HINTS,
   WORD_RELATION_KINDS,
   WORD_RELATION_LABELS,
   type WordRelationKind,
-} from '../../src/data/wordRelations';
+} from '../../web/src/data/wordRelations';
 import { exampleFor, useEditor } from '../lib/store';
-import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '../../src/data/wordSenses';
+import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '../../web/src/data/wordSenses';
 import { Field, Hanzi, Pinyin } from './text';
 
 /** Keeps only Han characters, as the app's word form does. Latin left by an IME is dropped after composition. */

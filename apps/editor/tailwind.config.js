@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import app from '../tailwind.config.js';
+import app from '../web/tailwind.config.js';
 
 const here = (path) => fileURLToPath(new URL(path, import.meta.url));
 
@@ -10,6 +10,6 @@ const here = (path) => fileURLToPath(new URL(path, import.meta.url));
  */
 export default {
   ...app,
-  content: [here('./*.{ts,tsx,html}'), here('./components/**/*.tsx'), here('../src/components/PinyinEditor.tsx'), here('../src/components/SegmentedPicker.tsx')],
+  content: [here('./*.{ts,tsx,html}'), here('./components/**/*.tsx'), here('../web/src/components/PinyinEditor.tsx'), here('../web/src/components/SegmentedPicker.tsx')],
   corePlugins: { preflight: false },
 };

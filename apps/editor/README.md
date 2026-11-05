@@ -7,10 +7,10 @@ Herramienta de escritorio para editar el vocabulario, los caracteres y los temas
 Desde la raíz del repo, con sus dependencias instaladas:
 
 ```bash
-npm --prefix editor run dev
+npm run editor
 ```
 
-Abre `http://127.0.0.1:4318`. El comando copia `content/snapshot.json`, `content/version.json` y la fuente WenKai a `editor/public/base/` y arranca Vite. El mismo servidor atiende la promoción; sin él, el editor solo puede descargar archivos.
+Abre `http://127.0.0.1:4318`. El comando copia `content/snapshot.json`, `content/version.json` y la fuente WenKai a `apps/editor/public/base/` y arranca Vite. El mismo servidor atiende la promoción; sin él, el editor solo puede descargar archivos.
 
 ## Editar
 
@@ -32,32 +32,32 @@ Promover publica el borrador completo, aunque la lista de revisión esté filtra
 "Revisar" muestra cada cambio campo a campo, los archivos del repo que se escribirán y la versión actual del contenido junto a la siguiente. Escribe qué cambia en esta versión y pulsa "Promover a la versión N". El servidor de desarrollo entonces:
 
 1. Valida el borrador contra `content/snapshot.json` (identificadores, niveles, temas, ejemplos).
-2. Escribe los archivos afectados en sus rutas del repo: `src/data/vocabulary/hskN.json`, `src/data/topics.ts`, `src/data/hsk1.json`, `public/packs/hskN.json`, `src/data/hskN.json`, las glosas de `src/data/glosses/`, `content/snapshot.json` y el registro de identificadores `src/data/vocabulary/published-ids.json`, con la revisión de cada entrada.
-3. Sube `content/version.json` (número, fecha y notas) y regenera `src/data/searchIndex.json` si cambió algún carácter.
-4. Refresca `editor/public/base/` y vacía el borrador local, de modo que el editor parte de la nueva base.
+2. Escribe los archivos afectados en sus rutas del repo: `apps/web/src/data/vocabulary/hskN.json`, `apps/web/src/data/topics.ts`, `apps/web/src/data/hsk1.json`, `apps/web/public/packs/hskN.json`, `apps/web/src/data/hskN.json`, las glosas de `apps/web/src/data/glosses/`, `content/snapshot.json` y el registro de identificadores `apps/web/src/data/vocabulary/published-ids.json`, con la revisión de cada entrada.
+3. Sube `content/version.json` (número, fecha y notas) y regenera `apps/web/src/data/searchIndex.json` si cambió algún carácter.
+4. Refresca `apps/editor/public/base/` y vacía el borrador local, de modo que el editor parte de la nueva base.
 
-Después, revisa el diff con git, haz commit y despliega. La app muestra la versión del contenido en Opciones y, como los datos van en el build, ofrece la actualización con su aviso habitual a quien la tenga instalada. Las listas HSK 2 a 6 se sirven desde `public/packs/`, cuyo hash entra en el nombre de la caché, así que una lista corregida se vuelve a descargar.
+Después, revisa el diff con git, haz commit y despliega. La app muestra la versión del contenido en Opciones y, como los datos van en el build, ofrece la actualización con su aviso habitual a quien la tenga instalada. Las listas HSK 2 a 6 se sirven desde `apps/web/public/packs/`, cuyo hash entra en el nombre de la caché, así que una lista corregida se vuelve a descargar.
 
-Sin servidor (por ejemplo, el build estático de `editor/dist/`), "Prefiero descargar el archivo" guarda `jiayou-publicacion.json`. Desde la raíz del repo:
+Sin servidor (por ejemplo, el build estático de `apps/editor/dist/`), "Prefiero descargar el archivo" guarda `jiayou-publicacion.json`. Desde la raíz del repo:
 
 ```bash
-npm --prefix editor run promote -- /ruta/jiayou-publicacion.json --notes "Qué cambia"
+npm run promote -w @jiayou/editor -- /ruta/jiayou-publicacion.json --notes "Qué cambia"
 ```
 
-`npm --prefix editor run export -- archivo.json` sigue existiendo: genera los mismos archivos en `editor/export/` sin tocar el repo.
+`npm run export -w @jiayou/editor -- archivo.json` sigue existiendo: genera los mismos archivos en `apps/editor/export/` sin tocar el repo.
 
 ## Compatibilidad actual
 
-Las correcciones de vocabulario HSK, caracteres y temas se promueven con los formatos actuales del proyecto. Una palabra nueva en un nivel HSK toma el identificador de catálogo (caracteres y lectura) y entra en `src/data/vocabulary/hskN.json`. Los recuentos por nivel de la app salen de esas listas. Las palabras en Extra van a `src/data/vocabulary/extra.json`. En la app, Extra es una lista de estudio más, junto a HSK 1 a 6, y aparece siempre en el selector de listas, aunque esté vacía: quien la marca recibe las palabras que traigan las siguientes versiones. Todo el vocabulario de la app sale del editor: el alumno no crea ni corrige palabras.
+Las correcciones de vocabulario HSK, caracteres y temas se promueven con los formatos actuales del proyecto. Una palabra nueva en un nivel HSK toma el identificador de catálogo (caracteres y lectura) y entra en `apps/web/src/data/vocabulary/hskN.json`. Los recuentos por nivel de la app salen de esas listas. Las palabras en Extra van a `apps/web/src/data/vocabulary/extra.json`. En la app, Extra es una lista de estudio más, junto a HSK 1 a 6, y aparece siempre en el selector de listas, aunque esté vacía: quien la marca recibe las palabras que traigan las siguientes versiones. Todo el vocabulario de la app sale del editor: el alumno no crea ni corrige palabras.
 
 Los generadores antiguos (`build-vocabulary`, `localize-hsk`, `fetch-hsk`) reconstruyen datos desde sus fuentes externas y pueden pisar correcciones. Revisa el diff si los ejecutas después de promover.
 
 ## Comprobaciones y distribución
 
 ```bash
-npm --prefix editor test
-npm --prefix editor run build
-npm --prefix editor run preview
+npm test -w @jiayou/editor
+npm run build -w @jiayou/editor
+npm run preview -w @jiayou/editor
 ```
 
-El build genera una web estática en `editor/dist/`. Sirve para editar y descargar borradores; promover requiere el servidor de desarrollo.
+El build genera una web estática en `apps/editor/dist/`. Sirve para editar y descargar borradores; promover requiere el servidor de desarrollo.

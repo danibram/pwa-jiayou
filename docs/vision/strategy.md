@@ -1,6 +1,6 @@
 # 加油: estrategia de aprendizaje y nuevos modos
 
-Fecha: 24 de octubre de 2026. Este documento parte de lo que la app ya hace (repaso espaciado en `progressStore.ts`, escritura con hanzi-writer en `Trazos.tsx`, 617 caracteres HSK 1-3 con glosa y palabra de ejemplo) y de la investigación previa en `docs/research/feature-ideas.md`. No repite lo que allí se decidió (audio, categorías, ocho momentos de recompensa, rangos, duelo por enlace); lo usa como base. Todos los caracteres que se citan se han comprobado contra `src/data/hsk1-3.json`. Donde un carácter que haría falta no está en la lista se dice, porque condiciona el diseño.
+Fecha: 24 de octubre de 2026. Este documento parte de lo que la app ya hace (repaso espaciado en `progressStore.ts`, escritura con hanzi-writer en `Trazos.tsx`, 617 caracteres HSK 1-3 con glosa y palabra de ejemplo) y de la investigación previa en `docs/research/feature-ideas.md`. No repite lo que allí se decidió (audio, categorías, ocho momentos de recompensa, rangos, duelo por enlace); lo usa como base. Todos los caracteres que se citan se han comprobado contra `apps/web/src/data/hsk1-3.json`. Donde un carácter que haría falta no está en la lista se dice, porque condiciona el diseño.
 
 El prototipo visual está en `docs/vision/prototype.html` y las reglas de dibujo (sprites, paleta, animaciones, accesibilidad) en `docs/vision/art-direction.md`.
 
@@ -328,6 +328,6 @@ Pequeños, todos en `progressStore.ts` y compatibles con lo guardado:
 - `DailyLog.lastActiveDay: string` para detectar pausas (Mochi dormida) y `DailyLog.longestStreak: number` para que los accesorios no se pierdan.
 - Un contador `masteredCount` derivado, no guardado, para la forma de Mochi.
 - Estado de los modos en claves propias de `localStorage`: `jiayou-story`, `jiayou-duel`, `jiayou-garden`. Nunca dentro de `hsk-flashcards-stats`, para que borrar el progreso de un modo no toque el calendario.
-- Tres ficheros JSON nuevos en `src/data/`: `spells.json`, `story.json`, `components.json`. Todos entran en el precache por `globPatterns`.
+- Tres ficheros JSON nuevos en `apps/web/src/data/`: `spells.json`, `story.json`, `components.json`. Todos entran en el precache por `globPatterns`.
 
 Ningún modo nuevo necesita red ni cuenta.

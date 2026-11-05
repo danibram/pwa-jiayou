@@ -1,6 +1,6 @@
 # Actualizar las voces
 
-Dos fuentes. Cada una tiene un script. Vuelve a lanzarlo cuando el origen publique archivos nuevos. Los dos reescriben `public/audio/NOTICE.txt`.
+Dos fuentes. Cada una tiene un script. Vuelve a lanzarlo cuando el origen publique archivos nuevos. Los dos reescriben `apps/web/public/audio/NOTICE.txt`.
 
 ## Mujer y hombre, CNS11643
 
@@ -13,7 +13,7 @@ curl -L -o /tmp/Voice.zip https://www.cns11643.gov.tw/opendata/Voice.zip
 python3 scripts/copy-cns-audio.py /tmp/Voice.zip
 ```
 
-Eso deja en `public/audio/f` y `public/audio/m` solo las sílabas que usa la app, en MP3 mono, y regenera `src/data/syllable-clips.json`. Incluye HSK 1–6 (lee `src/data/hsk*.json` y `public/packs/hsk*.json`).
+Eso deja en `apps/web/public/audio/f` y `apps/web/public/audio/m` solo las sílabas que usa la app, en MP3 mono, y regenera `apps/web/src/data/syllable-clips.json`. Incluye HSK 1–6 (lee `apps/web/src/data/hsk*.json` y `apps/web/public/packs/hsk*.json`).
 
 Después, reparte esos clips por nivel:
 
@@ -21,7 +21,7 @@ Después, reparte esos clips por nivel:
 npm run media-packs
 ```
 
-Crea `public/packs/hskN/strokes/`, `public/packs/hskN/audio/` y `syllables.json` para cada lista descargable (2–6). HSK 1 sigue en `public/strokes/`. `syllables.json` solo lista sílabas con MP3 real: si falta el archivo, Vite puede devolver el HTML de la app con 200 y la caché lo guarda como “audio”, y entonces todos los huecos suenan igual.
+Crea `apps/web/public/packs/hskN/strokes/`, `apps/web/public/packs/hskN/audio/` y `syllables.json` para cada lista descargable (2–6). HSK 1 sigue en `apps/web/public/strokes/`. `syllables.json` solo lista sílabas con MP3 real: si falta el archivo, Vite puede devolver el HTML de la app con 200 y la caché lo guarda como “audio”, y entonces todos los huecos suenan igual.
 
 ## Chen Wang, audio-cmn
 
@@ -35,7 +35,7 @@ Los archivos se copian tal cual desde `64k/syllabs`. No los reencodes: la licenc
 python3 scripts/copy-cmn-audio.py
 ```
 
-La primera vez clona el repo en `.cache/audio-cmn`, solo la carpeta de sílabas. Las siguientes hacen `git pull` y vuelven a copiar. El resultado queda en `public/audio/c` y en `src/data/syllable-clips-cmn.json`.
+La primera vez clona el repo en `.cache/audio-cmn`, solo la carpeta de sílabas. Las siguientes hacen `git pull` y vuelven a copiar. El resultado queda en `apps/web/public/audio/c` y en `apps/web/src/data/syllable-clips-cmn.json`.
 
 Si ya tienes el repo en otro sitio:
 

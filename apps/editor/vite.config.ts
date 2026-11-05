@@ -3,10 +3,10 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 import solid from 'vite-plugin-solid';
 import tailwindcss from 'tailwindcss';
-import { planDraft, promoteDraft } from '../scripts/content-publish.mjs';
+import { planDraft, promoteDraft } from '../../scripts/content-publish.mjs';
 
 const editorRoot = fileURLToPath(new URL('.', import.meta.url));
-const repoRoot = fileURLToPath(new URL('..', import.meta.url));
+const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 
 // Chunks can split a multi-byte character, so decode once the whole body is in.
 const readBody = (req: IncomingMessage) => new Promise<string>((resolve, reject) => {
@@ -55,7 +55,7 @@ export default defineConfig({
   base: './',
   plugins: [solid(), contentServer()],
   css: { postcss: { plugins: [tailwindcss({ config: fileURLToPath(new URL('./tailwind.config.js', import.meta.url)) })] } },
-  // The editor reuses the app's pinyin helpers from ../src, outside its own root.
+  // The editor reuses the app's code from ../web/src, outside its own root.
   server: { host: '127.0.0.1', port: 4318, fs: { allow: [repoRoot] } },
   build: { outDir: 'dist', emptyOutDir: true },
 });

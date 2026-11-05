@@ -19,7 +19,7 @@ let browser;
 try {
   await mkdir(source);
   await writeFile(join(source, 'index.html'), '<!doctype html><title>FSRS probe</title><link rel="icon" href="data:,"><script type="module" src="/main.js"></script>');
-  const probePath = resolve('src/domain/learning/fsrsProbe.ts');
+  const probePath = resolve('apps/web/src/domain/learning/fsrsProbe.ts');
   await writeFile(join(source, 'main.js'), `
 import { createFsrsProbe, probeSequence, replayProbeSequence, restoreProbeCard, serializeProbeCard } from ${JSON.stringify(probePath)};
 // No top-level await here. DefaultScheduler imports the FSRS-7 chunk lazily, and that chunk

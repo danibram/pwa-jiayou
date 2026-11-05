@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
-import { contentManifest, LEVELS, wordListPath } from './scripts/content-manifest.ts';
+import { contentManifest, LEVELS, wordListPath } from '../../scripts/content-manifest.ts';
 import { packCacheName } from './src/domain/content/caches.ts';
 
 // Hashed from the files themselves, so a pack changed without rebuilding content.json still gets a

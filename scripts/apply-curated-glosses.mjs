@@ -10,9 +10,9 @@ const args = process.argv.slice(2);
 const levelArg = args.find((a) => a.startsWith('--level='))?.split('=')[1] ?? args[args.indexOf('--level') + 1];
 const levels = levelArg ? [Number(levelArg)] : [4, 5, 6];
 
-const glossPath = (level) => join(root, `src/data/glosses/hsk${level}.json`);
-const curatedFilePath = (level) => join(root, `src/data/glosses/curated/hsk${level}.json`);
-const dataPath = (level) => join(root, `src/data/hsk${level}.json`);
+const glossPath = (level) => join(root, `apps/web/src/data/glosses/hsk${level}.json`);
+const curatedFilePath = (level) => join(root, `apps/web/src/data/glosses/curated/hsk${level}.json`);
+const dataPath = (level) => join(root, `apps/web/src/data/hsk${level}.json`);
 
 const loadSidecar = (level) => {
   const path = glossPath(level);
@@ -52,7 +52,7 @@ const applyLevel = (level) => {
   mkdirSync(dirname(glossPath(level)), { recursive: true });
   writeFileSync(glossPath(level), `${JSON.stringify(sidecar, null, 2)}\n`, 'utf8');
   writeFileSync(dataPath(level), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
-  writeFileSync(join(root, `public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
+  writeFileSync(join(root, `apps/web/public/packs/hsk${level}.json`), `${JSON.stringify(rows, null, 4)}\n`, 'utf8');
   console.log(`HSK ${level}: ${applied} curated glosses applied (${Object.keys(sidecar).length} in sidecar)`);
 };
 

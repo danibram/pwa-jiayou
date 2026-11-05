@@ -1,0 +1,39 @@
+{
+  "name": "@jiayou/web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run test -- --run && npm run build"
+  },
+  "dependencies": {
+    "hanzi-writer": "3.7.3",
+    "posthog-js": "^1.444.4",
+    "solid-js": "^1.8.7",
+    "ts-fsrs": "6.0.0"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "^0.8.5",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@types/node": "^20.10.5",
+    "autoprefixer": "^10.4.16",
+    "esbuild": "0.21.5",
+    "fake-indexeddb": "6.2.7",
+    "hanzi-writer-data": "2.0.1",
+    "jsdom": "^23.0.1",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-pwa": "^0.17.4",
+    "vite-plugin-solid": "^2.8.2",
+    "vitest": "^1.1.0",
+    "workbox-window": "^7.0.0"
+  }
+}

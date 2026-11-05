@@ -1,16 +1,16 @@
 import { createContext, createDeferred, createMemo, createSignal, useContext, type Accessor } from 'solid-js';
-import { WORD_POS_LABELS, sensesText, type WordPos, type WordSense } from '../../src/data/wordSenses';
+import { WORD_POS_LABELS, sensesText, type WordPos, type WordSense } from '../../web/src/data/wordSenses';
 import { createStore, produce, unwrap } from 'solid-js/store';
-import type { VocabularyEntry } from '../../src/data/vocabulary';
-import type { Topic } from '../../src/data/topics';
-import type { HSKCharacter } from '../../src/types';
+import type { VocabularyEntry } from '../../web/src/data/vocabulary';
+import type { Topic } from '../../web/src/data/topics';
+import type { HSKCharacter } from '../../web/src/types';
 import type { ContentDraft, ContentSnapshot } from './model';
 import { validateDraft, validateSnapshot } from './model';
-import { wordId } from '../../src/utils/pinyin';
-import type { HskLevel } from '../../src/types';
-import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '../../src/data/wordRelations';
-import legacyExamples from '../../src/data/vocabulary/examples.json';
-import type { VocabularyExample } from '../../src/data/vocabulary';
+import { wordId } from '../../web/src/utils/pinyin';
+import type { HskLevel } from '../../web/src/types';
+import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '../../web/src/data/wordRelations';
+import legacyExamples from '../../web/src/data/vocabulary/examples.json';
+import type { VocabularyExample } from '../../web/src/data/vocabulary';
 
 export const exampleFor = (word: VocabularyEntry) => word.example === undefined
   ? (legacyExamples as Record<string, VocabularyExample>)[word.simplified] : word.example;

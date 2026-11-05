@@ -4,7 +4,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import type { ContentManifest, PackEntry } from '../src/domain/content/manifest.ts';
+import type { ContentManifest, PackEntry } from '../apps/web/src/domain/content/manifest.ts';
 
 const SCHEMA = 1;
 export const LEVELS = [2, 3, 4, 5, 6];

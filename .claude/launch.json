@@ -7,6 +7,8 @@
       "runtimeArgs": [
         "run",
         "dev",
+        "-w",
+        "@jiayou/web",
         "--",
         "--port",
         "5173",
@@ -18,20 +20,23 @@
       "name": "editor",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "--prefix",
-        "editor",
         "run",
-        "dev"
+        "dev",
+        "-w",
+        "@jiayou/editor"
       ],
       "port": 4318,
       "url": "http://127.0.0.1:4318"
     },
     {
       "name": "preview",
-      "runtimeExecutable": "npx",
+      "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "vite",
+        "run",
         "preview",
+        "-w",
+        "@jiayou/web",
+        "--",
         "--port",
         "4173",
         "--strictPort"

@@ -52,7 +52,7 @@ Round 3 judged the visual design finished; its remaining items were content and 
 
 | Sev | Finding | Disposition |
 | --- | ------- | ----------- |
-| High | Main meaning wrong for many characters (是, 了, 后...) | Fixed. Curated gloss for all 617 characters in `src/data/glosses/` |
+| High | Main meaning wrong for many characters (是, 了, 后...) | Fixed. Curated gloss for all 617 characters in `apps/web/src/data/glosses/` |
 | High | Write card had no way out; idle start dot was a free hint | Fixed. "No me acuerdo" animates the answer and grades Otra vez; idle dot off on graded cards |
 | Med | No example words | Fixed. One example per character with pinyin, Spanish and audio |
 | Med | New-character card had no replay audio; neutral tone looked disabled | Fixed |

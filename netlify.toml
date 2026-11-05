@@ -1,0 +1,5 @@
+# The PWA lives in apps/web inside an npm workspaces monorepo. Netlify installs from the root
+# lockfile and builds the web workspace.
+[build]
+  command = "npm run build"
+  publish = "apps/web/dist"

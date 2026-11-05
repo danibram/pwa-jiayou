@@ -1,7 +1,7 @@
 import { Component, Show, createMemo, createSignal } from 'solid-js';
-import { leadSense, sensesText } from '../../src/data/wordSenses';
-import type { VocabularyEntry } from '../../src/data/vocabulary';
-import type { HskLevel } from '../../src/types';
+import { leadSense, sensesText } from '../../web/src/data/wordSenses';
+import type { VocabularyEntry } from '../../web/src/data/vocabulary';
+import type { HskLevel } from '../../web/src/types';
 import { useEditor } from '../lib/store';
 import { EntryList } from './EntryList';
 import { Hanzi, LevelTag, Pinyin } from './text';

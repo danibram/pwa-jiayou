@@ -1,5 +1,5 @@
 import { Component, For, Show, createMemo } from 'solid-js';
-import { splitPinyin } from '../../src/utils/pinyin';
+import { splitPinyin } from '../../web/src/utils/pinyin';
 
 /** Pinyin coloured by tone, the same convention as the app. */
 export const Pinyin: Component<{ text: string; class?: string }> = (props) => {

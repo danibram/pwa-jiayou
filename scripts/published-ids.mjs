@@ -16,7 +16,7 @@ import { REGISTRY_PATH, loadRevisions, registryJson, updateRegistry } from './co
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
-const LISTS = [1, 2, 3, 4, 5, 6].map((level) => `src/data/vocabulary/hsk${level}.json`).concat('src/data/vocabulary/extra.json');
+const LISTS = [1, 2, 3, 4, 5, 6].map((level) => `apps/web/src/data/vocabulary/hsk${level}.json`).concat('apps/web/src/data/vocabulary/extra.json');
 
 const snapshot = readJson('content/snapshot.json');
 const catalog = LISTS.flatMap(readJson);
