@@ -13,7 +13,7 @@ import type { LearningSessionActions, LearningSessionView } from './types';
 interface LearningCardProps {
   view: LearningSessionView;
   actions: LearningSessionActions;
-  /** Offer Fácil next to Otra vez, Difícil and Bien. Off by default. */
+  /** Offer Fácil next to Olvidada, Difícil and Bien. Off by default. */
   allowEasy?: boolean;
   /**
    * Extra content under a revealed answer, filled by the page from the catalog: traditional form,

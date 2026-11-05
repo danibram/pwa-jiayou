@@ -118,7 +118,7 @@ describe('self-assessed recall', () => {
     const group = screen.getByRole('group', { name: '¿Lo recordabas?' });
     const buttons = within(group).getAllByRole('button');
     expect(buttons.map((button) => button.textContent)).toEqual([
-      'Otra vezNo la recordé',
+      'OlvidadaNo la recordé',
       'DifícilLa recordé con esfuerzo',
       'BienLa recordé',
     ]);
@@ -129,7 +129,7 @@ describe('self-assessed recall', () => {
     }
   });
 
-  it('stops on the answer after Otra vez and waits for Continuar', () => {
+  it('stops on the answer after Olvidada and waits for Continuar', () => {
     const selection = meaningSelection();
     const { actions } = mount(view({
       selection,

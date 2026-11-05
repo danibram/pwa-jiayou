@@ -5,7 +5,7 @@ import type { LearningSessionView } from './types';
 
 /** Self-assessment labels. Difícil means a correct recall that took effort, never a near miss. */
 export const RATING_LABEL: Record<Rating, string> = {
-  again: 'Otra vez',
+  again: 'Olvidada',
   hard: 'Difícil',
   good: 'Bien',
   easy: 'Fácil',

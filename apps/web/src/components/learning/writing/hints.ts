@@ -1,7 +1,7 @@
 import type { AttemptAction, Hint } from '@jiayou/learning/types';
 
 // Every stroke hint shows part of the character, so each one reveals the answer. The evaluator rates
-// a drawing from memory with any hint as Otra vez (decision 8 in docs/learning-system.md).
+// a drawing from memory with any hint as Olvidada (decision 8 in docs/learning-system.md).
 
 /** "Pista": the next stroke, shown on request. */
 export const STROKE_HINT: Hint = { kind: 'other', revealsAnswer: true, value: 'stroke' };

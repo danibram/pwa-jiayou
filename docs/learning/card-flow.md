@@ -65,7 +65,7 @@ stateDiagram-v2
     [*] --> question
     question --> rate: Mostrar respuesta
     rate --> next: Bien o Fácil
-    rate --> result_wait: Otra vez o Difícil
+    rate --> result_wait: Olvidada o Difícil
     question --> result_wait: No lo sé
   }
   state "Opciones o respuesta escrita" as choice {
@@ -85,7 +85,7 @@ stateDiagram-v2
 | Comprobación tras «Ya la sé» (`view.claimedCheck`) | Opciones y «No lo sé» | Acierto: destello y sigue. Fallo: para, y la palabra vuelve como lección |
 | Recuerdo, antes de mostrar | Mostrar respuesta | |
 | Recuerdo, Bien o Fácil | Notas | Sin paso de resultado: la tarjeta siguiente sale ya |
-| Recuerdo, Otra vez o Difícil | Notas, luego Continuar | Para con la respuesta y la ficha |
+| Recuerdo, Olvidada o Difícil | Notas, luego Continuar | Para con la respuesta y la ficha |
 | Opciones, acierto a la primera (`view.after === 'flash'`) | «No lo sé» desactivado | Las opciones se quedan con la buena en verde 700 ms y sigue |
 | Escrita, acierto exacto | «No lo sé» y «Comprobar» desactivados | La respuesta se ve 700 ms, sin ficha, y sigue |
 | Escrita, acierto con nota (un tono que no cuenta, otra palabra que también vale) | Continuar | Para, para que se lea la nota |
