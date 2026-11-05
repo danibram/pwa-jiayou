@@ -101,7 +101,7 @@ describe('Trazos on the learning log', { timeout: 20_000 }, () => {
     expect(mine.events().some((event) => event.type === 'scheduled-review')).toBe(false);
   });
 
-  it('writes from memory the next day: a hint makes it Otra vez', async () => {
+  it('writes from memory the next day: a hint makes it Olvidada', async () => {
     const mine = store();
     const first = renderWithStore(() => <Trazos focus={{ kind: 'level' }} onBack={() => {}} />, mine);
     await runSession();
@@ -112,7 +112,7 @@ describe('Trazos on the learning log', { timeout: 20_000 }, () => {
     expect(await screen.findByText('De memoria')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Pista' }));
     fireEvent.click(screen.getByRole('button', { name: 'draw-0' }));
-    expect(await screen.findByText('Otra vez')).toBeTruthy();
+    expect(await screen.findByText('Olvidada')).toBeTruthy();
     expect(screen.getByText('Sin errores · con pista')).toBeTruthy();
     const review = mine.events().find((event) => event.type === 'scheduled-review');
     expect(review).toMatchObject({ rating: 'again', exercise: { stage: 'memory' } });

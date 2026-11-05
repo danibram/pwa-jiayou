@@ -36,10 +36,10 @@ La tabla resume qué mostraba cada una de las seis preguntas de la pantalla de r
 
 | Pregunta | Qué mostraba y cómo se respondía en el sistema anterior | Papel | Habilidad | Formato |
 | --- | --- | --- | --- | --- |
-| `meaning` | Los caracteres y "¿Qué significa esta palabra?". El alumno pulsa "Mostrar respuesta" y elige Otra vez, Difícil o Bien | Repaso programado si el elemento es elegible; si no, práctica | `meaning` | Recuerdo libre, autoevaluado |
+| `meaning` | Los caracteres y "¿Qué significa esta palabra?". El alumno pulsa "Mostrar respuesta" y elige Olvidada, Difícil o Bien | Repaso programado si el elemento es elegible; si no, práctica | `meaning` | Recuerdo libre, autoevaluado |
 | `reverse` | La glosa en español y un botón de audio que pronuncia la palabra. "¿Cómo se escribe…?", mostrar respuesta y autoevaluación | Práctica | `production` | Recuerdo libre, autoevaluado |
 | `listen` | Solo el audio, que suena al empezar, y "¿Qué palabra es?". Mostrar respuesta y autoevaluación | Práctica | `listening` | Recuerdo libre, autoevaluado |
-| `pick` | La glosa en español y tres o cuatro palabras en caracteres. Acertar a la primera da Bien, tras un fallo Difícil, tras dos fallos o "No lo sé" Otra vez | Práctica | `production` | Opciones, corrección automática |
+| `pick` | La glosa en español y tres o cuatro palabras en caracteres. Acertar a la primera da Bien, tras un fallo Difícil, tras dos fallos o "No lo sé" Olvidada | Práctica | `production` | Opciones, corrección automática |
 | `hear` | El audio y tres o cuatro palabras en caracteres, con la misma corrección que `pick` | Práctica | `listening` | Opciones, corrección automática |
 | `recognize` | Los caracteres y tres o cuatro significados, con la misma corrección que `pick` | Práctica | `meaning` | Opciones, corrección automática |
 
@@ -152,7 +152,7 @@ El apartado "Decisiones de estudio" de `docs/learning-system.md` fija estas regl
 
 **Presupuesto de palabras nuevas.** Cuenta presentaciones: los elementos distintos cuya primera exposición `teaching` tiene el `localDay` de hoy. Volver a enseñar una palabra tras fallar la práctica no gasta presupuesto otra vez. Una exposición `already-known` no lo gasta, igual que en el sistema anterior "Ya la sé" no gastaba palabras nuevas. El contador anterior subía con la primera nota.
 
-**Después de "Otra vez".** La palabra vuelve `requeueGap` tarjetas después, cuatro como en el sistema anterior (`STUDY_RULES.requeueGap`, aplicado por `requeueAfterAgain` en `packages/learning/src/sessions/requeue.ts`). Esa respuesta es práctica, porque el paso de reaprendizaje todavía no ha vencido. FSRS recibe la siguiente nota cuando vence el paso, dentro de la misma sesión si sigue abierta o en la siguiente. El resumen y Hoy no muestran la palabra como pendiente hasta que `dueAt` llega.
+**Después de "Olvidada".** La palabra vuelve `requeueGap` tarjetas después, cuatro como en el sistema anterior (`STUDY_RULES.requeueGap`, aplicado por `requeueAfterAgain` en `packages/learning/src/sessions/requeue.ts`). Esa respuesta es práctica, porque el paso de reaprendizaje todavía no ha vencido. FSRS recibe la siguiente nota cuando vence el paso, dentro de la misma sesión si sigue abierta o en la siguiente. El resumen y Hoy no muestran la palabra como pendiente hasta que `dueAt` llega.
 
 **Partículas y clasificadores.** Su tarjeta `meaning` pregunta qué función cumple la palabra. La respuesta que se descubre, `Exercise.answer.meaning`, es la glosa editorial, y el alumno se autoevalúa. `isFunctionWord` en `packages/learning/src/exercises/ambiguity.ts` los reconoce. El sistema anterior los mandaba a `recognize`. Las frases con hueco siguen pendientes hasta que exista contexto editorial.
 

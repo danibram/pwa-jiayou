@@ -73,7 +73,7 @@ export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'w
   } else if (next === 'recall') {
     await waitFor(() => {
       const group = screen.getByRole('group', { name: '¿Lo recordabas?' });
-      fireEvent.click(within(group).getByRole('button', { name: outcome === 'right' ? /^Bien\./ : /^Otra vez\./ }));
+      fireEvent.click(within(group).getByRole('button', { name: outcome === 'right' ? /^Bien\./ : /^Olvidada\./ }));
     });
   }
   await waitFor(() => {

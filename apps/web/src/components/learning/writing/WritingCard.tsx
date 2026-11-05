@@ -200,7 +200,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
                   Contorno
                 </button>
               </div>
-              <p class="text-center text-xs text-ink-soft">Con una pista, este repaso cuenta como Otra vez.</p>
+              <p class="text-center text-xs text-ink-soft">Con una pista, este repaso cuenta como Olvidada.</p>
             </Show>
           </div>
         }

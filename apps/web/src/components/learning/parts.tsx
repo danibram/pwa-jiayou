@@ -126,7 +126,7 @@ export const HintButton: Component<{ hint: Hint; disabled: boolean; onHint: (hin
 /** The colour that names each rating, as a dot on its option. */
 const RATING_DOT: Record<Rating, string> = { again: 'bg-seal', hard: 'bg-ink-soft', good: 'bg-jade', easy: 'bg-jade/60' };
 /**
- * Otra vez, Difícil, Bien and, when the session allows it, Fácil, as one choice: the options sit
+ * Olvidada, Difícil, Bien and, when the session allows it, Fácil, as one choice: the options sit
  * together in a tray and look alike, each with its colour as a dot, so none reads as already chosen.
  * Tapping one rates at once. Each says what it means under its name: Difícil is a recall that took
  * effort, not a near miss.

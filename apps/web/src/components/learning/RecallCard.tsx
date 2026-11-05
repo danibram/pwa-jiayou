@@ -30,7 +30,7 @@ const RecallCard: Component<RecallCardProps> = (props) => {
   const hintTaken = () => taken().some((hint) => hint.kind === 'pinyin');
   const cue = () => props.exercise.cue;
   const key = props.view.cardKey;
-  // Bien and Fácil have no result step: the controller goes straight to the next card. Otra vez and
+  // Bien and Fácil have no result step: the controller goes straight to the next card. Olvidada and
   // Difícil stop on the answer and the word's sheet.
 
   // The sound is the question on a listening card, so it plays as the card opens. If it cannot
