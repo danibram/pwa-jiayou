@@ -44,7 +44,7 @@ const strokesEnv = () => {
   return env.store({ resolveContent: resolve, pool });
 };
 
-type Step = { hints?: Hint[]; mistakes: number };
+type Step = { hints?: Hint[]; mistakes: number } | { skip: true };
 
 /**
  * Plays the session: exposures continue, writing cards take `plan(itemId, stage)` (hints, then the
@@ -66,8 +66,11 @@ const play = async (session: LearningSession, plan: (itemId: ItemId, stage: stri
       const stage = selection.exercise.stage!;
       seen.push(`${stage}:${characterOf(selection.itemId)}`);
       const step = plan(selection.itemId, stage);
-      for (const hint of step.hints ?? []) session.actions.hint(hint);
-      session.actions.drawing({ mistakes: step.mistakes });
+      if ('skip' in step) session.actions.answer({ answer: null, optionId: null });
+      else {
+        for (const hint of step.hints ?? []) session.actions.hint(hint);
+        session.actions.drawing({ mistakes: step.mistakes });
+      }
     }
     await session.idle();
   }
@@ -82,6 +85,33 @@ const attempts = (store: LearningStore, itemId: ItemId) =>
 const drawingOf = (actions: readonly AttemptAction[]) => actions.find((action) => action.type === 'drawing');
 
 describe('a Trazos session', () => {
+  it('lets a tracing be skipped as undrawn practice, and teaches that character again', async () => {
+    const store = strokesEnv();
+    await store.init();
+    const session = await env.session(store, { mode: 'strokes', scope: { kind: 'item', itemId: charItems[0] } });
+    let skips = 0;
+    const seen = await play(session, (_, stage) => (stage === 'trace' && skips++ === 0 ? { skip: true } : { mistakes: 0 }));
+    const skipped = attempts(store, charItems[0])[0];
+    expect(skipped).toMatchObject({ type: 'practice', evaluation: { outcome: 'unanswered' }, exercise: { stage: 'trace' } });
+    expect(drawingOf(skipped.actions)).toMatchObject({ mistakes: 0, evaluation: { outcome: 'unanswered' } });
+    expect(store.events().some((event) => event.type === 'scheduled-review')).toBe(false);
+    expect(seen.filter((step) => step.startsWith('trace'))).toHaveLength(2);
+  });
+
+  it('never skips a drawing from memory', async () => {
+    const store = strokesEnv();
+    await store.init();
+    await play(await env.session(store, { mode: 'strokes', scope: { kind: 'item', itemId: charItems[0] } }), () => ({ mistakes: 0 }));
+    env.clock.advance(DAY);
+    const session = await env.session(store, { mode: 'strokes', scope: { kind: 'item', itemId: charItems[0] } });
+    expect(session.view.selection).toMatchObject({ kind: 'exercise', exercise: { stage: 'memory' } });
+    const before = store.events().length;
+    session.actions.answer({ answer: null, optionId: null });
+    await session.idle();
+    expect(store.events()).toHaveLength(before);
+    expect(session.view.state).toBe('presenting');
+  });
+
   it('watches and traces new characters, then writes them from memory the next day, rated by mistakes and hints', async () => {
     const store = strokesEnv();
     await store.init();

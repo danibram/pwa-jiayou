@@ -1,4 +1,5 @@
 import { Component, createSignal, Show } from 'solid-js';
+import { CANVAS_MAX } from './layout';
 import Icon from '../../Icon';
 import StrokeCanvas, { type StrokeCanvasApi } from '../../StrokeCanvas';
 
@@ -39,7 +40,7 @@ const WatchStrokes: Component<WatchStrokesProps> = (props) => {
   return (
     <div class="flex flex-col">
       <p class="mb-2 h-5 text-center text-sm tabular-nums text-ink-soft" aria-live="polite">{line()}</p>
-      <div class="w-full" onClick={() => step() === null && play()}>
+      <div class="mx-auto w-full" style={{ 'max-width': CANVAS_MAX }} onClick={() => step() === null && play()}>
         <StrokeCanvas
           char={props.char}
           mode="watch"

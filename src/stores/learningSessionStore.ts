@@ -694,6 +694,13 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       const at = rt.clock();
       const optionId = input.optionId ?? null;
       const text = typeof input.answer === 'string' && input.answer.trim() !== '' ? input.answer : null;
+      if (shown.format === 'writing') {
+        // Skipping a tracing ends the card undrawn: practice that moves no date. No mistakes were counted.
+        if (shown.stage === 'trace' && input.answer === null && optionId === null) {
+          record({ type: 'drawing', at, mistakes: 0, evaluation: { outcome: 'unanswered' } }, true);
+        }
+        return;
+      }
       if (shown.format === 'multiple-choice') {
         if (optionId === null) {
           record({ type: 'answer', at, answer: null, selectedOptionId: null, evaluation: { outcome: 'unanswered' } }, true);

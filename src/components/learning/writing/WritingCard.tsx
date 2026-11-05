@@ -1,4 +1,5 @@
 import { Component, createEffect, createMemo, createSignal, Match, on, onCleanup, Show, Switch } from 'solid-js';
+import { CANVAS_MAX } from './layout';
 import type { ExerciseSelection } from '../../../domain/learning/exercises';
 import type { Exercise, ExposureCard, RevealedAnswer, SpeechAudio } from '../../../domain/learning/types';
 import Icon from '../../Icon';
@@ -38,7 +39,7 @@ const Prompt: Component<{ eyebrow: string; answer: RevealedAnswer; pinyin: strin
 /** Watching the strokes is the teaching exposure: nothing to answer, Continuar records it. */
 const WatchCard: Component<{ card: ExposureCard; view: WritingCardProps['view']; actions: WritingCardProps['actions'] }> = (props) => (
   <>
-    <div class="flex min-h-0 flex-1 flex-col justify-center py-2">
+    <div class="flex min-h-0 flex-1 flex-col overflow-y-auto py-2 [justify-content:safe_center]">
       <Prompt eyebrow="Carácter nuevo · mira el orden" answer={props.card.answer} pinyin={props.card.answer.pinyin} audio={props.card.audio} speech={props.view.speechAvailable} />
       <WatchStrokes char={props.card.answer.characters} slow />
     </div>
@@ -82,6 +83,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
   const outline = () => outlineTaken(props.view.actions);
   const hinted = () => hintsIn(props.view.actions).length > 0;
   const feedback = () => (props.view.state === 'feedback' ? props.view.feedback : null);
+  const skipped = () => props.view.actions.some((action) => action.type === 'drawing' && action.evaluation.outcome === 'unanswered');
 
   const askStroke = () => {
     if (!open()) return;
@@ -103,10 +105,12 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
     const shown = feedback();
     if (!shown) return '';
     if (shown.recorded === 'scheduled-review' && shown.rating) return RATING_LABEL[shown.rating];
+    if (skipped()) return 'Saltado';
     return shown.outcome === 'correct' ? (memory ? 'De memoria' : 'Calcado') : 'Con errores';
   };
 
   const resultDetail = () => {
+    if (skipped()) return 'Sin dibujar';
     const n = drawnMistakes(props.view.actions) ?? mistakes();
     const strokes = [...missed()].sort((a, b) => a - b).map((stroke) => stroke + 1);
     const review = strokes.length > 0 ? ` · revisa ${strokes.length === 1 ? 'el trazo' : 'los trazos'} ${strokes.join(', ')}` : '';
@@ -115,7 +119,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
 
   return (
     <>
-      <div class="flex min-h-0 flex-1 flex-col justify-center py-2">
+      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto py-2 [justify-content:safe_center]">
         <Prompt
           eyebrow={memory ? 'De memoria' : 'Calca el carácter'}
           answer={answer}
@@ -129,7 +133,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
             <span class="rounded-full bg-seal-soft px-2 py-0.5 text-xs font-semibold text-seal">{mistakesText(mistakes())}</span>
           </Show>
         </div>
-        <div class="relative" classList={{ 'animate-shake': shake() }}>
+        <div class="relative mx-auto w-full" style={{ 'max-width': CANVAS_MAX }} classList={{ 'animate-shake': shake() }}>
           <StrokeCanvas
             char={answer.characters}
             mode="write"
@@ -170,7 +174,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
             <Show
               when={memory}
               fallback={
-                <div class="flex h-11 items-center justify-center">
+                <div class="flex h-11 items-center justify-center gap-2">
                   <button
                     type="button"
                     class="btn-quiet h-11 w-40 text-sm shadow-none"
@@ -180,6 +184,14 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
                   >
                     <Icon name={guide() ? 'eye' : 'eyeOff'} size={16} />
                     Guía
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-quiet h-11 px-4 text-sm shadow-none"
+                    disabled={!open()}
+                    onClick={() => props.actions.answer({ answer: null, optionId: null })}
+                  >
+                    Saltar
                   </button>
                 </div>
               }
