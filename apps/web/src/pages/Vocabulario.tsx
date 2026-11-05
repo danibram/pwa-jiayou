@@ -1,5 +1,5 @@
 import { Component, createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import { formatPinyinWord } from '../utils/pinyin';
+import { formatPinyinWord } from '@jiayou/chinese';
 import SpeakButton from '../components/SpeakButton';
 import TopBar from '../components/TopBar';
 import Pinyin from '../components/Pinyin';
@@ -9,12 +9,12 @@ import ResultRow from '../components/ResultRow';
 import { statusWord, TopicBar, topicCountsLine, type StudyStatus, type TopicCounts } from '../components/TopicProgress';
 import { rankBy, type Searchable } from '../utils/searchRank';
 import { characterRecord, indexRowFor, searchCharacters } from '../utils/characterSearch';
-import { glossHead } from '../utils/glossDisplay';
-import { mainMeaning } from '../utils/meaning';
+import { glossHead } from '@jiayou/chinese';
+import { mainMeaning } from '@jiayou/chinese';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
 import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';
-import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '../data/wordSenses';
+import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '@jiayou/content';
 import StatusSeal from '../components/StatusSeal';
 import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
@@ -25,9 +25,9 @@ import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } f
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { characterItemId, wordItemId } from '../stores/learningStore';
+import { characterItemId, wordItemId } from '@jiayou/learning/items';
 import { useLearningStore } from '../components/LearningStoreContext';
-import { studyStatusOf } from '../utils/progressSummary';
+import { studyStatusOf } from '@jiayou/learning/progress';
 
 export interface VocabularyBrowseState {
   query: string;

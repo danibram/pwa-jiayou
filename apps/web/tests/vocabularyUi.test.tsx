@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@solidjs/testing-library';
-import { sensesText } from '../src/data/wordSenses';
+import { sensesText } from '@jiayou/content';
 import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Vocabulario from '../src/pages/Vocabulario';

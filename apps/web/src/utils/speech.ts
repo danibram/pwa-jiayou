@@ -4,7 +4,7 @@ import clips from '../data/syllable-clips.json';
 import cmnClips from '../data/syllable-clips-cmn.json';
 import { characterStore } from '../stores/characterStore';
 import { packHasClip, packMediaRoot } from './levelPacks';
-import { pinyinParts, syllableKey } from './pinyin';
+import { pinyinParts, syllableKey } from '@jiayou/chinese';
 import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
 

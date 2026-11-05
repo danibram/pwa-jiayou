@@ -1,4 +1,4 @@
-import { parseUserBackup, serializeBackup } from '../domain/learning/backup';
+import { parseUserBackup, serializeBackup } from '@jiayou/learning/backup';
 import type { LearningStore } from '../stores/learningStore';
 import LearningBackup, { type BackupWriteResult } from './learning/backup/LearningBackup';
 import { useLearningStore } from './LearningStoreContext';

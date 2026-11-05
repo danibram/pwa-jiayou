@@ -1,4 +1,4 @@
-import type { HskLevel } from '../types';
+export { isHskLevel } from '@jiayou/content';
 
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -7,9 +7,6 @@ export const isString = (value: unknown): value is string => typeof value === 's
 
 export const isFiniteNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value);
-
-export const isHskLevel = (value: unknown): value is HskLevel =>
-  value === 1 || value === 2 || value === 3 || value === 4 || value === 5 || value === 6;
 
 export type NonEmpty<T> = [T, ...T[]];
 

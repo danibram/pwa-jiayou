@@ -1,12 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { sensesText } from '../src/data/wordSenses';
+import { sensesText, vocabularySources } from '@jiayou/content';
 import { vocabulary, vocabularyByLevel } from './fixtures/levelWords';
 import {
   extraVocabulary,
   vocabularyCoverage,
   officialCounts,
-  vocabularySources,
   vocabularyExample,
 } from '../src/data/vocabulary';
 import sourceFixture from '../src/data/vocabulary/source-fixture.json';
@@ -18,11 +17,11 @@ import hsk5 from '../src/data/vocabulary/hsk5.json';
 import hsk6 from '../src/data/vocabulary/hsk6.json';
 import extra from '../src/data/vocabulary/extra.json';
 import publishedRegistry from '../src/data/vocabulary/published-ids.json';
-import { wordId } from '../src/utils/pinyin';
+import { wordId } from '@jiayou/chinese';
 import { topics } from '../src/data/topics';
 import { parseCharacterList } from '../src/stores/characterStore';
 import type { HskLevel } from '../src/types';
-import { characterContentId, characterRevision, wordRevision } from '../src/domain/learning/content/revision';
+import { characterContentId, characterRevision, wordRevision } from '@jiayou/content';
 import { listOf, updateRegistry, type ContentRegistry } from '../../../scripts/content-publish.mjs';
 
 type RawWord = (typeof hsk1)[number] & { level?: number; retired?: true };

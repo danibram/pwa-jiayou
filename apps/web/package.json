@@ -13,10 +13,12 @@
     "check": "npm run test -- --run && npm run build"
   },
   "dependencies": {
+    "@jiayou/learning": "*",
+    "@jiayou/content": "*",
+    "@jiayou/chinese": "*",
     "hanzi-writer": "3.7.3",
     "posthog-js": "^1.444.4",
-    "solid-js": "^1.8.7",
-    "ts-fsrs": "6.0.0"
+    "solid-js": "^1.8.7"
   },
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.5",
@@ -29,7 +31,7 @@
     "jsdom": "^23.0.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "vite": "^5.0.8",
     "vite-plugin-pwa": "^0.17.4",
     "vite-plugin-solid": "^2.8.2",

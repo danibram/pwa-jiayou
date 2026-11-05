@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { sensesText } from '../src/data/wordSenses';
+import { sensesText } from '@jiayou/content';
 
 vi.mock('../src/data/vocabulary/extra.json', () => ({
   default: [

@@ -1,7 +1,7 @@
 import { topicById } from '../data/topics';
-import type { SessionScope } from '../domain/learning/sessions';
-import type { SessionMode, SessionState } from '../domain/learning/types';
-import { wordItemId } from '../stores/learningStore';
+import type { SessionScope } from '@jiayou/learning/sessions';
+import type { SessionMode, SessionState } from '@jiayou/learning/types';
+import { wordIdOf, wordItemId } from '@jiayou/learning/items';
 
 /**
  * Word sessions are named in the URL and in history by a practice id: none for Hoy, `__more__`,
@@ -12,7 +12,6 @@ export const MORE_ID = '__more__';
 export const WEAK_ID = '__weak__';
 export const ALL_ID = '__all__';
 const TOPIC_PREFIX = 'topic:';
-const WORD_PREFIX = 'word-meaning:';
 
 export interface WordSessionTarget {
   mode: SessionMode;
@@ -45,7 +44,7 @@ export const sessionTarget = (practiceId?: string): WordSessionTarget => {
 /** The practice id and title of a stored session, for "Continuar sesión". */
 export const practiceIdOf = (session: Pick<SessionState, 'mode' | 'scope'>): { practiceId?: string; title: string } => {
   const { mode, scope } = session;
-  if (scope.kind === 'item') return { practiceId: scope.itemId.slice(WORD_PREFIX.length), title: 'Práctica' };
+  if (scope.kind === 'item') return { practiceId: wordIdOf(scope.itemId) ?? '', title: 'Práctica' };
   if (scope.kind === 'topics') return { practiceId: `${TOPIC_PREFIX}${scope.topicIds.join(',')}`, title: topicTitle(scope.topicIds) };
   if (mode === 'more-words') return { practiceId: MORE_ID, title: 'Más palabras' };
   if (mode === 'weak') return { practiceId: WEAK_ID, title: 'Flojos' };

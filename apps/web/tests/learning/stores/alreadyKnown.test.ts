@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { STUDY_RULES, type LearningEvent } from '../../../src/domain/learning/types';
+import { STUDY_RULES, type LearningEvent } from '@jiayou/learning/types';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
 import { advanceTo, environment, type Env } from './fixtures';
 
 // The fixture pool has twelve words, fewer than the real cap, so the cap is lowered here.
-vi.mock('../../../src/domain/learning/types', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../../src/domain/learning/types')>();
+vi.mock('@jiayou/learning/types', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@jiayou/learning/types')>();
   return { ...actual, STUDY_RULES: { ...actual.STUDY_RULES, alreadyKnownPerDay: 3 } };
 });
 

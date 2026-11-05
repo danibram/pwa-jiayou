@@ -1,4 +1,4 @@
-import { highestSequence, planMerge, planReplace, type BackupError, type LearningLog } from '../../domain/learning/backup';
+import { highestSequence, planMerge, planReplace, type BackupError, type LearningLog } from '@jiayou/learning/backup';
 import {
   canonicalJson,
   compareReplayOrder,
@@ -6,7 +6,7 @@ import {
   deviceLocalDayRule,
   rebuildItem,
   type Scheduler,
-} from '../../domain/learning/scheduler';
+} from '@jiayou/learning/scheduler';
 import type {
   ConfigId,
   ItemId,
@@ -16,7 +16,7 @@ import type {
   SessionMode,
   SessionState,
   StoredSchedulerConfig,
-} from '../../domain/learning/types';
+} from '@jiayou/learning/types';
 import { LearningStorageError, rejected, toStorageError } from './errors';
 import { deleteDatabase, openDatabase, request, transaction } from './idb';
 import { EVENT_INDEXES, LEARNING_DB_NAME, LEARNING_DB_VERSION, META, STORES } from './schema';

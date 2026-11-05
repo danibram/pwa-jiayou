@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import LearningBackup, { MAX_BACKUP_BYTES, type LearningBackupProps } from '../../../src/components/learning/backup/LearningBackup';
-import { createBackup } from '../../../src/domain/learning/backup';
+import { createBackup } from '@jiayou/learning/backup';
 
 const record = { right: 2, wrong: 1, reps: 1, lapses: 1, interval: 3, ease: 2.36, due: 4, strokeRuns: 1, strokeBest: 0, lastSeen: 1, clean: 1, lastReview: 1, updatedAt: 1, deviceId: 'device-a' };
 const daily = { day: '2026-01-02', reviewed: 3, introduced: 1, streak: 2 };

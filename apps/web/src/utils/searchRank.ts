@@ -1,4 +1,4 @@
-import { loosePinyin } from './pinyin';
+import { loosePinyin } from '@jiayou/chinese';
 
 /** Something a search can find: a character or a word. */
 export interface Searchable {

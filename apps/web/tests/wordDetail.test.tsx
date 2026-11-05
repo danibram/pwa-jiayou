@@ -7,7 +7,7 @@ import { vocabulary } from './fixtures/levelWords';
 import { vocabularyStore } from '../src/stores/vocabularyStore';
 import { characterRecord } from '../src/utils/characterSearch';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../src/utils/wordDetail';
-import { groupSenses, leadSense } from '../src/data/wordSenses';
+import { groupSenses, leadSense } from '@jiayou/content';
 import Vocabulario from '../src/pages/Vocabulario';
 
 const word = (simplified: string) => vocabulary.find((entry) => entry.simplified === simplified)!;

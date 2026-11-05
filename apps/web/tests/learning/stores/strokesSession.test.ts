@@ -1,13 +1,14 @@
 import { IDBFactory } from 'fake-indexeddb';
 import { afterEach, describe, expect, it } from 'vitest';
 import { autoStrokeHint, STROKE_HINT } from '../../../src/components/learning/writing/hints';
-import { contentReferenceForCharacter } from '../../../src/domain/learning/content/revision';
-import type { ItemContent } from '../../../src/domain/learning/exercises';
-import type { PoolItem } from '../../../src/domain/learning/sessions';
-import type { AttemptAction, Hint, ItemId, LearningEvent } from '../../../src/domain/learning/types';
+import { contentReferenceForCharacter } from '@jiayou/content';
+import type { ItemContent } from '@jiayou/learning/exercises';
+import type { PoolItem } from '@jiayou/learning/sessions';
+import type { AttemptAction, Hint, ItemId, LearningEvent } from '@jiayou/learning/types';
 import { characterStore } from '../../../src/stores/characterStore';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
-import { characterItemId, characterOf, contentReferenceOf, createLearningStore, type LearningStore } from '../../../src/stores/learningStore';
+import { contentReferenceOf, createLearningStore, type LearningStore } from '../../../src/stores/learningStore';
+import { characterItemId, characterOf } from '@jiayou/learning/items';
 import { DAY, environment, itemOf, POOL_WORDS, type Env } from './fixtures';
 
 let env: Env;

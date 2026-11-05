@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, For, JSX, on, Show } from 'solid-js';
-import type { Exercise, SpeechAudio } from '../../domain/learning/types';
+import type { Exercise, SpeechAudio } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import { AnswerPanel, AudioButton, FeedbackNote, HanziBlock } from './parts';
 import { askedGloss, pinyinPreview, typedField, typedReport, type TypedField } from './present';

@@ -7,7 +7,7 @@ import {
   contentReferenceForWord,
   hash64,
   wordRevision,
-} from '../../../src/domain/learning/content/revision';
+} from '@jiayou/content';
 import { extraVocabulary } from '../../../src/data/vocabulary';
 import { parseCharacterList } from '../../../src/stores/characterStore';
 import type { HskLevel } from '../../../src/types';

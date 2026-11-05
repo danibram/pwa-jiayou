@@ -8,10 +8,10 @@ import type { HskLevel } from '../types';
 import { isHskLevel } from './parse';
 import { KEYS } from '../persistence/keys';
 import { storage } from '../persistence/keyValue';
-import { pinyinParts, syllableKey } from './pinyin';
+import { pinyinParts, syllableKey } from '@jiayou/chinese';
 import { createSignal } from 'solid-js';
-import { CDN_CACHE, LEGACY_CACHE_PREFIX, packCacheName, packCachePrefix } from '../domain/content/caches';
-import { usablePacks, type PackEntry } from '../domain/content/manifest';
+import { CDN_CACHE, LEGACY_CACHE_PREFIX, packCacheName, packCachePrefix } from '@jiayou/content';
+import { usablePacks, type PackEntry } from '@jiayou/content';
 import clips from '../data/syllable-clips.json';
 import cmnClips from '../data/syllable-clips-cmn.json';
 

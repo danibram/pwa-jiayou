@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@solidjs/testing-library';
 import { describe, expect, it, vi } from 'vitest';
 import StudySettings from '../../../src/components/learning/settings/StudySettings';
-import { DEFAULT_SESSION_SETTINGS } from '../../../src/domain/learning/sessions';
+import { DEFAULT_SESSION_SETTINGS } from '@jiayou/learning/sessions';
 import { createMemoryKeyValue, type KeyValueStore } from '../../../src/persistence/keyValue';
 import {
   DEFAULT_STUDY_SETTINGS,

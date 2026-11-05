@@ -6,14 +6,15 @@ import { LearningCard, LearningSessionShell } from '../components/learning';
 import SessionSummary, { type SummaryItemResult } from '../components/learning/summary/SessionSummary';
 import { useLearningStore } from '../components/LearningStoreContext';
 import { catalogWords, findWord, type VocabularyEntry } from '../data/vocabulary';
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { characterExample, characterGloss } from '../utils/wordParts';
 import { levelRank } from '../utils/wordOrder';
 import { stopSpeech } from '../utils/speech';
 import { ALL_ID, MORE_ID, sessionTarget } from '../utils/wordSessions';
 import { createLearningSession } from '../stores/learningSessionStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import type { ItemId } from '../domain/learning/types';
+import type { ItemId } from '@jiayou/learning/types';
+import { wordIdOf } from '@jiayou/learning/items';
 
 interface Props {
   onBack: () => void;
@@ -25,11 +26,11 @@ interface Props {
   onPractice?: (practiceId?: string) => void;
 }
 
-const WORD_PREFIX = 'word-meaning:';
-
 /** The catalog entry behind a word item, for what the card does not store: tiles, related words. */
-const entryOf = (itemId: ItemId): VocabularyEntry | undefined =>
-  itemId.startsWith(WORD_PREFIX) ? findWord(itemId.slice(WORD_PREFIX.length)) : undefined;
+const entryOf = (itemId: ItemId): VocabularyEntry | undefined => {
+  const wordId = wordIdOf(itemId);
+  return wordId === null ? undefined : findWord(wordId);
+};
 
 /** Another HSK word that shares a character, as a usage example. Not one of the word's own parts (好 in 你好): the tiles already show those. */
 const relatedWord = (entry: VocabularyEntry) =>

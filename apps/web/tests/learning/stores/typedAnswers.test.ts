@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { validateAttemptEvent } from '../../../src/domain/learning/evaluation';
-import { isTypedAnswerExercise } from '../../../src/domain/learning/production';
-import type { LearningEvent } from '../../../src/domain/learning/types';
+import { validateAttemptEvent } from '@jiayou/learning/evaluation';
+import { isTypedAnswerExercise } from '@jiayou/learning/production';
+import type { LearningEvent } from '@jiayou/learning/types';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
 import type { LearningStore } from '../../../src/stores/learningStore';
 import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from './fixtures';

@@ -1,5 +1,5 @@
 import { Component, Show, createMemo, createSignal } from 'solid-js';
-import { leadSense } from '../../web/src/data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { useEditor } from '../lib/store';
 import { EntryList } from './EntryList';
 import { Field, Hanzi, LevelTag, Pinyin } from './text';

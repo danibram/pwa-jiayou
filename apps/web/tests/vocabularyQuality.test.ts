@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { leadSense, sensesText, WORD_POS, type WordSense } from '../src/data/wordSenses';
+import { leadSense, sensesText, WORD_POS, type WordSense } from '@jiayou/content';
 import { vocabulary, vocabularyByLevel } from './fixtures/levelWords';
 import { topics } from '../src/data/topics';
 

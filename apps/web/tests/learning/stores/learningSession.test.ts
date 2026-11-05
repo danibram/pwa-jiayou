@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { PRACTICE_LADDER } from '../../../src/domain/learning/exercises';
-import { createSchedulerRegistry, rebuildItem } from '../../../src/domain/learning/scheduler';
-import type { LearningEvent } from '../../../src/domain/learning/types';
+import { PRACTICE_LADDER } from '@jiayou/learning/exercises';
+import { createSchedulerRegistry, rebuildItem } from '@jiayou/learning/scheduler';
+import type { LearningEvent } from '@jiayou/learning/types';
 import { LearningStorageError } from '../../../src/persistence/learning';
 import type { LearningStore } from '../../../src/stores/learningStore';
 import {

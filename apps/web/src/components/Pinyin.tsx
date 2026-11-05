@@ -1,6 +1,6 @@
 import { Component, For, createMemo } from 'solid-js';
 import { pinyinSyllableHighlights } from '../utils/pinyinHighlights';
-import { endsInParticle, groupPinyin } from '../utils/pinyin';
+import { endsInParticle, groupPinyin } from '@jiayou/chinese';
 import { allWords, type VocabularyEntry } from '../data/vocabulary';
 
 /** Spellings of the multi-syllable words in `entries`, as space-joined lowercase pinyin. */

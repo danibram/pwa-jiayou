@@ -1,7 +1,7 @@
 import type { VocabularyEntry } from '../data/vocabulary';
-import { resolveWordRelations } from '../data/wordRelations';
+import { resolveWordRelations } from '@jiayou/content';
 import { levelRank } from './wordOrder';
-import { bySound, readingOf, soundMatch, type SoundMatch } from './soundAlike';
+import { bySound, readingOf, soundMatch, type SoundMatch } from '@jiayou/chinese';
 
 
 /** 一会儿 yíhuìr: a final 儿 read as -r is a spoken suffix, not 儿 "hijo". */
