@@ -1,13 +1,13 @@
-import type { AttemptAction, Evaluation, Exercise } from '../types';
-import { TYPED_RUBRICS, type TypedRubricId } from './exercises';
-import { evaluatePinyinAgainst, type PinyinDiagnosis } from './pinyinAnswer';
+import type { AttemptAction, Evaluation, Exercise } from '../types.ts';
+import { TYPED_RUBRICS, type TypedRubricId } from './exercises.ts';
+import { evaluatePinyinAgainst, type PinyinDiagnosis } from './pinyinAnswer.ts';
 import {
   evaluateCharactersAnswer,
   evaluateGlossAnswer,
   type AcceptedAnswer,
   type CharactersDiagnosis,
   type GlossDiagnosis,
-} from './typedAnswer';
+} from './typedAnswer.ts';
 
 /** What grading reads from an exercise. Stored exercises and `EvaluableExercise` both fit. */
 export type GradableExercise = Pick<Exercise, 'skill' | 'format' | 'grading' | 'cue' | 'rubric' | 'answer'> & {

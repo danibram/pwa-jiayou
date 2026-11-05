@@ -1,4 +1,4 @@
-import type { SessionSettings } from './types';
+import type { SessionSettings } from './types.ts';
 
 /**
  * Defaults taken from the current app, with work counted in cards:

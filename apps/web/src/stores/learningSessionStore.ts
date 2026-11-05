@@ -1,9 +1,9 @@
 import { getOwner, onCleanup, runWithOwner } from 'solid-js';
 import { createStore } from 'solid-js/store';
-import { evaluateAttempt, evaluatorVersion as currentEvaluatorVersion, type EvaluationResult } from '../domain/learning/evaluation';
-import { exposureCard, seededRandom, selectExercise, type ExerciseContext, type ExercisePrompt, type ExerciseSelection } from '../domain/learning/exercises';
-import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, TYPED_RUBRICS, type ProductionKind, type TypedGrade } from '../domain/learning/production';
-import { addLocalDays, effectiveItemEvents, passesPractice, pendingToday } from '../domain/learning/scheduler';
+import { evaluateAttempt, evaluatorVersion as currentEvaluatorVersion, type EvaluationResult } from '@jiayou/learning/evaluation';
+import { exposureCard, seededRandom, selectExercise, type ExerciseContext, type ExercisePrompt, type ExerciseSelection } from '@jiayou/learning/exercises';
+import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, TYPED_RUBRICS, type ProductionKind, type TypedGrade } from '@jiayou/learning/production';
+import { addLocalDays, effectiveItemEvents, passesPractice, pendingToday } from '@jiayou/learning/scheduler';
 import {
   buildSession,
   itemKind,
@@ -13,7 +13,7 @@ import {
   type PlannedCard,
   type SessionPlan,
   type SessionScope,
-} from '../domain/learning/sessions';
+} from '@jiayou/learning/sessions';
 import {
   EXERCISE_ROLES,
   STUDY_RULES,
@@ -32,7 +32,7 @@ import {
   type SessionMode,
   type SessionState,
   type Timestamp,
-} from '../domain/learning/types';
+} from '@jiayou/learning/types';
 import {
   isLearningStorageError,
   LearningStorageError,

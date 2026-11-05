@@ -7,7 +7,7 @@ import {
   replayProbeSequence,
   restoreProbeCard,
   serializeProbeCard,
-} from '../../src/domain/learning/fsrsProbe';
+} from '../src/fsrsProbe.ts';
 
 const firstReviewAt = new Date('2026-01-01T00:00:00.000Z');
 const nextReviewAt = new Date('2026-01-06T00:00:00.000Z');

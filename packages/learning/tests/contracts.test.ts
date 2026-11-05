@@ -25,7 +25,7 @@ import {
   type SchedulerState,
   type ValidEvaluation,
   type VoidableEventType,
-} from '../../src/domain/learning/types';
+} from '../src/types.ts';
 // The six prompts of the retired review screen (`PROMPTS` in the removed `src/utils/vocabularySession.ts`).
 const PROMPTS = ['meaning', 'reverse', 'listen', 'pick', 'hear', 'recognize'] as const;
 type Prompt = (typeof PROMPTS)[number];

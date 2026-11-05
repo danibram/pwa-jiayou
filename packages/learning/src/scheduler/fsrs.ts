@@ -1,6 +1,6 @@
 import { DefaultScheduler, Rating as FsrsRating, State, type DefaultSchedulerCard, type Grade } from 'ts-fsrs';
-import type { ConfigId, FsrsState, ItemId, Rating, SchedulerConfig, SchedulerState, Timestamp } from '../types';
-import { configId as computeConfigId } from './configId';
+import type { ConfigId, FsrsState, ItemId, Rating, SchedulerConfig, SchedulerState, Timestamp } from '../types.ts';
+import { configId as computeConfigId } from './configId.ts';
 
 /**
  * The ts-fsrs version this bundle ships. A test compares it with node_modules/ts-fsrs/package.json,

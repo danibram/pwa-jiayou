@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { evaluateAttempt, validateAttemptEvent } from '../../../src/domain/learning/evaluation';
-import type { LearningEvent } from '../../../src/domain/learning/types';
+import { evaluateAttempt, validateAttemptEvent } from '../../src/evaluation/index.ts';
+import type { LearningEvent } from '../../src/types.ts';
 import {
   CHAR,
   answer,
@@ -18,7 +18,7 @@ import {
   storedReview,
   tracing,
   writingFromMemory,
-} from './fixtures';
+} from './fixtures.ts';
 
 const codes = (event: LearningEvent) => validateAttemptEvent(event).map((error) => error.code);
 

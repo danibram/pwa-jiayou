@@ -13,7 +13,7 @@ import { stopSpeech } from '../utils/speech';
 import { ALL_ID, MORE_ID, sessionTarget } from '../utils/wordSessions';
 import { createLearningSession } from '../stores/learningSessionStore';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import type { ItemId } from '../domain/learning/types';
+import type { ItemId } from '@jiayou/learning/types';
 
 interface Props {
   onBack: () => void;

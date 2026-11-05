@@ -1,7 +1,7 @@
 import { Component, createEffect, createMemo, createSignal, Match, on, onCleanup, Show, Switch } from 'solid-js';
 import { CANVAS_MAX } from './layout';
-import type { ExerciseSelection } from '../../../domain/learning/exercises';
-import type { Exercise, ExposureCard, RevealedAnswer, SpeechAudio } from '../../../domain/learning/types';
+import type { ExerciseSelection } from '@jiayou/learning/exercises';
+import type { Exercise, ExposureCard, RevealedAnswer, SpeechAudio } from '@jiayou/learning/types';
 import Icon from '../../Icon';
 import Pinyin from '../../Pinyin';
 import SpeakButton from '../../SpeakButton';

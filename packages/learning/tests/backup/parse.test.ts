@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { createBackup, isItemId, isLocalDay, parseBackup, serializeBackup } from '../../../src/domain/learning/backup';
-import type { LearningBackup, LearningEvent } from '../../../src/domain/learning/types';
-import { CHAR, T0, at, exposure, meaningExercise, practice, twoDevices } from './fixtures';
+import { createBackup, isItemId, isLocalDay, parseBackup, serializeBackup } from '../../src/backup/index.ts';
+import type { LearningBackup, LearningEvent } from '../../src/types.ts';
+import { CHAR, T0, at, exposure, meaningExercise, practice, twoDevices } from './fixtures.ts';
 
 const sample = async (): Promise<LearningBackup> => {
   const { a, b, config } = await twoDevices();

@@ -6,7 +6,7 @@ import type {
   SessionMode,
   SkillEvidence,
   ValidEvaluation,
-} from '../types';
+} from '../types.ts';
 
 /** One of `Exercise.options`, with the published content it shows. */
 export type ExerciseOption = Exercise['options'][number];

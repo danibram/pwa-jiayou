@@ -1,8 +1,8 @@
-import type { LocalDayRule } from '../scheduler';
-import type { ItemId, LearningEvent, LearningItem, LocalDay, SchedulerState, SessionMode, Timestamp } from '../types';
+import type { LocalDayRule } from '../scheduler/index.ts';
+import type { ItemId, LearningEvent, LearningItem, LocalDay, SchedulerState, SessionMode, Timestamp } from '../types.ts';
 
-export type { CardIntent, CardReason } from '../types';
-import type { CardIntent, CardReason } from '../types';
+export type { CardIntent, CardReason } from '../types.ts';
+import type { CardIntent, CardReason } from '../types.ts';
 
 export interface PlannedCard {
   itemId: ItemId;
@@ -21,8 +21,8 @@ export interface PoolItem {
   topicIds?: readonly string[];
 }
 
-export type { SessionScope } from '../types';
-import type { SessionScope } from '../types';
+export type { SessionScope } from '../types.ts';
+import type { SessionScope } from '../types.ts';
 
 export interface SessionSettings {
   /** Hard cap on items taught for the first time per local day, by kind. */

@@ -1,5 +1,5 @@
-import { addLocalDays } from '../domain/learning/scheduler';
-import type { ItemId, LocalDay } from '../domain/learning/types';
+import { addLocalDays } from '@jiayou/learning/scheduler';
+import type { ItemId, LocalDay } from '@jiayou/learning/types';
 import type { ItemStatus, LearningStore } from '../stores/learningStore';
 
 export interface ProgressSummary {

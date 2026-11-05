@@ -4,8 +4,8 @@ import {
   evaluateAttempt,
   evaluatorVersion,
   type EvaluationResult,
-} from '../../../src/domain/learning/evaluation';
-import type { AttemptAction } from '../../../src/domain/learning/types';
+} from '../../src/evaluation/index.ts';
+import type { AttemptAction } from '../../src/types.ts';
 import {
   CHAR,
   alreadyKnown,
@@ -25,7 +25,7 @@ import {
   reverseCard,
   tracing,
   writingFromMemory,
-} from './fixtures';
+} from './fixtures.ts';
 
 const summary = (result: EvaluationResult) =>
   result.kind === 'scheduled-review'

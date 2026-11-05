@@ -1,7 +1,7 @@
-import { STUDY_RULES, type ItemId, type LearningEvent, type LocalDay, type SchedulerState, type Timestamp } from '../types';
-import type { LocalDayRule } from './localDay';
-import { addLocalDays } from './localDay';
-import { effectiveItemEvents } from './rebuild';
+import { STUDY_RULES, type ItemId, type LearningEvent, type LocalDay, type SchedulerState, type Timestamp } from '../types.ts';
+import type { LocalDayRule } from './localDay.ts';
+import { addLocalDays } from './localDay.ts';
+import { effectiveItemEvents } from './rebuild.ts';
 
 /** The absolute due check: the instant has come. A new item is never due by this test. */
 export const isDue = (state: SchedulerState, now: Timestamp): boolean => state.state !== 'new' && state.dueAt <= now;

@@ -1,6 +1,6 @@
-import type { LearningBackup } from '../types';
-import { err, ok, type BackupError, type Result } from './errors';
-import { parseBackupValue } from './parse';
+import type { LearningBackup } from '../types.ts';
+import { err, ok, type BackupError, type Result } from './errors.ts';
+import { parseBackupValue } from './parse.ts';
 
 // The files the backup screen reads. The app writes a plain learning backup, the event log with its
 // configs. Two older shapes are still read: the combined file of phase 4, with the log next to a v4

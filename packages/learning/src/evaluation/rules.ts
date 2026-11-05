@@ -6,8 +6,8 @@ import {
   type Rating,
   type Timestamp,
   type ValidEvaluation,
-} from '../types';
-import type { Confusion, EvaluableExercise } from './types';
+} from '../types.ts';
+import type { Confusion, EvaluableExercise } from './types.ts';
 
 /**
  * The task that may rate an item. A word rates only from recalling its meaning from the characters
@@ -123,8 +123,11 @@ export const readAttempt = (exercise: EvaluableExercise, actions: readonly Attem
 
 /** The actions do not decide the result: no failed answer, no self-assessment, no drawing. */
 export class IncompleteAttemptError extends Error {
-  constructor(readonly attemptId: string) {
+  readonly attemptId: string;
+
+  constructor(attemptId: string) {
     super(`Attempt ${attemptId} has no action that decides its result`);
+    this.attemptId = attemptId;
     this.name = 'IncompleteAttemptError';
   }
 }

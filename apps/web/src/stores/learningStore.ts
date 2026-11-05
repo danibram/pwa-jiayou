@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 import { topicById, topics } from '../data/topics';
 import { allWords, findWord } from '../data/vocabulary';
 import { characterContentId, contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
-import type { ItemContent, WordEntry } from '../domain/learning/exercises';
+import type { ItemContent, WordEntry } from '@jiayou/learning/exercises';
 import {
   compareReplayOrder,
   createScheduler,
@@ -17,7 +17,7 @@ import {
   tomorrowLoadFull as isTomorrowLoadFull,
   type LocalDayRule,
   type Scheduler,
-} from '../domain/learning/scheduler';
+} from '@jiayou/learning/scheduler';
 import {
   buildSession,
   DEFAULT_SESSION_SETTINGS,
@@ -27,7 +27,7 @@ import {
   type SessionPlan,
   type SessionScope,
   type SessionSettings,
-} from '../domain/learning/sessions';
+} from '@jiayou/learning/sessions';
 import type {
   ContentReference,
   ItemId,
@@ -38,7 +38,7 @@ import type {
   SessionMode,
   SessionState,
   Timestamp,
-} from '../domain/learning/types';
+} from '@jiayou/learning/types';
 import {
   createLearningRepository,
   isLearningStorageError,

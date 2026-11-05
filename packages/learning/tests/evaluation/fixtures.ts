@@ -1,5 +1,5 @@
-import type { AttemptInput, EvaluableExercise, EvaluationContext } from '../../../src/domain/learning/evaluation';
-import { evaluatorVersion } from '../../../src/domain/learning/evaluation';
+import type { AttemptInput, EvaluableExercise, EvaluationContext } from '../../src/evaluation/index.ts';
+import { evaluatorVersion } from '../../src/evaluation/index.ts';
 import type {
   AttemptAction,
   ConfigId,
@@ -9,7 +9,7 @@ import type {
   LearningEvent,
   Rating,
   ValidEvaluation,
-} from '../../../src/domain/learning/types';
+} from '../../src/types.ts';
 
 export const WORD: ItemId = 'word-meaning:word-4f60-597d-ni3-hao3';
 export const CHAR: ItemId = 'character-writing:char-4f60';

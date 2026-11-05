@@ -8,9 +8,9 @@ import {
   type SessionMode,
   type StoredSchedulerConfig,
   type Timestamp,
-} from '../types';
-import { compareReplayOrder } from '../scheduler';
-import { err, ok, type BackupError, type Result } from './errors';
+} from '../types.ts';
+import { compareReplayOrder } from '../scheduler/index.ts';
+import { err, ok, type BackupError, type Result } from './errors.ts';
 
 // Runtime validation of a learning backup. The file comes from anywhere, so nothing here trusts the
 // static types. Every field is checked, unknown keys are rejected and every output object is built

@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { validateAttemptEvent } from '../../../src/domain/learning/evaluation';
+import { validateAttemptEvent } from '@jiayou/learning/evaluation';
 import VocabularyReview from '../../../src/pages/VocabularyReview';
 import type { LearningStore } from '../../../src/stores/learningStore';
 import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from '../stores/fixtures';

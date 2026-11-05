@@ -1,4 +1,4 @@
-import { validateAttemptEvent } from '../evaluation';
+import { validateAttemptEvent } from '../evaluation/index.ts';
 import {
   canonicalJson,
   compareReplayOrder,
@@ -6,9 +6,9 @@ import {
   INSTALLED_TS_FSRS_VERSION,
   InvalidSchedulerConfigError,
   validateSchedulerConfig,
-} from '../scheduler';
-import type { ConfigId, ItemId, LearningEvent, StoredSchedulerConfig, VoidableEventType } from '../types';
-import { err, ok, type BackupError, type Result } from './errors';
+} from '../scheduler/index.ts';
+import type { ConfigId, ItemId, LearningEvent, StoredSchedulerConfig, VoidableEventType } from '../types.ts';
+import { err, ok, type BackupError, type Result } from './errors.ts';
 
 // Planning an import is a pure check over two logs, with no storage. The persistence layer writes what a plan
 // returns, all of it in one transaction, or nothing when the plan is an error.

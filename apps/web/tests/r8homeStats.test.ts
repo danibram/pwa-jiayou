@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { deviceLocalDayRule } from '../src/domain/learning/scheduler';
+import { deviceLocalDayRule } from '@jiayou/learning/scheduler';
 import { activityStreak } from '../src/utils/activityStreak';
 import { nextReviewsLabel, summarizeLearning, type ProgressSummary } from '../src/utils/progressSummary';
 import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from './learning/stores/fixtures';

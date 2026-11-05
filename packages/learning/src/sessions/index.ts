@@ -12,8 +12,8 @@ export type {
   SessionPlan,
   SessionScope,
   SessionSettings,
-} from './types';
-export { buildSession, itemKind } from './buildSession';
-export { markAlreadyKnown, requeueAfterAgain } from './requeue';
-export { DEFAULT_SESSION_SETTINGS } from './settings';
-export { seededShuffle } from './shuffle';
+} from './types.ts';
+export { buildSession, itemKind } from './buildSession.ts';
+export { markAlreadyKnown, requeueAfterAgain } from './requeue.ts';
+export { DEFAULT_SESSION_SETTINGS } from './settings.ts';
+export { seededShuffle } from './shuffle.ts';

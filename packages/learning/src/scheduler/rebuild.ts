@@ -7,10 +7,10 @@ import {
   type SchedulerState,
   type StoredSchedulerConfig,
   type VoidableEventType,
-} from '../types';
-import { canonicalJson } from './configId';
-import { createScheduler, InvalidSchedulerConfigError, type Scheduler } from './fsrs';
-import { addLocalDays } from './localDay';
+} from '../types.ts';
+import { canonicalJson } from './configId.ts';
+import { createScheduler, InvalidSchedulerConfigError, type Scheduler } from './fsrs.ts';
+import { addLocalDays } from './localDay.ts';
 
 /** Every config the log cites, created at startup so a rebuild never awaits. */
 export type SchedulerRegistry = ReadonlyMap<ConfigId, Scheduler>;

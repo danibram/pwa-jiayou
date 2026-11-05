@@ -1,0 +1,28 @@
+{
+  "name": "@jiayou/learning",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./types": "./src/types.ts",
+    "./scheduler": "./src/scheduler/index.ts",
+    "./evaluation": "./src/evaluation/index.ts",
+    "./exercises": "./src/exercises/index.ts",
+    "./sessions": "./src/sessions/index.ts",
+    "./production": "./src/production/index.ts",
+    "./backup": "./src/backup/index.ts",
+    "./evidence": "./src/evidence/index.ts",
+    "./evaluation/rules": "./src/evaluation/rules.ts",
+    "./fsrsProbe": "./src/fsrsProbe.ts",
+    "./testing/scheduler": "./tests/scheduler/fixtures.ts",
+    "./testing/evaluation": "./tests/evaluation/fixtures.ts"
+  },
+  "dependencies": {
+    "@jiayou/chinese": "*",
+    "@jiayou/content": "*",
+    "ts-fsrs": "6.0.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

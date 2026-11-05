@@ -1,9 +1,9 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import VocabularyReview from '../../../src/pages/VocabularyReview';
-import type { ItemContent } from '../../../src/domain/learning/exercises';
-import type { PoolItem } from '../../../src/domain/learning/sessions';
-import type { ItemId } from '../../../src/domain/learning/types';
+import type { ItemContent } from '@jiayou/learning/exercises';
+import type { PoolItem } from '@jiayou/learning/sessions';
+import type { ItemId } from '@jiayou/learning/types';
 import { characterStore } from '../../../src/stores/characterStore';
 import { vocabularyStore } from '../../../src/stores/vocabularyStore';
 import { characterItemId, characterOf, type LearningStore } from '../../../src/stores/learningStore';

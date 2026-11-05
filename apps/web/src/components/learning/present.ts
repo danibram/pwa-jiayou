@@ -1,5 +1,5 @@
-import { gradeTypedAnswer, type TypedGrade } from '../../domain/learning/production';
-import type { AttemptAction, Exercise, Hint, Rating } from '../../domain/learning/types';
+import { gradeTypedAnswer, type TypedGrade } from '@jiayou/learning/production';
+import type { AttemptAction, Exercise, Hint, Rating } from '@jiayou/learning/types';
 import { markTones, type Tone } from '@jiayou/chinese';
 import type { LearningSessionView } from './types';
 

@@ -1,6 +1,6 @@
 import { withToneSandhi } from '@jiayou/chinese';
 import { readingOf } from '@jiayou/chinese';
-import type { WordEntry } from './types';
+import type { WordEntry } from './types.ts';
 
 /** Lowercase, without accents or repeated spaces: "Feliz " and "feliz" are the same sense. */
 export const fold = (text: string): string =>

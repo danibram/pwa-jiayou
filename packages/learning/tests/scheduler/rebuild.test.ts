@@ -8,9 +8,9 @@ import {
   rebuildItem,
   type Scheduler,
   type SchedulerRegistry,
-} from '../../../src/domain/learning/scheduler';
-import type { LearningEvent, Rating, SchedulerState } from '../../../src/domain/learning/types';
-import { at, exposure, OTHER_WORD, practice, review, voided, WORD } from './fixtures';
+} from '../../src/scheduler/index.ts';
+import type { LearningEvent, Rating, SchedulerState } from '../../src/types.ts';
+import { at, exposure, OTHER_WORD, practice, review, voided, WORD } from './fixtures.ts';
 
 let scheduler: Scheduler;
 let slower: Scheduler;

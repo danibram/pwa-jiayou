@@ -1,5 +1,5 @@
-import { evaluatorVersion } from '../../../src/domain/learning/evaluation';
-import { configId, DEFAULT_SCHEDULER_CONFIG } from '../../../src/domain/learning/scheduler';
+import { evaluatorVersion } from '../../src/evaluation/index.ts';
+import { configId, DEFAULT_SCHEDULER_CONFIG } from '../../src/scheduler/index.ts';
 import type {
   ConfigId,
   ContentReference,
@@ -11,7 +11,7 @@ import type {
   SchedulerConfig,
   StoredSchedulerConfig,
   Timestamp,
-} from '../../../src/domain/learning/types';
+} from '../../src/types.ts';
 
 // Events that pass every backup rule. They use real config ids, the shipped evaluator version, items whose id
 // matches their content. The scheduler and evaluation fixtures break some of these on purpose.

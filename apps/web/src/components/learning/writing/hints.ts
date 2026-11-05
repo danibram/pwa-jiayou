@@ -1,4 +1,4 @@
-import type { AttemptAction, Hint } from '../../../domain/learning/types';
+import type { AttemptAction, Hint } from '@jiayou/learning/types';
 
 // Every stroke hint shows part of the character, so each one reveals the answer. The evaluator rates
 // a drawing from memory with any hint as Otra vez (decision 8 in docs/learning-system.md).

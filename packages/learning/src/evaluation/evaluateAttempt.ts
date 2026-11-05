@@ -1,6 +1,6 @@
-import { observeAttempt } from '../evidence/observe';
-import { regradeTypedAnswers } from '../production/grade';
-import { SESSION_MODE_RATES } from '../types';
+import { observeAttempt } from '../evidence/observe.ts';
+import { regradeTypedAnswers } from '../production/grade.ts';
+import { SESSION_MODE_RATES } from '../types.ts';
 import {
   IncompleteAttemptError,
   alreadyKnownHolds,
@@ -9,9 +9,9 @@ import {
   firstOutcome,
   ratingTaskOf,
   readAttempt,
-} from './rules';
-import type { AttemptInput, EvaluableExercise, EvaluationContext, EvaluationResult, PracticeReason } from './types';
-import { evaluatorVersion } from './version';
+} from './rules.ts';
+import type { AttemptInput, EvaluableExercise, EvaluationContext, EvaluationResult, PracticeReason } from './types.ts';
+import { evaluatorVersion } from './version.ts';
 
 /**
  * Decides which event a submitted attempt writes. Only a `scheduled-review` result may update FSRS.

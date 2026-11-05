@@ -1,7 +1,7 @@
-import { regradeTypedAnswers } from '../production/grade';
-import { SESSION_MODE_RATES, type LearningEvent, type ValidEvaluation } from '../types';
-import { alreadyKnownHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules';
-import { REVEAL_BEFORE_SELF_ASSESSMENT, SUPPORTED_EVALUATOR_VERSIONS } from './version';
+import { regradeTypedAnswers } from '../production/grade.ts';
+import { SESSION_MODE_RATES, type LearningEvent, type ValidEvaluation } from '../types.ts';
+import { alreadyKnownHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules.ts';
+import { REVEAL_BEFORE_SELF_ASSESSMENT, SUPPORTED_EVALUATOR_VERSIONS } from './version.ts';
 
 export type AttemptEventErrorCode =
   /** Written under rules this validator does not know, so it cannot check them. */

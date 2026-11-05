@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createBackup, parseUserBackup, serializeBackup } from '../../../src/domain/learning/backup';
-import { at, twoDevices } from './fixtures';
+import { createBackup, parseUserBackup, serializeBackup } from '../../src/backup/index.ts';
+import { at, twoDevices } from './fixtures.ts';
 
 const record = { right: 2, wrong: 1, reps: 1, lapses: 1, interval: 3, ease: 2.36, due: at(4), strokeRuns: 1, strokeBest: 0, lastSeen: at(1), clean: 1, lastReview: at(1), updatedAt: at(1), deviceId: 'device-a' };
 const daily = { day: '2026-01-02', reviewed: 3, introduced: 1, streak: 2 };

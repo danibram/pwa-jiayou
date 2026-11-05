@@ -9,7 +9,7 @@ export {
   type PinyinFormatError,
   type PinyinLetter,
   type PinyinToken,
-} from './pinyinInput';
+} from './pinyinInput.ts';
 export {
   evaluatePinyinAgainst,
   evaluatePinyinAnswer,
@@ -22,7 +22,7 @@ export {
   type SyllableError,
   type ToneError,
   type TonePolicy,
-} from './pinyinAnswer';
+} from './pinyinAnswer.ts';
 export {
   TYPED_ANSWER_POLICY_VERSION,
   evaluateCharactersAnswer,
@@ -31,7 +31,7 @@ export {
   type AcceptedAnswer,
   type CharactersDiagnosis,
   type GlossDiagnosis,
-} from './typedAnswer';
+} from './typedAnswer.ts';
 export {
   PRODUCTION_ROLES,
   TYPED_RUBRICS,
@@ -42,5 +42,5 @@ export {
   type ProductionExercise,
   type ProductionKind,
   type TypedRubricId,
-} from './exercises';
-export { gradeTypedAnswer, isTypedAnswerExercise, regradeTypedAnswers, type GradableExercise, type TypedGrade } from './grade';
+} from './exercises.ts';
+export { gradeTypedAnswer, isTypedAnswerExercise, regradeTypedAnswers, type GradableExercise, type TypedGrade } from './grade.ts';

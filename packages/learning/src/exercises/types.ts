@@ -1,5 +1,5 @@
 import type { CharacterContent, WordContent } from '@jiayou/content';
-import type { ProductionKind } from '../production/exercises';
+import type { ProductionKind } from '../production/exercises.ts';
 import type {
   CardIntent,
   CardReason,
@@ -9,7 +9,7 @@ import type {
   ItemId,
   LegacyPrompt,
   SkillEvidence,
-} from '../types';
+} from '../types.ts';
 
 /** The planned card this module turns into an exercise. `PlannedCard` from `../sessions` fits it. */
 export interface PlannedCardInput {

@@ -1,7 +1,7 @@
 import { Component, createMemo, JSX, Match, onCleanup, Show, Switch } from 'solid-js';
-import type { ExerciseSelection } from '../../domain/learning/exercises';
-import type { Exercise, Rating } from '../../domain/learning/types';
-import { isTypedAnswerExercise } from '../../domain/learning/production';
+import type { ExerciseSelection } from '@jiayou/learning/exercises';
+import type { Exercise, Rating } from '@jiayou/learning/types';
+import { isTypedAnswerExercise } from '@jiayou/learning/production';
 import ChoiceCard from './ChoiceCard';
 import RecallCard from './RecallCard';
 import TeachCard from './TeachCard';

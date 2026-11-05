@@ -7,10 +7,10 @@ import {
   seededShuffle,
   type PlannedCard,
   type SessionPlan,
-} from '../../../src/domain/learning/sessions';
-import { effectiveItemEvents, eligibleFromEvents } from '../../../src/domain/learning/scheduler';
-import { STUDY_RULES, type ItemId, type LearningEvent } from '../../../src/domain/learning/types';
-import { exposure, practice, review } from '../scheduler/fixtures';
+} from '../../src/sessions/index.ts';
+import { effectiveItemEvents, eligibleFromEvents } from '../../src/scheduler/index.ts';
+import { STUDY_RULES, type ItemId, type LearningEvent } from '../../src/types.ts';
+import { exposure, practice, review } from '../scheduler/fixtures.ts';
 import {
   char,
   CONFIG,
@@ -27,7 +27,7 @@ import {
   word,
   words,
   YESTERDAY,
-} from './fixtures';
+} from './fixtures.ts';
 
 const intents = (plan: SessionPlan) => plan.cards.map((card) => card.intent);
 const ofItem = (cards: readonly PlannedCard[], itemId: ItemId) => cards.filter((card) => card.itemId === itemId);

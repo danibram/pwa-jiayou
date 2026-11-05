@@ -8,11 +8,11 @@ import {
   serializeBackup,
   type BackupErrorCode,
   type LearningLog,
-} from '../../../src/domain/learning/backup';
-import { validateAttemptEvent } from '../../../src/domain/learning/evaluation';
-import { configId, DEFAULT_SCHEDULER_CONFIG } from '../../../src/domain/learning/scheduler';
-import type { LearningEvent, SchedulerConfig } from '../../../src/domain/learning/types';
-import { CHAR, OTHER_WORD, WORD, at, deepFreeze, exposure, practice, review, stored, twoDevices, voided } from './fixtures';
+} from '../../src/backup/index.ts';
+import { validateAttemptEvent } from '../../src/evaluation/index.ts';
+import { configId, DEFAULT_SCHEDULER_CONFIG } from '../../src/scheduler/index.ts';
+import type { LearningEvent, SchedulerConfig } from '../../src/types.ts';
+import { CHAR, OTHER_WORD, WORD, at, deepFreeze, exposure, practice, review, stored, twoDevices, voided } from './fixtures.ts';
 
 const codes = async (current: LearningLog, incoming: LearningLog): Promise<BackupErrorCode[]> => {
   const planned = await planMerge(current, incoming);

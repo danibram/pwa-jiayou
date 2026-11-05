@@ -1,4 +1,4 @@
-import type { ConfigId, SchedulerConfig } from '../types';
+import type { ConfigId, SchedulerConfig } from '../types.ts';
 
 /** JSON with keys sorted and undefined values dropped, so equal objects compare equal whatever their key order. */
 export const canonicalJson = (value: unknown): string => {

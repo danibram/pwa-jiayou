@@ -1,5 +1,5 @@
-import type { ExerciseSelection } from '../../domain/learning/exercises';
-import type { AttemptAction, Hint, Rating } from '../../domain/learning/types';
+import type { ExerciseSelection } from '@jiayou/learning/exercises';
+import type { AttemptAction, Hint, Rating } from '@jiayou/learning/types';
 
 /**
  * What the session controller (`src/stores/learningSessionStore.ts`) exposes to the screen. Kept

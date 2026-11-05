@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { aggregateSkills } from '../../../src/domain/learning/evidence';
-import type { LearningEvent, SkillEvidence, ValidEvaluation } from '../../../src/domain/learning/types';
-import { CHAR, WORD, correct, incorrect, storedPractice } from './fixtures';
+import { aggregateSkills } from '../../src/evidence/index.ts';
+import type { LearningEvent, SkillEvidence, ValidEvaluation } from '../../src/types.ts';
+import { CHAR, WORD, correct, incorrect, storedPractice } from './fixtures.ts';
 
 const evidence = (skill: SkillEvidence['skill'], recordedAt: number, evaluation: ValidEvaluation): SkillEvidence => ({
   id: `${skill}-${recordedAt}`, skill, recordedAt, evaluation, assisted: false, confusions: [], mistakes: null,

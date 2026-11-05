@@ -14,9 +14,9 @@ import {
   type LocalDayRule,
   type ReviewedSchedulerState,
   type Scheduler,
-} from '../../../src/domain/learning/scheduler';
-import { STUDY_RULES, type LearningEvent, type LocalDay, type Rating, type SchedulerState } from '../../../src/domain/learning/types';
-import { at, DAY, practice, review, utcRule, voided, WORD } from './fixtures';
+} from '../../src/scheduler/index.ts';
+import { STUDY_RULES, type LearningEvent, type LocalDay, type Rating, type SchedulerState } from '../../src/types.ts';
+import { at, DAY, practice, review, utcRule, voided, WORD } from './fixtures.ts';
 
 let scheduler: Scheduler;
 beforeAll(async () => {

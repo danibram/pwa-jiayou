@@ -1,4 +1,4 @@
-import type { PlannedCard, SessionCounts } from './types';
+import type { PlannedCard, SessionCounts } from './types.ts';
 
 /** Card totals by intent. Every card is one unit of work, a teaching card too. */
 export const summarize = (

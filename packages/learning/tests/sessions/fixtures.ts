@@ -1,6 +1,6 @@
-import { DEFAULT_SESSION_SETTINGS, type PoolItem, type SessionInput } from '../../../src/domain/learning/sessions';
-import type { ConfigId, ItemId, LocalDay, SchedulerState, Timestamp } from '../../../src/domain/learning/types';
-import { DAY, utcRule } from '../scheduler/fixtures';
+import { DEFAULT_SESSION_SETTINGS, type PoolItem, type SessionInput } from '../../src/sessions/index.ts';
+import type { ConfigId, ItemId, LocalDay, SchedulerState, Timestamp } from '../../src/types.ts';
+import { DAY, utcRule } from '../scheduler/fixtures.ts';
 
 export { DAY, utcRule };
 export const HOUR = 3_600_000;

@@ -1,6 +1,6 @@
 import { topicById } from '../data/topics';
-import type { SessionScope } from '../domain/learning/sessions';
-import type { SessionMode, SessionState } from '../domain/learning/types';
+import type { SessionScope } from '@jiayou/learning/sessions';
+import type { SessionMode, SessionState } from '@jiayou/learning/types';
 import { wordItemId } from '../stores/learningStore';
 
 /**

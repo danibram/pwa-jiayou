@@ -1,6 +1,6 @@
 // FSRS scheduling for the learning log: create once at startup, then everything is synchronous so
 // it can run inside an IndexedDB transaction. No storage, DOM or global clock.
-export { canonicalJson, configId } from './configId';
+export { canonicalJson, configId } from './configId.ts';
 export {
   createScheduler,
   validateSchedulerConfig,
@@ -11,8 +11,8 @@ export {
   type NewSchedulerState,
   type ReviewedSchedulerState,
   type Scheduler,
-} from './fsrs';
-export { addLocalDays, deviceLocalDayRule, type LocalDayRule } from './localDay';
+} from './fsrs.ts';
+export { addLocalDays, deviceLocalDayRule, type LocalDayRule } from './localDay.ts';
 export {
   assertNoDuplicateAttempts,
   compareReplayOrder,
@@ -23,5 +23,5 @@ export {
   passesPractice,
   rebuildItem,
   type SchedulerRegistry,
-} from './rebuild';
-export { isDue, isMastered, isWeak, pendingToday, pendingTomorrow, tomorrowLoad, tomorrowLoadFull } from './rules';
+} from './rebuild.ts';
+export { isDue, isMastered, isWeak, pendingToday, pendingTomorrow, tomorrowLoad, tomorrowLoadFull } from './rules.ts';

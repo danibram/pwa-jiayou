@@ -6,7 +6,7 @@ import {
   expectedReading,
   parsePinyinInput,
   type PinyinTarget,
-} from '../../../src/domain/learning/production';
+} from '@jiayou/learning/production';
 import { word } from '../exercises/fixtures';
 
 const nihao = word('word-4f60-597d-ni3-hao3');

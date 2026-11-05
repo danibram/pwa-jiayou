@@ -1,6 +1,6 @@
-import type { AttemptReading } from '../evaluation/rules';
-import type { AttemptInput, EvaluableExercise, SkillObservation } from '../evaluation/types';
-import type { ValidEvaluation } from '../types';
+import type { AttemptReading } from '../evaluation/rules.ts';
+import type { AttemptInput, EvaluableExercise, SkillObservation } from '../evaluation/types.ts';
+import type { ValidEvaluation } from '../types.ts';
 
 /**
  * One observation of the exercise's skill from a valid attempt. Its id comes from the attempt and

@@ -4,7 +4,7 @@ import ProgressBackup, { applyUserBackup, exportUserBackup } from '../src/compon
 import { characterStore } from '../src/stores/characterStore';
 import { createLearningSession } from '../src/stores/learningSessionStore';
 import { characterItemId, type LearningStore } from '../src/stores/learningStore';
-import type { SessionMode } from '../src/domain/learning/types';
+import type { SessionMode } from '@jiayou/learning/types';
 import { renderWithStore, testLearningStore } from './fixtures/learningStore';
 
 vi.mock('../src/components/StrokeCanvas', () => ({ default: () => null }));

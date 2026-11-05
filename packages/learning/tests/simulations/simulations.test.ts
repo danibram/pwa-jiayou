@@ -6,9 +6,9 @@ import {
   isWeak,
   rebuildItem,
   type Scheduler,
-} from '../../../src/domain/learning/scheduler';
-import type { SessionScope } from '../../../src/domain/learning/sessions';
-import { STUDY_RULES, type ItemId, type LocalDay, type SessionMode } from '../../../src/domain/learning/types';
+} from '../../src/scheduler/index.ts';
+import type { SessionScope } from '../../src/sessions/index.ts';
+import { STUDY_RULES, type ItemId, type LocalDay, type SessionMode } from '../../src/types.ts';
 import {
   createLearner,
   createWorld,
@@ -23,7 +23,7 @@ import {
   wordIds,
   type ReviewRecord,
   type World,
-} from './simulator';
+} from './simulator.ts';
 
 let scheduler: Scheduler;
 beforeAll(async () => {

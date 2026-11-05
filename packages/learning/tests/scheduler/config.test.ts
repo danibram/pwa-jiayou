@@ -9,8 +9,8 @@ import {
   INSTALLED_TS_FSRS_VERSION,
   InvalidSchedulerConfigError,
   validateSchedulerConfig,
-} from '../../../src/domain/learning/scheduler';
-import type { SchedulerConfig } from '../../../src/domain/learning/types';
+} from '../../src/scheduler/index.ts';
+import type { SchedulerConfig } from '../../src/types.ts';
 
 const withChange = (change: Record<string, unknown>) => ({ ...DEFAULT_SCHEDULER_CONFIG, ...change }) as SchedulerConfig;
 

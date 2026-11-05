@@ -1,6 +1,6 @@
-import type { ItemId } from '../types';
-import { summarize } from './counts';
-import type { PlannedCard, SessionPlan } from './types';
+import type { ItemId } from '../types.ts';
+import { summarize } from './counts.ts';
+import type { PlannedCard, SessionPlan } from './types.ts';
 
 /** Cards an Again added for the item: requeued practice and teach-again pairs. */
 const addedFor = (cards: readonly PlannedCard[], itemId?: ItemId) =>

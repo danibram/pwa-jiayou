@@ -1,5 +1,5 @@
 import { characterContentId, contentReferenceForCharacter, contentReferenceForWord, type CharacterContent } from '@jiayou/content';
-import { evaluatorVersion } from '../evaluation';
+import { evaluatorVersion } from '../evaluation/index.ts';
 import {
   EXERCISE_ROLES,
   type CardReason,
@@ -12,14 +12,14 @@ import {
   type Skill,
   type SkillEvidence,
   type SpeechAudio,
-} from '../types';
+} from '../types.ts';
 import { glossHead } from '@jiayou/chinese';
-import { buildProductionExercise, PRODUCTION_ROLES, type ProductionKind } from '../production/exercises';
+import { buildProductionExercise, PRODUCTION_ROLES, type ProductionKind } from '../production/exercises.ts';
 import { spokenMeaning } from '@jiayou/chinese';
-import { hasHomograph, hasHomophone, isFunctionWord, spokenReading } from './ambiguity';
-import { askGloss, displayGloss } from './glosses';
-import { buildOptions } from './options';
-import { shuffleWith, token } from './random';
+import { hasHomograph, hasHomophone, isFunctionWord, spokenReading } from './ambiguity.ts';
+import { askGloss, displayGloss } from './glosses.ts';
+import { buildOptions } from './options.ts';
+import { shuffleWith, token } from './random.ts';
 import type {
   ExerciseContext,
   ExercisePrompt,
@@ -28,7 +28,7 @@ import type {
   PlannedCardInput,
   SkipReason,
   WordEntry,
-} from './types';
+} from './types.ts';
 
 /**
  * Names the rule set that grades an exercise. Its revision is the evaluator version, because the

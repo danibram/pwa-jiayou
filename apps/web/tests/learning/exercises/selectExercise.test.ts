@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
-import { evaluateAttempt, evaluatorVersion } from '../../../src/domain/learning/evaluation';
-import { ratingTaskOf } from '../../../src/domain/learning/evaluation/rules';
-import { gradeTypedAnswer, isTypedAnswerExercise, PRODUCTION_ROLES } from '../../../src/domain/learning/production';
+import { evaluateAttempt, evaluatorVersion } from '@jiayou/learning/evaluation';
+import { ratingTaskOf } from '@jiayou/learning/evaluation/rules';
+import { gradeTypedAnswer, isTypedAnswerExercise, PRODUCTION_ROLES } from '@jiayou/learning/production';
 import {
   buildOptions,
   displayGloss,
@@ -16,8 +16,8 @@ import {
   STROKE_RUBRIC_REVISION,
   type ExerciseSelection,
   type WordEntry,
-} from '../../../src/domain/learning/exercises';
-import type { AttemptAction, Exercise, ItemId } from '../../../src/domain/learning/types';
+} from '@jiayou/learning/exercises';
+import type { AttemptAction, Exercise, ItemId } from '@jiayou/learning/types';
 import { ambiguityCases } from '../fixtures/contentCases';
 import { SEEDS, card, context, hsk1Characters, observation, settled, vocabulary, word, wordItem } from './fixtures';
 

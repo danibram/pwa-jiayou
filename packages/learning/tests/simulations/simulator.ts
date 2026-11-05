@@ -1,7 +1,7 @@
 // Deterministic multi-day study simulator: session policy (buildSession, requeueAfterAgain),
 // evaluator and FSRS together. No Math.random, no Date.now: every instant is explicit and every
 // draw comes from a seeded generator.
-import { evaluateAttempt } from '../../../src/domain/learning/evaluation';
+import { evaluateAttempt } from '../../src/evaluation/index.ts';
 import {
   addLocalDays,
   effectiveItemEvents,
@@ -10,7 +10,7 @@ import {
   tomorrowLoad,
   type LocalDayRule,
   type Scheduler,
-} from '../../../src/domain/learning/scheduler';
+} from '../../src/scheduler/index.ts';
 import {
   buildSession,
   DEFAULT_SESSION_SETTINGS,
@@ -22,7 +22,7 @@ import {
   type SessionPlan,
   type SessionScope,
   type SessionSettings,
-} from '../../../src/domain/learning/sessions';
+} from '../../src/sessions/index.ts';
 import type {
   AttemptAction,
   CardReason,
@@ -35,7 +35,7 @@ import type {
   SchedulerState,
   SessionMode,
   Timestamp,
-} from '../../../src/domain/learning/types';
+} from '../../src/types.ts';
 
 export const MINUTE = 60_000;
 export const HOUR = 60 * MINUTE;

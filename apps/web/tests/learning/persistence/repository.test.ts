@@ -6,8 +6,8 @@ import {
   DEFAULT_SCHEDULER_CONFIG,
   rebuildItem,
   type Scheduler,
-} from '../../../src/domain/learning/scheduler';
-import type { LearningEvent } from '../../../src/domain/learning/types';
+} from '@jiayou/learning/scheduler';
+import type { LearningEvent } from '@jiayou/learning/types';
 import {
   LearningStorageError,
   resetLearningData,

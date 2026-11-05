@@ -1,2 +1,2 @@
-export { observeAttempt } from './observe';
-export { aggregateSkills } from './aggregateSkills';
+export { observeAttempt } from './observe.ts';
+export { aggregateSkills } from './aggregateSkills.ts';

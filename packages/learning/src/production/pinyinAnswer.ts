@@ -1,5 +1,5 @@
 import { withToneSandhi, type Tone } from '@jiayou/chinese';
-import type { Evaluation } from '../types';
+import type { Evaluation } from '../types.ts';
 import {
   PINYIN_POLICY_VERSION,
   parsePinyinInput,
@@ -7,7 +7,7 @@ import {
   type PinyinFormatError,
   type PinyinLetter,
   type PinyinToken,
-} from './pinyinInput';
+} from './pinyinInput.ts';
 
 /** The entry fields a pinyin answer is checked against. Catalog words and accepted answers fit. */
 export interface PinyinTarget {

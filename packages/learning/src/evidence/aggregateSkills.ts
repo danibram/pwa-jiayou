@@ -1,4 +1,4 @@
-import { REPLAY_ORDER, type LearningEvent, type SkillAggregate } from '../types';
+import { REPLAY_ORDER, type LearningEvent, type SkillAggregate } from '../types.ts';
 
 type AttemptEvent = Extract<LearningEvent, { type: 'practice' | 'scheduled-review' | 'invalid-attempt' }>;
 

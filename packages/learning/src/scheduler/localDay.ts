@@ -1,4 +1,4 @@
-import type { LocalDay, Timestamp } from '../types';
+import type { LocalDay, Timestamp } from '../types.ts';
 
 /**
  * How the caller's device splits time into local days ("Inicio del día" in contracts.md). The domain

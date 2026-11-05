@@ -1,6 +1,6 @@
-import { effectiveItemEvents, isWeak, pendingToday, tomorrowLoadFull } from '../scheduler';
-import { SESSION_MODE_RATES, STUDY_RULES, type ItemId, type LearningEvent, type LocalDay, type SchedulerState } from '../types';
-import { summarize } from './counts';
+import { effectiveItemEvents, isWeak, pendingToday, tomorrowLoadFull } from '../scheduler/index.ts';
+import { SESSION_MODE_RATES, STUDY_RULES, type ItemId, type LearningEvent, type LocalDay, type SchedulerState } from '../types.ts';
+import { summarize } from './counts.ts';
 import type {
   CardReason,
   ItemKind,
@@ -9,7 +9,7 @@ import type {
   PoolItem,
   SessionInput,
   SessionPlan,
-} from './types';
+} from './types.ts';
 
 const GROUP = 3;
 

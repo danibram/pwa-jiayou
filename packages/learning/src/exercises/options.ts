@@ -1,6 +1,6 @@
-import { fold, sharesSense, soundsSame } from './ambiguity';
-import { shuffleWith } from './random';
-import type { WordEntry } from './types';
+import { fold, sharesSense, soundsSame } from './ambiguity.ts';
+import { shuffleWith } from './random.ts';
+import type { WordEntry } from './types.ts';
 
 export interface ChoiceOption {
   id: string;

@@ -1,5 +1,5 @@
-import type { ConfigId, Exercise, ItemId, LearningEvent, LocalDay, Rating, Timestamp, ValidEvaluation } from '../../../src/domain/learning/types';
-import type { LocalDayRule } from '../../../src/domain/learning/scheduler';
+import type { ConfigId, Exercise, ItemId, LearningEvent, LocalDay, Rating, Timestamp, ValidEvaluation } from '../../src/types.ts';
+import type { LocalDayRule } from '../../src/scheduler/index.ts';
 
 export const WORD: ItemId = 'word-meaning:word-4f60-597d-ni3-hao3';
 export const OTHER_WORD: ItemId = 'word-meaning:word-8c22-8c22-xie4-xie5';

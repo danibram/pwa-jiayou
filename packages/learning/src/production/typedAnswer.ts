@@ -1,5 +1,5 @@
-import { fold } from '../exercises/ambiguity';
-import type { Evaluation } from '../types';
+import { fold } from '../exercises/ambiguity.ts';
+import type { Evaluation } from '../types.ts';
 
 /**
  * Names the rules for typed characters and typed glosses in this file. Exercises that grade with
@@ -7,8 +7,8 @@ import type { Evaluation } from '../types';
  */
 export const TYPED_ANSWER_POLICY_VERSION = 'typed-answer-policy@1';
 
-export type { AcceptedAnswer } from '../types';
-import type { AcceptedAnswer } from '../types';
+export type { AcceptedAnswer } from '../types.ts';
+import type { AcceptedAnswer } from '../types.ts';
 
 export interface CharactersDiagnosis {
   policyVersion: typeof TYPED_ANSWER_POLICY_VERSION;

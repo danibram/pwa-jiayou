@@ -1,10 +1,10 @@
-import { fold, isFunctionWord, senseKeys, soundsSame, spokenReading } from '../exercises/ambiguity';
-import { askGloss, displayGloss } from '../exercises/glosses';
-import { token } from '../exercises/random';
-import type { ExerciseContext, SkipReason, WordEntry } from '../exercises/types';
-import type { Exercise, ExerciseRole, ItemId, RevealedAnswer, SpeechAudio } from '../types';
-import { PINYIN_POLICY_VERSION } from './pinyinInput';
-import { TYPED_ANSWER_POLICY_VERSION, type AcceptedAnswer } from './typedAnswer';
+import { fold, isFunctionWord, senseKeys, soundsSame, spokenReading } from '../exercises/ambiguity.ts';
+import { askGloss, displayGloss } from '../exercises/glosses.ts';
+import { token } from '../exercises/random.ts';
+import type { ExerciseContext, SkipReason, WordEntry } from '../exercises/types.ts';
+import type { Exercise, ExerciseRole, ItemId, RevealedAnswer, SpeechAudio } from '../types.ts';
+import { PINYIN_POLICY_VERSION } from './pinyinInput.ts';
+import { TYPED_ANSWER_POLICY_VERSION, type AcceptedAnswer } from './typedAnswer.ts';
 
 /**
  * The exercises typed answers make possible. All are practice. None is the meaning task, so the

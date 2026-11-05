@@ -1,5 +1,5 @@
-import { fold, senseKeys } from './ambiguity';
-import type { WordEntry } from './types';
+import { fold, senseKeys } from './ambiguity.ts';
+import type { WordEntry } from './types.ts';
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const plain = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f\s]/g, '').toLowerCase();
