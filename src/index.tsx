@@ -3,7 +3,6 @@ import { render } from 'solid-js/web';
 import './index.css';
 import App from './App';
 import UpdateNotice from './components/UpdateNotice';
-import { OfflineDownloadNotice } from './components/OfflineStatus';
 import { initTheme } from './utils/theme';
 import { initAnalytics } from './analytics';
 import { loadSelectedWords } from './utils/levelPacks';
@@ -41,4 +40,4 @@ if (!(root instanceof HTMLElement)) {
 const FIRST_PAINT_WAIT_MS = 1500;
 void Promise.race([loadSelectedWords(), new Promise((resolve) => setTimeout(resolve, FIRST_PAINT_WAIT_MS))])
   .catch(() => {})
-  .finally(() => render(() => <><App /><UpdateNotice /><OfflineDownloadNotice /></>, root));
+  .finally(() => render(() => <><App /><UpdateNotice /></>, root));

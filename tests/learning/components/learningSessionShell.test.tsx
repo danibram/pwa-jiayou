@@ -52,6 +52,12 @@ describe('learning session shell', () => {
 
     setView({ ...current(), error: { message: 'Blocked', retryable: false } });
     expect(screen.queryByRole('button', { name: 'Reintentar' })).toBeNull();
+
+    // Without advice of its own, the error reads once: the headline and what happened to the answer.
+    setView({ ...current(), error: { message: '', retryable: false } });
+    expect(screen.getByRole('alert').textContent).toBe(
+      'No se pudo guardar el progreso en este dispositivo.Tu última respuesta no se ha guardado. Vuelve a abrir la sesión más tarde.',
+    );
   });
 
   it('shows a storage error even before a card loads', () => {

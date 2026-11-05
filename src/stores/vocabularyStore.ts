@@ -1,6 +1,6 @@
 import { createStore } from 'solid-js/store';
-import { allWords, catalogWords, levelWords, type VocabularyEntry } from '../data/vocabulary';
-import { DEFAULT_LIST, hskLevelsOf, knownLists, listLabel, type ListId } from '../data/lists';
+import { allWords, BUNDLED_WORD_LEVEL, catalogWords, hasLevelWords, levelWords, type VocabularyEntry } from '../data/vocabulary';
+import { DEFAULT_LIST, hskListId, hskLevelsOf, knownLists, listLabel, type ListId } from '../data/lists';
 import type { HskLevel } from '../types';
 import { studyList, studyLists, wordsInLists } from './studyLists';
 import { dayNumber } from './characterStore';
@@ -89,6 +89,20 @@ export const vocabularyStore = {
   /** The HSK levels among the checked lists. Characters shown beside words come from these. */
   studiedLevels(): HskLevel[] {
     return hskLevelsOf(store.selectedLists);
+  },
+
+  /**
+   * HSK levels among the checked lists whose words are not on the device: the download failed, or
+   * the pack was deleted. Their words are in no screen or session until it arrives.
+   */
+  missingLevels(): HskLevel[] {
+    return hskLevelsOf(store.selectedLists).filter((level) => level !== BUNDLED_WORD_LEVEL && !hasLevelWords(level));
+  },
+
+  /** "HSK 2", "HSK 2 y 3": the levels `missingLevels` returns, or '' when none. */
+  missingLabel(): string {
+    const missing = this.missingLevels();
+    return missing.length > 0 ? listLabel(missing.map(hskListId)) : '';
   },
 
   /** A word of the checked lists by id. A word of a list that is off is not found. */

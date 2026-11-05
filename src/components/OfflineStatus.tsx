@@ -2,20 +2,6 @@ import { createResource, createSignal, For, onCleanup, onMount, Show } from 'sol
 import { downloadState, saveStudyMedia } from '../utils/levelPacks';
 import { contentVersionLabel } from '../data/contentVersion';
 
-export function OfflineDownloadNotice() {
-  const [dismissed, setDismissed] = createSignal(false);
-  return <Show when={downloadState().state === 'error' && !dismissed()}>
-    <aside role="alert" class="sheet fixed inset-x-4 bottom-4 z-50 mx-auto max-w-md p-4 text-ink">
-      <p class="font-semibold">Descarga incompleta</p>
-      <p class="mt-1 text-sm text-ink-soft">Algunos archivos de tus listas necesitan conexión. Puedes volver a intentarlo en Opciones.</p>
-      <div class="mt-3 flex gap-2">
-        <button type="button" class="btn-ink h-11 px-4 text-sm" onClick={() => { setDismissed(false); void saveStudyMedia(); }}>Reintentar</button>
-        <button type="button" class="btn-quiet h-11 px-4 text-sm" onClick={() => setDismissed(true)}>Cerrar</button>
-      </div>
-    </aside>
-  </Show>;
-}
-
 async function inspectStorage() {
   try {
   if (!('caches' in window)) return null;

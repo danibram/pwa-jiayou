@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { PRACTICE_LADDER } from '../../../src/domain/learning/exercises';
 import { createSchedulerRegistry, rebuildItem } from '../../../src/domain/learning/scheduler';
 import type { LearningEvent } from '../../../src/domain/learning/types';
+import { LearningStorageError } from '../../../src/persistence/learning';
 import type { LearningStore } from '../../../src/stores/learningStore';
 import {
   advanceTo,
@@ -169,6 +170,26 @@ describe('learning session controller', () => {
     const events = await log(store);
     expect(events).toHaveLength(1);
     expect(events[0].type).toBe('exposure');
+  });
+
+  it('adds no second line to a storage error it has no advice for', async () => {
+    const e = fresh();
+    const store = e.store({
+      repository: (create) => {
+        const repo = create();
+        return new Proxy(repo, {
+          get: (target, key) =>
+            key === 'commitAnswer'
+              ? () => Promise.reject(new LearningStorageError({ kind: 'unknown', message: 'Simulated DataError' }))
+              : Reflect.get(target, key),
+        });
+      },
+    });
+    const session = await e.session(store, { mode: 'today' });
+    session.actions.continue();
+    await session.idle();
+    // The shell's headline already says the progress was not saved.
+    expect(session.view.error).toEqual({ message: '', retryable: false });
   });
 
   it('retries a failed answer on a scored card without a second event', async () => {
@@ -343,6 +364,38 @@ describe('learning session controller', () => {
     expect((await log(store)).at(-1)).toMatchObject({ type: 'invalid-attempt', evaluation: { reason: 'technical-error' }, evidence: [] });
   });
 
+  it('runs the rest of the session without audio after one audio card fails to play', async () => {
+    const e = fresh();
+    const { store } = await teachDay(e);
+    // Right after teaching, Repasar todo practises the words with audio cards among the first.
+    const session = await e.session(store, { mode: 'review-all', resume: false });
+    const audioCue = (s: typeof session) => s.view.selection?.kind === 'exercise' && s.view.selection.exercise.cue === 'audio';
+    await advanceTo(session, audioCue);
+    expect(session.view.speechAvailable).toBe(true);
+    session.actions.audioFailed();
+    await session.idle();
+    expect(session.view.feedback?.recorded).toBe('invalid-attempt');
+    expect(session.view.speechAvailable).toBe(false);
+    const stored = await store.runtime().loadSession('review-all');
+    expect(stored!.queue.slice(stored!.position).filter((entry) => entry.exercise?.cue === 'audio')).toEqual([]);
+
+    session.actions.continue();
+    const cues: string[] = [];
+    for (let guard = 0; guard < 100 && session.view.state !== 'finished'; guard++) {
+      if (session.view.state === 'feedback') {
+        session.actions.continue();
+        continue;
+      }
+      if (session.view.selection?.kind === 'exercise') cues.push(session.view.selection.exercise.cue);
+      expect(session.view.speechAvailable).toBe(false);
+      await answerCard(session);
+    }
+    expect(session.view.state).toBe('finished');
+    expect(cues.length).toBeGreaterThan(0);
+    expect(cues).not.toContain('audio');
+    expect((await log(store)).filter((event) => event.type === 'invalid-attempt')).toHaveLength(1);
+  });
+
   it('moves on by itself after a correct pick, and never after a self-assessment', async () => {
     const e = fresh();
     const store = e.store();
@@ -406,6 +459,25 @@ describe('learning store', () => {
     expect(store.status(itemOf(POOL_WORDS[0]))).toBe('new');
     expect(await log(store)).toHaveLength(0);
     expect(store.newLeftToday()).toBe(10);
+  });
+
+  it('gives the device a new id on reset, so merging an older backup never repeats a (deviceId, sequence) pair', async () => {
+    const e = fresh();
+    localStorage.removeItem('jiayou-device-id');
+    // The default id source, as the app uses it.
+    const store = e.store({ deviceId: undefined });
+    await finish(await e.session(store, { mode: 'today' }));
+    const backup = await store.exportBackup();
+    expect(backup.events.length).toBeGreaterThan(0);
+    await store.resetLearningData();
+    await answerCard(await e.session(store, { mode: 'more-words' }));
+    const after = await store.exportBackup();
+    expect(after.deviceId).not.toBe(backup.deviceId);
+    expect(after.events.map((event) => event.sequence)).toEqual([0]);
+    await store.mergeBackup(backup);
+    const pairs = (await log(store)).map((event) => `${event.deviceId}#${event.sequence}`);
+    expect(pairs).toHaveLength(backup.events.length + 1);
+    expect(new Set(pairs).size).toBe(pairs.length);
   });
 
   it('reports tomorrow load and due counts', async () => {

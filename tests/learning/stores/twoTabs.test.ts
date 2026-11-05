@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { channelBus, DAY, environment, finish, MORNING, until, type Env } from './fixtures';
+import { answerCard, channelBus, DAY, environment, finish, MORNING, until, type Env } from './fixtures';
 
 let env: Env;
 afterEach(() => env?.closeAll());
@@ -61,6 +61,35 @@ describe('one session open in two tabs', () => {
     await a.reload();
     const attempts = a.events().filter((event) => event.itemId === itemId && event.type !== 'exposure' && event.occurredAt >= MORNING + DAY);
     expect(attempts).toHaveLength(1);
+  });
+
+  it('writes one practice event when both tabs answer the same practice card', async () => {
+    env = environment();
+    await teachDay0();
+    // Still day 0: every word waits for tomorrow, so Repasar todo only writes practice, which
+    // leaves the cached state as it was and gives the state check nothing to catch.
+    const bus = channelBus();
+    const a = env.store({ channel: bus.channel() });
+    const b = env.store({ channel: bus.channel() });
+    const tabA = await env.session(a, { mode: 'review-all' });
+    await tabA.idle();
+    const tabB = await env.session(b, { mode: 'review-all' });
+    expect(tabB.sessionId()).toBe(tabA.sessionId());
+    const selection = tabA.view.selection!;
+    expect(selection.kind).toBe('exercise');
+    const exerciseId = selection.kind === 'exercise' ? selection.exercise.id : '';
+    expect(tabB.view.selection?.itemId).toBe(selection.itemId);
+
+    await answerCard(tabA);
+    // Same tick as A's commit: B has not heard of it yet.
+    await answerCard(tabB);
+
+    await a.reload();
+    const forCard = a.events().filter((event) => event.type !== 'exposure' && event.type !== 'attempt-voided' && event.exercise.id === exerciseId);
+    expect(forCard.map((event) => event.type)).toEqual(['practice']);
+    // B dropped its answer and took the stored session.
+    expect(tabB.view.state).toBe('presenting');
+    expect(tabB.view.position).toBe(1);
   });
 
   it('stops a session when another tab resets the progress', async () => {

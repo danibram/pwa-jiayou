@@ -110,6 +110,20 @@ describe('commitAnswer', () => {
     expect(await repo.listEvents()).toHaveLength(2);
   });
 
+  it('refuses, retryably and without writing, an answer given at a session position another tab has moved past', async () => {
+    const repo = await fresh().open();
+    await repo.saveAttemptDraft(sessionWithHint());
+    const moved = { ...sessionWithHint(), position: 1 };
+    await repo.commitAnswer({ event: pendingPractice('p1', at(1)), nextState: null, session: moved, sessionPosition: 0 });
+    // The other tab still shows card 0. Practice leaves the state alone, so only the position tells.
+    const error = await failure(repo.commitAnswer({ event: pendingPractice('p2', at(2)), nextState: null, session: moved, sessionPosition: 0 }));
+    expect(kindOf(error)).toBe('stale-state');
+    expect(error.retryable).toBe(true);
+    expect((await repo.listEvents()).map((event) => event.id)).toEqual(['p1']);
+    await repo.commitAnswer({ event: pendingPractice('p2', at(2)), nextState: null, session: { ...moved, position: 2 }, sessionPosition: 1 });
+    expect(await repo.listEvents()).toHaveLength(2);
+  });
+
   it('is idempotent: retrying the same write returns the stored result and writes nothing', async () => {
     const repo = await fresh().open();
     const input = { event: pendingReview('r1', at(1), 'good', scheduler.configId), nextState: applyRating(scheduler, 'good', at(1)) };

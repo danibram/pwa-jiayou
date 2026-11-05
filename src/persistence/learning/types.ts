@@ -38,6 +38,12 @@ export interface CommitAnswerInput {
    * evaluated before another tab's write never lands on top of it. Omit for exposures.
    */
   basedOn?: SchedulerState | null;
+  /**
+   * The position of `session` this answer was given at. When the stored session with the same id
+   * sits elsewhere, another tab already answered or undid a card, so the write is refused with a
+   * retryable `stale-state` error. Skipped when no session of that id is stored.
+   */
+  sessionPosition?: number;
 }
 
 export interface CommitResult<E extends LearningEvent = LearningEvent> {

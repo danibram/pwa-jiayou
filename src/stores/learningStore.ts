@@ -54,7 +54,7 @@ import {
   type VoidOptions,
   type VoidReason,
 } from '../persistence/learning';
-import { deviceIdIn } from '../persistence/deviceId';
+import { deviceIdIn, renewDeviceIdIn } from '../persistence/deviceId';
 import { storage } from '../persistence/keyValue';
 import { learningSettings } from '../persistence/learningSettings';
 import { canSpeak } from '../utils/speech';
@@ -90,6 +90,11 @@ export interface LearningStoreOptions {
   locks?: LocksLike | null;
   /** Defaults to the id the legacy progress already stamps (`deviceIdIn(storage)`). */
   deviceId?: () => string;
+  /**
+   * Gives the device a new id before the development reset deletes the log. Defaults to
+   * `renewDeviceIdIn(storage)` when `deviceId` is not injected, and to nothing when it is.
+   */
+  renewDeviceId?: () => void;
   config?: SchedulerConfig;
   clock?: () => Timestamp;
   dayRule?: LocalDayRule;
@@ -605,8 +610,14 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       return result;
     },
 
-    /** The explicit development reset: deletes the learning database and opens an empty one. */
+    /**
+     * The explicit development reset: deletes the learning database and opens an empty one. The
+     * device gets a new id first, so the restarted `sequence` never repeats a (deviceId, sequence)
+     * pair of the old log, which an old backup may still bring back. It changes before the delete
+     * because other tabs reopen the database as soon as they hear of the reset.
+     */
     async resetLearningData(): Promise<void> {
+      (options.renewDeviceId ?? (options.deviceId ? () => {} : () => void renewDeviceIdIn(storage)))();
       disconnect();
       states = new Map();
       setLog([]);

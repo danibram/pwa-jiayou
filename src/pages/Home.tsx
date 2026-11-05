@@ -16,7 +16,7 @@ import { levelWords, wordCount } from '../data/vocabulary';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { wordItemId } from '../stores/learningStore';
 import { useLearningStore } from '../components/LearningStoreContext';
-import { prepareListMedia } from '../utils/levelPacks';
+import { downloadState, prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
 import type { HskLevel } from '../types';
 import { ALL_ID, MORE_ID, practiceIdOf, WEAK_ID } from '../utils/wordSessions';
@@ -113,6 +113,8 @@ const Home: Component<HomeProps> = (props) => {
   const pausedWord = () => (paused.state === 'ready' ? paused() : null);
   const wordClosed = () => !pausedWord() && wordPending() === 0;
   const unseen = () => words().filter((word) => statusOf(word.id) === 'new').length;
+  /** Checked levels whose words are not on the device. Nothing above counts them. */
+  const missingLabel = () => vocabularyStore.missingLabel();
   const newPerDay = () => store.settings().newPerDay['word-meaning'];
   /** The whole day's budget is spent, not only Hoy's share. */
   const capReached = () => store.newLeftToday('other') === 0;
@@ -122,7 +124,8 @@ const Home: Component<HomeProps> = (props) => {
     const n = moreWords()?.counts.newItems ?? 0;
     if (n > 0) return { kind: 'more', n };
     if (wordSummary().weak > 0) return { kind: 'weak', n: wordSummary().weak };
-    if (unseen() === 0) return { kind: 'all' };
+    // Words still to download are not seen yet, even though no screen counts them.
+    if (unseen() === 0 && !missingLabel()) return { kind: 'all' };
     return { kind: 'done' };
   };
 
@@ -229,6 +232,10 @@ const Home: Component<HomeProps> = (props) => {
   /** A newly ticked level downloads its words, then their strokes and audio, behind the page. */
   const [mediaSave, setMediaSave] = createSignal<{ done: number; total: number }>();
   const [mediaFailed, setMediaFailed] = createSignal(false);
+  const downloading = () => mediaSave() !== undefined || downloadState().state === 'downloading';
+  /** This page's own download, or the one the app runs at start and when the connection returns. */
+  const downloadFailed = () => !downloading() && (mediaFailed() || downloadState().state === 'error');
+  const needsDownload = (lvl: HskLevel) => !downloading() && vocabularyStore.missingLevels().includes(lvl);
   let mediaRun = 0;
   const saveLevelMedia = () => {
     const run = ++mediaRun;
@@ -239,6 +246,8 @@ const Home: Component<HomeProps> = (props) => {
       .finally(() => { if (run === mediaRun) setMediaSave(undefined); });
   };
   const pickWordLevel = (lvl: (typeof wordLevels)[number]) => {
+    // A checked level whose words never arrived shows unchecked, and tapping it downloads it again.
+    if (needsDownload(lvl)) return saveLevelMedia();
     const adding = !levelOn(lvl);
     vocabularyStore.toggleList(hskListId(lvl));
     if (adding) saveLevelMedia();
@@ -318,15 +327,18 @@ const Home: Component<HomeProps> = (props) => {
               mastered={masteredWordsIn}
               learning={learningWordsIn}
               unit="palabras"
+              needsDownload={needsDownload}
             />
             <Show when={mediaSave() && (mediaSave()!.total === 0 || mediaSave()!.done < mediaSave()!.total)}>
               <p class="mt-2 text-xs text-ink-soft tabular-nums" role="status">
                 Descargando trazos y audios para usar sin conexión…{mediaSave()!.total > 0 ? ` ${mediaPercent()} %` : ''}
               </p>
             </Show>
-            <Show when={mediaFailed()}>
+            <Show when={!downloading() && (downloadFailed() || missingLabel())}>
               <p class="mt-2 text-xs text-seal" role="alert">
-                No se pudieron descargar los trazos y audios. Las palabras ya están; lo demás se descargará cuando haya conexión.{' '}
+                {missingLabel()
+                  ? `${downloadFailed() ? 'No se pudieron descargar' : 'Faltan por descargar'} las palabras de ${missingLabel()}. Se descargarán cuando haya conexión.`
+                  : 'No se pudieron descargar los trazos y audios. Las palabras ya están; lo demás se descargará cuando haya conexión.'}{' '}
                 <button type="button" class="inline-flex min-h-11 items-center font-medium text-ink underline decoration-ink/30 underline-offset-4" onClick={saveLevelMedia}>
                   Reintentar
                 </button>
@@ -341,7 +353,7 @@ const Home: Component<HomeProps> = (props) => {
               Hoy toca ponerse al día. Las palabras nuevas vuelven cuando bajen los repasos.
             </p>
           </Show>
-          <Show when={wordPending() === 0 && unseen() === 0}>
+          <Show when={wordPending() === 0 && unseen() === 0 && !missingLabel()}>
             <p class="mt-4 text-sm text-ink-soft">
               Has visto todas las palabras de esta lista.
               {wordLevels.some((level) => !levelOn(level))

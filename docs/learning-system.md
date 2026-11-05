@@ -28,6 +28,10 @@ Este documento coordinó la implementación por fases. Todas las pantallas usan 
 - Al arrancar, la app borra las claves de localStorage que dejó el sistema anterior (progreso v4 y sesiones guardadas). Sus datos no se migran.
 - "Ya la sé" se ofrecía sobre la lección completa, con la respuesta a la vista. En 7A pasó a ofrecerse antes de mostrarla, solo en la primera enseñanza y con un tope diario.
 - La misma sesión abierta en dos pestañas podía calificar dos veces una tarjeta. Desde 7A la respuesta lleva el estado sobre el que se decidió. Si otra pestaña lo cambió, no se escribe y la pestaña toma la sesión guardada o evalúa de nuevo. Una sesión guardada tampoco retrocede salvo al deshacer, y borrar el progreso en otra pestaña detiene la sesión abierta.
+- La validación en el navegador de 7B encontró que la comprobación de 7A no veía una tarjeta de práctica respondida en dos pestañas, porque la práctica no cambia la caché. La escritura comprueba ahora también la posición de la sesión guardada.
+- El reinicio de desarrollo da al dispositivo un `deviceId` nuevo, para que la `sequence` que empieza de cero no repita pares de una copia anterior.
+- Si falla el audio de una tarjeta, el resto de la sesión sigue sin audio y no vuelve a elegir formatos de escucha.
+- Las palabras de un nivel marcado que no llegaron a descargarse no se pueden contar, porque la app no tiene su lista. Inicio y las sesiones vacías dicen qué nivel falta por descargar en vez de dar por vistas todas las palabras.
 - El evaluador pasó a `learning-evaluator@3`: una autoevaluación solo vale después de descubrir la respuesta. Los eventos `@1` y `@2` se siguen aceptando sin esa comprobación.
 - Se retiró la comprobación de caracteres "probablemente conocidos" del constructor de sesiones. Ninguna lista la activaba.
 - Al reanudar, una tarjeta escrita con una política de respuestas que ya no existe se genera de nuevo en vez de quedar sin corrección posible.

@@ -111,7 +111,8 @@ export interface LearningSessionView {
  *   answered, and asks that card again.
  * - `pause`/`resume` only change the view; every action is already saved.
  * - `retry` repeats the write that failed. It reuses the event id, so it never writes twice.
- * - `audioFailed` closes the attempt as an `invalid-attempt` with a technical error.
+ * - `audioFailed` closes the attempt as an `invalid-attempt` with a technical error. The rest of
+ *   the session runs without audio: `speechAvailable` turns false and later audio cards are rebuilt.
  */
 export interface LearningSessionActions {
   answer(input: { answer?: string | null; optionId?: string | null }): void;
@@ -214,9 +215,13 @@ const isStaleTypedExercise = (exercise: Exercise): boolean =>
 const rejectedStale = (itemId: ItemId) =>
   new LearningStorageError({ kind: 'stale-state', itemId, message: `The state of ${itemId} keeps changing in another tab` });
 
+/**
+ * The second line under the shell's headline, which already says the progress was not saved. A kind
+ * without its own advice gets no second line, so the headline is not repeated.
+ */
 const describeError = (error: unknown): { message: string; retryable: boolean } => {
   if (isLearningStorageError(error)) {
-    return { message: ERROR_MESSAGE[error.error.kind] ?? 'No se pudo guardar el progreso.', retryable: error.retryable };
+    return { message: ERROR_MESSAGE[error.error.kind] ?? '', retryable: error.retryable };
   }
   return { message: 'Algo ha fallado en la sesión.', retryable: false };
 };
@@ -336,6 +341,13 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   /** Bumped whenever the screen moves, so a stale auto-advance does nothing. */
   let shownToken = 0;
 
+  /**
+   * Set by the first audio that fails to play. The device said it could speak, but this session
+   * stops trusting it and runs without audio, so the learner does not skip card after card.
+   */
+  let speechBroken = false;
+  const speechOn = (): boolean => !speechBroken && rt.speechAvailable();
+
   const entryAt = (index: number): QueueEntry | null => session?.queue[index] ?? null;
   const current = (): QueueEntry | null => (session ? entryAt(session.position) : null);
 
@@ -346,7 +358,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       const state = rt.states().get(id);
       return (state !== undefined && state.state !== 'new') || rt.itemEvents(id).some((event) => event.type === 'exposure');
     },
-    speechAvailable: rt.speechAvailable(),
+    speechAvailable: speechOn(),
     recentEvidence: effectiveItemEvents(rt.itemEvents(itemId), itemId).flatMap((event) => ('evidence' in event ? event.evidence : [])),
     random,
   });
@@ -419,7 +431,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       revealed: !!attempt?.actions.some((action) => action.type === 'reveal'),
       position: index,
       total: session?.queue.length ?? 0,
-      speechAvailable: rt.speechAvailable(),
+      speechAvailable: speechOn(),
       error: null,
       inputError: null,
       canClaimKnown: state === 'presenting' && claimAvailable(entry),
@@ -543,6 +555,16 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   };
 
   /**
+   * For writes that are not re-evaluated (exposures, a stale attempt closed on resume): when another
+   * tab moved the session on, this tab takes the stored session and the write is dropped.
+   */
+  const adoptOnStale = (snapshot: SessionState, itemId: ItemId) => async () => {
+    await store.reload();
+    if (session !== snapshot || (await adoptStored())) return;
+    throw rejectedStale(itemId);
+  };
+
+  /**
    * Evaluates the open attempt and writes its event, the item's state and the advanced session at once.
    * The write carries the state the evaluation read; if another tab changed it meanwhile, the store
    * reloads and the answer is evaluated again once, unless the other tab already moved past this card.
@@ -632,7 +654,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       if (staleRetries <= 0) throw rejectedStale(entry.itemId);
       submit(invalidation, staleRetries - 1);
     };
-    commit({ event, nextState, session: next, basedOn: itemState }, () => {
+    commit({ event, nextState, session: next, basedOn: itemState, sessionPosition: before.position }, () => {
       session = next;
       attempt = submitted;
       undo = { eventId: submitted.eventId, voidId: rt.newId(), before, attemptId: submitted.id };
@@ -758,12 +780,13 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         content: contentReferenceOf(content),
         card: exposureCard(entry.itemId, content, 'already-known', context(entry.itemId)),
       };
+      const before = session;
       const next: SessionState = { ...session, queue: queueAfter };
-      commit({ event, nextState: practiceNextState(entry.itemId, event), session: next }, () => {
+      commit({ event, nextState: practiceNextState(entry.itemId, event), session: next, sessionPosition: before.position }, () => {
         session = next;
         undo = null;
         present();
-      });
+      }, adoptOnStale(before, entry.itemId));
     },
     continue() {
       if (!session) return;
@@ -786,13 +809,14 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         content: entry.content,
         card: entry.exposure,
       };
+      const before = session;
       const position = session.position + 1;
       const next: SessionState = { ...session, position, status: position >= session.queue.length ? 'completed' : 'active' };
-      commit({ event, nextState: practiceNextState(entry.itemId, event), session: next }, () => {
+      commit({ event, nextState: practiceNextState(entry.itemId, event), session: next, sessionPosition: before.position }, () => {
         session = next;
         undo = null;
         present();
-      });
+      }, adoptOnStale(before, entry.itemId));
     },
     undoLast() {
       if (!session || !undo) return;
@@ -834,7 +858,17 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       }, true);
     },
     audioFailed() {
-      if (!exercise()) return;
+      if (!exercise() || !session) return;
+      speechBroken = true;
+      setView('speechAvailable', false);
+      // The cards still to come that need audio are chosen again, now without it.
+      const from = session.position;
+      session = {
+        ...session,
+        queue: session.queue.map((entry, index) =>
+          index > from && entry.exercise?.cue === 'audio' ? buildEntry(cardOf(entry)) ?? entry : entry,
+        ),
+      };
       record({ type: 'answer', at: rt.clock(), answer: null, selectedOptionId: null, evaluation: { outcome: 'invalid', reason: 'technical-error' } }, true);
     },
   };
@@ -967,11 +1001,12 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       queue: [...regenerated],
       attempts: session.attempts.map((other) => (other.id === stale.id ? { ...stale, status: 'submitted' } : other)),
     };
-    commit({ event, nextState: practiceNextState(entry.itemId, event), session: next }, () => {
+    const before = session;
+    commit({ event, nextState: practiceNextState(entry.itemId, event), session: next, sessionPosition: before.position }, () => {
       session = next;
       attempt = null;
       present();
-    });
+    }, adoptOnStale(before, entry.itemId));
   };
 
   const summary = (): LearningSessionSummary => {

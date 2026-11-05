@@ -5,6 +5,7 @@ import type { ItemContent } from '../../../src/domain/learning/exercises';
 import type { PoolItem } from '../../../src/domain/learning/sessions';
 import type { ItemId } from '../../../src/domain/learning/types';
 import { characterStore } from '../../../src/stores/characterStore';
+import { vocabularyStore } from '../../../src/stores/vocabularyStore';
 import { characterItemId, characterOf, type LearningStore } from '../../../src/stores/learningStore';
 import { DAY, environment, itemOf, POOL_WORDS, type Env } from '../stores/fixtures';
 import { answerOnScreen, withStore } from './harness';
@@ -150,6 +151,20 @@ describe('the word review page over the learning store', () => {
     expect(await screen.findByText('Aún no hay palabras que repasar')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Aprender palabras nuevas' }));
     expect(onPractice).toHaveBeenCalledWith('__more__');
+  });
+
+  it('says a checked level is not downloaded when a topic has nothing else to study', async () => {
+    env = environment();
+    // The session's pool is empty, as when a topic's words all belong to a level still to download.
+    const store = env.store({ speechAvailable: () => false, pool: () => [] });
+    vocabularyStore.selectLists(['hsk-1', 'hsk-2']);
+    try {
+      open(store, { practiceId: 'topic:colores', resume: false });
+      expect(await screen.findByText('Nada que estudiar en este tema')).toBeTruthy();
+      expect(screen.getByText('Las palabras de HSK 2 no están descargadas en este dispositivo. Se descargarán cuando haya conexión.')).toBeTruthy();
+    } finally {
+      vocabularyStore.reset();
+    }
   });
 
   it('says a single word outside the checked lists cannot be studied here', async () => {

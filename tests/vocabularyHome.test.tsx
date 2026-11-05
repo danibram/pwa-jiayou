@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Home from '../src/pages/Home';
 import App from '../src/App';
 import { renderWithStore } from './fixtures/learningStore';
+import { vocabularyStore } from '../src/stores/vocabularyStore';
 
 vi.mock('../src/components/StrokeCanvas', () => ({ default: () => null }));
 vi.mock('../src/utils/strokeData', () => ({ loadStrokeData: async () => null }));
@@ -39,6 +40,28 @@ describe('vocabulary home', () => {
     expect(level2).toHaveAttribute('aria-checked', 'true');
     expect(JSON.parse(localStorage.getItem('jiayou-study-lists')!).selectedLists).toEqual(['hsk-1', 'hsk-2']);
     expect(screen.getByText(/De HSK 1 y 2/)).toBeTruthy();
+  });
+
+  it('says a checked level is not downloaded instead of claiming every word was seen', async () => {
+    localStorage.setItem('hsk-installed-levels', JSON.stringify([1]));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new TypeError('offline'));
+    vocabularyStore.selectLists(['hsk-1', 'hsk-2']);
+    try {
+      renderWithStore(() => <Home onNavigate={() => {}} />);
+      // "No se pudieron" when an earlier test left the app's own download failed.
+      expect(await screen.findByRole('alert')).toHaveTextContent(/^(Faltan por|No se pudieron) descargar las palabras de HSK 2\. Se descargarán cuando haya conexión\. Reintentar$/);
+      const level2 = screen.getByRole('checkbox', { name: /^HSK 2,/ });
+      expect(level2).toHaveAttribute('aria-label', expect.stringMatching(/sin descargar$/));
+      expect(level2).toHaveAttribute('aria-checked', 'false');
+      // Tapping the chip downloads the level again; it does not drop it from the selection.
+      fireEvent.click(level2);
+      expect(vocabularyStore.state.selectedLists).toEqual(['hsk-1', 'hsk-2']);
+      await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/^No se pudieron descargar las palabras de HSK 2\./));
+      expect(screen.queryByText(/Has visto todas/)).toBeNull();
+      expect(screen.queryByText(/Las palabras ya están/)).toBeNull();
+    } finally {
+      vocabularyStore.reset();
+    }
   });
 
   it('opens one topic with a tap and returns to it after viewing a word', async () => {

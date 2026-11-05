@@ -309,7 +309,7 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
       );
     },
 
-    async commitAnswer({ event: pending, nextState, session, basedOn }) {
+    async commitAnswer({ event: pending, nextState, session, basedOn, sessionPosition }) {
       let stamped: LearningEvent;
       try {
         if (!isRecord(pending)) throw rejected('invalid-event', 'An event must be an object');
@@ -348,6 +348,18 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
                 itemId: stamped.itemId,
                 message: `The state of ${stamped.itemId} changed since the answer was evaluated`,
               });
+            }
+            if (session && sessionPosition !== undefined) {
+              // A practice answer may leave the item's state as it was, so the session's own position
+              // is what tells a second tab that this card was already answered.
+              const storedSession = (await request(tx.objectStore(STORES.sessions).get(session.id))) as SessionState | undefined;
+              if (storedSession && storedSession.position !== sessionPosition) {
+                throw new LearningStorageError({
+                  kind: 'stale-state',
+                  itemId: stamped.itemId,
+                  message: `Session ${session.id} moved to card ${storedSession.position} while this tab answered card ${sessionPosition}`,
+                });
+              }
             }
             const meta = tx.objectStore(STORES.meta);
             const sequence = await readSequence(meta);

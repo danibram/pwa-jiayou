@@ -12,6 +12,7 @@ import { levelRank } from '../utils/wordOrder';
 import { stopSpeech } from '../utils/speech';
 import { ALL_ID, MORE_ID, sessionTarget } from '../utils/wordSessions';
 import { createLearningSession } from '../stores/learningSessionStore';
+import { vocabularyStore } from '../stores/vocabularyStore';
 import type { ItemId } from '../domain/learning/types';
 
 interface Props {
@@ -139,6 +140,9 @@ const VocabularyReview: Component<Props> = (props) => {
     if (leftOut('pending-elsewhere')) return 'Tienes palabras pendientes en Hoy. Repásalas y después sigue aquí con las nuevas.';
     if (leftOut('tomorrow-load')) return 'Las palabras nuevas vuelven cuando bajen los repasos.';
     if (leftOut('content-unavailable')) return 'Algunas palabras todavía no están descargadas en este dispositivo.';
+    // None of the words of a checked level that never arrived is in the plan, so nothing above says so.
+    const missing = vocabularyStore.missingLabel();
+    if (missing && target.mode !== 'weak') return `Las palabras de ${missing} no están descargadas en este dispositivo. Se descargarán cuando haya conexión.`;
     if (target.mode === 'topic') return `Marca otro nivel en Inicio para traer más palabras de ${many ? 'estos temas' : 'este tema'}.`;
     if (target.mode === 'review-all') return 'El repaso solo pregunta las palabras que ya has visto. Empieza aprendiendo unas pocas.';
     if (target.mode === 'weak') return 'Ninguna palabra que hayas fallado sigue floja.';
