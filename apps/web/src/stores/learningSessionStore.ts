@@ -49,6 +49,10 @@ import {
   type PendingEvent,
 } from '../persistence/learning';
 import { contentReferenceOf, learningStore, type LearningRuntime, type LearningStore } from './learningStore';
+// The typed answer's report decides whether a right answer has a note worth stopping for.
+import { typedReport } from '../components/learning/present';
+
+const nothingToPoint = (report: ReturnType<typeof typedReport>): boolean => report.summary === null && report.lines.length === 0;
 import { wordItemId } from '@jiayou/learning/items';
 
 // --- The UI seam. Components build against these types; keep them stable. ---
@@ -94,10 +98,32 @@ export interface LearningSessionView {
   canClaimKnown: boolean;
   /** The first teaching of a word, with today's "Ya la sé" claims used up. */
   claimsUsedUp: boolean;
+  /**
+   * New on every card put on screen: the next card, the check after "Ya la sé", the card an undo
+   * brings back. Cards remount on it and pass it to `continue`, `knowIt` and `openLesson`, so a tap,
+   * key or timer meant for the card before does nothing on this one.
+   */
+  cardKey: string;
+  /**
+   * The step of a teaching card, null on any other. `ask` shows only the characters with "Ya la sé"
+   * and "Enséñamela"; `open` shows the lesson and Continuar. `again` marks a word taught before
+   * (a reteach, or the lesson after a missed practice), which never asks.
+   */
+  lesson: { mode: 'ask' | 'open'; again: boolean } | null;
+  /** The check right after "Ya la sé": the meaning among options, one tap that holds the claim or not. */
+  claimedCheck: boolean;
+  /**
+   * How a result leaves. One rule: an answer right without help never stops, a miss always does.
+   * `flash` shows the right answer for `flashMs` and moves on by itself (Continuar skips the wait);
+   * `wait` stops on the answer and the word's sheet until Continuar. A self-assessed card rated Bien
+   * or Fácil has no result step at all: the learner already saw the answer.
+   */
+  after: 'wait' | 'flash';
 }
 
 /**
- * What the UI may do. Calls that do not fit the current state are ignored.
+ * What the UI may do. Calls that do not fit the current state are ignored. The ones that take a
+ * `cardKey` also ignore a key that is not `view.cardKey`; without one they act on the card on screen.
  *
  * - `answer` on a multiple-choice card: `optionId` picks an option, graded correct when the option
  *   shows the item's own content. A wrong pick stays on the card (state `presenting`, the action
@@ -115,8 +141,10 @@ export interface LearningSessionView {
  * - `hint` records a hint; the exercise builder says whether it reveals the answer.
  * - `drawing` ends a writing card with the stroke checker's mistakes.
  * - `knowIt` is "Ya la sé" on a teaching card: it writes an `already-known` exposure and turns the
- *   card into a meaning check in place.
- * - `continue` moves on after feedback, and on a teaching card writes its exposure and moves on.
+ *   card into a meaning check in place, already revealed.
+ * - `openLesson` is "Enséñamela": it opens the lesson of a teaching card that asks first. Nothing is
+ *   written until Continuar.
+ * - `continue` moves on after feedback, and on an open lesson writes its exposure and moves on.
  * - `undoLast` voids the last answer while its feedback is shown, or before the next card is
  *   answered, and asks that card again.
  * - `pause`/`resume` only change the view; every action is already saved.
@@ -130,8 +158,9 @@ export interface LearningSessionActions {
   hint(hint: Hint): void;
   selfAssess(rating: Rating): void;
   drawing(input: { mistakes: number }): void;
-  knowIt(): void;
-  continue(): void;
+  knowIt(cardKey?: string): void;
+  openLesson(cardKey?: string): void;
+  continue(cardKey?: string): void;
   undoLast(): void;
   pause(): void;
   resume(): void;
@@ -160,7 +189,12 @@ export interface LearningSessionOptions {
   seed?: number;
   /** Resume the stored active session of this mode when its scope matches. Defaults to true. */
   resume?: boolean;
+  /** How long a right answer stays before the next card. Defaults to `FLASH_MS`, 0 under test. */
+  flashMs?: number;
 }
+
+/** How long a right answer stays on screen: long enough to see it turn green, not to wait on it. */
+export const FLASH_MS = 700;
 
 export interface LearningSession {
   view: LearningSessionView;
@@ -288,6 +322,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   const { mode } = options;
   const scope: SessionScope = options.scope ?? { kind: 'all' };
   const store = options.store ?? learningStore;
+  const flashMs = options.flashMs ?? (import.meta.env.MODE === 'test' ? 0 : FLASH_MS);
 
   const [view, setRaw] = createStore<LearningSessionView>({
     state: 'loading',
@@ -303,6 +338,10 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     canUndo: false,
     canClaimKnown: false,
     claimsUsedUp: false,
+    cardKey: '',
+    lesson: null,
+    claimedCheck: false,
+    after: 'wait',
   });
 
   let rt: LearningRuntime;
@@ -316,6 +355,10 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   /** Writes run one after another, so a draft never lands after the answer it precedes. */
   let queue: Promise<unknown> = Promise.resolve();
   let undo: { eventId: string; voidId: string; before: SessionState; attemptId: string } | null = null;
+  /** Counts the cards put on screen, for `view.cardKey`. */
+  let presented = 0;
+  /** "Enséñamela" on the teaching card on screen. Not stored: a reload asks again. */
+  let lessonOpened = false;
 
   const undoable = (): boolean =>
     undo !== null && (view.state === 'feedback' || (view.state === 'presenting' && (!attempt || attempt.actions.length === 0)));
@@ -396,23 +439,39 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   const claimable = (entry: QueueEntry | null): entry is QueueEntry => !!entry && isClaimable(entry);
   const claimAvailable = (entry: QueueEntry | null): boolean => !!entry && canClaimKnown(entry, claimsToday());
 
-  const show = (state: LearningSessionState, index: number) => {
+  /** The teaching step of the card on screen, null when it is not a teaching card. */
+  const lessonOf = (entry: QueueEntry | null): LearningSessionView['lesson'] => {
+    if (!entry?.exposure || entry.intent !== 'teach') return null;
+    const asks = claimAvailable(entry) && !lessonOpened;
+    return { mode: asks ? 'ask' : 'open', again: entry.reason === 'reteach' || entry.reason === 'teach-again' };
+  };
+
+  /** Puts a fresh card on screen in one write, so no field of the card before shows with it. */
+  const show = (index: number) => {
     const entry = entryAt(index);
+    presented += 1;
     setView({
-      state,
+      state: 'presenting',
       selection: entry ? plain(selectionOf(entry)) : null,
       actions: plain(attempt && entry?.exercise ? [...attempt.actions] : []),
       revealed: !!attempt?.actions.some((action) => action.type === 'reveal'),
+      feedback: null,
       position: index,
       total: session?.queue.length ?? 0,
       speechAvailable: speechOn(),
       error: null,
       inputError: null,
-      canClaimKnown: state === 'presenting' && claimAvailable(entry),
-      claimsUsedUp: state === 'presenting' && claimable(entry) && !claimAvailable(entry),
+      canClaimKnown: claimAvailable(entry),
+      claimsUsedUp: claimable(entry) && !claimAvailable(entry),
+      cardKey: `card-${presented}`,
+      lesson: lessonOf(entry),
+      claimedCheck: entry?.intent === 'already-known-check',
+      after: 'wait',
     });
-    if (state !== 'feedback') setView('feedback', null);
   };
+
+  /** A call from a card that is no longer on screen. */
+  const staleKey = (cardKey: string | undefined): boolean => cardKey !== undefined && cardKey !== view.cardKey;
 
   const fail = (error: unknown, write: (() => Promise<void>) | null) => {
     const described = describeError(error);
@@ -455,10 +514,12 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         session = done;
         run(() => rt.repo.saveAttemptDraft(done), false);
       }
-      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null, canClaimKnown: false, claimsUsedUp: false });
+      presented += 1;
+      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null, canClaimKnown: false, claimsUsedUp: false, cardKey: `card-${presented}`, lesson: null, claimedCheck: false, after: 'wait' });
       return;
     }
     attempt = null;
+    lessonOpened = false;
     if (entry.exercise) {
       const open = session.attempts.find(
         (candidate) => candidate.status === 'in-progress' && candidate.itemId === entry.itemId && candidate.exercise.id === entry.exercise!.id,
@@ -475,7 +536,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       };
       session = withAttempt(session, attempt);
     }
-    show('presenting', session.position);
+    show(session.position);
   };
 
   /** The cached state after a non-rating event: an unassisted correct practice after teaching sets `eligibleFrom` (P1). */
@@ -622,6 +683,17 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       recorded: result.kind,
     };
     const shown = before.position;
+    // Bien or Fácil on a self-assessed card: the learner saw the answer and knew it, so no result step.
+    const knewIt = exercise.grading === 'self-assessment' &&
+      submitted.actions.some((action) => action.type === 'self-assessment' && (action.rating === 'good' || action.rating === 'easy'));
+    // Right on the first answer with no hint: the right answer shows for a moment and the card moves on.
+    // A typed answer that was right but has something to point out (a tone that did not count,
+    // another word that also fits) stops, so the note is read.
+    const typed = isTypedAnswerExercise(exercise);
+    const firstTry = (exercise.format === 'multiple-choice' || typed) &&
+      feedback.outcome === 'correct' &&
+      !submitted.actions.some((action) => action.type === 'hint' || (action.type === 'answer' && action.evaluation.outcome !== 'correct')) &&
+      (!typed || nothingToPoint(typedReport(exercise, submitted.actions)));
     const onStale = async () => {
       await store.reload();
       // Another tab's answer already reached this tab and moved it on: this answer is dropped.
@@ -633,8 +705,26 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       session = next;
       attempt = submitted;
       undo = { eventId: submitted.eventId, voidId: rt.newId(), before, attemptId: submitted.id };
-        setView({ state: 'feedback', feedback, total: next.queue.length, position: shown, actions: plain([...submitted.actions]), error: null });
+      if (knewIt && !invalidation) {
+        present();
+        return;
+      }
+      const flash = firstTry && !invalidation;
+      setView({ state: 'feedback', feedback, total: next.queue.length, position: shown, actions: plain([...submitted.actions]), error: null, after: flash ? 'flash' : 'wait' });
+      if (flash) moveOnAfterFlash();
     }, onStale);
+  };
+
+  /**
+   * Leaves a `flash` result once it has been seen. It waits in the write queue, so `idle()` covers it,
+   * and does nothing if the learner already moved on, undid it or paused meanwhile.
+   */
+  const moveOnAfterFlash = (): void => {
+    const key = view.cardKey;
+    run(async () => {
+      if (flashMs > 0) await new Promise((resolve) => setTimeout(resolve, flashMs));
+      if (view.state === 'feedback' && view.cardKey === key) present();
+    }, false);
   };
 
   const record = (action: AttemptAction, end: boolean): void => {
@@ -733,8 +823,9 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       const outcome = mistakes > WRITING_FROM_MEMORY.hardMaxMistakes ? 'incorrect' : 'correct';
       record({ type: 'drawing', at: rt.clock(), mistakes, evaluation: { outcome } }, true);
     },
-    knowIt() {
+    knowIt(cardKey) {
       const entry = current();
+      if (staleKey(cardKey) || view.lesson?.mode !== 'ask') return;
       if (view.state !== 'presenting' || !session || !entry || !claimAvailable(entry)) return;
       const content = rt.contentFor(entry.itemId);
       if (!content) return;
@@ -763,8 +854,14 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         present();
       }, adoptOnStale(before, entry.itemId));
     },
-    continue() {
-      if (!session) return;
+    openLesson(cardKey) {
+      if (staleKey(cardKey) || view.state !== 'presenting' || view.lesson?.mode !== 'ask') return;
+      lessonOpened = true;
+      // The answer is on screen now, so the claim is gone.
+      setView({ lesson: { ...view.lesson, mode: 'open' }, canClaimKnown: false });
+    },
+    continue(cardKey) {
+      if (!session || staleKey(cardKey)) return;
       if (view.state === 'feedback') {
         present();
         return;

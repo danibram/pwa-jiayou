@@ -32,6 +32,8 @@ export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'w
   let next: 'choice' | 'recall' | null = null;
   let typed = false;
   await waitFor(() => {
+    // A right last answer moves on by itself, so the session may end while this waits.
+    if (screen.queryByTestId('session-summary')) return;
     // A first lesson opens with "Enséñamela" before its Continuar.
     const teach = enabled('Enséñamela');
     if (teach) fireEvent.click(teach);

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { STUDY_RULES, type LearningEvent } from '@jiayou/learning/types';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
-import { advanceTo, environment, type Env } from './fixtures';
+import { advanceTo, environment, rightOption, type Env } from './fixtures';
 
 // The fixture pool has twelve words, fewer than the real cap, so the cap is lowered here.
 vi.mock('@jiayou/learning/types', async (importOriginal) => {
@@ -19,8 +19,7 @@ const claim = async (session: LearningSession) => {
   session.actions.knowIt();
   await session.idle();
   expect(session.card()?.intent).toBe('already-known-check');
-  session.actions.reveal();
-  session.actions.selfAssess('good');
+  session.actions.answer({ optionId: rightOption(session) });
   await session.idle();
 };
 
@@ -85,24 +84,5 @@ describe('"Ya la sé"', () => {
     more.actions.knowIt();
     await more.idle();
     expect(store.events()).toHaveLength(before);
-  });
-});
-
-describe('self-assessment', () => {
-  it('does nothing until the answer is revealed', async () => {
-    env = environment();
-    const store = env.store();
-    const session = await env.session(store, { mode: 'more-words' });
-    session.actions.knowIt();
-    await session.idle();
-    const before = store.events().length;
-    session.actions.selfAssess('good');
-    await session.idle();
-    expect(store.events()).toHaveLength(before);
-    expect(session.view.state).toBe('presenting');
-    session.actions.reveal();
-    session.actions.selfAssess('good');
-    await session.idle();
-    expect(store.events().at(-1)).toMatchObject({ type: 'scheduled-review', evaluatorVersion: 'learning-evaluator@3' });
   });
 });

@@ -6,7 +6,7 @@ import ChoiceCard from './ChoiceCard';
 import RecallCard from './RecallCard';
 import TeachCard from './TeachCard';
 import TypedAnswerCard from './TypedAnswerCard';
-import { FeedbackNote } from './parts';
+import { createArmed, FeedbackNote } from './parts';
 import { RATING_KEY } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -22,8 +22,6 @@ interface LearningCardProps {
   details?: JSX.Element;
   /** Opens a character of the answered word over the card. */
   onCharacter?: (char: string) => void;
-  /** The card is the check right after "Ya la sé". */
-  claimedCheck?: boolean;
 }
 
 type ExerciseKind = Extract<ExerciseSelection, { kind: 'exercise' }>;
@@ -46,10 +44,19 @@ const InvalidCard: Component<{ view: LearningSessionView; actions: LearningSessi
         <button type="button" class="btn-ink h-14 w-full" disabled={props.view.state !== 'presenting'} onClick={() => props.actions.audioFailed()}>Saltar tarjeta</button>
       </Show>
     }>
-      <button type="button" class="btn-ink h-14 w-full" onClick={() => props.actions.continue()}>Continuar</button>
+      <button type="button" class="btn-ink h-14 w-full" onClick={() => props.actions.continue(props.view.cardKey)}>Continuar</button>
     </Show>
   </>
 );
+
+/**
+ * A card's taps count only after it has been on screen a moment, so a quick second tap on the card
+ * before (Continuar, an option) does not land on whatever this card has in the same spot.
+ */
+const Armed: Component<{ children: JSX.Element }> = (props) => {
+  const armed = createArmed();
+  return <div class="flex min-h-0 flex-1 flex-col" classList={{ 'pointer-events-none': !armed() }}>{props.children}</div>;
+};
 
 /**
  * Renders whatever card the session presents and reports what the learner does. It never decides
@@ -59,12 +66,11 @@ const InvalidCard: Component<{ view: LearningSessionView; actions: LearningSessi
  */
 const LearningCard: Component<LearningCardProps> = (props) => {
   const exercise = (): ExerciseKind | null => (props.view.selection?.kind === 'exercise' ? props.view.selection : null);
-  /** Each card mounts afresh, so local state (an audio error, autoplay) never leaks into the next one. */
-  const cardId = createMemo(() => {
-    const selection = props.view.selection;
-    if (!selection) return null;
-    return selection.kind === 'exercise' ? selection.exercise.id : selection.card.id;
-  });
+  /**
+   * Each card mounts afresh on its key, so local state (an audio error, autoplay, a hold) never
+   * leaks into the next one, and what a card reports carries the key it was shown with.
+   */
+  const cardKey = createMemo(() => (props.view.selection ? props.view.cardKey : null));
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
@@ -78,12 +84,12 @@ const LearningCard: Component<LearningCardProps> = (props) => {
     if (event.code === 'Space') {
       if (view.state === 'feedback') {
         event.preventDefault();
-        props.actions.continue();
+        props.actions.continue(view.cardKey);
       } else if (view.state === 'presenting' && selection.kind === 'exposure') {
-        // A lesson behind "Ya la sé" handles its own Space: it opens before it continues.
-        if (selection.card.reason === 'teaching' && view.canClaimKnown) return;
+        // A lesson that asks first opens before it continues, as the buttons do.
         event.preventDefault();
-        props.actions.continue();
+        if (view.lesson?.mode === 'ask') props.actions.openLesson(view.cardKey);
+        else props.actions.continue(view.cardKey);
       } else if (view.state === 'presenting' && selection.kind === 'exercise' && selection.exercise.grading === 'self-assessment' && !view.revealed) {
         event.preventDefault();
         props.actions.reveal();
@@ -100,7 +106,8 @@ const LearningCard: Component<LearningCardProps> = (props) => {
 
   return (
     <div class="flex min-h-0 flex-1 flex-col">
-      <Show when={cardId()} keyed>
+      <Show when={cardKey()} keyed>
+      <Armed>
       <Switch>
         <Match when={props.view.selection?.kind === 'exposure' && props.view.selection}>{(selection) => (
           <TeachCard card={(selection() as Extract<ExerciseSelection, { kind: 'exposure' }>).card} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
@@ -112,7 +119,7 @@ const LearningCard: Component<LearningCardProps> = (props) => {
           <TypedAnswerCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
         </Match>
         <Match when={exercise()?.exercise.format === 'free-recall' && exercise()!.exercise.grading === 'self-assessment'}>
-          <RecallCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} allowEasy={props.allowEasy ?? false} details={props.details} onCharacter={props.onCharacter} claimedCheck={props.claimedCheck} />
+          <RecallCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} allowEasy={props.allowEasy ?? false} details={props.details} onCharacter={props.onCharacter} />
         </Match>
         <Match when={exercise()?.exercise.format === 'multiple-choice'}>
           <ChoiceCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
@@ -121,6 +128,7 @@ const LearningCard: Component<LearningCardProps> = (props) => {
           <InvalidCard view={props.view} actions={props.actions} message="Esta tarjeta todavía no se puede mostrar." audioCue={false} />
         </Match>
       </Switch>
+      </Armed>
       </Show>
     </div>
   );

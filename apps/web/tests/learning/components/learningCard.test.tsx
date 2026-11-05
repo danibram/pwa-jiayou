@@ -12,10 +12,10 @@ vi.mock('../../../src/utils/speech', async (importOriginal) => ({
   speakWord: vi.fn(),
 }));
 
-const mount = (initial: LearningSessionView, options: { allowEasy?: boolean; claimedCheck?: boolean } = {}) => {
+const mount = (initial: LearningSessionView, options: { allowEasy?: boolean } = {}) => {
   const [current, setView] = createSignal(initial);
   const actions = sessionActions();
-  const result = render(() => <LearningCard view={current()} actions={actions} allowEasy={options.allowEasy} claimedCheck={options.claimedCheck} />);
+  const result = render(() => <LearningCard view={current()} actions={actions} allowEasy={options.allowEasy} />);
   return { ...result, actions, setView, current };
 };
 
@@ -26,41 +26,55 @@ beforeEach(() => {
 });
 
 describe('teach card', () => {
-  it('shows only the characters while "Ya la sé" is open, and the lesson after Enséñamela', () => {
+  it('shows only the characters while the lesson asks first, and the lesson once open', () => {
     const selection = teachSelection();
-    const { actions } = mount(view({ selection, canClaimKnown: true }));
+    const asking = view({ selection, canClaimKnown: true, lesson: { mode: 'ask', again: false } });
+    const { actions, setView } = mount(asking);
     expect(screen.getByRole('img', { name: '你好' })).toBeTruthy();
     expect(screen.queryByText(selection.card.answer.meaning)).toBeNull();
     expect(screen.queryByText(selection.card.answer.pinyin)).toBeNull();
     expect(speakWord).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'Ya la sé' }));
-    expect(actions.knowIt).toHaveBeenCalledOnce();
-
+    expect(actions.knowIt).toHaveBeenCalledWith('card-1');
     fireEvent.click(screen.getByRole('button', { name: 'Enséñamela' }));
+    expect(actions.openLesson).toHaveBeenCalledWith('card-1');
+
+    // The controller opens it.
+    setView({ ...asking, canClaimKnown: false, lesson: { mode: 'open', again: false } });
     expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
     expect(speakWord).toHaveBeenCalledOnce();
     expect(vi.mocked(speakWord).mock.calls[0].slice(0, 2)).toEqual([selection.card.audio!.pinyin, '你好']);
-    // The answer is on screen now, so the claim is gone.
     expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
-    expect(actions.continue).toHaveBeenCalledOnce();
-    expect(actions.knowIt).toHaveBeenCalledOnce();
+    expect(actions.continue).toHaveBeenCalledWith('card-1');
   });
 
-  it('opens a closed lesson with Space before continuing, and closes the next card again', () => {
+  it('opens a lesson that asks with Space, and continues an open one', () => {
     const selection = teachSelection();
-    const { actions, setView } = mount(view({ selection, canClaimKnown: true }));
+    const { actions, setView } = mount(view({ selection, canClaimKnown: true, lesson: { mode: 'ask', again: false } }));
     fireEvent.keyDown(window, { code: 'Space' });
+    expect(actions.openLesson).toHaveBeenCalledWith('card-1');
     expect(actions.continue).not.toHaveBeenCalled();
-    expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
+    setView(view({ selection, lesson: { mode: 'open', again: false } }));
     fireEvent.keyDown(window, { code: 'Space' });
-    expect(actions.continue).toHaveBeenCalledOnce();
+    expect(actions.continue).toHaveBeenCalledWith('card-1');
+  });
 
-    vi.mocked(speakWord).mockClear();
-    const next = { ...selection, card: { ...selection.card, id: `${selection.card.id}-next` } };
-    setView(view({ selection: next, canClaimKnown: true }));
-    expect(screen.queryByText(selection.card.answer.meaning)).toBeNull();
-    expect(speakWord).not.toHaveBeenCalled();
+  it('reports each tap with the key of the card on screen', () => {
+    const selection = teachSelection();
+    const { actions, setView } = mount(view({ selection, lesson: { mode: 'open', again: false } }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(actions.continue).toHaveBeenLastCalledWith('card-1');
+    setView(view({ selection, cardKey: 'card-2', lesson: { mode: 'open', again: false } }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(actions.continue).toHaveBeenLastCalledWith('card-2');
+  });
+
+  it('says a reteach is a word seen before', () => {
+    mount(view({ selection: teachSelection(), lesson: { mode: 'open', again: true } }));
+    expect(screen.getByText('Otra vez')).toBeTruthy();
+    expect(screen.getByTestId('teach-again')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
   });
 
   it('says why "Ya la sé" is gone once the day\'s claims are used up', () => {
@@ -71,19 +85,13 @@ describe('teach card', () => {
 
   it('shows the lesson at once, with Continuar only, when no claim is open', () => {
     const selection = teachSelection();
-    const { actions } = mount(view({ selection, canClaimKnown: false }));
+    const { actions } = mount(view({ selection, canClaimKnown: false, lesson: { mode: 'open', again: false } }));
     expect(screen.queryByTestId('claims-used-up')).toBeNull();
+    expect(screen.queryByTestId('teach-again')).toBeNull();
     expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
     expect(speakWord).toHaveBeenCalledOnce();
     expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Enséñamela' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
-    expect(actions.continue).toHaveBeenCalledOnce();
-  });
-
-  it('offers no claim once the exposure is recorded', () => {
-    const { actions } = mount(view({ selection: teachSelection(), state: 'feedback', feedback: { outcome: 'correct', rating: null, recorded: 'exposure' } }));
-    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(actions.continue).toHaveBeenCalledOnce();
   });
@@ -121,54 +129,19 @@ describe('self-assessed recall', () => {
     }
   });
 
-  it('opens the "Ya la sé" check on the answer and rates Bien by itself unless the card is touched', () => {
-    vi.useFakeTimers();
-    try {
-      const selection = meaningSelection();
-      const { actions, setView, current } = mount(view({ selection }), { claimedCheck: true });
-      // No question to reveal: the claim already came before the answer.
-      expect(actions.reveal).toHaveBeenCalledOnce();
-      setView({ ...current(), revealed: true, actions: [{ type: 'reveal', at: 1 }] });
-      expect(screen.getByText(selection.exercise.answer!.meaning)).toBeTruthy();
-      expect(screen.getByTestId('auto-continue')).toBeTruthy();
-      vi.advanceTimersByTime(4_000);
-      expect(actions.selfAssess).toHaveBeenLastCalledWith('good');
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('stops the automatic Bien when the learner touches the card, so they can pick another rating', () => {
-    vi.useFakeTimers();
-    try {
-      const selection = meaningSelection();
-      mount(view({ selection, revealed: true, actions: [{ type: 'reveal', at: 1 }] }), { claimedCheck: true });
-      fireEvent.pointerDown(screen.getByTestId('card-scroll'));
-      expect(screen.queryByTestId('auto-continue')).toBeNull();
-      vi.advanceTimersByTime(10_000);
-      // Nothing was rated for the learner.
-      const group = screen.getByRole('group', { name: '¿Lo recordabas?' });
-      expect(within(group).getByRole('button', { name: /^Otra vez/ })).toBeEnabled();
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('goes straight to the next card after Bien, and stops on the answer after Otra vez', () => {
+  it('stops on the answer after Otra vez and waits for Continuar', () => {
     const selection = meaningSelection();
-    const rated = (rating: 'good' | 'again') => view({
+    const { actions } = mount(view({
       selection,
       state: 'feedback',
       revealed: true,
-      actions: [{ type: 'reveal', at: 1 }, { type: 'self-assessment', at: 2, rating }],
-      feedback: { outcome: rating === 'good' ? 'correct' : 'incorrect', rating, recorded: 'scheduled-review' },
-    });
-    const good = mount(rated('good'));
-    expect(good.actions.continue).toHaveBeenCalledOnce();
-    good.unmount();
-    const again = mount(rated('again'));
-    expect(again.actions.continue).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'Continuar' })).toBeTruthy();
+      actions: [{ type: 'reveal', at: 1 }, { type: 'self-assessment', at: 2, rating: 'again' }],
+      feedback: { outcome: 'incorrect', rating: 'again', recorded: 'scheduled-review' },
+    }));
+    expect(actions.continue).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('auto-continue')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(actions.continue).toHaveBeenCalledWith('card-1');
   });
 
   it('offers Fácil only when allowed, and rates from the keyboard', () => {
@@ -260,6 +233,32 @@ describe('self-assessed recall', () => {
 });
 
 describe('multiple choice', () => {
+  it('keeps the options on a right first pick, the right one marked, with nothing to tap', () => {
+    const selection = practiceSelection('recognize');
+    const right = selection.exercise.options.find((option) => option.contentId === selection.content.contentId)!;
+    const answered = (after: 'wait' | 'flash') => view({
+      selection,
+      state: 'feedback',
+      actions: [optionAnswer(right.id, 'correct')],
+      feedback: { outcome: 'correct', rating: null, recorded: 'practice' },
+      after,
+    });
+    const flashing = mount(answered('flash'));
+    expect(screen.getByRole('group', { name: /^Elige/ })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Continuar' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'No lo sé' })).toBeDisabled();
+    flashing.unmount();
+    const waiting = mount(answered('wait'));
+    expect(screen.queryByRole('group', { name: /^Elige/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(waiting.actions.continue).toHaveBeenCalledWith('card-1');
+  });
+
+  it('names the "Ya la sé" check', () => {
+    mount(view({ selection: practiceSelection('recognize'), claimedCheck: true }));
+    expect(screen.getByText('Compruébalo')).toBeTruthy();
+  });
+
   it('reports a wrong tile and then the right one as two answers', () => {
     const selection = practiceSelection('pick');
     const { actions, setView, current } = mount(view({ selection }));

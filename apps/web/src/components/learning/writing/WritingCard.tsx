@@ -1,4 +1,4 @@
-import { Component, createEffect, createMemo, createSignal, Match, on, onCleanup, Show, Switch } from 'solid-js';
+import { Component, createMemo, createSignal, Match, onCleanup, Show, Switch } from 'solid-js';
 import { CANVAS_MAX } from './layout';
 import type { ExerciseSelection } from '@jiayou/learning/exercises';
 import type { Exercise, ExposureCard, RevealedAnswer, SpeechAudio } from '@jiayou/learning/types';
@@ -37,17 +37,20 @@ const Prompt: Component<{ eyebrow: string; answer: RevealedAnswer; pinyin: strin
 );
 
 /** Watching the strokes is the teaching exposure: nothing to answer, Continuar records it. */
-const WatchCard: Component<{ card: ExposureCard; view: WritingCardProps['view']; actions: WritingCardProps['actions'] }> = (props) => (
+const WatchCard: Component<{ card: ExposureCard; view: WritingCardProps['view']; actions: WritingCardProps['actions'] }> = (props) => {
+  const key = props.view.cardKey;
+  return (
   <>
     <div class="flex min-h-0 flex-1 flex-col overflow-y-auto py-2 [justify-content:safe_center]">
       <Prompt eyebrow="Carácter nuevo · mira el orden" answer={props.card.answer} pinyin={props.card.answer.pinyin} audio={props.card.audio} speech={props.view.speechAvailable} />
       <WatchStrokes char={props.card.answer.characters} slow />
     </div>
-    <button type="button" class="btn-ink mt-3 h-14 w-full" disabled={props.view.state !== 'presenting'} onClick={() => props.actions.continue()}>
+    <button type="button" class="btn-ink mt-3 h-14 w-full" disabled={props.view.state !== 'presenting'} onClick={() => props.actions.continue(key)}>
       Continuar
     </button>
   </>
-);
+  );
+};
 
 /**
  * Tracing (`stage: 'trace'`) and writing from memory (`stage: 'memory'`). The stroke checker counts
@@ -56,6 +59,7 @@ const WatchCard: Component<{ card: ExposureCard; view: WritingCardProps['view'];
  * canvas shows by itself after repeated misses.
  */
 const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; actions: WritingCardProps['actions'] }> = (props) => {
+  const key = props.view.cardKey;
   const memory = props.exercise.stage === 'memory';
   const answer = props.exercise.answer!;
   const [guide, setGuide] = createSignal(true);
@@ -69,17 +73,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
   onCleanup(() => clearTimeout(shakeTimer));
 
   const open = () => props.view.state === 'presenting';
-  // Undo voids the drawing and shows the same card again, through saving: the finished quiz starts over.
-  let answered = false;
-  createEffect(on(() => props.view.state, (state) => {
-    if (state === 'feedback') answered = true;
-    if (state !== 'presenting' || !answered) return;
-    answered = false;
-    setDone(0);
-    setMistakes(0);
-    setMissed([]);
-    canvas?.restartQuiz();
-  }));
+  // Undo puts the card on screen again under a new key, so it mounts a fresh canvas and quiz.
   const outline = () => outlineTaken(props.view.actions);
   const hinted = () => hintsIn(props.view.actions).length > 0;
   const feedback = () => (props.view.state === 'feedback' ? props.view.feedback : null);
@@ -229,7 +223,7 @@ const DrawCard: Component<{ exercise: Exercise; view: WritingCardProps['view']; 
                 <Show when={scheduleNote(shown(), false)}>{(note) => <p class="mt-0.5 text-xs text-ink-soft">{note()}</p>}</Show>
               </div>
             </div>
-            <button type="button" class="btn-ink h-14 w-full" onClick={() => props.actions.continue()}>
+            <button type="button" class="btn-ink h-14 w-full" onClick={() => props.actions.continue(key)}>
               Continuar
               <Icon name="next" size={18} />
             </button>
@@ -248,11 +242,7 @@ type ExerciseKind = Extract<ExerciseSelection, { kind: 'exercise' }>;
  * from a watched character or a result.
  */
 const WritingCard: Component<WritingCardProps> = (props) => {
-  const cardId = createMemo(() => {
-    const selection = props.view.selection;
-    if (!selection) return null;
-    return selection.kind === 'exercise' ? selection.exercise.id : selection.card.id;
-  });
+  const cardId = createMemo(() => (props.view.selection ? props.view.cardKey : null));
   const exercise = (): ExerciseKind | null => (props.view.selection?.kind === 'exercise' ? props.view.selection : null);
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -261,7 +251,7 @@ const WritingCard: Component<WritingCardProps> = (props) => {
     const view = props.view;
     if (view.state === 'feedback' || (view.state === 'presenting' && view.selection?.kind === 'exposure')) {
       event.preventDefault();
-      props.actions.continue();
+      props.actions.continue(view.cardKey);
     }
   };
   window.addEventListener('keydown', onKeyDown);

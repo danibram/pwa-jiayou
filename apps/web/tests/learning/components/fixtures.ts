@@ -62,6 +62,10 @@ export const view = (overrides: Partial<LearningSessionView> = {}): LearningSess
   claimsUsedUp: false,
   error: null,
   inputError: null,
+  cardKey: 'card-1',
+  lesson: null,
+  claimedCheck: false,
+  after: 'wait',
   ...overrides,
 });
 
@@ -72,6 +76,7 @@ export const sessionActions = (): { [K in keyof LearningSessionActions]: ReturnT
   selfAssess: vi.fn(),
   drawing: vi.fn(),
   knowIt: vi.fn(),
+  openLesson: vi.fn(),
   continue: vi.fn(),
   undoLast: vi.fn(),
   pause: vi.fn(),

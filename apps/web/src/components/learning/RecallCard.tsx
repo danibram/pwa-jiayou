@@ -2,7 +2,7 @@ import { Component, createEffect, JSX, on, Show } from 'solid-js';
 import type { Exercise } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import Pinyin from '../Pinyin';
-import { AnswerPanel, AudioButton, CardScroll, ContinueButton, createHold, FeedbackNote, HanziBlock, HintButton, RatingButtons, TakenHints } from './parts';
+import { AnswerPanel, AudioButton, CardScroll, ContinueButton, FeedbackNote, HanziBlock, HintButton, RatingButtons, TakenHints } from './parts';
 import { askedGloss, offeredHint, takenHints } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -13,8 +13,6 @@ interface RecallCardProps {
   allowEasy: boolean;
   details?: JSX.Element;
   onCharacter?: (char: string) => void;
-  /** The check right after "Ya la sé": the answer is shown at once and Bien is chosen unless held. */
-  claimedCheck?: boolean;
 }
 
 const EYEBROW = { characters: null, gloss: 'Significado → palabra', audio: 'Escucha' } as const;
@@ -31,21 +29,9 @@ const RecallCard: Component<RecallCardProps> = (props) => {
   const taken = () => takenHints(props.view.actions);
   const hintTaken = () => taken().some((hint) => hint.kind === 'pinyin');
   const cue = () => props.exercise.cue;
-  /** Rated Bien or Fácil: the learner knew it, so the answer goes by on its own unless held. */
-  const knew = () => props.view.actions.some((action) => action.type === 'self-assessment' && (action.rating === 'good' || action.rating === 'easy'));
-  // A touch or scroll holds the countdown once the answer is on screen, rated or not.
-  const { held, hold } = createHold(showAnswer);
-
-  // "Ya la sé" already claimed it: the check opens on the answer, not on a question to reveal.
-  createEffect(on(() => props.exercise.id, () => {
-    if (props.claimedCheck && props.view.state === 'presenting' && !props.view.revealed) props.actions.reveal();
-  }));
-
-  // Knowing it needs no results screen: Bien or Fácil goes straight to the next card. Otra vez and
-  // Difícil stop on the answer and the word's sheet. The header's undo still takes it back.
-  createEffect(on(() => props.view.state, (state) => {
-    if (state === 'feedback' && knew()) props.actions.continue();
-  }));
+  const key = props.view.cardKey;
+  // Bien and Fácil have no result step: the controller goes straight to the next card. Otra vez and
+  // Difícil stop on the answer and the word's sheet.
 
   // The sound is the question on a listening card, so it plays as the card opens. If it cannot
   // play, the card cannot be answered and the controller closes it as invalid.
@@ -57,7 +43,7 @@ const RecallCard: Component<RecallCardProps> = (props) => {
 
   return (
     <>
-      <CardScroll answered={showAnswer()} showDetails={showAnswer()} details={props.details} onHold={hold}>
+      <CardScroll showDetails={showAnswer()} details={props.details}>
         <Show when={answered() && props.view.feedback} fallback={
           <Show when={EYEBROW[cue()]}>{(label) => <p class="eyebrow mb-3">{label()}</p>}</Show>
         }>{(feedback) => <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} />}</Show>
@@ -99,12 +85,12 @@ const RecallCard: Component<RecallCardProps> = (props) => {
       </CardScroll>
 
       <Show when={!answered()} fallback={
-        <ContinueButton auto={knew()} held={held()} disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue()} />
+        <ContinueButton disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue(key)} />
       }>
         <Show when={props.view.revealed} fallback={
           <button type="button" class="btn-ink h-14 w-full" disabled={!open()} onClick={() => props.actions.reveal()}>Mostrar respuesta</button>
         }>
-          <RatingButtons allowEasy={props.allowEasy} disabled={!open()} autoGood={props.claimedCheck} held={held()} onRate={(rating) => props.actions.selfAssess(rating)} />
+          <RatingButtons allowEasy={props.allowEasy} disabled={!open()} onRate={(rating) => props.actions.selfAssess(rating)} />
         </Show>
       </Show>
     </>
