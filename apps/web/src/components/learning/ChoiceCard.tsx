@@ -2,7 +2,7 @@ import { Component, createEffect, For, JSX, on, Show } from 'solid-js';
 import type { Exercise } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import Pinyin from '../Pinyin';
-import { AnswerPanel, AudioButton, FeedbackNote, HanziBlock, HintButton, TakenHints } from './parts';
+import { AnswerPanel, AudioButton, CardScroll, ContinueButton, createArmed, createHold, FeedbackNote, HanziBlock, HintButton, TakenHints } from './parts';
 import { askedGloss, correctOptionId, offeredHint, takenHints, wrongOptionIds } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -11,6 +11,7 @@ interface ChoiceCardProps {
   view: LearningSessionView;
   actions: LearningSessionActions;
   details?: JSX.Element;
+  onCharacter?: (char: string) => void;
 }
 
 const EYEBROW = { characters: 'Palabra → significado', gloss: 'Significado → palabra', audio: 'Escucha' } as const;
@@ -31,6 +32,11 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
   const meaningTiles = () => cue() === 'characters';
   const hint = () => offeredHint(props.exercise);
   const taken = () => takenHints(props.view.actions);
+  /** Right on the first tap with no hint: the answer goes by on its own unless the learner holds it. */
+  const knew = () => props.view.feedback?.outcome === 'correct' && wrong().length === 0 && taken().length === 0;
+  const { held, hold } = createHold(answered);
+  const armed = createArmed();
+  const unknown = () => props.view.actions.some((action) => action.type === 'answer' && action.selectedOptionId === null);
   const optionText = (id: string) => props.exercise.options.find((option) => option.id === id)?.text ?? '';
 
   createEffect(on(() => props.exercise.id, () => {
@@ -47,11 +53,11 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
     const right = meaningTiles() ? answer.meaning : answer.characters;
     return (
       <>
-        Tocaste{' '}
+        Has elegido{' '}
         <Show when={meaningTiles()} fallback={<span class="font-hanzi text-base" lang="zh-CN">{optionText(first)}</span>}>
           «{optionText(first).toLowerCase()}»
         </Show>
-        . La respuesta es{' '}
+        . Era{' '}
         <Show when={meaningTiles()} fallback={<span class="font-hanzi text-base" lang="zh-CN">{right}</span>}>
           «{right.toLowerCase()}»
         </Show>
@@ -67,8 +73,11 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
 
   return (
     <>
-      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:[justify-content:safe_center]">
-        <p class="eyebrow mb-3">{EYEBROW[cue()]}</p>
+      <CardScroll answered={answered()} showDetails={showAnswer()} details={props.details} onHold={hold}>
+        {/* Once answered, the result leads: what happened comes before the word. */}
+        <Show when={answered() && props.view.feedback} fallback={<p class="eyebrow mb-3">{EYEBROW[cue()]}</p>}>{(feedback) => (
+          <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} mixUp={mixUp()} unknown={unknown()} />
+        )}</Show>
 
         <Show when={cue() === 'gloss' && !showAnswer()}>
           <p class="text-[1.75rem] font-semibold leading-snug text-balance first-letter:uppercase">{askedGloss(props.exercise.prompt)}</p>
@@ -84,7 +93,7 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
           />
         </Show>
         <Show when={(cue() === 'characters' || showAnswer()) && props.exercise.answer}>{(answer) => (
-          <HanziBlock characters={answer().characters} />
+          <HanziBlock characters={answer().characters} compact={showAnswer()} onCharacter={showAnswer() ? props.onCharacter : undefined} />
         )}</Show>
         <Show when={cue() === 'characters' && !showAnswer() && props.exercise.context}>{(context) => (
           <Pinyin word text={context()} class="mt-2 text-lg font-medium" />
@@ -92,14 +101,20 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
 
         <Show when={!showAnswer()} fallback={
           <Show when={props.exercise.answer}>{(answer) => (
-            <AnswerPanel answer={answer()} audio={props.exercise.audio} speechAvailable={props.view.speechAvailable} details={props.details} />
+            <AnswerPanel answer={answer()} audio={props.exercise.audio} speechAvailable={props.view.speechAvailable} />
           )}</Show>
         }>
           <TakenHints hints={taken()} />
-          <p class="mt-3 text-sm text-ink-soft">{props.exercise.prompt}</p>
+          {/* The hint sits beside the question, so the options keep the room on a short screen. */}
+          <div class="mt-2 flex min-h-11 items-center justify-center gap-1">
+            <p class="text-sm text-ink-soft">{props.exercise.prompt}</p>
+            <Show when={hint() && !taken().some((taken) => taken.kind === 'pinyin')}>
+              <HintButton hint={hint()!} disabled={!open()} onHint={(value) => props.actions.hint(value)} class="-my-1 px-2.5 text-ink-soft" />
+            </Show>
+          </div>
           <div
-            class="mt-4 grid w-full max-w-[20rem]"
-            classList={{ 'grid-cols-1 gap-2': meaningTiles(), 'grid-cols-2 gap-2.5': !meaningTiles() }}
+            class="mt-2 grid w-full max-w-[20rem]"
+            classList={{ 'grid-cols-1 gap-2 [@media(max-height:700px)]:grid-cols-2': meaningTiles(), 'grid-cols-2 gap-2.5': !meaningTiles() }}
             role="group"
             aria-label={meaningTiles() ? 'Elige el significado' : 'Elige la palabra'}
           >
@@ -108,7 +123,7 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
                 type="button"
                 class="tile flex items-center px-2 transition active:scale-[0.97]"
                 classList={{
-                  'min-h-12 justify-between gap-3 px-4 text-left': meaningTiles(),
+                  'min-h-12 justify-between gap-3 px-4 text-left [@media(max-height:700px)]:px-3': meaningTiles(),
                   'min-h-[4.5rem] flex-col justify-center': !meaningTiles(),
                   'border-seal/60 bg-seal-soft': tileState(option.id).wrong,
                   'border-jade/60 bg-jade/10': tileState(option.id).right,
@@ -128,24 +143,18 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
           <Show when={open() && wrong().length > 0}>
             <p role="status" class="mt-3 text-sm text-seal">{meaningTiles() ? 'Ese no.' : 'Esa no.'} Prueba otra vez.</p>
           </Show>
-          <Show when={hint() && !taken().some((taken) => taken.kind === 'pinyin')}>
-            <HintButton hint={hint()!} disabled={!open()} onHint={(value) => props.actions.hint(value)} />
-          </Show>
         </Show>
 
-        <Show when={answered() && props.view.feedback}>{(feedback) => (
-          <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} mixUp={mixUp()} />
-        )}</Show>
-      </div>
+      </CardScroll>
 
       <Show when={!answered()} fallback={
-        <button type="button" class="btn-ink h-14 w-full" disabled={props.view.state !== 'feedback'} onClick={() => props.actions.continue()}>Continuar</button>
+        <ContinueButton auto={knew()} held={held()} disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue()} />
       }>
         <button
           type="button"
           class="btn-quiet h-14 w-full"
           disabled={!open()}
-          onClick={() => props.actions.answer({ answer: null, optionId: null })}
+          onClick={() => { if (armed()) props.actions.answer({ answer: null, optionId: null }); }}
         >No lo sé</button>
       </Show>
     </>

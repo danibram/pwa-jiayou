@@ -33,6 +33,10 @@ interface CharacterDetailSheetProps {
   onOpenCharacter?: (character: string) => void;
   /** The word page the sheet opened from, left out of its word list. */
   currentWordId?: string;
+  /** Draws "Ver trazos" as a quiet button, for a sheet over a session whose own action is Continuar. */
+  quietStrokes?: boolean;
+  /** Back to the sheet this one was opened from. */
+  onBack?: () => void;
   /** Called after the drawer has slid away, however it was closed. */
   onClose: () => void;
 }
@@ -101,6 +105,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
       class="px-4"
       style={{ 'padding-bottom': 'max(env(safe-area-inset-bottom), 1.25rem)' }}
       onClose={() => props.onClose()}
+      onBack={props.onBack}
     >
 
       {/* The glyph is as tall as everything beside it, so the sheet has no empty corner. */}
@@ -113,7 +118,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
           onStrokeCount={setLoadedStrokes}
         />
         <div ref={(element) => (info = element)} class="min-w-0 flex-1">
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-2">
             <Pinyin text={char().pinyin} class="text-xl font-medium" />
             <Show when={canSpeak()}>
               <SpeakButton pinyin={char().pinyin} hanzi={char().character} />
@@ -235,7 +240,7 @@ const CharacterDetailSheet: Component<CharacterDetailSheetProps> = (props) => {
         }
       >
         <Show when={props.onStrokes}>
-          <button type="button" class="btn-ink mt-5 h-12 w-full text-sm" onClick={() => props.onStrokes?.()}>
+          <button type="button" class={`${props.quietStrokes ? 'btn-quiet' : 'btn-ink'} mt-5 h-12 w-full text-sm`} onClick={() => props.onStrokes?.()}>
             <Icon name="brush" size={16} />
             Ver trazos y escribirlo
           </button>

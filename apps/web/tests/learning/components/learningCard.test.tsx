@@ -12,10 +12,10 @@ vi.mock('../../../src/utils/speech', async (importOriginal) => ({
   speakWord: vi.fn(),
 }));
 
-const mount = (initial: LearningSessionView, options: { allowEasy?: boolean } = {}) => {
+const mount = (initial: LearningSessionView, options: { allowEasy?: boolean; claimedCheck?: boolean } = {}) => {
   const [current, setView] = createSignal(initial);
   const actions = sessionActions();
-  const result = render(() => <LearningCard view={current()} actions={actions} allowEasy={options.allowEasy} />);
+  const result = render(() => <LearningCard view={current()} actions={actions} allowEasy={options.allowEasy} claimedCheck={options.claimedCheck} />);
   return { ...result, actions, setView, current };
 };
 
@@ -121,6 +121,56 @@ describe('self-assessed recall', () => {
     }
   });
 
+  it('opens the "Ya la sé" check on the answer and rates Bien by itself unless the card is touched', () => {
+    vi.useFakeTimers();
+    try {
+      const selection = meaningSelection();
+      const { actions, setView, current } = mount(view({ selection }), { claimedCheck: true });
+      // No question to reveal: the claim already came before the answer.
+      expect(actions.reveal).toHaveBeenCalledOnce();
+      setView({ ...current(), revealed: true, actions: [{ type: 'reveal', at: 1 }] });
+      expect(screen.getByText(selection.exercise.answer!.meaning)).toBeTruthy();
+      expect(screen.getByTestId('auto-continue')).toBeTruthy();
+      vi.advanceTimersByTime(4_000);
+      expect(actions.selfAssess).toHaveBeenLastCalledWith('good');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('stops the automatic Bien when the learner touches the card, so they can pick another rating', () => {
+    vi.useFakeTimers();
+    try {
+      const selection = meaningSelection();
+      mount(view({ selection, revealed: true, actions: [{ type: 'reveal', at: 1 }] }), { claimedCheck: true });
+      fireEvent.pointerDown(screen.getByTestId('card-scroll'));
+      expect(screen.queryByTestId('auto-continue')).toBeNull();
+      vi.advanceTimersByTime(10_000);
+      // Nothing was rated for the learner.
+      const group = screen.getByRole('group', { name: '¿Lo recordabas?' });
+      expect(within(group).getByRole('button', { name: /^Otra vez/ })).toBeEnabled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('goes straight to the next card after Bien, and stops on the answer after Otra vez', () => {
+    const selection = meaningSelection();
+    const rated = (rating: 'good' | 'again') => view({
+      selection,
+      state: 'feedback',
+      revealed: true,
+      actions: [{ type: 'reveal', at: 1 }, { type: 'self-assessment', at: 2, rating }],
+      feedback: { outcome: rating === 'good' ? 'correct' : 'incorrect', rating, recorded: 'scheduled-review' },
+    });
+    const good = mount(rated('good'));
+    expect(good.actions.continue).toHaveBeenCalledOnce();
+    good.unmount();
+    const again = mount(rated('again'));
+    expect(again.actions.continue).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Continuar' })).toBeTruthy();
+  });
+
   it('offers Fácil only when allowed, and rates from the keyboard', () => {
     const selection = meaningSelection();
     const { actions } = mount(view({ selection, revealed: true }), { allowEasy: true });
@@ -176,7 +226,7 @@ describe('self-assessed recall', () => {
     expect(actions.audioFailed).toHaveBeenCalledOnce();
   });
 
-  it('says a practice answer does not move the schedule', () => {
+  it('keeps the practice note off the card: the summary says it once', () => {
     const selection = practiceSelection('reverse');
     const { actions } = mount(view({
       selection,
@@ -184,7 +234,7 @@ describe('self-assessed recall', () => {
       revealed: true,
       feedback: { outcome: 'correct', rating: null, recorded: 'practice' },
     }));
-    expect(screen.getByText('Esta práctica no cambia cuándo vuelve.')).toBeTruthy();
+    expect(screen.queryByText('Esta práctica no cambia cuándo vuelve.')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(actions.continue).toHaveBeenCalledOnce();
   });
@@ -235,8 +285,8 @@ describe('multiple choice', () => {
       feedback: { outcome: 'incorrect', rating: null, recorded: 'practice' },
     });
     const status = screen.getByRole('status');
-    expect(status.textContent).toContain(`Tocaste ${wrong.text}. La respuesta es 你好.`);
-    expect(status.textContent).toContain('Esta práctica no cambia cuándo vuelve.');
+    expect(status.textContent).toContain(`Has elegido ${wrong.text}. Era 你好.`);
+    expect(status.textContent).not.toContain('Esta práctica no cambia cuándo vuelve.');
   });
 
   it('reports No lo sé as an answer without an option', () => {
@@ -357,7 +407,6 @@ describe('typed answers', () => {
     mount(answeredView(pinyinCard(), 'nǐ hǎo', 'correct'));
     expect(screen.queryByLabelText('Qué ha fallado')).toBeNull();
     expect(screen.getByRole('status').textContent).toContain('Bien');
-    expect(screen.getByRole('status').textContent).toContain('Esta práctica no cambia cuándo vuelve.');
   });
 
   it('asks the reading from the Spanish without showing the characters', () => {

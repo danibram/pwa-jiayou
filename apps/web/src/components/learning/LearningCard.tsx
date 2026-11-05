@@ -20,6 +20,10 @@ interface LearningCardProps {
    * a word that shares a character, stroke tiles. The card itself only reads what the exercise stored.
    */
   details?: JSX.Element;
+  /** Opens a character of the answered word over the card. */
+  onCharacter?: (char: string) => void;
+  /** The card is the check right after "Ya la sé". */
+  claimedCheck?: boolean;
 }
 
 type ExerciseKind = Extract<ExerciseSelection, { kind: 'exercise' }>;
@@ -64,6 +68,8 @@ const LearningCard: Component<LearningCardProps> = (props) => {
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    // A sheet opened over the card (a character, a related word) owns the keys meanwhile.
+    if ('drawerOpen' in document.documentElement.dataset) return;
     const target = event.target;
     if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLButtonElement) return;
     const view = props.view;
@@ -97,19 +103,19 @@ const LearningCard: Component<LearningCardProps> = (props) => {
       <Show when={cardId()} keyed>
       <Switch>
         <Match when={props.view.selection?.kind === 'exposure' && props.view.selection}>{(selection) => (
-          <TeachCard card={(selection() as Extract<ExerciseSelection, { kind: 'exposure' }>).card} view={props.view} actions={props.actions} details={props.details} />
+          <TeachCard card={(selection() as Extract<ExerciseSelection, { kind: 'exposure' }>).card} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
         )}</Match>
         <Match when={exercise() && unplayable(exercise()!.exercise, props.view)}>
           <InvalidCard view={props.view} actions={props.actions} message="Este dispositivo no puede reproducir el audio de esta tarjeta." audioCue />
         </Match>
         <Match when={exercise() && isTypedAnswerExercise(exercise()!.exercise)}>
-          <TypedAnswerCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} />
+          <TypedAnswerCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
         </Match>
         <Match when={exercise()?.exercise.format === 'free-recall' && exercise()!.exercise.grading === 'self-assessment'}>
-          <RecallCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} allowEasy={props.allowEasy ?? false} details={props.details} />
+          <RecallCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} allowEasy={props.allowEasy ?? false} details={props.details} onCharacter={props.onCharacter} claimedCheck={props.claimedCheck} />
         </Match>
         <Match when={exercise()?.exercise.format === 'multiple-choice'}>
-          <ChoiceCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} />
+          <ChoiceCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} onCharacter={props.onCharacter} />
         </Match>
         <Match when={exercise()}>
           <InvalidCard view={props.view} actions={props.actions} message="Esta tarjeta todavía no se puede mostrar." audioCue={false} />

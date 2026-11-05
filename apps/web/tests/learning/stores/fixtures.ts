@@ -132,7 +132,7 @@ export const environment = (): Env => {
       return store;
     },
     async session(store, options) {
-      const session = createLearningSession({ seed: 7, autoAdvance: { setTimer: () => {} }, ...options, store });
+      const session = createLearningSession({ seed: 7, ...options, store });
       await session.ready;
       return session;
     },

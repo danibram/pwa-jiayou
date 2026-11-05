@@ -160,11 +160,6 @@ export interface LearningSessionOptions {
   seed?: number;
   /** Resume the stored active session of this mode when its scope matches. Defaults to true. */
   resume?: boolean;
-  /**
-   * After a correct first pick on a multiple-choice card the feedback moves on by itself after
-   * `delayMs` (800 by default). Tests inject the timer.
-   */
-  autoAdvance?: { delayMs?: number; setTimer?: (run: () => void, ms: number) => void };
 }
 
 export interface LearningSession {
@@ -330,10 +325,6 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     const next = undoable();
     if (view.canUndo !== next) setRaw('canUndo', next);
   }) as typeof setRaw;
-  const delayMs = options.autoAdvance?.delayMs ?? 800;
-  const setTimer = options.autoAdvance?.setTimer ?? ((run: () => void, ms: number) => void setTimeout(run, ms));
-  /** Bumped whenever the screen moves, so a stale auto-advance does nothing. */
-  let shownToken = 0;
 
   /**
    * Set by the first audio that fails to play. The device said it could speak, but this session
@@ -406,7 +397,6 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   const claimAvailable = (entry: QueueEntry | null): boolean => !!entry && canClaimKnown(entry, claimsToday());
 
   const show = (state: LearningSessionState, index: number) => {
-    shownToken += 1;
     const entry = entryAt(index);
     setView({
       state,
@@ -643,14 +633,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       session = next;
       attempt = submitted;
       undo = { eventId: submitted.eventId, voidId: rt.newId(), before, attemptId: submitted.id };
-      shownToken += 1;
-      setView({ state: 'feedback', feedback, total: next.queue.length, position: shown, actions: plain([...submitted.actions]), error: null });
-      if (exercise.format === 'multiple-choice' && feedback.outcome === 'correct') {
-        const token = shownToken;
-        setTimer(() => {
-          if (token === shownToken && view.state === 'feedback') present();
-        }, delayMs);
-      }
+        setView({ state: 'feedback', feedback, total: next.queue.length, position: shown, actions: plain([...submitted.actions]), error: null });
     }, onStale);
   };
 
