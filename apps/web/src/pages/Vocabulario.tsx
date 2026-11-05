@@ -1,5 +1,5 @@
 import { Component, createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import { formatPinyinWord } from '../utils/pinyin';
+import { formatPinyinWord } from '@jiayou/chinese';
 import SpeakButton from '../components/SpeakButton';
 import TopBar from '../components/TopBar';
 import Pinyin from '../components/Pinyin';
@@ -9,8 +9,8 @@ import ResultRow from '../components/ResultRow';
 import { statusWord, TopicBar, topicCountsLine, type StudyStatus, type TopicCounts } from '../components/TopicProgress';
 import { rankBy, type Searchable } from '../utils/searchRank';
 import { characterRecord, indexRowFor, searchCharacters } from '../utils/characterSearch';
-import { glossHead } from '../utils/glossDisplay';
-import { mainMeaning } from '../utils/meaning';
+import { glossHead } from '@jiayou/chinese';
+import { mainMeaning } from '@jiayou/chinese';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
 import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';

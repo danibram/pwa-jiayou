@@ -12,7 +12,7 @@ import {
   splitPinyin,
   syllableKey,
   toneOf,
-} from '../src/utils/pinyin';
+} from '@jiayou/chinese';
 
 const readings = () => {
   const bundled = JSON.parse(readFileSync('src/data/hsk1.json', 'utf8')) as { character: string; pinyin: string }[];

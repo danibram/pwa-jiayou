@@ -25,7 +25,7 @@ const setup = () => {
   writeFileSync(join(dir, 'content/version.json'), json({ version: 1, date: '2026-11-03', notes: 'Primera versión.' }));
   copyFileSync(join(root, 'apps/editor/lib/model.ts'), join(dir, 'apps/editor/lib/model.ts'));
   // Publication bundles the app's revision code to compute each entry's revision.
-  for (const path of ['apps/web/src/domain/learning/content', 'apps/web/src/domain/learning/types.ts', 'apps/web/src/utils/pinyin.ts', 'shared/pinyin']) cpSync(join(root, path), join(dir, path), { recursive: true });
+  for (const path of ['apps/web/src/domain/learning/content', 'apps/web/src/domain/learning/types.ts']) cpSync(join(root, path), join(dir, path), { recursive: true });
   symlinkSync(join(root, 'node_modules'), join(dir, 'node_modules'), 'dir');
   writeFileSync(join(dir, 'content/snapshot.json'), json(base));
   writeFileSync(join(dir, 'apps/web/src/data/topics.ts'), 'export const topics: Topic[] = [\n];\n');

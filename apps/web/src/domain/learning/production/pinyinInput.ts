@@ -1,4 +1,4 @@
-import type { Tone } from '../../../utils/pinyin';
+import type { Tone } from '@jiayou/chinese';
 
 /**
  * Names the rules in this file and in `pinyinAnswer.ts`: how typed pinyin is read, which tones a

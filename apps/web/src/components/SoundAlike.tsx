@@ -1,6 +1,6 @@
 import { Component, For, Show } from 'solid-js';
 import Pinyin from './Pinyin';
-import type { SoundMatch } from '../utils/soundAlike';
+import type { SoundMatch } from '@jiayou/chinese';
 
 export interface SoundAlikeItem {
   key: string;

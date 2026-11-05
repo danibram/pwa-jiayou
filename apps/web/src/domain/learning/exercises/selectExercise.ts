@@ -13,9 +13,9 @@ import {
   type SkillEvidence,
   type SpeechAudio,
 } from '../types';
-import { glossHead } from '../../../utils/glossDisplay';
+import { glossHead } from '@jiayou/chinese';
 import { buildProductionExercise, PRODUCTION_ROLES, type ProductionKind } from '../production/exercises';
-import { spokenMeaning } from '../../../utils/meaning';
+import { spokenMeaning } from '@jiayou/chinese';
 import { hasHomograph, hasHomophone, isFunctionWord, spokenReading } from './ambiguity';
 import { askGloss, displayGloss } from './glosses';
 import { buildOptions } from './options';
@@ -109,12 +109,7 @@ const wordAnswer = (word: WordEntry): RevealedAnswer => ({
 const characterMeaning = (character: CharacterContent): string =>
   capitalize(
     glossHead(
-      spokenMeaning({
-        definition: character.definition,
-        gloss: character.gloss,
-        pinyin: character.pinyin,
-        example: character.example ? { word: '', pinyin: '', es: character.example.es } : undefined,
-      }),
+      spokenMeaning(character),
     ),
   );
 

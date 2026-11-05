@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 import type { HskLevel } from '../types';
-import { withToneSandhi } from '../utils/pinyin';
+import { withToneSandhi } from '@jiayou/chinese';
 import type { WordRelation } from './wordRelations';
 import { isWordRelationKind } from './wordRelations';
 import { parseSenses, type WordSense } from './wordSenses';

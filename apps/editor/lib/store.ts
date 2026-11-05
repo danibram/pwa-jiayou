@@ -6,7 +6,7 @@ import type { Topic } from '../../web/src/data/topics';
 import type { HSKCharacter } from '../../web/src/types';
 import type { ContentDraft, ContentSnapshot } from './model';
 import { validateDraft, validateSnapshot } from './model';
-import { wordId } from '../../web/src/utils/pinyin';
+import { wordId } from '@jiayou/chinese';
 import type { HskLevel } from '../../web/src/types';
 import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '../../web/src/data/wordRelations';
 import legacyExamples from '../../web/src/data/vocabulary/examples.json';

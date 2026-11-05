@@ -128,7 +128,7 @@ See [apps/editor/README.md](apps/editor/README.md) for editing and publishing co
 
 ## Project layout
 
-An npm workspaces monorepo. Run every command from the repository root.
+An npm workspaces monorepo. Run every command from the repository root. Packages ship as TypeScript source with `.ts` relative imports, so Vite, Vitest and Node 24 scripts import them without a build step.
 
 ```
 apps/
@@ -139,12 +139,14 @@ apps/
 │   │   ├── stores/        learningStore and the session controller, vocabularyStore, characterStore
 │   │   ├── domain/        pure logic: learning (FSRS-7, events, sessions, evaluation, backup), content
 │   │   ├── persistence/   IndexedDB learning log, settings, device id
-│   │   ├── utils/         levelPacks (downloads and cache), speech, pinyin, search, theme
+│   │   ├── utils/         levelPacks (downloads and cache), speech, search, theme
 │   │   └── data/          lists, catalog, topics, vocabulary JSON, character JSON, glosses, overrides, drafts
 │   ├── public/            packs, audio, strokes, fonts, icons
 │   └── tests/             vitest, jsdom
 └── editor/                local content editor
-shared/                    pinyin and content contracts used by the app, the editor and the scripts
+packages/
+└── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
+shared/                    content contracts used by the app, the editor and the scripts
 content/                   published content snapshot and version
 scripts/                   data pipelines
 docs/                      audio, vocabulary data, specs, vision, research

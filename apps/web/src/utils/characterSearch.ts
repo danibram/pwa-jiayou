@@ -1,8 +1,8 @@
 import rawIndex from '../data/searchIndex.json';
 import type { ExampleWord, HSKCharacter, HskLevel } from '../types';
-import { mainMeaning } from './meaning';
+import { mainMeaning } from '@jiayou/chinese';
 import { rankBy } from './searchRank';
-import { withToneSandhi } from './pinyin';
+import { withToneSandhi } from '@jiayou/chinese';
 
 export interface SearchIndexRow {
   character: string;

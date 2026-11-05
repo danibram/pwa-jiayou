@@ -1,4 +1,5 @@
-import { foldPinyin, toneOf, type Tone } from './pinyin';
+import { foldPinyin, toneOf } from './pinyin.ts';
+import type { Tone } from './syllables.ts';
 
 export interface Reading {
   /** Syllables without tone marks: "shi jian" → ["shi", "jian"]. */

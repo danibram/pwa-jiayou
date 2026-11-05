@@ -1,4 +1,4 @@
-import { withToneSandhi, type Tone } from '../../../utils/pinyin';
+import { withToneSandhi, type Tone } from '@jiayou/chinese';
 import type { Evaluation } from '../types';
 import {
   PINYIN_POLICY_VERSION,

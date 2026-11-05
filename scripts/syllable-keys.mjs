@@ -1,5 +1,5 @@
 // Syllable filename stems for CNS11643 / app audio (matches scripts/copy-cns-audio.py).
-import { syllableKey, wordId } from '../shared/pinyin/index.ts';
+import { syllableKey, wordId } from '@jiayou/chinese';
 
 export { syllableKey, wordId };
 

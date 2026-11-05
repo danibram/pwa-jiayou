@@ -2,7 +2,7 @@
 
 ## Estado actual comprobado
 
-El vocabulario guarda `id` en cada entrada. El progreso actual usa ese identificador. `shared/pinyin/index.ts` genera IDs a partir de los caracteres simplificados y la lectura de diccionario, con un token por sílaba. El tono 1 no lleva sufijo, los tonos 2 a 4 llevan número y el tono neutro lleva `5`. La lectura mostrada puede aplicar cambios tonales de 一 y 不, pero el ID usa la lectura original del JSON.
+El vocabulario guarda `id` en cada entrada. El progreso actual usa ese identificador. `packages/chinese/src/syllables.ts` genera IDs a partir de los caracteres simplificados y la lectura de diccionario, con un token por sílaba. El tono 1 no lleva sufijo, los tonos 2 a 4 llevan número y el tono neutro lleva `5`. La lectura mostrada puede aplicar cambios tonales de 一 y 不, pero el ID usa la lectura original del JSON.
 
 `apps/web/src/data/vocabulary/published-ids.json` es el registro de IDs publicados. Tiene una línea por ID con su estado (`available` o `retired`), la lista que lo distribuye (`hsk1` a `hsk6` o `extra`) y `revisions`, todas las revisiones publicadas para ese ID de la más antigua a la más reciente. Cubre las 5005 palabras de HSK 1 a 6 y Extra, que hoy está vacía, y los 2650 caracteres con su ID `char-<hex>`. Los 5005 IDs del registro anterior, un array de IDs de HSK, se importaron tal cual. Ningún ID se volvió a calcular.
 

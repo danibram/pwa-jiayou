@@ -11,8 +11,8 @@ import { characterStore } from '../stores/characterStore';
 import { createLearningSession } from '../stores/learningSessionStore';
 import { characterItemId, characterOf, type LearningStore } from '../stores/learningStore';
 import type { StrokeFocus } from '../screen';
-import { glossHead } from '../utils/glossDisplay';
-import { spokenMeaning } from '../utils/meaning';
+import { glossHead } from '@jiayou/chinese';
+import { spokenMeaning } from '@jiayou/chinese';
 import { stopSpeech } from '../utils/speech';
 import { characterOrWordStub } from '../utils/wordCharacter';
 

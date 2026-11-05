@@ -1,7 +1,7 @@
 import { characterStore } from '../stores/characterStore';
 import { characterRecord } from './characterSearch';
-import { glossHead } from './glossDisplay';
-import { mainMeaning } from './meaning';
+import { glossHead } from '@jiayou/chinese';
+import { mainMeaning } from '@jiayou/chinese';
 
 /**
  * The short meaning of one character inside a word, for "知 saber + 道 camino".

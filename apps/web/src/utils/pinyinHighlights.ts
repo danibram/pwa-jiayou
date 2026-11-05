@@ -1,4 +1,4 @@
-import { loosePinyin, pinyinParts } from './pinyin';
+import { loosePinyin, pinyinParts } from '@jiayou/chinese';
 
 /** One flag per syllable (pinyinParts order) for toneless query overlap. */
 export const pinyinSyllableHighlights = (pinyin: string, query: string): boolean[] => {

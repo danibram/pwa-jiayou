@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { withToneSandhi } from '../utils/pinyin';
+import { withToneSandhi } from '@jiayou/chinese';
 import { BUNDLED_LEVEL, catalogLevels } from '../data/catalog';
 import hsk1Data from '../data/hsk1.json';
 import { ExampleWord, HSKCharacter, HskLevel } from '../types';

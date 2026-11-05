@@ -6,7 +6,7 @@ import {
   parseSyllableParts,
   type SyllableParts,
   type Tone,
-} from '../utils/pinyin';
+} from '@jiayou/chinese';
 
 const TONE_OPTIONS: { value: `${Tone}`; label: string }[] = [
   { value: '1', label: '1' },

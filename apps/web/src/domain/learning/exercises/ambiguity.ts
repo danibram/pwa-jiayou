@@ -1,5 +1,5 @@
-import { withToneSandhi } from '../../../utils/pinyin';
-import { readingOf } from '../../../utils/soundAlike';
+import { withToneSandhi } from '@jiayou/chinese';
+import { readingOf } from '@jiayou/chinese';
 import type { WordEntry } from './types';
 
 /** Lowercase, without accents or repeated spaces: "Feliz " and "feliz" are the same sense. */

@@ -1,7 +1,10 @@
-import { HSKCharacter } from '../types';
-
-/** What the meaning helpers read. A character outside HSK has only these. */
-type Meaning = Pick<HSKCharacter, 'definition' | 'gloss' | 'example' | 'pinyin'>;
+/** What the meaning helpers read from a character. A character outside HSK has only these. */
+export interface Meaning {
+  definition: string;
+  pinyin: string;
+  gloss?: string;
+  example?: { es?: string };
+}
 
 const senses = (definition: string) =>
   definition

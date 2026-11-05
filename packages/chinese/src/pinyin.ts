@@ -1,7 +1,4 @@
-import { PLAIN, TONE_MARKS, type Tone } from '../../../../shared/pinyin/index.ts';
-
-export type { Tone };
-export { syllableKey, wordId } from '../../../../shared/pinyin/index.ts';
+import { PLAIN, TONE_MARKS, type Tone } from './syllables.ts';
 
 /** Lowercase letters only, tone marks stripped. Matches syllable key folding without the tone suffix. */
 export const foldPinyin = (text: string): string => {

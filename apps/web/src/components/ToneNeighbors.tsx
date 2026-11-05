@@ -1,10 +1,10 @@
 import { Component, createMemo } from 'solid-js';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { characterForHit, searchCharacters } from '../utils/characterSearch';
-import { glossHead } from '../utils/glossDisplay';
+import { glossHead } from '@jiayou/chinese';
 import { leadSense } from '../data/wordSenses';
-import { markTones } from '../utils/pinyin';
-import { bySound, readingOf, soundMatch } from '../utils/soundAlike';
+import { markTones } from '@jiayou/chinese';
+import { bySound, readingOf, soundMatch } from '@jiayou/chinese';
 import SoundAlike, { type SoundAlikeItem } from './SoundAlike';
 
 interface Props {

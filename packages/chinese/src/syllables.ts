@@ -1,6 +1,6 @@
-// The single copy of the syllable and word id rules. App, api/ and scripts/ import this file as
-// TypeScript source (Vite, Bun and Node 22.18+ all strip types), so there is no build step and
-// no second copy to drift. Word ids are the key of saved progress: changing either rule orphans it.
+// The single copy of the syllable and word id rules. The app, the editor and scripts/ import it as
+// TypeScript source (Vite and Node 24 strip types), so there is no build step and no second copy
+// to drift. Word ids are the key of saved progress: changing either rule orphans it.
 
 export type Tone = 1 | 2 | 3 | 4 | 5;
 

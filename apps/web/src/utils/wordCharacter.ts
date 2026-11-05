@@ -3,7 +3,7 @@ import { vocabularyStore } from '../stores/vocabularyStore';
 import { leadSense } from '../data/wordSenses';
 import type { HSKCharacter } from '../types';
 import { characterRecord } from './characterSearch';
-import { pinyinParts } from './pinyin';
+import { pinyinParts } from '@jiayou/chinese';
 
 /** What a character sheet or the stroke page shows. A character outside HSK has no level, radical or deck row. */
 export type KnownCharacter = Omit<HSKCharacter, 'hsk_level'> & { hsk_level?: HSKCharacter['hsk_level'] };

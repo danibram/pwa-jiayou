@@ -18,7 +18,7 @@ import hsk5 from '../src/data/vocabulary/hsk5.json';
 import hsk6 from '../src/data/vocabulary/hsk6.json';
 import extra from '../src/data/vocabulary/extra.json';
 import publishedRegistry from '../src/data/vocabulary/published-ids.json';
-import { wordId } from '../src/utils/pinyin';
+import { wordId } from '@jiayou/chinese';
 import { topics } from '../src/data/topics';
 import { parseCharacterList } from '../src/stores/characterStore';
 import type { HskLevel } from '../src/types';

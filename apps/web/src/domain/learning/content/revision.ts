@@ -1,5 +1,5 @@
 import type { ContentReference } from '../types';
-import { withToneSandhi } from '../../../utils/pinyin';
+import { withToneSandhi } from '@jiayou/chinese';
 
 // Per-entry content revisions. Publishing (scripts/content-publish.mjs) writes the same values to
 // src/data/vocabulary/published-ids.json, and tests/vocabularyData.test.ts checks they match.

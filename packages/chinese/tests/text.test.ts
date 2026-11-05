@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { withToneSandhi } from '../src/utils/pinyin';
-import { displayGloss, glossHead } from '../src/utils/glossDisplay';
+import { withToneSandhi } from '../src/index.ts';
+import { displayGloss, glossHead } from '../src/index.ts';
 
 describe('withToneSandhi', () => {
   it('turns 不 into bú before a fourth tone', () => {
