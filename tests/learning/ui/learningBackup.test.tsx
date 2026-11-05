@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
-import LearningBackup, { type LearningBackupProps } from '../../../src/components/learning/backup/LearningBackup';
+import LearningBackup, { MAX_BACKUP_BYTES, type LearningBackupProps } from '../../../src/components/learning/backup/LearningBackup';
 import { createBackup } from '../../../src/domain/learning/backup';
 
 const record = { right: 2, wrong: 1, reps: 1, lapses: 1, interval: 3, ease: 2.36, due: 4, strokeRuns: 1, strokeBest: 0, lastSeen: 1, clean: 1, lastReview: 1, updatedAt: 1, deviceId: 'device-a' };
@@ -12,11 +12,14 @@ const combinedFile = JSON.stringify({
   legacyCharacters: { version: 4, chars: { 好: record, 人: record }, daily, activity: {} },
 });
 
+/** What the app exports now: the learning log alone. */
+const learningFile = JSON.stringify(createBackup({ deviceId: 'device-a', exportedAt: 5, events: [], configs: [] }));
+
 /** A v4 file with word progress, which import ignores with a warning. */
 const v4File = JSON.stringify({ version: 4, chars: { 好: record }, daily, words: { 'word-x': record }, wordDaily: daily, activity: {} });
 
 const mocks = (overrides: Partial<LearningBackupProps> = {}) => ({
-  exportBackup: vi.fn().mockResolvedValue(combinedFile),
+  exportBackup: vi.fn().mockResolvedValue(learningFile),
   mergeBackup: vi.fn().mockResolvedValue({ ok: true, added: 3, warnings: [] }),
   replaceBackup: vi.fn().mockResolvedValue({ ok: true, added: 3, warnings: [] }),
   ...overrides,
@@ -36,7 +39,7 @@ describe('learning backup UI', () => {
   });
   afterEach(() => { vi.restoreAllMocks(); });
 
-  it('downloads the combined backup the export returns', async () => {
+  it('downloads the learning backup the export returns', async () => {
     const props = mocks();
     render(() => <LearningBackup {...props} />);
     fireEvent.click(screen.getByRole('button', { name: 'Exportar progreso' }));
@@ -48,7 +51,7 @@ describe('learning backup UI', () => {
       reader.onload = () => resolve(reader.result as string);
       reader.readAsText(blob);
     });
-    expect(text).toBe(combinedFile);
+    expect(text).toBe(learningFile);
     const link = click.mock.instances[0] as unknown as HTMLAnchorElement;
     expect(link.download).toBe('jiayou-progreso.json');
   });
@@ -64,7 +67,8 @@ describe('learning backup UI', () => {
     const props = mocks();
     render(() => <LearningBackup {...props} />);
     choose(combinedFile);
-    await screen.findByText(/La copia tiene 0 registros de aprendizaje y 2 caracteres/);
+    await screen.findByText(/La copia tiene 0 registros de aprendizaje\. Combinarla/);
+    expect(screen.getByText(/progreso antiguo de 2 caracteres, que no se importa/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Combinar con mi progreso' }));
     expect(await screen.findByRole('status')).toHaveTextContent('Copia combinada con tu progreso. 3 registros nuevos.');
     expect(props.mergeBackup).toHaveBeenCalledWith(combinedFile);
@@ -101,6 +105,19 @@ describe('learning backup UI', () => {
     expect(props.replaceBackup).not.toHaveBeenCalled();
   });
 
+  it('refuses a file over 100 MB without reading it', async () => {
+    const props = mocks();
+    render(() => <LearningBackup {...props} />);
+    const file = new File(['x'], 'huge.json', { type: 'application/json' });
+    const text = vi.fn().mockResolvedValue(learningFile);
+    Object.defineProperty(file, 'text', { value: text });
+    Object.defineProperty(file, 'size', { value: MAX_BACKUP_BYTES + 1 });
+    fireEvent.change(screen.getByLabelText('Importar copia'), { target: { files: [file] } });
+    expect(await screen.findByRole('status')).toHaveTextContent('El archivo es demasiado grande para ser una copia de progreso (más de 100 MB).');
+    expect(text).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'Combinar con mi progreso' })).toBeNull();
+  });
+
   it('rejects a file that is not JSON', async () => {
     const props = mocks();
     render(() => <LearningBackup {...props} />);
@@ -123,7 +140,8 @@ describe('learning backup UI', () => {
     const props = mocks({ mergeBackup: vi.fn().mockResolvedValue({ ok: true, added: 0, warnings: ['Se ignoró el progreso de 1 palabra.'] }) });
     render(() => <LearningBackup {...props} />);
     choose(v4File);
-    await screen.findByText(/La copia tiene 1 carácter\./);
+    await screen.findByText(/La copia es del formato antiguo y no trae progreso que importar\./);
+    expect(screen.getByText(/progreso antiguo de 1 carácter y 1 palabra/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Combinar con mi progreso' }));
     const status = await screen.findByRole('status');
     expect(status).toHaveTextContent('Copia combinada. No traía nada que no tuvieras ya.');

@@ -1,7 +1,7 @@
 import { regradeTypedAnswers } from '../production/grade';
 import { SESSION_MODE_RATES, type LearningEvent, type ValidEvaluation } from '../types';
 import { alreadyKnownHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules';
-import { SUPPORTED_EVALUATOR_VERSIONS } from './version';
+import { REVEAL_BEFORE_SELF_ASSESSMENT, SUPPORTED_EVALUATOR_VERSIONS } from './version';
 
 export type AttemptEventErrorCode =
   /** Written under rules this validator does not know, so it cannot check them. */
@@ -26,7 +26,9 @@ export type AttemptEventErrorCode =
   | 'already-known-not-good'
   | 'unknown-basis'
   /** Evidence on an invalid attempt, or evidence with an invalid evaluation. */
-  | 'invalid-evidence';
+  | 'invalid-evidence'
+  /** A self-assessment before the answer was revealed (from `learning-evaluator@3`). */
+  | 'self-assessment-without-reveal';
 
 export interface AttemptEventError {
   eventId: string;
@@ -72,6 +74,14 @@ export const validateAttemptEvent = (event: LearningEvent): AttemptEventError[] 
   if (findInvalid(actions)) {
     fail('invalid-action-in-valid-event', `A ${event.type} event cannot contain an invalid answer`);
     return errors;
+  }
+
+  if (REVEAL_BEFORE_SELF_ASSESSMENT.includes(event.evaluatorVersion) && event.exercise.grading === 'self-assessment') {
+    const rated = actions.findIndex((action) => action.type === 'self-assessment');
+    const revealed = actions.findIndex((action) => action.type === 'reveal');
+    if (rated >= 0 && (revealed < 0 || revealed > rated)) {
+      fail('self-assessment-without-reveal', 'A self-assessment needs the answer revealed first');
+    }
   }
 
   const reading = readAttempt(event.exercise, actions);

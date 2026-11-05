@@ -52,10 +52,3 @@ export const practiceIdOf = (session: Pick<SessionState, 'mode' | 'scope'>): { p
   if (mode === 'review-all') return { practiceId: ALL_ID, title: 'Repasar todo' };
   return { title: 'Hoy' };
 };
-
-/** Answers and first looks per day from two logs, added up. */
-export const mergeActivity = (...logs: Record<string, number>[]): Record<string, number> => {
-  const out: Record<string, number> = {};
-  for (const log of logs) for (const [day, count] of Object.entries(log)) out[day] = (out[day] ?? 0) + count;
-  return out;
-};

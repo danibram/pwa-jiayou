@@ -1,6 +1,37 @@
 # Sistema de aprendizaje
 
-Este documento coordina la implementación por fases. La fase 0 define los contratos y comprueba la librería antes de conectar el nuevo sistema a las pantallas. Las fases posteriores siguen pendientes hasta completar sus criterios de aceptación.
+Este documento coordinó la implementación por fases. Todas las pantallas usan ya el registro de eventos, y el sistema de progreso anterior se ha retirado.
+
+## Estado
+
+| Fase | Estado |
+| --- | --- |
+| 0 | Entregada. Contratos, prueba de FSRS-7 en Node y Chrome sin conexión, e identidad del contenido |
+| 1 | Entregada. Planificador FSRS-7 con reconstrucción desde eventos, evaluador versionado y evidencia por habilidad |
+| 2 | Entregada. Repositorio IndexedDB atómico e idempotente con bloqueo entre pestañas, copias por unión de eventos y registro permanente de IDs publicados |
+| 3 | Entregada. Constructor de sesiones común, selector de ejercicios sin preguntas ambiguas y simulaciones de varios días |
+| 4 | Entregada. Controlador de sesión, componentes de estudio, ajustes y resumen. El vocabulario dejó el planificador antiguo |
+| 5 | Entregada. Enseñanza con "Ya la sé", peldaños de práctica, respuestas escritas con política de pinyin versionada y Trazos sobre el registro |
+| 6 | Pendiente. Necesita varias semanas de eventos reales |
+| 7A | Entregada. Limpieza descrita abajo |
+| 7B y 7C | En curso. Validación de la PWA en el navegador y auditoría de pérdida de datos, evaluación y carga |
+
+## Desviaciones del plan
+
+- En Trazos no se ofrece "Ya la sé". Un carácter siempre se ve y se calca antes de escribirlo de memoria.
+- Un carácter fuera del catálogo HSK, fuera de los niveles elegidos o sin descargar solo muestra sus trazos. No entra en ninguna sesión, porque su glosa sale de la palabra que lo usa y no tiene una revisión c1 estable.
+- No existe `src/domain/learning/introduction/`. La enseñanza vive en el constructor de sesiones (`sessions/requeue.ts`) y en el selector de ejercicios (`exposureCard`).
+- La copia combinada de la fase 4, con eventos de vocabulario y progreso v4 de caracteres, duró hasta la fase 5C. Ahora se exporta solo el registro de eventos. Las copias v4 y combinadas se siguen leyendo, pero su progreso antiguo no se importa y la pantalla lo avisa.
+- Las sesiones guardadas empezaron siendo una sola para toda la app. En 7A pasó a haber una por modo, para que abrir Trazos no borre una sesión de palabras en pausa.
+- La rúbrica de escritura cita las versiones de `hanzi-writer` y `hanzi-writer-data` (`STROKE_RUBRIC_REVISION`), fijadas con versión exacta en `package.json`. Un test comprueba que coinciden con las instaladas.
+- Las frases con hueco para partículas y clasificadores siguen pendientes hasta que exista contexto editorial.
+- Al arrancar, la app borra las claves de localStorage que dejó el sistema anterior (progreso v4 y sesiones guardadas). Sus datos no se migran.
+- "Ya la sé" se ofrecía sobre la lección completa, con la respuesta a la vista. En 7A pasó a ofrecerse antes de mostrarla, solo en la primera enseñanza y con un tope diario.
+- La misma sesión abierta en dos pestañas podía calificar dos veces una tarjeta. Desde 7A la respuesta lleva el estado sobre el que se decidió. Si otra pestaña lo cambió, no se escribe y la pestaña toma la sesión guardada o evalúa de nuevo. Una sesión guardada tampoco retrocede salvo al deshacer, y borrar el progreso en otra pestaña detiene la sesión abierta.
+- El evaluador pasó a `learning-evaluator@3`: una autoevaluación solo vale después de descubrir la respuesta. Los eventos `@1` y `@2` se siguen aceptando sin esa comprobación.
+- Se retiró la comprobación de caracteres "probablemente conocidos" del constructor de sesiones. Ninguna lista la activaba.
+- Al reanudar, una tarjeta escrita con una política de respuestas que ya no existe se genera de nuevo en vez de quedar sin corrección posible.
+- Las simulaciones de la fase 3 encontraron dos fallos, ya corregidos. Los temas dejaban repasos esperando y el día de 25 horas permitía calificar dos veces.
 
 ## Decisiones del producto
 
@@ -30,10 +61,10 @@ Estas decisiones se tomaron al revisar la fase 0 y condicionan todas las fases s
 
 Se tomaron tras la revisión de la fase 0 y sustituyen el comportamiento actual donde difiere.
 
-1. Una palabra enseñada y acertada en práctica queda pendiente para el día local siguiente. La primera tarjeta de significado de ese día da su primera nota FSRS. Si falla la práctica, se vuelve a enseñar en la misma sesión y sigue sin nota.
+1. Una palabra enseñada y acertada en práctica sin una pista que dé la respuesta queda pendiente para el día local siguiente. En escritura cuenta como ayuda cualquier pista. La primera tarjeta de significado de ese día da su primera nota FSRS. Si falla la práctica, se vuelve a enseñar en la misma sesión y sigue sin nota.
 2. Desaparece "Descartar y salir". Al salir se conserva lo respondido. Las correcciones se hacen deshaciendo respuestas concretas.
-3. Una palabra es floja si tiene un fallo programado en los últimos 30 días y todavía no tiene dos aciertos programados seguidos después. La sesión Flojos es práctica. Una palabra está dominada con estabilidad FSRS de 21 días o más. El límite de carga de mañana se mantiene, calculado con los vencimientos FSRS de las 24 horas siguientes. Cada evento guarda el modo de sesión para que estas reglas se reconstruyan igual en cualquier dispositivo.
-4. "Ya la sé" muestra en ese momento una tarjeta de significado sin opciones. Un acierto cuenta como primera nota Bien y un fallo devuelve la palabra al camino normal. Es la única nota que se permite sin la espera del punto 1, porque la palabra no se acaba de enseñar.
+3. Una palabra es floja si tiene un fallo programado en los últimos 30 días y todavía no tiene dos aciertos programados seguidos después. La sesión Flojos es práctica. Una palabra está dominada con estabilidad FSRS de 21 días o más. El límite de carga de mañana se mantiene. Cuenta los vencimientos FSRS de las 24 horas siguientes y las palabras enseñadas hoy cuya primera nota llega mañana. El resumen de la sesión muestra esa misma cifra como "Mañana". Cada evento guarda el modo de sesión para que estas reglas se reconstruyan igual en cualquier dispositivo.
+4. La primera enseñanza de una palabra muestra primero solo los caracteres, con "Ya la sé" y "Enséñamela". "Enséñamela" abre la lección completa. "Ya la sé" lleva a una tarjeta de significado sin opciones sin haber mostrado la respuesta. Un acierto cuenta como primera nota Bien y un fallo devuelve la palabra al camino normal. Es la única nota que se permite sin la espera del punto 1, porque la palabra no se acaba de enseñar. No se ofrece al volver a enseñar una palabra ni pasadas 10 respuestas "Ya la sé" en el día local (`STUDY_RULES.alreadyKnownPerDay`).
 5. El presupuesto de palabras nuevas cuenta presentaciones, no primeras notas.
 6. Tras "Otra vez", la palabra vuelve cuatro tarjetas después como práctica. FSRS recibe la siguiente nota cuando vence el paso de reaprendizaje, en esa sesión si sigue abierta o en la siguiente. El resumen no la muestra pendiente hasta que vence.
 7. Para partículas y clasificadores, la tarjeta de significado pregunta su función y la respuesta es la glosa editorial, con autoevaluación. La fase 5 añade frases con hueco cuando exista contexto editorial.
@@ -135,7 +166,7 @@ Depende de las fases anteriores.
 
 | Paquete | Trabajo |
 | --- | --- |
-| 7A | Retirar el código antiguo que quede, incluidos `progressStore`, `vocabularyProgressStore` y la fusión v4, sin eliminar funciones compartidas de caracteres |
+| 7A | Retirar el código antiguo que quede, incluidos `progressStore`, `vocabularyProgressStore` y la fusión v4, sin eliminar funciones compartidas de caracteres. Entregado. Además de esos módulos se retiraron el código que dejaron sin uso, las claves antiguas de localStorage y las citas a archivos borrados en los contratos |
 | 7B | Probar PWA offline, actualizaciones con sesión pendiente, reinicio, audio, paquetes no descargados y contenido retirado |
 | 7C | Auditar pérdida de datos, evaluación y carga de estudio con pruebas dirigidas, incluidos cambio de día y horario de verano |
 

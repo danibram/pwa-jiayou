@@ -13,7 +13,7 @@ export const STORES = {
   schedulerStates: 'schedulerStates',
   /** `StoredSchedulerConfig` by `id`. */
   configs: 'configs',
-  /** `SessionState` by `id`. At most one has `status: 'active'`. */
+  /** `SessionState` by `id`. At most one per `mode`. */
   sessions: 'sessions',
   /** Out-of-line keys from `META`. */
   meta: 'meta',

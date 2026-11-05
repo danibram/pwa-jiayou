@@ -98,9 +98,10 @@ describe('vocabulary screens', () => {
 
   it('teaches a new word before asking and saves the lesson', async () => {
     const { store } = renderWithStore(() => <VocabularyReview onBack={() => {}} onStrokes={() => {}} resume={false} />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Continuar' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Enséñamela' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     await waitFor(() => expect(store.events().map((event) => event.type)).toEqual(['exposure']));
-    const session = await store.activeSession();
+    const session = await store.activeSession('today');
     expect(session?.queue.some((entry) => entry.intent === 'practice')).toBe(true);
   });
 });

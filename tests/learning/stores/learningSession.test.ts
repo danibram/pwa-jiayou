@@ -59,7 +59,7 @@ describe('learning session controller', () => {
     expect(store.status(first)).toBe('learning');
     expect(store.state(first)).toMatchObject({ state: 'new', eligibleFrom: '2026-11-06' });
     expect(store.status(itemOf(POOL_WORDS[11]))).toBe('new');
-    expect((await store.runtime().repo.loadAll()).session).toBeNull();
+    expect((await store.runtime().repo.loadAll()).sessions.size).toBe(0);
 
     e.clock.advance(DAY);
     expect(store.pendingToday()).toBe(10);
@@ -126,7 +126,7 @@ describe('learning session controller', () => {
     await answerCard(session);
     const position = session.view.position;
     const selection = JSON.stringify(session.view.selection);
-    expect((await store.runtime().loadSession())?.scope).toEqual({ kind: 'topics', topicIds: ['comida', 'casa'] });
+    expect((await store.runtime().loadSession('topic'))?.scope).toEqual({ kind: 'topics', topicIds: ['comida', 'casa'] });
     store.close();
 
     const resumed = await e.session(e.store(), { mode: 'topic', scope: { kind: 'topics', topicIds: ['casa', 'comida'] } });
@@ -148,7 +148,7 @@ describe('learning session controller', () => {
     expect(other.view.position).toBe(0);
     const casa = new Set(POOL_WORDS.filter((word) => word.topicIds?.includes('casa')).map(itemOf));
     expect(casa.has(other.view.selection!.itemId)).toBe(true);
-    expect((await reloaded.runtime().loadSession())?.scope).toEqual({ kind: 'topics', topicIds: ['casa'] });
+    expect((await reloaded.runtime().loadSession('topic'))?.scope).toEqual({ kind: 'topics', topicIds: ['casa'] });
   });
 
   it.each(['before-write', 'after-write'] as const)('retries a failed answer write (%s) and stores exactly one event', async (mode) => {
@@ -237,7 +237,7 @@ describe('learning session controller', () => {
     const session = await e.session(store, { mode: 'today' });
     const itemId = session.view.selection!.itemId;
     await answerCard(session, 'wrong');
-    const entries = (await store.runtime().loadSession())!.queue;
+    const entries = (await store.runtime().loadSession('today'))!.queue;
     expect(entries[5]).toMatchObject({ itemId, intent: 'practice', reason: 'requeue' });
     expect(entries.filter((entry) => entry.itemId === itemId)).toHaveLength(2);
   });
@@ -277,7 +277,7 @@ describe('learning session controller', () => {
     await answerCard(session, 'wrong');
     expect(session.view.feedback).toEqual({ outcome: 'incorrect', rating: null, recorded: 'practice' });
     expect(session.view.total).toBe(total + 2);
-    const queue = (await store.runtime().loadSession())!.queue.filter((entry) => entry.itemId === itemId);
+    const queue = (await store.runtime().loadSession('today'))!.queue.filter((entry) => entry.itemId === itemId);
     expect(queue.map((entry) => [entry.intent, entry.reason])).toEqual([
       ['already-known-check', 'claimed-known'],
       ['teach', 'teach-again'],
@@ -295,7 +295,7 @@ describe('learning session controller', () => {
     const position = session.view.position;
     session.actions.answer({ optionId: wrongOption(session) });
     await session.idle();
-    const later = (await store.runtime().loadSession())!.queue.slice(position + 1).find((entry) => entry.itemId !== itemId)!;
+    const later = (await store.runtime().loadSession('today'))!.queue.slice(position + 1).find((entry) => entry.itemId !== itemId)!;
     store.close();
 
     for (const id of [itemId, later.itemId]) {
@@ -310,7 +310,7 @@ describe('learning session controller', () => {
     const invalid = (await log(reloaded)).filter((event) => event.type === 'invalid-attempt');
     expect(invalid).toHaveLength(1);
     expect(invalid[0]).toMatchObject({ itemId, evaluation: { outcome: 'invalid', reason: 'content-changed' } });
-    const stored = (await reloaded.runtime().loadSession())!;
+    const stored = (await reloaded.runtime().loadSession('today'))!;
     expect(stored.queue[position].content.contentRevision).not.toBe((invalid[0] as { content: { contentRevision: string } }).content.contentRevision);
     // The later card changed without actions: regenerated, no event.
     const regenerated = stored.queue.slice(position + 1).find((entry) => entry.itemId === later.itemId)!;

@@ -6,7 +6,7 @@ export type BackupWriteResult =
   | { ok: false; errors: { message: string }[] };
 
 export interface LearningBackupProps {
-  /** The combined backup file as text. */
+  /** The learning backup file as text: the event log and its scheduler configs. */
   exportBackup(): Promise<string>;
   /** Adds what the file has and this device lacks. Never removes anything. */
   mergeBackup(raw: string): Promise<BackupWriteResult>;
@@ -19,15 +19,16 @@ export interface LearningBackupProps {
 /** Errors listed before the rest are summed up, so a broken file does not fill the screen. */
 const MAX_ERRORS = 5;
 
+/** Larger files are refused before reading: a year of daily study is a few megabytes. */
+export const MAX_BACKUP_BYTES = 100 * 1024 * 1024;
+
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
-/** What the file holds, in words. */
-const describe = (backup: UserBackup): string => {
-  const parts: string[] = [];
-  if (backup.learning) parts.push(plural(backup.learning.events.length, 'registro de aprendizaje', 'registros de aprendizaje'));
-  if (backup.legacyCharacters) parts.push(plural(Object.keys(backup.legacyCharacters.chars).length, 'carácter', 'caracteres'));
-  return `La copia tiene ${parts.join(' y ')}.`;
-};
+/** What the file holds, in words. Older v4 progress is never imported; a warning counts it. */
+const describe = (backup: UserBackup): string =>
+  backup.learning
+    ? `La copia tiene ${plural(backup.learning.events.length, 'registro de aprendizaje', 'registros de aprendizaje')}.`
+    : 'La copia es del formato antiguo y no trae progreso que importar.';
 
 type Message = { text: string; details: string[] };
 
@@ -72,6 +73,10 @@ const LearningBackup: Component<LearningBackupProps> = (props) => {
     setConfirmReplace(false);
     setMessage(null);
     if (!file) return;
+    if (file.size > MAX_BACKUP_BYTES) {
+      say('El archivo es demasiado grande para ser una copia de progreso (más de 100 MB). Tu progreso no ha cambiado.');
+      return;
+    }
     let raw: string;
     try {
       raw = await file.text();

@@ -37,6 +37,14 @@ import type {
 export type RubricId = 'self-assessment' | 'multiple-choice' | 'writing-from-memory' | 'writing-trace';
 const rubric = (id: RubricId): Exercise['rubric'] => ({ id, revision: evaluatorVersion });
 
+/**
+ * A drawing is graded by hanzi-writer's stroke matcher over hanzi-writer-data's stroke paths, so the
+ * mistake count a writing attempt stores depends on both packages. package.json pins them exactly and
+ * a test keeps this string equal to the installed versions: upgrading either changes the rubric.
+ */
+export const STROKE_RUBRIC_REVISION = 'hanzi-writer@3.7.3+hanzi-writer-data@2.0.1';
+const strokeRubric = (id: 'writing-from-memory' | 'writing-trace'): Exercise['rubric'] => ({ id, revision: STROKE_RUBRIC_REVISION });
+
 /** Right after teaching, practice stays on the supported rungs, as the old `withPrompts` did. */
 const TEACHING_REASONS: ReadonlySet<CardReason> = new Set(['new-practice', 'teach-again']);
 
@@ -270,7 +278,7 @@ const selectCharacter = (card: PlannedCardInput, character: CharacterContent, co
     context: answer.pinyin,
     audio: speech(answer, context.speechAvailable),
     answer,
-    rubric: rubric(memory ? 'writing-from-memory' : 'writing-trace'),
+    rubric: strokeRubric(memory ? 'writing-from-memory' : 'writing-trace'),
   };
   return { kind: 'exercise', itemId, content, exercise, evaluatorVersion, prompt, skipped: [] };
 };

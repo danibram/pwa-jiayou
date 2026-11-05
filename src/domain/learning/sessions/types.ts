@@ -19,8 +19,6 @@ export interface PoolItem {
   available: boolean;
   /** Topics the item belongs to, for a topic scope. */
   topicIds?: readonly string[];
-  /** The learner probably knows it already (Trazos: a character from a word already met). */
-  likelyKnown?: boolean;
 }
 
 export type { SessionScope } from '../types';
@@ -37,8 +35,6 @@ export interface SessionSettings {
   workLimit: number;
   /** Practice cards a session starts with, inside `workLimit`. */
   practiceLimit: number;
-  /** `likely-known` checks per session, outside the new-item budget. */
-  alreadyKnownPerSession: number;
   /** Cards `requeueAfterAgain` may add to one session. A reteach adds two. */
   requeueLimit: number;
   /** Requeues and reteaches for one item in one session. */
@@ -81,9 +77,7 @@ export type LeftOutReason =
   /** New, but a pending item is not in this topic or Más palabras plan. Those come first. */
   | 'pending-elsewhere'
   /** Practice candidate beyond `practiceLimit` or the room left. */
-  | 'practice-limit'
-  /** Likely known, beyond `alreadyKnownPerSession`. */
-  | 'already-known-limit';
+  | 'practice-limit';
 
 /**
  * Informational. `requeueAfterAgain` and `markAlreadyKnown` keep the card totals right, but a

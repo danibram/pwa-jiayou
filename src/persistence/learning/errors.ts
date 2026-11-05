@@ -28,6 +28,11 @@ export type StorageError =
   | { kind: 'quota-exceeded'; message: string }
   /** The transaction was aborted (another tab, a closed connection, a browser hiccup). Retry. */
   | { kind: 'aborted'; message: string }
+  /**
+   * The item's stored state is not the one the answer was evaluated against: another tab wrote to it.
+   * Nothing was written. Reload the state, evaluate again and retry.
+   */
+  | { kind: 'stale-state'; message: string; itemId: string }
   /** IndexedDB is missing, blocked or was closed by a reset in another tab. Reload. */
   | { kind: 'unavailable'; message: string }
   | {
@@ -44,7 +49,7 @@ export type StorageError =
   | { kind: 'corrupt-log'; reason: CorruptLogError['reason'] | 'constraint'; message: string }
   | { kind: 'unknown'; message: string };
 
-const RETRYABLE: ReadonlySet<StorageError['kind']> = new Set(['quota-exceeded', 'aborted', 'unavailable']);
+const RETRYABLE: ReadonlySet<StorageError['kind']> = new Set(['quota-exceeded', 'aborted', 'stale-state', 'unavailable']);
 
 export class LearningStorageError extends Error {
   override name = 'LearningStorageError';

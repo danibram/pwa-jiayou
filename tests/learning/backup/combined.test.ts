@@ -23,7 +23,7 @@ describe('learning backup file', () => {
   it('round trips the event log and its configs', async () => {
     const learning = await learningBackup();
     const parsed = parseUserBackup(serializeBackup(learning));
-    expect(parsed).toEqual({ ok: true, value: { source: 'learning', learning, legacyCharacters: null, warnings: [] } });
+    expect(parsed).toEqual({ ok: true, value: { source: 'learning', learning, warnings: [] } });
   });
 
   it.each([
@@ -81,9 +81,8 @@ describe('v4 progress file', () => {
     expect(parsed.value.warnings[0].message).toMatch(/1 carácter y 2 palabras/);
   });
 
-  it('says there is nothing to import when it is empty', () => {
-    const parsed = parseUserBackup(v4File({}, {}));
-    expect(parsed.ok && parsed.value.warnings.map((warning) => warning.message)).toEqual(['La copia es del formato antiguo y no trae nada que importar.']);
+  it('has no warning when it is empty', () => {
+    expect(parseUserBackup(v4File({}, {}))).toEqual({ ok: true, value: { source: 'legacy-v4', learning: null, warnings: [] } });
   });
 
   it('does not read the records it ignores', () => {

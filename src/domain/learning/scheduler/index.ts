@@ -20,6 +20,7 @@ export {
   CorruptLogError,
   effectiveItemEvents,
   eligibleFromEvents,
+  passesPractice,
   rebuildItem,
   type SchedulerRegistry,
 } from './rebuild';

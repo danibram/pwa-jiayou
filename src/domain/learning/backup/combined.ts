@@ -7,11 +7,6 @@ import { parseBackupValue } from './parse';
 // character half, and a v4 progress file. Their v4 progress is not imported, because characters and
 // words start over in the event log and there are no users to migrate. A warning says so.
 
-/** The v4 records an older file carried. They are counted for the warning and never imported. */
-export interface IgnoredLegacyProgress {
-  chars: Readonly<Record<string, unknown>>;
-}
-
 export interface BackupWarning {
   code: 'legacy-progress-ignored';
   message: string;
@@ -19,11 +14,10 @@ export interface BackupWarning {
   count: number;
 }
 
-/** What a chosen file holds. Only `learning` is ever imported. */
+/** What a chosen file holds. Only `learning` is ever imported; a v4 file has none. */
 export type UserBackup =
-  | { source: 'learning'; learning: LearningBackup; legacyCharacters: null; warnings: BackupWarning[] }
-  | { source: 'combined'; learning: LearningBackup; legacyCharacters: IgnoredLegacyProgress | null; warnings: BackupWarning[] }
-  | { source: 'legacy-v4'; learning: null; legacyCharacters: IgnoredLegacyProgress; warnings: BackupWarning[] };
+  | { source: 'learning' | 'combined'; learning: LearningBackup; warnings: BackupWarning[] }
+  | { source: 'legacy-v4'; learning: null; warnings: BackupWarning[] };
 
 const hasOwn = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -32,11 +26,7 @@ const formatError = (path: string, message: string): BackupError => ({ code: 'in
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
-/** The v4 records of an older file: its characters and, in a v4 file, its words. */
-const legacyRecords = (value: Record<string, unknown>): { legacy: IgnoredLegacyProgress; words: number } => ({
-  legacy: { chars: isRecord(value.chars) ? { ...value.chars } : {} },
-  words: isRecord(value.words) ? Object.keys(value.words).length : 0,
-});
+const countOf = (value: unknown) => (isRecord(value) ? Object.keys(value).length : 0);
 
 const ignoredWarning = (chars: number, words: number): BackupWarning[] => {
   const parts = [chars > 0 ? plural(chars, 'carácter', 'caracteres') : '', words > 0 ? plural(words, 'palabra', 'palabras') : ''].filter(Boolean);
@@ -77,27 +67,19 @@ export const parseUserBackup = (raw: string): Result<UserBackup, BackupError[]> 
     const learning = hasOwn(value, 'learning') ? parseBackupValue(value.learning, 'learning') : null;
     if (learning && !learning.ok) errors.push(...learning.error);
     if (errors.length > 0 || !learning?.ok) return err(errors);
-    const legacy = isRecord(value.legacyCharacters) ? legacyRecords(value.legacyCharacters).legacy : null;
-    const warnings = legacy ? ignoredWarning(Object.keys(legacy.chars).length, 0) : [];
-    return ok({ source: 'combined', learning: learning.value, legacyCharacters: legacy, warnings });
+    const chars = isRecord(value.legacyCharacters) ? countOf(value.legacyCharacters.chars) : 0;
+    return ok({ source: 'combined', learning: learning.value, warnings: ignoredWarning(chars, 0) });
   }
 
   if (hasOwn(value, 'version')) {
     if (value.version !== 4) return err([{ code: 'unsupported-version', path: 'version', message: 'Esta versión de la copia no es compatible.' }]);
-    const { legacy, words } = legacyRecords(value);
-    const warnings = ignoredWarning(Object.keys(legacy.chars).length, words);
-    return ok({
-      source: 'legacy-v4',
-      learning: null,
-      legacyCharacters: legacy,
-      warnings: warnings.length > 0 ? warnings : [{ code: 'legacy-progress-ignored', count: 0, message: 'La copia es del formato antiguo y no trae nada que importar.' }],
-    });
+    return ok({ source: 'legacy-v4', learning: null, warnings: ignoredWarning(countOf(value.chars), countOf(value.words)) });
   }
 
   if (hasOwn(value, 'schemaVersion')) {
     const learning = parseBackupValue(value);
     if (!learning.ok) return learning;
-    return ok({ source: 'learning', learning: learning.value, legacyCharacters: null, warnings: [] });
+    return ok({ source: 'learning', learning: learning.value, warnings: [] });
   }
 
   return err([formatError('', 'El archivo no contiene una copia de progreso.')]);

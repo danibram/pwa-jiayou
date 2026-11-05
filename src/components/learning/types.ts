@@ -23,6 +23,8 @@ export interface LearningSessionView {
   error: { message: string; retryable: boolean } | null;
   /** Why the last typed answer was not taken. Nothing was saved and the field stays open. */
   inputError: string | null;
+  /** The teaching card offers "Ya la sé" before showing the answer. */
+  canClaimKnown: boolean;
 }
 
 /** What the screen reports. The controller evaluates, rates and saves; the components never do. */

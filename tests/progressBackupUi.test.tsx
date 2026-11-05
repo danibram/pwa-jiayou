@@ -139,7 +139,7 @@ describe('the backup', () => {
     fireEvent.change(input, { target: { files: [first] } });
     fireEvent.change(input, { target: { files: [second] } });
     resolveSecond(legacy);
-    await screen.findByText(/La copia tiene 1 carácter\./);
+    await screen.findByText(/La copia es del formato antiguo y no trae progreso que importar\./);
     resolveFirst('{');
     await Promise.resolve();
     expect(screen.queryByText(/Esta copia no es válida/)).toBeNull();

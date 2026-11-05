@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { validateAttemptEvent } from '../../../src/domain/learning/evaluation';
+import { isTypedAnswerExercise } from '../../../src/domain/learning/production';
 import type { LearningEvent } from '../../../src/domain/learning/types';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
 import type { LearningStore } from '../../../src/stores/learningStore';
@@ -57,7 +58,7 @@ describe('typed answers in the session controller', () => {
   it('keeps the card open and records nothing when the text cannot be read', async () => {
     const { store, session } = await typedCard();
     const before = store.events().length;
-    const draft = (await store.runtime().repo.loadAll()).session;
+    const draft = (await store.runtime().repo.loadSession('word'));
 
     session.actions.answer({ answer: 'ba8 ba' });
     expect(session.view.inputError).toBe('No hay tono 8. Usa del 1 al 4, y 5 o 0 para el tono neutro.');
@@ -68,7 +69,7 @@ describe('typed answers in the session controller', () => {
     expect(session.view.state).toBe('presenting');
     expect(session.view.actions).toEqual([]);
     expect(store.events()).toHaveLength(before);
-    expect((await store.runtime().repo.loadAll()).session).toEqual(draft);
+    expect((await store.runtime().repo.loadSession('word'))).toEqual(draft);
     // Punctuation and blank text are not answers either.
     session.actions.answer({ answer: "'-" });
     expect(session.view.inputError).not.toBeNull();
@@ -83,8 +84,8 @@ describe('typed answers in the session controller', () => {
     const selection = shownExercise(session);
     // The stored queue keeps the accepted entries, so a resumed card grades the same way.
     await session.idle();
-    const stored = await store.runtime().repo.loadAll();
-    expect(stored.session?.queue[stored.session.position].exercise?.accepted).toEqual(selection.exercise.accepted);
+    const stored = await store.runtime().repo.loadSession('word');
+    expect(stored?.queue[stored.position].exercise?.accepted).toEqual(selection.exercise.accepted);
 
     session.actions.answer({ answer: 'ba8' });
     expect(session.view.inputError).not.toBeNull();
@@ -142,5 +143,30 @@ describe('typed answers in the session controller', () => {
     expect(again.prompt).toBe(selection.prompt);
     expect(TYPED_PINYIN).toContain(again.prompt);
     expect(again.exercise.accepted).toEqual(selection.exercise.accepted);
+  });
+});
+
+describe('a typed card stored under an older policy', () => {
+  it('is rebuilt on resume instead of showing a card no answer can pass', async () => {
+    const { store, session } = await typedCard();
+    const selection = shownExercise(session);
+    await session.idle();
+    const stored = (await store.runtime().repo.loadSession('word'))!;
+    const position = stored.position;
+    const old = stored.queue.map((entry, index) =>
+      index === position && entry.exercise ? { ...entry, exercise: { ...entry.exercise, rubric: { ...entry.exercise.rubric, revision: 'pinyin-policy@0' } } } : entry,
+    );
+    await store.runtime().repo.saveAttemptDraft({ ...stored, queue: old });
+    store.close();
+
+    const resumed = await env.session(env.store({ speechAvailable: () => false }), { mode: 'word', scope: { kind: 'item', itemId: item } });
+    expect(resumed.sessionId()).toBe(session.sessionId());
+    expect(resumed.view.position).toBe(position);
+    const card = resumed.view.selection;
+    expect(card?.kind).toBe('exercise');
+    if (card?.kind !== 'exercise') return;
+    expect(card.itemId).toBe(selection.itemId);
+    expect(card.exercise.rubric.revision).not.toBe('pinyin-policy@0');
+    expect(isTypedAnswerExercise(card.exercise) || card.exercise.format !== 'free-recall').toBe(true);
   });
 });

@@ -63,7 +63,8 @@ describe('app start over the learning store', () => {
     stores.push(store);
     renderWithStore(() => <App />, store);
     fireEvent.click(await screen.findByRole('button', { name: 'Aprender 10 palabras' }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Continuar' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Enséñamela' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     await waitFor(() => expect(store.events()).toHaveLength(1));
     fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
     fireEvent.click(await screen.findByRole('button', { name: /^Opciones/ }));

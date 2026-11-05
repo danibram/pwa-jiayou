@@ -3,4 +3,4 @@
 export { err, ok, type BackupError, type BackupErrorCode, type Result } from './errors';
 export { createBackup, isConfigId, isItemId, isLocalDay, parseBackup, parseBackupValue, serializeBackup } from './parse';
 export { highestSequence, planMerge, planReplace, type LearningLog, type MergePlan, type ReplacePlan } from './plan';
-export { parseUserBackup, type BackupWarning, type IgnoredLegacyProgress, type UserBackup } from './combined';
+export { parseUserBackup, type BackupWarning, type UserBackup } from './combined';

@@ -74,6 +74,8 @@ const LearningCard: Component<LearningCardProps> = (props) => {
         event.preventDefault();
         props.actions.continue();
       } else if (view.state === 'presenting' && selection.kind === 'exposure') {
+        // A lesson behind "Ya la sé" handles its own Space: it opens before it continues.
+        if (selection.card.reason === 'teaching' && view.canClaimKnown) return;
         event.preventDefault();
         props.actions.continue();
       } else if (view.state === 'presenting' && selection.kind === 'exercise' && selection.exercise.grading === 'self-assessment' && !view.revealed) {

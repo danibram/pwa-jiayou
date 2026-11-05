@@ -126,8 +126,8 @@ export interface LearningRuntime {
   /** Commits through the repository and folds the result into the store. */
   commit(input: CommitAnswerInput): Promise<CommitResult>;
   voidAttempt(targetEventId: string, reason: VoidReason, now: Timestamp, options?: VoidOptions): Promise<CommitResult<VoidEvent>>;
-  /** The active session as stored. */
-  loadSession(): Promise<SessionState | null>;
+  /** The stored active session of `mode`, or null. */
+  loadSession(mode: SessionMode): Promise<SessionState | null>;
 }
 
 export const wordItemId = (wordId: string): ItemId => `word-meaning:${wordId}`;
@@ -290,9 +290,23 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
     bump();
   };
 
+  /** Session controllers listen here for writes from other tabs. */
+  const listeners = new Set<(change: LearningChange) => void>();
+  const notify = (change: LearningChange) => {
+    for (const listener of [...listeners]) listener(change);
+  };
+
+  /**
+   * Another tab wrote. A session draft needs no reload, a reset reconnects, and anything else reloads
+   * the log before the listeners hear of it, so they read the new states.
+   */
   const onChange = (change: LearningChange) => {
-    if (change.kind === 'session') return;
-    const work = change.kind === 'reset' ? reconnect() : reload();
+    if (change.kind === 'session') {
+      notify(change);
+      return;
+    }
+    if (change.kind === 'reset') notify(change);
+    const work = change.kind === 'reset' ? reconnect() : reload().then(() => notify(change));
     work.catch((failure: unknown) => setError(messageOf(failure)));
   };
 
@@ -370,8 +384,8 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       bump();
       return result;
     },
-    async loadSession() {
-      return (await runtime!.repo.loadAll()).session;
+    loadSession(mode) {
+      return runtime!.repo.loadSession(mode);
     },
   });
 
@@ -466,16 +480,20 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       return Math.max(0, cap - taught);
     },
 
-    /** Items falling due in the next 24 hours, overdue ones excluded. */
+    /**
+     * Tomorrow's load (`tomorrowLoad`): items falling due in the next 24 hours, overdue ones excluded,
+     * and items taught today whose first rating opens tomorrow. The gate on new items and the
+     * session summary's "Mañana" read this same figure.
+     */
     dueByTomorrow(kind: ItemKind = 'word-meaning'): number {
       version();
-      return countTomorrowLoad(statesOf(kindPool(kind)), clock());
+      return countTomorrowLoad(statesOf(kindPool(kind)), clock(), dayRule);
     },
 
     /** No new items while tomorrow's load reaches the limit. */
     tomorrowLoadFull(kind: ItemKind = 'word-meaning'): boolean {
       version();
-      return isTomorrowLoadFull(statesOf(kindPool(kind)), clock());
+      return isTomorrowLoadFull(statesOf(kindPool(kind)), clock(), dayRule);
     },
 
     /** Whether Hoy shows the item as pending today. */
@@ -513,11 +531,17 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       return days;
     },
 
-    /** The stored active session, or null. Home offers to continue it. */
-    async activeSession(): Promise<SessionState | null> {
+    /** The stored active session of `mode`, or null. */
+    async activeSession(mode: SessionMode): Promise<SessionState | null> {
       const active = await init();
-      const session = await active.loadSession();
-      return session && session.status === 'active' ? session : null;
+      return active.loadSession(mode);
+    },
+
+    /** Every stored active session, one per mode at most, the most recently started first. */
+    async activeSessions(): Promise<SessionState[]> {
+      const { repo: active } = await init();
+      const { sessions } = await active.loadAll();
+      return [...sessions.values()].sort((a, b) => b.startedAt - a.startedAt);
     },
 
     /** The session settings in force now. */
@@ -528,6 +552,14 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
     /** The store's clock. */
     now(): Timestamp {
       return clock();
+    },
+
+    /** Calls `callback` after another tab's write lands in this store. Returns the unsubscribe. */
+    onExternalChange(callback: (change: LearningChange) => void): () => void {
+      listeners.add(callback);
+      return () => {
+        listeners.delete(callback);
+      };
     },
 
     /** Every exposure and attempt of the item in replay order, each marked when a void cancels it. */
@@ -590,6 +622,7 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
 
     /** Closes the connection. A later `init()` opens it again. */
     close() {
+      listeners.clear();
       disconnect();
       starting = null;
       setReady(false);

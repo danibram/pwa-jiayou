@@ -395,7 +395,7 @@ export const createWorld = (options: WorldOptions): World => {
       added: 0,
       pendingAtStart: backlog.filter((itemId) => inScope(scope, poolById.get(itemId)!)).length,
       backlogAtStart: backlog.length,
-      tomorrowLoadAtStart: tomorrowLoad(states.values(), startedAt),
+      tomorrowLoadAtStart: tomorrowLoad(states.values(), startedAt, zone),
       scheduledWritten: 0,
       practiceWritten: 0,
       exposures: 0,

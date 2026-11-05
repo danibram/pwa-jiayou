@@ -58,6 +58,7 @@ export const view = (overrides: Partial<LearningSessionView> = {}): LearningSess
   total: 10,
   speechAvailable: true,
   canUndo: false,
+  canClaimKnown: false,
   error: null,
   inputError: null,
   ...overrides,

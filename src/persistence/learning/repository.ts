@@ -13,6 +13,7 @@ import type {
   LearningBackup,
   LearningEvent,
   SchedulerState,
+  SessionMode,
   SessionState,
   StoredSchedulerConfig,
 } from '../../domain/learning/types';
@@ -83,14 +84,27 @@ const assertState = (state: SchedulerState, itemId: ItemId): void => {
   }
 };
 
-/** Keeps at most one active session: writing one drops every other session. */
-const putSession = async (tx: IDBTransaction, session: SessionState): Promise<void> => {
+/**
+ * Keeps one session per mode: writing one drops every other session of its mode, so pausing Hoy and
+ * opening Trazos leaves both. The store holds a handful of rows, so a scan beats an index.
+ *
+ * A write never moves a stored session back unless `rewind` says so (undo does): a tab that has not
+ * yet heard of another tab's answer must not put the session back on the card already answered.
+ */
+const putSession = async (tx: IDBTransaction, session: SessionState, rewind = false): Promise<void> => {
   const store = tx.objectStore(STORES.sessions);
-  if (session.status === 'active') {
-    const keys = await request(store.getAllKeys());
-    for (const key of keys) if (key !== session.id) store.delete(key);
-  }
+  const stored = (await request(store.getAll())) as SessionState[];
+  const same = stored.find((other) => other.id === session.id);
+  if (same && !rewind && same.position > session.position) return;
+  for (const other of stored) if (other.mode === session.mode && other.id !== session.id) store.delete(other.id);
   store.put(session);
+};
+
+/** The active session of each mode. */
+const activeByMode = (sessions: readonly SessionState[]): Map<SessionMode, SessionState> => {
+  const out = new Map<SessionMode, SessionState>();
+  for (const session of sessions) if (session.status === 'active') out.set(session.mode, session);
+  return out;
 };
 
 /**
@@ -265,9 +279,18 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
           return {
             deviceId,
             states: new Map(states.map((state) => [state.itemId, state])),
-            session: sessions.find((session) => session.status === 'active') ?? null,
+            sessions: activeByMode(sessions),
             configs,
           };
+        }),
+      );
+    },
+
+    loadSession(mode) {
+      return read(() =>
+        transaction(database(), [STORES.sessions], 'readonly', async (tx) => {
+          const sessions = (await request(tx.objectStore(STORES.sessions).getAll())) as SessionState[];
+          return activeByMode(sessions).get(mode) ?? null;
         }),
       );
     },
@@ -286,7 +309,7 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
       );
     },
 
-    async commitAnswer({ event: pending, nextState, session }) {
+    async commitAnswer({ event: pending, nextState, session, basedOn }) {
       let stamped: LearningEvent;
       try {
         if (!isRecord(pending)) throw rejected('invalid-event', 'An event must be an object');
@@ -318,12 +341,19 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
                 throw rejected('duplicate-attempt', `Attempt ${stamped.attemptId} already has event ${other.id}`, { eventId: stamped.id });
               }
             }
+            const current = ((await request(states.get(stamped.itemId))) as SchedulerState | undefined) ?? null;
+            if (basedOn !== undefined && canonicalJson(current) !== canonicalJson(basedOn)) {
+              throw new LearningStorageError({
+                kind: 'stale-state',
+                itemId: stamped.itemId,
+                message: `The state of ${stamped.itemId} changed since the answer was evaluated`,
+              });
+            }
             const meta = tx.objectStore(STORES.meta);
             const sequence = await readSequence(meta);
             const event = { ...stamped, sequence } as LearningEvent;
             meta.put(sequence + 1, META.sequence);
             events.add(event);
-            const current = ((await request(states.get(event.itemId))) as SchedulerState | undefined) ?? null;
             const next = typeof nextState === 'function' ? nextState(current) : nextState;
             if (next) {
               assertState(next, event.itemId);
@@ -336,14 +366,14 @@ export const createLearningRepository = (options: LearningRepositoryOptions): Le
       );
     },
 
-    async saveAttemptDraft(session) {
+    async saveAttemptDraft(session, draftOptions = {}) {
       try {
         assertSession(session);
       } catch (error) {
         throw toStorageError(error);
       }
       await write(
-        () => transaction(database(), [STORES.sessions], 'readwrite', (tx) => putSession(tx, session)),
+        () => transaction(database(), [STORES.sessions], 'readwrite', (tx) => putSession(tx, session, draftOptions.rewind === true)),
         () => ({ kind: 'session', itemIds: [] }),
       );
     },

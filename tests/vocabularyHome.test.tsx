@@ -16,7 +16,8 @@ describe('vocabulary home', () => {
     expect(await screen.findByText('Hoy: 10 nuevas.')).toBeTruthy();
     expect(screen.getByText('Esta semana aún no has practicado')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Aprender 10 palabras' }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Continuar' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Enséñamela' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     await waitFor(() => expect(store.events()).toHaveLength(1));
     fireEvent.click(screen.getByRole('button', { name: 'Volver' }));
     // Leaving keeps the lesson; Home counts it and offers the rest of the session.

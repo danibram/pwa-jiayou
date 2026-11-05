@@ -15,9 +15,10 @@ describe('vocabulary browser history', () => {
     const home = history.state;
     fireEvent.click(await screen.findByRole('button', { name: 'Aprender 10 palabras' }));
     const review = history.state;
-    fireEvent.click(await screen.findByRole('button', { name: 'Continuar' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Enséñamela' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     await waitFor(() => expect(screen.getByText('Quedan 19')).toBeTruthy());
-    const second = (await store.activeSession())!;
+    const second = (await store.activeSession('today'))!;
     const shown = second.queue[second.position].exposure!.answer.characters;
 
     window.dispatchEvent(new PopStateEvent('popstate', { state: home }));

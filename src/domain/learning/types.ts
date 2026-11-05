@@ -226,6 +226,8 @@ export const STUDY_RULES = {
   tomorrowWindowMs: 86_400_000,
   /** After Again, the word comes back this many cards later, as practice. */
   requeueGap: 4,
+  /** "Ya la sé" claims per local day. Past it a new word is always taught. */
+  alreadyKnownPerDay: 10,
 } as const;
 
 /** One observation inside an attempt event; the item, content and attempt are the event's. */
@@ -331,7 +333,7 @@ export interface LearningBackup {
   configs: readonly StoredSchedulerConfig[];
 }
 
-/** The current review screen's prompts, from `src/utils/vocabularySession.ts`. Kept here so the domain does not import it. */
+/** The six prompts of the retired review screen. Practice formats and `EXERCISE_ROLES` still use their names. */
 export type LegacyPrompt = 'meaning' | 'reverse' | 'listen' | 'pick' | 'hear' | 'recognize';
 
 export interface ExerciseRole {
@@ -386,8 +388,6 @@ export type CardReason =
    * practice. Failing that practice brings another pair, within the requeue limits.
    */
   | 'teach-again'
-  /** An item the learner probably knows (Trazos: a character met in words). Outside the budget. */
-  | 'likely-known'
   /** "Ya la sé" turned a teach card into a check. */
   | 'claimed-known'
   /** Practice on a weak item (Flojos). */

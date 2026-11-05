@@ -30,8 +30,14 @@ export type NextState = SchedulerState | null | ((current: SchedulerState | null
 export interface CommitAnswerInput {
   event: PendingEvent;
   nextState: NextState;
-  /** The session with its position moved past this answer. Omit when no session is open. */
+  /** The session with its position moved past this answer. Replaces the stored session of its mode. Omit when no session is open. */
   session?: SessionState | null;
+  /**
+   * The item's state the event was decided on (null for an item without one). When given, the write
+   * is refused with a retryable `stale-state` error if the stored state differs, so an answer
+   * evaluated before another tab's write never lands on top of it. Omit for exposures.
+   */
+  basedOn?: SchedulerState | null;
 }
 
 export interface CommitResult<E extends LearningEvent = LearningEvent> {
@@ -54,8 +60,8 @@ export interface VoidOptions {
 export interface LoadedLearningData {
   deviceId: string;
   states: ReadonlyMap<ItemId, SchedulerState>;
-  /** The session with `status: 'active'`, or null. */
-  session: SessionState | null;
+  /** The `status: 'active'` session of each mode. A mode keeps at most one stored session. */
+  sessions: ReadonlyMap<SessionMode, SessionState>;
   configs: readonly StoredSchedulerConfig[];
 }
 
@@ -133,6 +139,8 @@ export interface LearningRepository {
   open(): Promise<void>;
   close(): void;
   loadAll(): Promise<LoadedLearningData>;
+  /** The active session of `mode`, or null. */
+  loadSession(mode: SessionMode): Promise<SessionState | null>;
   /** Events matching one index, in replay order. All events without a query. */
   listEvents(query?: EventQuery): Promise<LearningEvent[]>;
   /**
@@ -140,8 +148,11 @@ export interface LearningRepository {
    * with the same event id and content returns the stored result and writes nothing.
    */
   commitAnswer(input: CommitAnswerInput): Promise<CommitResult>;
-  /** Saves an in-progress attempt (actions, hints) so a reload resumes it. Writes no event. */
-  saveAttemptDraft(session: SessionState): Promise<void>;
+  /**
+   * Saves an in-progress attempt (actions, hints) so a reload resumes it. Writes no event. A stored
+   * session of the same id that is further on is kept, unless `rewind` (undo) is set.
+   */
+  saveAttemptDraft(session: SessionState, options?: { rewind?: boolean }): Promise<void>;
   /** Appends an `attempt-voided` and rebuilds the target's item, in one transaction. */
   voidAttempt(targetEventId: string, reason: VoidReason, now: Timestamp, options?: VoidOptions): Promise<CommitResult<VoidEvent>>;
   /**
@@ -151,7 +162,7 @@ export interface LearningRepository {
    */
   importEvents(events: readonly LearningEvent[], configs: readonly StoredSchedulerConfig[]): Promise<ImportResult>;
   /**
-   * Replace-restore with `planReplace`: drops the log, caches and pending session, writes the backup,
+   * Replace-restore with `planReplace`: drops the log, caches and pending sessions, writes the backup,
    * keeps the installed config stored and rebuilds every item.
    */
   replaceAll(backup: LearningBackup): Promise<ReplaceResult>;

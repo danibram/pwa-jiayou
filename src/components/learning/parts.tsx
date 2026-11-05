@@ -1,5 +1,4 @@
 import { Component, createSignal, For, JSX, Show } from 'solid-js';
-import { GRADE_CLASS } from '../GradeButtons';
 import Icon from '../Icon';
 import Pinyin from '../Pinyin';
 import RiceGrid from '../RiceGrid';
@@ -103,13 +102,20 @@ export const HintButton: Component<{ hint: Hint; disabled: boolean; onHint: (hin
   </button>
 );
 
+/** Bien is the filled accent: white on jade in light, paper on the lighter jade in dark. */
+const RATING_CLASS: Record<Exclude<Rating, 'easy'>, string> = {
+  again: 'btn-quiet',
+  hard: 'btn-quiet',
+  good: 'btn bg-jade text-white dark:text-paper shadow-lift hover:brightness-105',
+};
+
 /**
  * Otra vez, Difícil, Bien and, when the session allows it, Fácil. Each says what it means under its
  * name: Difícil is a recall that took effort, not a near miss.
  */
 export const RatingButtons: Component<{ allowEasy: boolean; disabled: boolean; onRate: (rating: Rating) => void }> = (props) => {
   const ratings = (): Rating[] => (props.allowEasy ? ['again', 'hard', 'good', 'easy'] : ['again', 'hard', 'good']);
-  const classFor = (rating: Rating) => (rating === 'easy' ? 'btn-quiet' : GRADE_CLASS[rating]);
+  const classFor = (rating: Rating) => (rating === 'easy' ? 'btn-quiet' : RATING_CLASS[rating]);
   return (
     <div
       class="grid gap-2 animate-fade"

@@ -5,7 +5,7 @@ import type { LocalDay, Timestamp } from '../types';
  * never reads the time zone itself: the app passes the device rule, tests pass a fixed one.
  */
 export interface LocalDayRule {
-  /** The local calendar day that contains `now`, as `dayKey` writes it. */
+  /** The local calendar day that contains `now`, as `YYYY-MM-DD`. */
   localDay(now: Timestamp): LocalDay;
   /** The first instant of the next local day. */
   nextLocalMidnight(now: Timestamp): Timestamp;
@@ -25,8 +25,8 @@ export const addLocalDays = (day: LocalDay, days: number): LocalDay => {
 };
 
 /**
- * The device's own rule, the one `dayKey` (`toLocaleDateString('sv-SE')`) and `endOfDay`
- * (`setHours`) use today. It reads the time zone, never the clock.
+ * The device's own rule, the one the previous progress system used: `toLocaleDateString('sv-SE')`
+ * names the day and `setHours` finds its end. It reads the time zone, never the clock.
  */
 export const deviceLocalDayRule: LocalDayRule = {
   localDay: (now) => new Date(now).toLocaleDateString('sv-SE') as LocalDay,

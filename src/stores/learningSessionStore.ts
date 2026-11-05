@@ -1,10 +1,12 @@
+import { getOwner, onCleanup, runWithOwner } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { evaluateAttempt, evaluatorVersion as currentEvaluatorVersion, type EvaluationResult } from '../domain/learning/evaluation';
 import { exposureCard, seededRandom, selectExercise, type ExerciseContext, type ExercisePrompt, type ExerciseSelection } from '../domain/learning/exercises';
-import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, type ProductionKind, type TypedGrade } from '../domain/learning/production';
-import { addLocalDays, effectiveItemEvents, pendingToday } from '../domain/learning/scheduler';
+import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, TYPED_RUBRICS, type ProductionKind, type TypedGrade } from '../domain/learning/production';
+import { addLocalDays, effectiveItemEvents, passesPractice, pendingToday } from '../domain/learning/scheduler';
 import {
   buildSession,
+  itemKind,
   markAlreadyKnown,
   requeueAfterAgain,
   seededShuffle,
@@ -31,7 +33,14 @@ import {
   type SessionState,
   type Timestamp,
 } from '../domain/learning/types';
-import { isLearningStorageError, type CommitAnswerInput, type NextState, type PendingEvent } from '../persistence/learning';
+import {
+  isLearningStorageError,
+  LearningStorageError,
+  type CommitAnswerInput,
+  type LearningChange,
+  type NextState,
+  type PendingEvent,
+} from '../persistence/learning';
 import { contentReferenceOf, learningStore, type LearningRuntime, type LearningStore } from './learningStore';
 
 // --- The UI seam. Components build against these types; keep them stable. ---
@@ -70,6 +79,11 @@ export interface LearningSessionView {
   inputError: string | null;
   /** A confirmed answer `undoLast` would void: its feedback is shown, or the next card is untouched. */
   canUndo: boolean;
+  /**
+   * Whether the teaching card on screen offers "Ya la sé": the first teaching of a word, while
+   * today's claims stay under `STUDY_RULES.alreadyKnownPerDay`.
+   */
+  canClaimKnown: boolean;
 }
 
 /**
@@ -136,7 +150,7 @@ export interface LearningSessionCard {
   itemId: ItemId;
   intent: PlannedCard['intent'];
   reason: PlannedCard['reason'];
-  /** Whether `knowIt` applies: a teaching card that is not a reteach after a failed check. */
+  /** Whether `knowIt` applies: see `LearningSessionView.canClaimKnown`. */
   canClaimKnown: boolean;
 }
 
@@ -147,7 +161,7 @@ export interface LearningSessionOptions {
   store?: LearningStore;
   /** Seeds practice order and exercise choice. Defaults to the clock. */
   seed?: number;
-  /** Resume the stored active session when its mode and scope match. Defaults to true. */
+  /** Resume the stored active session of this mode when its scope matches. Defaults to true. */
   resume?: boolean;
   /**
    * After a correct first pick on a multiple-choice card the feedback moves on by itself after
@@ -187,7 +201,18 @@ const ERROR_MESSAGE: Record<string, string> = {
   'quota-exceeded': 'No queda espacio para guardar. Libera espacio y vuelve a intentarlo.',
   aborted: 'No se pudo guardar la respuesta. Vuelve a intentarlo.',
   unavailable: 'No se puede abrir el almacenamiento. Recarga la página.',
+  'stale-state': 'Otra pestaña cambió esta tarjeta. Vuelve a intentarlo.',
 };
+
+/** A typed card stored under a policy version this build does not grade: no text could pass it. */
+const isStaleTypedExercise = (exercise: Exercise): boolean =>
+  exercise.format === 'free-recall' &&
+  exercise.grading === 'automatic' &&
+  Object.prototype.hasOwnProperty.call(TYPED_RUBRICS, exercise.rubric.id) &&
+  !isTypedAnswerExercise(exercise);
+
+const rejectedStale = (itemId: ItemId) =>
+  new LearningStorageError({ kind: 'stale-state', itemId, message: `The state of ${itemId} keeps changing in another tab` });
 
 const describeError = (error: unknown): { message: string; retryable: boolean } => {
   if (isLearningStorageError(error)) {
@@ -283,6 +308,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     error: null,
     inputError: null,
     canUndo: false,
+    canClaimKnown: false,
   });
 
   let rt: LearningRuntime;
@@ -369,6 +395,20 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     return out;
   };
 
+  /** "Ya la sé" claims written today, each an `already-known` exposure. Exposures are never voided. */
+  const claimsToday = (): number => {
+    const today = rt.dayRule.localDay(rt.clock());
+    return rt.events().filter((event) => event.type === 'exposure' && event.card.reason === 'already-known' && event.localDay === today).length;
+  };
+
+  /** Only the first teaching of a word, never a reteach or a character, and within the daily cap. */
+  const claimAvailable = (entry: QueueEntry | null): boolean =>
+    !!entry &&
+    entry.intent === 'teach' &&
+    entry.reason === 'new' &&
+    itemKind(entry.itemId) === 'word-meaning' &&
+    claimsToday() < STUDY_RULES.alreadyKnownPerDay;
+
   const show = (state: LearningSessionState, index: number) => {
     shownToken += 1;
     const entry = entryAt(index);
@@ -382,6 +422,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       speechAvailable: rt.speechAvailable(),
       error: null,
       inputError: null,
+      canClaimKnown: state === 'presenting' && claimAvailable(entry),
     });
     if (state !== 'feedback') setView('feedback', null);
   };
@@ -394,8 +435,12 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     setView({ state: 'error', error: described });
   };
 
+  /** Set when another tab reset the progress: this session must not write again. */
+  let stopped = false;
+
   /** Runs a write after the ones before it. On failure the view moves to `error` with this write to retry. */
   const run = (write: () => Promise<void>, saving: boolean): void => {
+    if (stopped) return;
     if (saving) setView('state', 'saving');
     const next = queue.then(write).catch((error: unknown) => fail(error, write));
     queue = next;
@@ -423,7 +468,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         session = done;
         run(() => rt.repo.saveAttemptDraft(done), false);
       }
-      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null });
+      setView({ state: 'finished', selection: null, actions: [], revealed: false, feedback: null, position: session.queue.length, total: session.queue.length, error: null, canClaimKnown: false });
       return;
     }
     attempt = null;
@@ -446,12 +491,12 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     show('presenting', session.position);
   };
 
-  /** The cached state after a non-rating event: a correct practice after teaching sets `eligibleFrom` (P1). */
+  /** The cached state after a non-rating event: an unassisted correct practice after teaching sets `eligibleFrom` (P1). */
   const practiceNextState = (itemId: ItemId, event: PendingEvent): NextState => {
     const taughtBefore = effectiveItemEvents(rt.itemEvents(itemId), itemId).some(
       (other) => other.type === 'exposure' && other.card.reason === 'teaching',
     );
-    const passes = event.type === 'practice' && event.evaluation.outcome === 'correct' && taughtBefore;
+    const passes = taughtBefore && passesPractice(event);
     return (stored: SchedulerState | null) => {
       if (stored && stored.state !== 'new') return null;
       const base = stored ?? rt.scheduler.newState(itemId);
@@ -460,16 +505,49 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     };
   };
 
-  const commit = (input: CommitAnswerInput, after: () => void): void => {
+  const isStale = (error: unknown): boolean => isLearningStorageError(error) && error.error.kind === 'stale-state';
+
+  /**
+   * Writes the answer. `onStale` runs instead of `after` when another tab changed the item since
+   * the answer was evaluated; nothing was written then.
+   */
+  const commit = (input: CommitAnswerInput, after: () => void, onStale?: () => Promise<void>): void => {
     const write = async () => {
-      await rt.commit(input);
+      try {
+        await rt.commit(input);
+      } catch (error) {
+        if (onStale && isStale(error)) {
+          await onStale();
+          return;
+        }
+        throw error;
+      }
       after();
     };
     run(write, true);
   };
 
-  /** Evaluates the open attempt and writes its event, the item's state and the advanced session at once. */
-  const submit = (invalidation?: InvalidEvaluation): void => {
+  /**
+   * Takes the stored session when another tab moved it on, so this tab does not answer a card twice.
+   * Returns whether it did. Local drafts on the same card win: they are newer than the stored ones.
+   */
+  const adoptStored = async (): Promise<boolean> => {
+    if (!session) return false;
+    const stored = await rt.loadSession(mode);
+    if (!stored || stored.id !== session.id) return false;
+    if (stored.position === session.position && stored.queue.length === session.queue.length) return false;
+    session = stored;
+    undo = null;
+    present();
+    return true;
+  };
+
+  /**
+   * Evaluates the open attempt and writes its event, the item's state and the advanced session at once.
+   * The write carries the state the evaluation read; if another tab changed it meanwhile, the store
+   * reloads and the answer is evaluated again once, unless the other tab already moved past this card.
+   */
+  const submit = (invalidation?: InvalidEvaluation, staleRetries = 1): void => {
     if (!session || !attempt) return;
     const entry = current()!;
     const exercise = entry.exercise!;
@@ -547,7 +625,14 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       recorded: result.kind,
     };
     const shown = before.position;
-    commit({ event, nextState, session: next }, () => {
+    const onStale = async () => {
+      await store.reload();
+      // Another tab's answer already reached this tab and moved it on: this answer is dropped.
+      if (session !== before || (await adoptStored())) return;
+      if (staleRetries <= 0) throw rejectedStale(entry.itemId);
+      submit(invalidation, staleRetries - 1);
+    };
+    commit({ event, nextState, session: next, basedOn: itemState }, () => {
       session = next;
       attempt = submitted;
       undo = { eventId: submitted.eventId, voidId: rt.newId(), before, attemptId: submitted.id };
@@ -559,7 +644,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
           if (token === shownToken && view.state === 'feedback') present();
         }, delayMs);
       }
-    });
+    }, onStale);
   };
 
   const record = (action: AttemptAction, end: boolean): void => {
@@ -641,7 +726,8 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     },
     selfAssess(rating) {
       const shown = exercise();
-      if (!shown || shown.grading !== 'self-assessment') return;
+      // Rating needs the answer on screen: a recall is only judged against what it should have been.
+      if (!shown || shown.grading !== 'self-assessment' || !view.revealed) return;
       record({ type: 'self-assessment', at: rt.clock(), rating }, true);
     },
     drawing({ mistakes }) {
@@ -652,7 +738,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     },
     knowIt() {
       const entry = current();
-      if (view.state !== 'presenting' || !session || !entry || entry.intent !== 'teach' || entry.reason === 'teach-again') return;
+      if (view.state !== 'presenting' || !session || !entry || !claimAvailable(entry)) return;
       const content = rt.contentFor(entry.itemId);
       if (!content) return;
       const plan = markAlreadyKnown(planOf(session), session.position, entry.itemId);
@@ -724,7 +810,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         session = restored;
         undo = null;
         present();
-        await rt.repo.saveAttemptDraft(session);
+        await rt.repo.saveAttemptDraft(session, { rewind: true });
       };
       run(write, true);
     },
@@ -754,41 +840,66 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   };
 
   /**
-   * A stored session whose content changed: an open attempt with actions closes as invalid
-   * (`content-changed`) and its card is regenerated; other changed cards are regenerated silently.
-   * A card whose content is no longer installed keeps its stored exercise, which holds everything
-   * it shows.
+   * A stored session whose cards no longer hold: content that changed, or a typed card written under
+   * a policy version this build cannot grade (it would accept no answer). An open attempt with
+   * actions on such a card closes as invalid (`content-changed`, or `other` for a policy change) and
+   * the card is regenerated; other such cards are regenerated silently. A card whose content is no
+   * longer installed keeps its stored exercise, which holds everything it shows.
    */
-  const revalidate = (stored: SessionState): { session: SessionState; invalid: SessionAttempt | null; changed: boolean } => {
+  const revalidate = (stored: SessionState): { session: SessionState; invalid: { attempt: SessionAttempt; reason: InvalidEvaluation['reason'] } | null; changed: boolean } => {
     let changed = false;
-    let invalid: SessionAttempt | null = null;
+    let invalid: { attempt: SessionAttempt; reason: InvalidEvaluation['reason'] } | null = null;
     const queueAfter = stored.queue.map((entry, index) => {
       if (index < stored.position) return entry;
       const content = rt.contentFor(entry.itemId);
-      if (!content || contentReferenceOf(content).contentRevision === entry.content.contentRevision) return entry;
+      if (!content) return entry;
+      const contentChanged = contentReferenceOf(content).contentRevision !== entry.content.contentRevision;
+      const policyGone = !!entry.exercise && isStaleTypedExercise(entry.exercise);
+      if (!contentChanged && !policyGone) return entry;
       changed = true;
       if (index === stored.position && entry.exercise) {
         const open = stored.attempts.find(
           (candidate) => candidate.status === 'in-progress' && candidate.itemId === entry.itemId && candidate.exercise.id === entry.exercise!.id,
         );
-        if (open && open.actions.length > 0) invalid = open;
+        if (open && open.actions.length > 0) invalid = { attempt: open, reason: contentChanged ? 'content-changed' : 'other' };
       }
       return buildEntry(cardOf(entry)) ?? entry;
     });
     return { session: { ...stored, queue: queueAfter }, invalid, changed };
   };
 
+  /**
+   * Another tab wrote. A reset stops this session for good. Any other write may have moved this
+   * session on (the same session open in two tabs), so the stored one is taken when it moved.
+   */
+  const onExternalChange = (change: LearningChange): void => {
+    if (stopped) return;
+    if (change.kind === 'reset') {
+      stopped = true;
+      setView({ state: 'error', error: { message: 'Se ha borrado el progreso en otra pestaña. Vuelve al inicio.', retryable: false } });
+      return;
+    }
+    queue = queue
+      .then(async () => {
+        if (!stopped && (view.state === 'presenting' || view.state === 'feedback')) await adoptStored();
+      })
+      .catch(() => {});
+  };
+
   const start = async (): Promise<void> => {
     rt = await store.init();
+    const unsubscribe = store.onExternalChange(onExternalChange);
+    // The screen that made this session owns it; the subscription ends with that screen.
+    if (owner) runWithOwner(owner, () => onCleanup(unsubscribe));
     const seed = options.seed ?? rt.clock();
     random = seededRandom(seed);
-    const stored = options.resume === false ? null : await rt.loadSession();
-    if (stored && stored.mode === mode && stored.scope && sameScope(stored.scope, scope)) {
+    const stored = options.resume === false ? null : await rt.loadSession(mode);
+    if (stored && stored.scope && sameScope(stored.scope, scope)) {
       const checked = revalidate(stored);
       if (checked.invalid) {
         // Close the stale attempt against the card it was shown with; the commit carries the new queue.
         session = stored;
-        submitStale(checked.invalid, checked.session.queue);
+        submitStale(checked.invalid.attempt, checked.invalid.reason, checked.session.queue);
         return;
       }
       session = checked.session;
@@ -823,7 +934,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   };
 
   /** Writes the invalid attempt for a card whose content changed, with the regenerated queue. */
-  const submitStale = (stale: SessionAttempt, regenerated: readonly QueueEntry[]): void => {
+  const submitStale = (stale: SessionAttempt, reason: InvalidEvaluation['reason'], regenerated: readonly QueueEntry[]): void => {
     if (!session) return;
     const entry = current()!;
     const now = rt.clock();
@@ -831,7 +942,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       sessionMode: mode,
       scheduledEligible: false,
       alreadyKnownCheck: entry.intent === 'already-known-check',
-      invalidation: { outcome: 'invalid', reason: 'content-changed' },
+      invalidation: { outcome: 'invalid', reason },
     });
     if (result.kind !== 'invalid-attempt') return;
     const event: PendingEvent = {
@@ -901,16 +1012,22 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     } while (seen !== queue);
   };
 
+  const owner = getOwner();
   const ready = start().catch((error: unknown) => fail(error, null));
+
+  /** After a reset in another tab every action does nothing. */
+  const guarded = Object.fromEntries(
+    Object.entries(actions).map(([name, action]) => [name, (...args: unknown[]) => (stopped ? undefined : (action as (...rest: unknown[]) => void)(...args))]),
+  ) as unknown as LearningSessionActions;
 
   return {
     view,
-    actions,
+    actions: guarded,
     summary,
     card() {
       const entry = current();
       if (!entry || view.state === 'feedback' || view.state === 'finished') return null;
-      return { itemId: entry.itemId, intent: entry.intent, reason: entry.reason, canClaimKnown: entry.intent === 'teach' && entry.reason !== 'teach-again' };
+      return { itemId: entry.itemId, intent: entry.intent, reason: entry.reason, canClaimKnown: claimAvailable(entry) };
     },
     sessionId: () => session?.id ?? null,
     ready: ready.then(idle),

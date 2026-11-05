@@ -202,6 +202,13 @@ describe('eligibleFrom', () => {
     expect(eligibleFrom([exposure({ id: 'e0', occurredAt: at(0), reason: 'already-known' }), practice({ id: 'p0', occurredAt: at(0, 1) })])).toBeNull();
   });
 
+  it('waits for a pass without a hint that gave the answer away', () => {
+    const assisted = { ...practice({ id: 'p0', occurredAt: at(0, 1) }), evidence: [{ id: 'x', skill: 'meaning', recordedAt: at(0, 1), evaluation: { outcome: 'correct' }, assisted: true, confusions: [], mistakes: null }] } as LearningEvent;
+    const taught = exposure({ id: 'e0', occurredAt: at(0) });
+    expect(eligibleFrom([taught, assisted])).toBeNull();
+    expect(eligibleFrom([taught, assisted, practice({ id: 'p1', occurredAt: at(1, 1) })])).toBe('2026-01-03');
+  });
+
   it('waits for the retaught word to pass, and drops a voided pass', () => {
     const failed = [exposure({ id: 'e0', occurredAt: at(0) }), practice({ id: 'p0', occurredAt: at(0, 1), outcome: 'incorrect' })];
     const retaught = [...failed, exposure({ id: 'e1', occurredAt: at(2) }), practice({ id: 'p1', occurredAt: at(2, 1) })];

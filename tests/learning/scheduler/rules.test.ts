@@ -127,22 +127,37 @@ describe('isMastered', () => {
 });
 
 describe('tomorrowLoad', () => {
-  it('counts items falling due in the next 24 hours, not overdue or new ones', () => {
+  it('counts items falling due in the next 24 hours, not overdue ones or new ones already eligible', () => {
     const now = at(10);
+    const today = utcRule.localDay(now);
     const states = [
       reviewed({ dueAt: now - 1 }),
       reviewed({ dueAt: now }),
       reviewed({ dueAt: now + DAY - 1 }),
       reviewed({ dueAt: now + DAY }),
-      newWord('2026-01-01'),
+      newWord(today),
+      newWord(null),
+      newWord(addLocalDays(today, 2)),
     ];
-    expect(tomorrowLoad(states, now)).toBe(2);
+    expect(tomorrowLoad(states, now, utcRule)).toBe(2);
+  });
+
+  it('counts words taught today whose first rating opens tomorrow', () => {
+    const now = at(10);
+    const tomorrow = addLocalDays(utcRule.localDay(now), 1);
+    const states = [
+      ...Array.from({ length: 55 }, () => reviewed({ dueAt: now + DAY / 2 })),
+      ...Array.from({ length: 20 }, () => newWord(tomorrow)),
+    ];
+    expect(tomorrowLoad(states, now, utcRule)).toBe(75);
+    expect(tomorrowLoadFull(states, now, utcRule)).toBe(true);
+    expect(tomorrowLoadFull(states.slice(0, 59), now, utcRule)).toBe(false);
   });
 
   it('is full at the limit', () => {
     const now = at(10);
     const states = Array.from({ length: STUDY_RULES.tomorrowLoadLimit }, () => reviewed({ dueAt: now + 1 }));
-    expect(tomorrowLoadFull(states.slice(1), now)).toBe(false);
-    expect(tomorrowLoadFull(states, now)).toBe(true);
+    expect(tomorrowLoadFull(states.slice(1), now, utcRule)).toBe(false);
+    expect(tomorrowLoadFull(states, now, utcRule)).toBe(true);
   });
 });

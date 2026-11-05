@@ -5,8 +5,8 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
 const plain = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f\s]/g, '').toLowerCase();
 
 /**
- * The gloss as a card shows it, capitalised. Same rule as `displayGloss` in VocabularyReview: when
- * the first sense only repeats the pinyin ("de" under "de"), its note says more and replaces it.
+ * The gloss as a card shows it, capitalised. When the first sense only repeats the pinyin ("de"
+ * under "de"), its note says more and replaces it.
  */
 export const displayGloss = (word: Pick<WordEntry, 'senses' | 'pinyin'>): string => {
   const [first] = word.senses;
@@ -28,10 +28,10 @@ export interface AskedGloss {
 }
 
 /**
- * The Spanish a production card asks from, as `askGloss` in sessionDeck builds it. When another
- * word shares the first sense ("leer" is 读 and 阅读), the second sense comes along, or the length
- * when there is none. Unlike `askGloss` it checks every word in `vocabulary`, and it reports when
- * the result still fits another word.
+ * The Spanish a production card asks from. When another word shares the first sense ("leer" is 读
+ * and 阅读), the second sense comes along, or the length when there is none. Unlike the retired
+ * review screen's version it checks every word in `vocabulary`, and it reports when the result
+ * still fits another word.
  */
 export const askGloss = (word: WordEntry, vocabulary: readonly WordEntry[]): AskedGloss => {
   const [first = '', second] = word.senses.map((sense) => sense.text.trim());

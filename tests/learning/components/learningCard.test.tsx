@@ -26,22 +26,57 @@ beforeEach(() => {
 });
 
 describe('teach card', () => {
-  it('shows the word, plays it once and reports Ya la sé and Continuar', () => {
+  it('shows only the characters while "Ya la sé" is open, and the lesson after Enséñamela', () => {
     const selection = teachSelection();
-    const { actions } = mount(view({ selection }));
+    const { actions } = mount(view({ selection, canClaimKnown: true }));
     expect(screen.getByRole('img', { name: '你好' })).toBeTruthy();
+    expect(screen.queryByText(selection.card.answer.meaning)).toBeNull();
+    expect(screen.queryByText(selection.card.answer.pinyin)).toBeNull();
+    expect(speakWord).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Ya la sé' }));
+    expect(actions.knowIt).toHaveBeenCalledOnce();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Enséñamela' }));
     expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
     expect(speakWord).toHaveBeenCalledOnce();
     expect(vi.mocked(speakWord).mock.calls[0].slice(0, 2)).toEqual([selection.card.audio!.pinyin, '你好']);
-    fireEvent.click(screen.getByRole('button', { name: 'Ya la sé' }));
+    // The answer is on screen now, so the claim is gone.
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
+    expect(actions.continue).toHaveBeenCalledOnce();
     expect(actions.knowIt).toHaveBeenCalledOnce();
+  });
+
+  it('opens a closed lesson with Space before continuing, and closes the next card again', () => {
+    const selection = teachSelection();
+    const { actions, setView } = mount(view({ selection, canClaimKnown: true }));
+    fireEvent.keyDown(window, { code: 'Space' });
+    expect(actions.continue).not.toHaveBeenCalled();
+    expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
+    fireEvent.keyDown(window, { code: 'Space' });
+    expect(actions.continue).toHaveBeenCalledOnce();
+
+    vi.mocked(speakWord).mockClear();
+    const next = { ...selection, card: { ...selection.card, id: `${selection.card.id}-next` } };
+    setView(view({ selection: next, canClaimKnown: true }));
+    expect(screen.queryByText(selection.card.answer.meaning)).toBeNull();
+    expect(speakWord).not.toHaveBeenCalled();
+  });
+
+  it('shows the lesson at once, with Continuar only, when no claim is open', () => {
+    const selection = teachSelection();
+    const { actions } = mount(view({ selection, canClaimKnown: false }));
+    expect(screen.getByText(selection.card.answer.meaning)).toBeTruthy();
+    expect(speakWord).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Enséñamela' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(actions.continue).toHaveBeenCalledOnce();
   });
 
-  it('keeps Ya la sé off once the exposure is recorded', () => {
+  it('offers no claim once the exposure is recorded', () => {
     const { actions } = mount(view({ selection: teachSelection(), state: 'feedback', feedback: { outcome: 'correct', rating: null, recorded: 'exposure' } }));
-    expect(screen.getByRole('button', { name: 'Ya la sé' })).toBeDisabled();
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continuar' }));
     expect(actions.continue).toHaveBeenCalledOnce();
   });

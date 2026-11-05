@@ -34,12 +34,10 @@ const cardAt = (plan: SessionPlan, position: number, itemId: ItemId): PlannedCar
  *
  * Counts come from the cards themselves, so a reloaded plan keeps its bounds. Past `requeuesPerItem`
  * for the item, or when the cards would pass `requeueLimit` for the session, it returns `plan` itself.
- * A likely-known check that fails adds nothing: the item waits for a normal session as a new item.
  */
 export const requeueAfterAgain = (plan: SessionPlan, position: number, itemId: ItemId): SessionPlan => {
   const card = cardAt(plan, position, itemId);
   if (card.intent === 'teach') throw new Error('A teach card is not answered');
-  if (card.intent === 'already-known-check' && card.reason === 'likely-known') return plan;
 
   const { requeueGap, requeueLimit, requeuesPerItem } = plan.limits;
   const reteach =

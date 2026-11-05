@@ -43,16 +43,20 @@ export const isMastered = (state: SchedulerState): boolean =>
   state.state !== 'new' && state.stability >= STUDY_RULES.masteredStabilityDays;
 
 /**
- * Items falling due from now to 24 hours later. Items already overdue are today's work and do not
- * count, unlike the old `dueByTomorrow`.
+ * Tomorrow's load: rated items falling due from now to 24 hours later, plus new items whose first
+ * rating opens tomorrow (taught and practised today). Items already overdue, and new items already
+ * eligible, are today's work and do not count. The previous system counted to the end of tomorrow.
  */
-export const tomorrowLoad = (states: Iterable<SchedulerState>, now: Timestamp): number => {
+export const tomorrowLoad = (states: Iterable<SchedulerState>, now: Timestamp, rule: LocalDayRule): number => {
   const end = now + STUDY_RULES.tomorrowWindowMs;
+  const tomorrow = addLocalDays(rule.localDay(now), 1);
   let load = 0;
-  for (const state of states) if (state.state !== 'new' && state.dueAt >= now && state.dueAt < end) load += 1;
+  for (const state of states) {
+    if (state.state === 'new' ? state.eligibleFrom === tomorrow : state.dueAt >= now && state.dueAt < end) load += 1;
+  }
   return load;
 };
 
 /** New words wait while tomorrow's load reaches the limit. */
-export const tomorrowLoadFull = (states: Iterable<SchedulerState>, now: Timestamp): boolean =>
-  tomorrowLoad(states, now) >= STUDY_RULES.tomorrowLoadLimit;
+export const tomorrowLoadFull = (states: Iterable<SchedulerState>, now: Timestamp, rule: LocalDayRule): boolean =>
+  tomorrowLoad(states, now, rule) >= STUDY_RULES.tomorrowLoadLimit;

@@ -55,10 +55,7 @@ export const hasHomograph = (word: WordEntry, vocabulary: readonly WordEntry[]):
 export const hasHomophone = (word: WordEntry, vocabulary: readonly WordEntry[]): boolean =>
   vocabulary.some((other) => other.id !== word.id && other.simplified.trim() !== word.simplified.trim() && soundsSame(word, other));
 
-/**
- * Particles and classifiers, judged on the first sense. Same rule as `isFunctionWord` in
- * `src/domain/vocabulary/sessionDeck.ts`, which this module cannot import because it loads the catalog.
- */
+/** Particles and classifiers, judged on the first sense. */
 export const isFunctionWord = (word: Pick<WordEntry, 'senses'>): boolean => {
   const [first] = word.senses;
   return first?.pos === 'partícula' || first?.pos === 'clasificador' || /part[ií]cula|clasificador/i.test(first?.text ?? '');

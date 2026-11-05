@@ -70,22 +70,6 @@ export const summarizeLearning = (itemIds: readonly ItemId[], store: LearningSto
   return summary;
 };
 
-/**
- * Reviews waiting by the end of tomorrow: rated items due by then, and words taught and practised
- * today, whose first rating comes tomorrow. What a session summary calls "Mañana".
- */
-export const dueByEndOfTomorrow = (itemIds: readonly ItemId[], store: LearningStore, now = store.now()): number => {
-  const end = endOfDay(now, 1);
-  const tomorrowDay = addLocalDays(new Date(now).toLocaleDateString('sv-SE') as LocalDay, 1);
-  let count = 0;
-  for (const itemId of itemIds) {
-    const state = store.state(itemId);
-    if (!state) continue;
-    if (state.state === 'new' ? state.eligibleFrom !== null && state.eligibleFrom <= tomorrowDay : state.dueAt <= end) count++;
-  }
-  return count;
-};
-
 /** The three statuses Home and the word list show: weak and review words are still learning. */
 export const studyStatusOf = (status: ItemStatus): 'new' | 'learning' | 'mastered' =>
   status === 'new' ? 'new' : status === 'mastered' ? 'mastered' : 'learning';

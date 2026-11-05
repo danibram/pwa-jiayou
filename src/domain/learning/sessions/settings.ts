@@ -6,7 +6,7 @@ import type { SessionSettings } from './types';
  *   (`MORE_SIZE`); 8 new characters a day (`CHAR_NEW_PER_DAY`);
  * - 30 cards a session: the old session held up to 20 items, and its ten new words took three places
  *   each. A new item is now two cards (teach and one practice), so ten new words and ten reviews fill it;
- * - 20 practice cards (`SESSION_SIZE`) and 10 likely-known checks (`KNOWN_PER_SESSION`);
+ * - 20 practice cards (`SESSION_SIZE`);
  * - at most 10 cards added by Again, two per item.
  */
 export const DEFAULT_SESSION_SETTINGS: SessionSettings = {
@@ -15,7 +15,6 @@ export const DEFAULT_SESSION_SETTINGS: SessionSettings = {
   newPerSession: 10,
   workLimit: 30,
   practiceLimit: 20,
-  alreadyKnownPerSession: 10,
   requeueLimit: 10,
   requeuesPerItem: 2,
 };

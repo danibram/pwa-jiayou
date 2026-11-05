@@ -37,10 +37,9 @@ const optional = (value: string | undefined) => (value === undefined ? null : cl
  * The w1 form holds what a word card shows or uses to pick its question:
  * - simplified and traditional (the card shows the traditional form when it differs);
  * - the reading a card shows;
- * - the first sense's part of speech, because isFunctionWord in sessionDeck turns the recall of a
- *   particle or classifier around;
- * - the first sense's note, which displayGloss in VocabularyReview shows when the first sense is
- *   only the pinyin;
+ * - the first sense's part of speech, because `isFunctionWord` turns the recall of a particle or
+ *   classifier around;
+ * - the first sense's note, which `displayGloss` shows when the first sense is only the pinyin;
  * - every sense text in order: the first leads the card, the rest are the line below it, and
  *   askGloss adds the second when another word shares the first.
  * Later senses' parts of speech and notes appear only on the word page, so they are left out, as are

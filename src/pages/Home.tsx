@@ -102,10 +102,13 @@ const Home: Component<HomeProps> = (props) => {
   const wordScope = () => [...vocabularyStore.state.selectedLists].sort().join(',');
   const previousWords = readHomeSnapshot('vocabulary', untrack(wordScope));
   rememberHomeSnapshot('vocabulary', untrack(wordScope), untrack(wordSummary));
-  /** The stored word session still has cards: Home offers to continue it. Trazos resumes its own. */
+  /**
+   * A stored word session still has cards: Home offers to continue the most recently started one.
+   * Each mode keeps its own session, and Trazos resumes its own.
+   */
   const [paused] = createResource(() => store.ready(), async () => {
-    const session = await store.activeSession();
-    return session && session.mode !== 'strokes' ? practiceIdOf(session) : null;
+    const session = (await store.activeSessions()).find((candidate) => candidate.mode !== 'strokes');
+    return session ? practiceIdOf(session) : null;
   });
   const pausedWord = () => (paused.state === 'ready' ? paused() : null);
   const wordClosed = () => !pausedWord() && wordPending() === 0;

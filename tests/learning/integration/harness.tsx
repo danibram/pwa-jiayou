@@ -14,7 +14,7 @@ const enabled = (name: string | RegExp) =>
 
 /** The text of the right option on the multiple-choice card the stored session is at. */
 const rightOptionText = async (store: LearningStore): Promise<string> => {
-  const session = await store.activeSession();
+  const [session] = await store.activeSessions();
   const entry = session?.queue[session.position];
   const option = entry?.exercise?.options.find((candidate) => candidate.contentId === entry.content.contentId);
   if (!option) throw new Error('No multiple-choice card stored at the current position');
@@ -32,6 +32,9 @@ export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'w
   let next: 'choice' | 'recall' | null = null;
   let typed = false;
   await waitFor(() => {
+    // A first lesson opens with "Enséñamela" before its Continuar.
+    const teach = enabled('Enséñamela');
+    if (teach) fireEvent.click(teach);
     const go = enabled('Continuar');
     if (go) return void fireEvent.click(go);
     if (screen.queryByRole('textbox') && enabled('No lo sé')) {
@@ -53,7 +56,7 @@ export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'w
     throw new Error('No card ready');
   });
   if (typed) {
-    const session = await store.activeSession();
+    const [session] = await store.activeSessions();
     const exercise = session?.queue[session.position]?.exercise;
     if (!exercise) throw new Error('No typed card stored at the current position');
     fireEvent.input(screen.getByRole('textbox'), { target: { value: rightText(exercise) } });

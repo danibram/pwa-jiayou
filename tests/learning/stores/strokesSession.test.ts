@@ -98,6 +98,10 @@ describe('a Trazos session', () => {
     expect(traced.exercise).toMatchObject({ skill: 'writing', format: 'writing', stage: 'trace', cue: 'characters' });
     expect(traced.actions.map((action) => action.type)).toEqual(['hint', 'drawing']);
     expect(drawingOf(traced.actions)).toMatchObject({ mistakes: 2 });
+    // A trace that needed a stroke hint is not a pass: that character is taught again before its first rating.
+    expect(store.state(charItems[0])).toMatchObject({ state: 'new', eligibleFrom: null });
+    const again = await env.session(store, { mode: 'strokes', scope: { kind: 'item', itemId: charItems[0] } });
+    expect(await play(again, () => ({ mistakes: 0 }))).toEqual([`watch:${CHARS[0].character}`, `trace:${CHARS[0].character}`]);
     for (const itemId of charItems) {
       expect(store.state(itemId)).toMatchObject({ state: 'new', eligibleFrom: '2026-11-06' });
       expect(store.status(itemId)).toBe('learning');
@@ -194,5 +198,28 @@ describe('character content in the learning store', () => {
     expect(named).toContain(characterItemId('爸'));
     expect(named).not.toContain(characterItemId('八'));
     store.close();
+  });
+});
+
+describe('sessions of two modes', () => {
+  it('keeps a paused Hoy session while a Trazos session starts and finishes', async () => {
+    const store = strokesEnv();
+    await store.init();
+
+    const today = await env.session(store, { mode: 'today' });
+    expect(today.view.selection).toMatchObject({ kind: 'exposure', itemId: itemOf(DAD) });
+    today.actions.continue();
+    await today.idle();
+    const position = today.view.position;
+    expect(position).toBeGreaterThan(0);
+    expect(today.view.state).toBe('presenting');
+
+    await play(await env.session(store, { mode: 'strokes' }), () => ({ mistakes: 0 }));
+    expect(await store.activeSession('strokes')).toBeNull();
+    expect((await store.activeSession('today'))?.id).toBe(today.sessionId());
+
+    const resumed = await env.session(store, { mode: 'today' });
+    expect(resumed.sessionId()).toBe(today.sessionId());
+    expect(resumed.view.position).toBe(position);
   });
 });

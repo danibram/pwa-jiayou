@@ -102,13 +102,20 @@ export const effectiveItemEvents = (events: readonly LearningEvent[], itemId: It
 };
 
 /**
- * Decision P1: the local day after the first correct practice that follows the first teaching
- * exposure, or null while there is none. Takes events already in replay order.
+ * A practice that shows the learner recalled the item alone: correct, with no hint that gave the
+ * answer away before the first answer (any hint, for writing). Decision P1 waits for one.
+ */
+export const passesPractice = (event: { type: string; evaluation?: { outcome: string }; evidence?: readonly { assisted: boolean }[] }): boolean =>
+  event.type === 'practice' && event.evaluation?.outcome === 'correct' && (event.evidence ?? []).every((evidence) => !evidence.assisted);
+
+/**
+ * Decision P1: the local day after the first unassisted correct practice that follows the first
+ * teaching exposure, or null while there is none. Takes events already in replay order.
  */
 export const eligibleFromEvents = (ordered: readonly LearningEvent[]): LocalDay | null => {
   const taught = ordered.findIndex((event) => event.type === 'exposure' && event.card.reason === 'teaching');
   if (taught < 0) return null;
-  const passed = ordered.slice(taught + 1).find((event) => event.type === 'practice' && event.evaluation.outcome === 'correct');
+  const passed = ordered.slice(taught + 1).find((event) => passesPractice(event));
   return passed ? addLocalDays(passed.localDay, 1) : null;
 };
 

@@ -8,9 +8,12 @@ import { initTheme } from './utils/theme';
 import { initAnalytics } from './analytics';
 import { loadSelectedWords } from './utils/levelPacks';
 import { learningStore } from './stores/learningStore';
+import { removeObsoleteKeys } from './persistence/obsoleteKeys';
+import { storage } from './persistence/keyValue';
 
 initAnalytics();
 initTheme();
+removeObsoleteKeys(storage);
 
 document.documentElement.addEventListener('pointerdown', () => {
   document.documentElement.dataset.pointer = '';

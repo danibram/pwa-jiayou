@@ -382,20 +382,15 @@ describe('modes', () => {
     expect(missing.leftOut).toEqual([{ itemId: word(999), reason: 'not-in-pool' }]);
   });
 
-  it('Trazos plans characters only, checks likely-known ones outside the budget', () => {
+  it('Trazos plans characters only, within the daily budget for characters', () => {
     const chars = ['4e00', '4e8c', '4e09', '56db', '4e94', '516d', '4e03', '516b', '4e5d', '5341'].map(char);
     const plan = buildSession(input({
       mode: 'strokes',
-      pool: [
-        ...poolOf([word(1)]),
-        ...poolOf(chars.slice(0, 2), { likelyKnown: true }),
-        ...poolOf(chars.slice(2)),
-      ],
+      pool: [...poolOf([word(1)]), ...poolOf(chars)],
       states: statesOf(reviewed(word(1), on(7))),
     }));
     expect(plan.cards.every((card) => card.itemId.startsWith('character-writing:'))).toBe(true);
-    expect(plan.counts).toMatchObject({ alreadyKnownCheck: 2, newItems: 8, teach: 8, practice: 8, scheduled: 0 });
-    // Eight new characters a day; the likely-known ones do not take part of it.
+    expect(plan.counts).toMatchObject({ alreadyKnownCheck: 0, newItems: 8, teach: 8, practice: 8, scheduled: 0 });
     expect(plan.counts.newLeftAfter).toBe(0);
   });
 

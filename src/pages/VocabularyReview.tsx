@@ -11,7 +11,6 @@ import { characterExample, characterGloss } from '../utils/wordParts';
 import { levelRank } from '../utils/wordOrder';
 import { stopSpeech } from '../utils/speech';
 import { ALL_ID, MORE_ID, sessionTarget } from '../utils/wordSessions';
-import { dueByEndOfTomorrow } from '../utils/progressSummary';
 import { createLearningSession } from '../stores/learningSessionStore';
 import type { ItemId } from '../domain/learning/types';
 
@@ -192,7 +191,7 @@ const VocabularyReview: Component<Props> = (props) => {
               open
               recorded={session.summary().recorded}
               items={summaryItems()}
-              dueTomorrow={dueByEndOfTomorrow(store.runtime().pool().map((item) => item.itemId), store)}
+              dueTomorrow={store.dueByTomorrow('word-meaning')}
               nextDueAt={session.summary().nextReviews[0]?.dueAt ?? null}
               newWords={newWords()}
               now={store.now()}

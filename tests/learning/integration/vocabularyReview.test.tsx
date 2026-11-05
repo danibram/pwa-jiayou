@@ -1,7 +1,11 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import VocabularyReview from '../../../src/pages/VocabularyReview';
-import type { LearningStore } from '../../../src/stores/learningStore';
+import type { ItemContent } from '../../../src/domain/learning/exercises';
+import type { PoolItem } from '../../../src/domain/learning/sessions';
+import type { ItemId } from '../../../src/domain/learning/types';
+import { characterStore } from '../../../src/stores/characterStore';
+import { characterItemId, characterOf, type LearningStore } from '../../../src/stores/learningStore';
 import { DAY, environment, itemOf, POOL_WORDS, type Env } from '../stores/fixtures';
 import { answerOnScreen, withStore } from './harness';
 
@@ -29,15 +33,56 @@ const finishOnScreen = async (store: LearningStore) => {
 };
 
 describe('the word review page over the learning store', () => {
+  it('counts only words in the summary line for tomorrow, not the characters traced today', async () => {
+    env = environment();
+    const rows = ['爱', '八'].map((char) => characterStore.state.characters.find((row) => row.character === char)!);
+    const words = env.words;
+    const resolveContent = (itemId: ItemId): ItemContent | null => {
+      const char = characterOf(itemId);
+      if (char !== null) {
+        const row = rows.find((candidate) => candidate.character === char);
+        return row ? { kind: 'character', character: row } : null;
+      }
+      const word = words.get(itemId.slice('word-meaning:'.length));
+      return word ? { kind: 'word', word } : null;
+    };
+    const pool = (): PoolItem[] => [
+      ...POOL_WORDS.slice(0, 2).map((word) => ({ itemId: itemOf(word), available: true })),
+      ...rows.map((row) => ({ itemId: characterItemId(row.character), available: true })),
+    ];
+    const store = env.store({ speechAvailable: () => false, resolveContent, pool });
+
+    // Trazos first: both characters are watched and traced, so their first rating is due tomorrow too.
+    const strokes = await env.session(store, { mode: 'strokes' });
+    for (let guard = 0; guard < 40 && strokes.view.state !== 'finished'; guard++) {
+      const selection = strokes.view.selection;
+      if (strokes.view.state === 'feedback' || selection?.kind === 'exposure') strokes.actions.continue();
+      else strokes.actions.drawing({ mistakes: 0 });
+      await strokes.idle();
+    }
+    for (const row of rows) {
+      expect(store.state(characterItemId(row.character))).toMatchObject({ state: 'new', eligibleFrom: expect.any(String) });
+    }
+
+    open(store);
+    const summary = await finishOnScreen(store);
+    expect(summary).toHaveTextContent('Mañana2 repasos');
+  }, 15_000);
+
   it('teaches a word, practises it, resumes the same card after a reload and ends on the summary', async () => {
     env = environment();
     const first = env.store({ speechAvailable: () => false });
     const { onStrokes } = open(first);
 
-    // Hoy opens on a lesson: the word, its reading and meaning, and the page's own details.
+    // Hoy opens on a new word with only its characters: "Ya la sé" must not follow the answer.
     expect(await screen.findByText('Palabra nueva', { selector: '.eyebrow' })).toBeTruthy();
     expect(screen.getByRole('img', { name: POOL_WORDS[0].simplified })).toBeTruthy();
+    expect(screen.queryByText('Cómo se escribe · toca un carácter')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Ya la sé' })).toBeTruthy();
+    // Enséñamela opens the lesson: the reading, the meaning and the page's own details.
+    fireEvent.click(screen.getByRole('button', { name: 'Enséñamela' }));
     expect(screen.getByText('Cómo se escribe · toca un carácter')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
     fireEvent.click(screen.getAllByRole('button', { name: /^Practicar trazos de/ })[0]);
     expect(onStrokes).toHaveBeenCalledWith([...POOL_WORDS[0].simplified][0]);
     // Leaving never discards: there is no such choice.

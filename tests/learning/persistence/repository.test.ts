@@ -91,8 +91,23 @@ describe('commitAnswer', () => {
     expect(result.event).toMatchObject({ id: 'r1', deviceId: 'device-a', sequence: 0 });
     const loaded = await repo.loadAll();
     expect(loaded.states.get(WORD)).toEqual(result.state);
-    expect(loaded.session).toEqual(session);
+    expect(loaded.sessions.get('today')).toEqual(session);
     expect(loaded.configs.map((config) => config.id)).toEqual([scheduler.configId]);
+  });
+
+  it('refuses, retryably and without writing, an answer decided on a state another tab has changed', async () => {
+    const repo = await fresh().open();
+    const first = await repo.commitAnswer({ event: pendingReview('r1', at(1), 'good', scheduler.configId), nextState: applyRating(scheduler, 'good', at(1)), basedOn: null });
+    // A second answer evaluated before r1 landed, on the empty state.
+    const error = await failure(
+      repo.commitAnswer({ event: pendingReview('r2', at(2), 'good', scheduler.configId), nextState: applyRating(scheduler, 'good', at(2)), basedOn: null }),
+    );
+    expect(kindOf(error)).toBe('stale-state');
+    expect(error.retryable).toBe(true);
+    expect((await repo.listEvents()).map((event) => event.id)).toEqual(['r1']);
+    // Decided on the current state, it goes through.
+    await repo.commitAnswer({ event: pendingReview('r2', at(2), 'good', scheduler.configId), nextState: applyRating(scheduler, 'good', at(2)), basedOn: first.state });
+    expect(await repo.listEvents()).toHaveLength(2);
   });
 
   it('is idempotent: retrying the same write returns the stored result and writes nothing', async () => {
@@ -157,7 +172,7 @@ describe('commitAnswer', () => {
     expect(await repo.listEvents()).toEqual([]);
     const loaded = await repo.loadAll();
     expect(loaded.states.size).toBe(0);
-    expect(loaded.session).toBeNull();
+    expect(loaded.sessions.size).toBe(0);
     const next = await repo.commitAnswer({ event: pendingPractice('p1', at(2)), nextState: null });
     expect(next.event.sequence).toBe(0);
   });
@@ -230,7 +245,7 @@ describe('injected write failures', () => {
     expect(await repo.listEvents()).toEqual([]);
     const loaded = await repo.loadAll();
     expect(loaded.states.size).toBe(0);
-    expect(loaded.session).toBeNull();
+    expect(loaded.sessions.size).toBe(0);
   });
 });
 
@@ -299,16 +314,37 @@ describe('drafts', () => {
     first.close();
 
     const reloaded = await harnessed.open();
-    const { session: resumed } = await reloaded.loadAll();
+    const resumed = await reloaded.loadSession('today');
     expect(resumed).toEqual(session);
     expect(resumed?.attempts[0].actions[0]).toMatchObject({ type: 'hint', hint: { kind: 'pinyin', revealsAnswer: false } });
   });
 
-  it('keeps one active session: starting another drops the previous one', async () => {
+  it('keeps one session per mode: starting another of the same mode drops the previous one', async () => {
     const repo = await fresh().open();
     await repo.saveAttemptDraft(sessionWithHint('session-1'));
     await repo.saveAttemptDraft(sessionWithHint('session-2'));
-    expect((await repo.loadAll()).session?.id).toBe('session-2');
+    expect((await repo.loadAll()).sessions.get('today')?.id).toBe('session-2');
+    expect((await repo.loadAll()).sessions.size).toBe(1);
+  });
+
+  it('does not move a stored session back unless asked to', async () => {
+    const repo = await fresh().open();
+    await repo.saveAttemptDraft({ ...sessionWithHint(), position: 1 });
+    await repo.saveAttemptDraft(sessionWithHint());
+    expect((await repo.loadSession('today'))?.position).toBe(1);
+    await repo.saveAttemptDraft(sessionWithHint(), { rewind: true });
+    expect((await repo.loadSession('today'))?.position).toBe(0);
+  });
+
+  it('keeps the session of another mode', async () => {
+    const repo = await fresh().open();
+    const today = sessionWithHint('today-1');
+    await repo.saveAttemptDraft(today);
+    await repo.saveAttemptDraft({ ...sessionWithHint('strokes-1'), mode: 'strokes' });
+    await repo.saveAttemptDraft({ ...sessionWithHint('strokes-1'), mode: 'strokes', status: 'completed' });
+    expect(await repo.loadSession('today')).toEqual(today);
+    expect(await repo.loadSession('strokes')).toBeNull();
+    expect([...(await repo.loadAll()).sessions.keys()]).toEqual(['today']);
   });
 });
 
@@ -463,7 +499,7 @@ describe('replaceAll and the sequence counter', () => {
     await repo.saveAttemptDraft(sessionWithHint());
     await repo.replaceAll({ schemaVersion: 1, exportedAt: at(30), deviceId: 'device-z', events: [], configs: [] });
     const loaded = await repo.loadAll();
-    expect(loaded.session).toBeNull();
+    expect(loaded.sessions.size).toBe(0);
     expect(loaded.states.size).toBe(0);
     expect(loaded.configs.map((config) => config.id)).toEqual([scheduler.configId]);
   });

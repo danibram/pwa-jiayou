@@ -117,7 +117,6 @@ const LEFT_OUT_REASONS: readonly LeftOutReason[] = [
   'tomorrow-load',
   'pending-elsewhere',
   'practice-limit',
-  'already-known-limit',
 ];
 
 /**
@@ -147,6 +146,7 @@ export const buildSession = (input: SessionInput): SessionPlan => {
       return state ? [state] : [];
     }),
     now,
+    dayRule,
   );
 
   let scoped: PoolItem[];
@@ -207,13 +207,11 @@ export const buildSession = (input: SessionInput): SessionPlan => {
     }
   };
 
-  /** Free reteaches, likely-known checks, then budget-spending new items, in pool order. */
+  /** Free reteaches, then budget-spending new items, in pool order. */
   const takeNew = (list: Candidate[]) => {
     let pairs = 0;
-    let checks = 0;
     const reteach = list.filter((c) => c.taught);
-    const likelyKnown = list.filter((c) => !c.taught && !c.seen && c.item.likelyKnown);
-    const fresh = list.filter((c) => !c.taught && !(c.item.likelyKnown && !c.seen));
+    const fresh = list.filter((c) => !c.taught);
     for (const c of reteach) {
       if (pairs >= settings.newPerSession || room() < 2) {
         leave(c.item.itemId, 'new-budget-session');
@@ -222,19 +220,6 @@ export const buildSession = (input: SessionInput): SessionPlan => {
       teachings.push({ itemId: c.item.itemId, reason: 'reteach' });
       used += 2;
       pairs += 1;
-    }
-    for (const c of likelyKnown) {
-      if (checks >= settings.alreadyKnownPerSession) {
-        leave(c.item.itemId, 'already-known-limit');
-        continue;
-      }
-      if (room() < 1) {
-        leave(c.item.itemId, 'work-limit');
-        continue;
-      }
-      reviews.push({ itemId: c.item.itemId, intent: 'already-known-check', reason: 'likely-known' });
-      used += 1;
-      checks += 1;
     }
     for (const c of fresh) {
       let reason: LeftOutReason | null = null;

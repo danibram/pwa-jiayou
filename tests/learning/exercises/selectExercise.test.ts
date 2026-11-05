@@ -13,6 +13,7 @@ import {
   seededRandom,
   sharesSense,
   soundsSame,
+  STROKE_RUBRIC_REVISION,
   type ExerciseSelection,
   type WordEntry,
 } from '../../../src/domain/learning/exercises';
@@ -520,14 +521,14 @@ describe('writing stages', () => {
 
   it('practises by tracing, which does not rate', () => {
     const exercise = exerciseOf(selectExercise(card(itemId, 'practice', 'seen'), content, context()));
-    expect(exercise).toMatchObject({ skill: 'writing', format: 'writing', stage: 'trace', cue: 'characters', rubric: { id: 'writing-trace' } });
+    expect(exercise).toMatchObject({ skill: 'writing', format: 'writing', stage: 'trace', cue: 'characters', rubric: { id: 'writing-trace', revision: STROKE_RUBRIC_REVISION } });
     expect(ratingTaskOf(itemId, exercise)).toBeNull();
   });
 
   it('reviews by drawing from memory, the rating task', () => {
     const selection = selectExercise(card(itemId, 'scheduled', 'due-review'), content, context());
     const exercise = exerciseOf(selection);
-    expect(exercise).toMatchObject({ skill: 'writing', format: 'writing', stage: 'memory', cue: 'gloss', grading: 'automatic', rubric: { id: 'writing-from-memory' } });
+    expect(exercise).toMatchObject({ skill: 'writing', format: 'writing', stage: 'memory', cue: 'gloss', grading: 'automatic', rubric: { id: 'writing-from-memory', revision: STROKE_RUBRIC_REVISION } });
     expect(exercise.prompt).toContain(exercise.answer!.meaning);
     expect(ratingTaskOf(itemId, exercise)).toBe('writing');
     const result = evaluateAttempt(
