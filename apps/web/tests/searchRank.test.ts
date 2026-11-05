@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { sensesText } from '../src/data/wordSenses';
+import { sensesText } from '@jiayou/content';
 import { searchCharacters } from '../src/utils/characterSearch';
 import { rankBy, searchScore } from '../src/utils/searchRank';
 import { vocabulary } from './fixtures/levelWords';

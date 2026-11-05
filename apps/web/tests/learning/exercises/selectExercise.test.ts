@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contentReferenceForCharacter, contentReferenceForWord } from '../../../src/domain/learning/content/revision';
+import { contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
 import { evaluateAttempt, evaluatorVersion } from '../../../src/domain/learning/evaluation';
 import { ratingTaskOf } from '../../../src/domain/learning/evaluation/rules';
 import { gradeTypedAnswer, isTypedAnswerExercise, PRODUCTION_ROLES } from '../../../src/domain/learning/production';

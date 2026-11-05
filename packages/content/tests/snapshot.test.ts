@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateDraft, validateSnapshot, type ContentSnapshot } from '../lib/model';
+import { validateDraft, validateSnapshot, type ContentSnapshot } from '../src/index.ts';
 
 const base: ContentSnapshot = {
   schemaVersion: 1,

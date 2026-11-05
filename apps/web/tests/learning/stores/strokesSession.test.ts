@@ -1,7 +1,7 @@
 import { IDBFactory } from 'fake-indexeddb';
 import { afterEach, describe, expect, it } from 'vitest';
 import { autoStrokeHint, STROKE_HINT } from '../../../src/components/learning/writing/hints';
-import { contentReferenceForCharacter } from '../../../src/domain/learning/content/revision';
+import { contentReferenceForCharacter } from '@jiayou/content';
 import type { ItemContent } from '../../../src/domain/learning/exercises';
 import type { PoolItem } from '../../../src/domain/learning/sessions';
 import type { AttemptAction, Hint, ItemId, LearningEvent } from '../../../src/domain/learning/types';

@@ -1,4 +1,4 @@
-import type { VocabularyEntry } from './vocabulary';
+import type { VocabularyEntry } from './vocabulary.ts';
 
 /**
  * Curated links between catalog words. Shared characters, tone neighbors and topics

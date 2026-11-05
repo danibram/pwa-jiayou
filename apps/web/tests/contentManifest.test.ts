@@ -3,8 +3,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { contentManifest } from '../../../scripts/content-manifest';
-import { packCacheName } from '../src/domain/content/caches';
-import { PACK_SCHEMA, usablePacks } from '../src/domain/content/manifest';
+import { packCacheName } from '@jiayou/content';
+import { PACK_SCHEMA, usablePacks } from '@jiayou/content';
 
 describe('content manifest', () => {
   it('matches the pack files, so the committed copy is never stale', () => {

@@ -9,9 +9,9 @@ import {
   WORD_RELATION_KINDS,
   WORD_RELATION_LABELS,
   type WordRelationKind,
-} from '../../web/src/data/wordRelations';
+} from '@jiayou/content';
 import { exampleFor, useEditor } from '../lib/store';
-import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '../../web/src/data/wordSenses';
+import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '@jiayou/content';
 import { Field, Hanzi, Pinyin } from './text';
 
 /** Keeps only Han characters, as the app's word form does. Latin left by an IME is dropped after composition. */

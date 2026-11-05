@@ -1,4 +1,8 @@
-import type { ContentReference } from '../types';
+/** An immutable revision of one published word or character. */
+export interface ContentReference {
+  contentId: string;
+  contentRevision: string;
+}
 import { withToneSandhi } from '@jiayou/chinese';
 
 // Per-entry content revisions. Publishing (scripts/content-publish.mjs) writes the same values to

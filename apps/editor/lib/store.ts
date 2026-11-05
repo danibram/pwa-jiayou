@@ -1,14 +1,14 @@
 import { createContext, createDeferred, createMemo, createSignal, useContext, type Accessor } from 'solid-js';
-import { WORD_POS_LABELS, sensesText, type WordPos, type WordSense } from '../../web/src/data/wordSenses';
+import { WORD_POS_LABELS, sensesText, type WordPos, type WordSense } from '@jiayou/content';
 import { createStore, produce, unwrap } from 'solid-js/store';
 import type { VocabularyEntry } from '../../web/src/data/vocabulary';
 import type { Topic } from '../../web/src/data/topics';
 import type { HSKCharacter } from '../../web/src/types';
-import type { ContentDraft, ContentSnapshot } from './model';
-import { validateDraft, validateSnapshot } from './model';
+import type { ContentDraft, ContentSnapshot } from '@jiayou/content';
+import { validateDraft, validateSnapshot } from '@jiayou/content';
 import { wordId } from '@jiayou/chinese';
 import type { HskLevel } from '../../web/src/types';
-import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '../../web/src/data/wordRelations';
+import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '@jiayou/content';
 import legacyExamples from '../../web/src/data/vocabulary/examples.json';
 import type { VocabularyExample } from '../../web/src/data/vocabulary';
 

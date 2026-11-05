@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
 import { contentManifest, LEVELS, wordListPath } from '../../scripts/content-manifest.ts';
-import { packCacheName } from './src/domain/content/caches.ts';
+import { packCacheName } from '@jiayou/content';
 
 // Hashed from the files themselves, so a pack changed without rebuilding content.json still gets a
 // new cache. Only that pack's cache changes; the others keep what the learner already downloaded.

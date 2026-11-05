@@ -14,7 +14,7 @@ import { mainMeaning } from '@jiayou/chinese';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
 import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';
-import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '../data/wordSenses';
+import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '@jiayou/content';
 import StatusSeal from '../components/StatusSeal';
 import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';

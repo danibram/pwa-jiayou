@@ -1,4 +1,4 @@
-import type { CharacterContent, WordContent } from '../content/revision';
+import type { CharacterContent, WordContent } from '@jiayou/content';
 import type { ProductionKind } from '../production/exercises';
 import type {
   CardIntent,

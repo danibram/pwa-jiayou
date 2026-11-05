@@ -145,8 +145,8 @@ apps/
 │   └── tests/             vitest, jsdom
 └── editor/                local content editor
 packages/
-└── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
-shared/                    content contracts used by the app, the editor and the scripts
+├── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
+└── content/               @jiayou/content: content types, word and snapshot checks, revisions, pack manifest
 content/                   published content snapshot and version
 scripts/                   data pipelines
 docs/                      audio, vocabulary data, specs, vision, research

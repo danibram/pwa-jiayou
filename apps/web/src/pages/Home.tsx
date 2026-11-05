@@ -1,4 +1,4 @@
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { Component, createMemo, createResource, createSignal, For, Show, untrack } from 'solid-js';
 import Icon from '../components/Icon';
 import RiceGrid from '../components/RiceGrid';

@@ -1,8 +1,6 @@
-/** An immutable revision of one published word or character. */
-export interface ContentReference {
-  contentId: string;
-  contentRevision: string;
-}
+import type { ContentReference } from '@jiayou/content';
+
+export type { ContentReference } from '@jiayou/content';
 
 /**
  * Derived from the content id, so every device names an item the same way. A word's content id is

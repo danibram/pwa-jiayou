@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
 import { topicById, topics } from '../data/topics';
 import { allWords, findWord } from '../data/vocabulary';
-import { characterContentId, contentReferenceForCharacter, contentReferenceForWord } from '../domain/learning/content/revision';
+import { characterContentId, contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
 import type { ItemContent, WordEntry } from '../domain/learning/exercises';
 import {
   compareReplayOrder,

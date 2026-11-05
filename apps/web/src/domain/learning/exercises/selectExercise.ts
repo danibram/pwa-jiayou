@@ -1,4 +1,4 @@
-import { characterContentId, contentReferenceForCharacter, contentReferenceForWord, type CharacterContent } from '../content/revision';
+import { characterContentId, contentReferenceForCharacter, contentReferenceForWord, type CharacterContent } from '@jiayou/content';
 import { evaluatorVersion } from '../evaluation';
 import {
   EXERCISE_ROLES,

@@ -1,12 +1,8 @@
-import type { VocabularyEntry } from '../../web/src/data/vocabulary';
-import type { Topic } from '../../web/src/data/topics';
-import type { HSKCharacter } from '../../web/src/types';
-
-/** Keep in sync with WORD_RELATION_KINDS in src/data/wordRelations.ts. Inlined so content-publish can load this file as a data URL. */
-const RELATION_KINDS = new Set(['synonym', 'antonym', 'related', 'classifier', 'confused']);
-const isWordRelationKind = (value: unknown): boolean => typeof value === 'string' && RELATION_KINDS.has(value);
-/** Keep in sync with WORD_POS in src/data/wordSenses.ts, inlined for the same reason. */
-const WORD_POS = new Set(['sustantivo', 'verbo', 'adjetivo', 'adverbio', 'clasificador', 'pronombre', 'numeral', 'preposición', 'conjunción', 'partícula', 'interjección', 'expresión']);
+import type { HSKCharacter } from './contracts.ts';
+import { isWordRelationKind } from './relations.ts';
+import { isWordPos } from './senses.ts';
+import type { Topic } from './topic.ts';
+import type { VocabularyEntry } from './vocabulary.ts';
 
 /**
  * A retired word keeps its row, so its id stays taken and its history readable, but publication leaves
@@ -86,7 +82,7 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot, publish
       for (const sense of row.senses as unknown[]) {
         if (!object(sense) || !text(sense.text)) fail(`Significado vacío en ${row.simplified}.`);
         const use = sense as Record<string, unknown>;
-        if (use.pos !== undefined && !WORD_POS.has(use.pos as string)) fail(`Categoría desconocida en ${row.simplified}.`);
+        if (use.pos !== undefined && !isWordPos(use.pos)) fail(`Categoría desconocida en ${row.simplified}.`);
         if (use.note !== undefined && !text(use.note)) fail(`Nota vacía en ${row.simplified}.`);
       }
     }

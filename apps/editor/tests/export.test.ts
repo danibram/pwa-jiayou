@@ -4,7 +4,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSyn
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { characterRevision, wordRevision } from '../../web/src/domain/learning/content/revision';
+import { characterRevision, wordRevision } from '@jiayou/content';
 
 const root = existsSync(join(process.cwd(), 'scripts/content-publish.mjs')) ? process.cwd() : resolve(process.cwd(), '../..');
 const dirs: string[] = [];
@@ -19,13 +19,11 @@ const base = {
 const setup = () => {
   const dir = mkdtempSync(join(tmpdir(), 'jiayou-export-'));
   dirs.push(dir);
-  for (const sub of ['scripts', 'apps/editor/lib', 'content', 'apps/web/src/data/vocabulary', 'apps/web/public/packs']) mkdirSync(join(dir, sub), { recursive: true });
+  for (const sub of ['scripts', 'content', 'apps/web/src/data/vocabulary', 'apps/web/public/packs']) mkdirSync(join(dir, sub), { recursive: true });
   copyFileSync(join(root, 'scripts/content-publish.mjs'), join(dir, 'scripts/content-publish.mjs'));
   copyFileSync(join(root, 'scripts/build-search-index.mjs'), join(dir, 'scripts/build-search-index.mjs'));
   writeFileSync(join(dir, 'content/version.json'), json({ version: 1, date: '2026-11-03', notes: 'Primera versión.' }));
-  copyFileSync(join(root, 'apps/editor/lib/model.ts'), join(dir, 'apps/editor/lib/model.ts'));
-  // Publication bundles the app's revision code to compute each entry's revision.
-  for (const path of ['apps/web/src/domain/learning/content', 'apps/web/src/domain/learning/types.ts']) cpSync(join(root, path), join(dir, path), { recursive: true });
+  // The script imports @jiayou/content (validators and revisions) through the repository's node_modules.
   symlinkSync(join(root, 'node_modules'), join(dir, 'node_modules'), 'dir');
   writeFileSync(join(dir, 'content/snapshot.json'), json(base));
   writeFileSync(join(dir, 'apps/web/src/data/topics.ts'), 'export const topics: Topic[] = [\n];\n');

@@ -1,4 +1,4 @@
-import type { PackEntry } from './manifest';
+import type { PackEntry } from './manifest.ts';
 
 /**
  * Each pack has a cache of its own, named by its hash. Updating HSK 4 opens a new HSK 4 cache and

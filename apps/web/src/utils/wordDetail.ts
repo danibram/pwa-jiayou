@@ -1,5 +1,5 @@
 import type { VocabularyEntry } from '../data/vocabulary';
-import { resolveWordRelations } from '../data/wordRelations';
+import { resolveWordRelations } from '@jiayou/content';
 import { levelRank } from './wordOrder';
 import { bySound, readingOf, soundMatch, type SoundMatch } from '@jiayou/chinese';
 

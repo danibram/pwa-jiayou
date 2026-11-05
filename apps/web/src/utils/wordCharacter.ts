@@ -1,6 +1,6 @@
 import { extraVocabulary } from '../data/vocabulary';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import type { HSKCharacter } from '../types';
 import { characterRecord } from './characterSearch';
 import { pinyinParts } from '@jiayou/chinese';

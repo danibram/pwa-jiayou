@@ -13,6 +13,7 @@
     "check": "npm run test -- --run && npm run build"
   },
   "dependencies": {
+    "@jiayou/content": "*",
     "@jiayou/chinese": "*",
     "hanzi-writer": "3.7.3",
     "posthog-js": "^1.444.4",

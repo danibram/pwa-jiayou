@@ -6,7 +6,7 @@ import { LearningCard, LearningSessionShell } from '../components/learning';
 import SessionSummary, { type SummaryItemResult } from '../components/learning/summary/SessionSummary';
 import { useLearningStore } from '../components/LearningStoreContext';
 import { catalogWords, findWord, type VocabularyEntry } from '../data/vocabulary';
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { characterExample, characterGloss } from '../utils/wordParts';
 import { levelRank } from '../utils/wordOrder';
 import { stopSpeech } from '../utils/speech';
