@@ -1,5 +1,5 @@
 import { Component, Show, createMemo, createSignal } from 'solid-js';
-import { leadSense, sensesText } from '../../web/src/data/wordSenses';
+import { leadSense, sensesText } from '@jiayou/content';
 import type { VocabularyEntry } from '../../web/src/data/vocabulary';
 import type { HskLevel } from '../../web/src/types';
 import { useEditor } from '../lib/store';

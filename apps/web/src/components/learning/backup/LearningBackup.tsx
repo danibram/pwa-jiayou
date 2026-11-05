@@ -1,5 +1,5 @@
 import { Component, For, Show, createSignal } from 'solid-js';
-import { parseUserBackup, type UserBackup } from '../../../domain/learning/backup';
+import { parseUserBackup, type UserBackup } from '@jiayou/learning/backup';
 
 export type BackupWriteResult =
   | { ok: true; added: number; warnings: string[] }

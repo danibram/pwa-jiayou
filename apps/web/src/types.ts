@@ -1,4 +1,4 @@
-export type { ExampleWord, HSKCharacter, HskLevel } from '../../../shared/contracts/content.ts';
+export type { ExampleWord, HSKCharacter, HskLevel } from '@jiayou/content';
 
 export type ReviewPool = 'today' | 'more' | 'all' | 'weak';
 

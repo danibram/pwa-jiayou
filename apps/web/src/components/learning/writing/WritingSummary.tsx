@@ -1,5 +1,5 @@
 import { Component, For, Show } from 'solid-js';
-import type { Rating } from '../../../domain/learning/types';
+import type { Rating } from '@jiayou/learning/types';
 import { RATING_LABEL } from '../present';
 
 export interface WritingSummaryItem {

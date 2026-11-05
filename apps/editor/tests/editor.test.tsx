@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Editor from '../Editor';
-import type { ContentSnapshot } from '../lib/model';
+import type { ContentSnapshot } from '@jiayou/content';
 
 const base: ContentSnapshot = {
   schemaVersion: 1,

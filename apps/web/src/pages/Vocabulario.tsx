@@ -14,7 +14,7 @@ import { mainMeaning } from '@jiayou/chinese';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
 import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
 import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';
-import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '../data/wordSenses';
+import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '@jiayou/content';
 import StatusSeal from '../components/StatusSeal';
 import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
@@ -25,9 +25,9 @@ import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } f
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { characterItemId, wordItemId } from '../stores/learningStore';
+import { characterItemId, wordItemId } from '@jiayou/learning/items';
 import { useLearningStore } from '../components/LearningStoreContext';
-import { studyStatusOf } from '../utils/progressSummary';
+import { studyStatusOf } from '@jiayou/learning/progress';
 
 export interface VocabularyBrowseState {
   query: string;

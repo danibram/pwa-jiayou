@@ -2,7 +2,7 @@ import { Component, createMemo } from 'solid-js';
 import { vocabularyStore } from '../stores/vocabularyStore';
 import { characterForHit, searchCharacters } from '../utils/characterSearch';
 import { glossHead } from '@jiayou/chinese';
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { markTones } from '@jiayou/chinese';
 import { bySound, readingOf, soundMatch } from '@jiayou/chinese';
 import SoundAlike, { type SoundAlikeItem } from './SoundAlike';

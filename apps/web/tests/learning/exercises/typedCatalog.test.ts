@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildProductionExercise, gradeTypedAnswer, type ProductionKind } from '../../../src/domain/learning/production';
-import type { Exercise } from '../../../src/domain/learning/types';
+import { buildProductionExercise, gradeTypedAnswer, type ProductionKind } from '@jiayou/learning/production';
+import type { Exercise } from '@jiayou/learning/types';
 import { context, vocabulary } from './fixtures';
 
 const KINDS: readonly ProductionKind[] = ['pinyin-from-characters', 'pinyin-from-gloss', 'characters-from-audio', 'gloss-from-audio'];

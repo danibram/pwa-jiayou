@@ -13,7 +13,7 @@ import type { KnownCharacter } from '../utils/wordCharacter';
 import { charactersWithRadical, indexRowFor } from '../utils/characterSearch';
 import { displayGloss, glossHead } from '@jiayou/chinese';
 import { mainMeaning, otherMeanings } from '@jiayou/chinese';
-import { leadSense } from '../data/wordSenses';
+import { leadSense } from '@jiayou/content';
 import { canSpeak } from '../utils/speech';
 
 interface CharacterDetailSheetProps {

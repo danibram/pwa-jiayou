@@ -1,13 +1,13 @@
 import { IDBFactory } from 'fake-indexeddb';
 import hsk1 from '../../../src/data/vocabulary/hsk1.json';
-import type { ItemContent, WordEntry } from '../../../src/domain/learning/exercises';
-import type { PoolItem } from '../../../src/domain/learning/sessions';
-import { isTypedAnswerExercise } from '../../../src/domain/learning/production';
-import type { Exercise, ItemId, Timestamp } from '../../../src/domain/learning/types';
+import type { ItemContent, WordEntry } from '@jiayou/learning/exercises';
+import type { PoolItem } from '@jiayou/learning/sessions';
+import { isTypedAnswerExercise } from '@jiayou/learning/production';
+import type { Exercise, ItemId, Timestamp } from '@jiayou/learning/types';
 import { LearningStorageError, type ChannelLike, type LearningRepository } from '../../../src/persistence/learning';
 import { createLearningSession, type LearningSession, type LearningSessionOptions } from '../../../src/stores/learningSessionStore';
 import { createLearningStore, type LearningStore, type LearningStoreOptions } from '../../../src/stores/learningStore';
-import { utcRule } from '../scheduler/fixtures';
+import { utcRule } from '@jiayou/learning/testing/scheduler';
 
 export { utcRule };
 

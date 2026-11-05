@@ -1,6 +1,6 @@
-import type { BackupError } from '../../domain/learning/backup';
-import type { AttemptEventError } from '../../domain/learning/evaluation';
-import { CorruptLogError, InvalidSchedulerConfigError } from '../../domain/learning/scheduler';
+import type { BackupError } from '@jiayou/learning/backup';
+import type { AttemptEventError } from '@jiayou/learning/evaluation';
+import { CorruptLogError, InvalidSchedulerConfigError } from '@jiayou/learning/scheduler';
 
 /** Why a write was refused. Retrying the same input fails the same way. */
 export type RejectReason =

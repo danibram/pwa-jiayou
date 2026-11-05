@@ -1,7 +1,7 @@
 import { createRoot } from 'solid-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createEditorStore } from '../lib/store';
-import { validateSnapshot, type ContentSnapshot } from '../lib/model';
+import { validateSnapshot, type ContentSnapshot } from '@jiayou/content';
 
 const word = (id: string, simplified: string, pinyin: string, extra: object = {}) => ({
   id, simplified, traditional: simplified, pinyin, senses: [{ text: 'algo' }], level: 1 as const, characters: [...simplified], topicIds: [], sourceId: 'hsk-2-0', ...extra,

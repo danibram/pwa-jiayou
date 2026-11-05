@@ -11,7 +11,8 @@ import { existsSync, realpathSync } from 'node:fs';
 import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import ts from 'typescript';
+import * as content from '@jiayou/content';
+import { validateDraft, validateSnapshot } from '@jiayou/content';
 
 const defaultRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const json = (value, indent = 2) => `${JSON.stringify(value, null, indent)}\n`;
@@ -23,30 +24,12 @@ const readOptional = async (path, fallback) => {
   catch (error) { if (error.code === 'ENOENT') return fallback; throw error; }
 };
 
-let validators;
-const model = async (root) => {
-  if (validators) return validators;
-  const source = await readFile(join(root, 'apps/editor/lib/model.ts'), 'utf8');
-  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 } }).outputText;
-  validators = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
-  return validators;
-};
-
-const revisionModules = new Map();
 /**
- * The client's own src/domain/learning/content/revision.ts, bundled with esbuild so plain node can run
- * it: a published revision is the value the app computes, not a copy of the rule.
+ * Revisions come from @jiayou/content, the code the app runs, so a published revision is the value the
+ * app computes and not a copy of the rule. Async for the callers that awaited the old loader.
  */
-export async function loadRevisions(root = defaultRoot) {
-  if (revisionModules.has(root)) return revisionModules.get(root);
-  const { build } = await import('esbuild');
-  const result = await build({
-    entryPoints: [join(root, 'apps/web/src/domain/learning/content/revision.ts')],
-    bundle: true, write: false, format: 'esm', platform: 'neutral', logLevel: 'silent',
-  });
-  const loaded = import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`);
-  revisionModules.set(root, loaded);
-  return loaded;
+export async function loadRevisions() {
+  return content;
 }
 
 export const REGISTRY_PATH = 'apps/web/src/data/vocabulary/published-ids.json';
@@ -114,8 +97,7 @@ export const todayIso = () => new Date().toISOString().slice(0, 10);
 
 /** Copies the canonical snapshot into the editor's public folder, with the WenKai font when the repo has it. */
 export async function writeBase(snapshot, root = defaultRoot) {
-  const { validateSnapshot } = await model(root);
-  validateSnapshot(snapshot);
+    validateSnapshot(snapshot);
   const baseDir = join(root, 'apps/editor/public/base');
   const body = json(snapshot);
   await mkdir(baseDir, { recursive: true });
@@ -162,8 +144,7 @@ const topicsSource = async (root, topics) => {
  * Validates the draft against the canonical snapshot first.
  */
 export async function planDraft(draft, root = defaultRoot) {
-  const { validateSnapshot, validateDraft } = await model(root);
-  const base = await readJson(join(root, 'content/snapshot.json'));
+    const base = await readJson(join(root, 'content/snapshot.json'));
   // validateSnapshot fills a missing topic kind, so hash the file as written first.
   const revision = snapshotRevision(base);
   validateSnapshot(base);
@@ -224,7 +205,7 @@ export async function planDraft(draft, root = defaultRoot) {
   if (!equal(extra, listed(base.vocabulary, undefined))) files.push(['apps/web/src/data/vocabulary/extra.json', json(extra)]);
   // The registry follows the content: an unchanged draft writes nothing, not even a registry refresh.
   if (files.length) {
-    const nextRegistry = registryJson(updateRegistry(registry, { words: snapshot.vocabulary, characters: snapshot.characters }, await loadRevisions(root)));
+    const nextRegistry = registryJson(updateRegistry(registry, { words: snapshot.vocabulary, characters: snapshot.characters }, await loadRevisions()));
     const stored = await readFile(join(root, REGISTRY_PATH), 'utf8').catch((error) => { if (error.code === 'ENOENT') return null; throw error; });
     if (nextRegistry !== stored) files.push([REGISTRY_PATH, nextRegistry]);
   }

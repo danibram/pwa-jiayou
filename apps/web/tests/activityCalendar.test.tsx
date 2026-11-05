@@ -1,7 +1,7 @@
 import { render } from '@solidjs/testing-library';
 import { describe, expect, it } from 'vitest';
 import ActivityCalendar from '../src/components/ActivityCalendar';
-import { activityStreak } from '../src/utils/activityStreak';
+import { activityStreak } from '@jiayou/learning/progress';
 
 // Sunday 1 November 2026, noon.
 const today = new Date(2026, 10, 1, 12);
@@ -20,12 +20,12 @@ const sample = {
 
 describe('activity calendar and streak', () => {
   it('count the same days', () => {
-    expect(activityStreak(sample, today)).toBe(4);
+    expect(activityStreak(sample, '2026-11-01')).toBe(4);
     const view = render(() => <ActivityCalendar activity={sample} today={today} />);
     expect(view.getByText('Esta semana has practicado 4 días')).toBeTruthy();
   });
 
   it('count nothing for an empty log', () => {
-    expect(activityStreak({}, today)).toBe(0);
+    expect(activityStreak({}, '2026-11-01')).toBe(0);
   });
 });

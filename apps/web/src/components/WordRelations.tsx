@@ -1,8 +1,8 @@
 import { Component, For, Show, createMemo } from 'solid-js';
 import type { VocabularyEntry } from '../data/vocabulary';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { relationGroups, type WordRelationKind } from '../data/wordRelations';
-import { leadSense } from '../data/wordSenses';
+import { relationGroups, type WordRelationKind } from '@jiayou/content';
+import { leadSense } from '@jiayou/content';
 import Pinyin from './Pinyin';
 import WordRef from './WordRef';
 

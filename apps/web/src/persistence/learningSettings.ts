@@ -1,5 +1,5 @@
 import { createSignal, type Accessor } from 'solid-js';
-import { DEFAULT_SESSION_SETTINGS, type SessionSettings } from '../domain/learning/sessions';
+import { DEFAULT_SESSION_SETTINGS, type SessionSettings } from '@jiayou/learning/sessions';
 import { storage, type KeyValueStore } from './keyValue';
 
 /** Where the study settings live. Not in `KEYS` because the learning system owns it. */

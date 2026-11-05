@@ -137,7 +137,6 @@ apps/
 │   │   ├── pages/         Home, Listas, Vocabulario, VocabularyReview, Trazos, Opciones, Acerca
 │   │   ├── components/    StrokeCanvas (hanzi-writer), learning cards, CharacterDetailSheet, ProgressBackup, …
 │   │   ├── stores/        learningStore and the session controller, vocabularyStore, characterStore
-│   │   ├── domain/        pure logic: learning (FSRS-7, events, sessions, evaluation, backup), content
 │   │   ├── persistence/   IndexedDB learning log, settings, device id
 │   │   ├── utils/         levelPacks (downloads and cache), speech, search, theme
 │   │   └── data/          lists, catalog, topics, vocabulary JSON, character JSON, glosses, overrides, drafts
@@ -145,8 +144,9 @@ apps/
 │   └── tests/             vitest, jsdom
 └── editor/                local content editor
 packages/
-└── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
-shared/                    content contracts used by the app, the editor and the scripts
+├── chinese/               @jiayou/chinese: pinyin, tones, sandhi, word ids, sound-alikes, glosses
+├── content/               @jiayou/content: content types, word and snapshot checks, revisions, pack manifest
+└── learning/              @jiayou/learning: FSRS-7, event log rules, sessions, evaluation, backup, progress
 content/                   published content snapshot and version
 scripts/                   data pipelines
 docs/                      audio, vocabulary data, specs, vision, research

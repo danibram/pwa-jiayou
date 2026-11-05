@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
-import { validateAttemptEvent, evaluatorVersion } from '../../../src/domain/learning/evaluation';
-import { buildProductionExercise } from '../../../src/domain/learning/production';
-import type { LearningEvent } from '../../../src/domain/learning/types';
+import { validateAttemptEvent, evaluatorVersion } from '@jiayou/learning/evaluation';
+import { buildProductionExercise } from '@jiayou/learning/production';
+import type { LearningEvent } from '@jiayou/learning/types';
 import { context, word } from '../exercises/fixtures';
 
 const w = word('word-4f60-597d-ni3-hao3');
