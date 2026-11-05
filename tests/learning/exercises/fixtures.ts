@@ -34,7 +34,10 @@ export const context = (overrides: Partial<ExerciseContext> = {}, seed = 1): Exe
 });
 
 let next = 0;
-/** Correct observations, one per skill in turn, so practice counts the word as settled. */
+/**
+ * Autonomous correct observations, one per skill in turn. Each one climbs a rung of the practice
+ * ladder, so the default three put the word on typed answers.
+ */
 export const settled = (skills: readonly Skill[] = ['meaning', 'production', 'listening']): SkillEvidence[] =>
   skills.map((skill, index) => ({
     id: `evidence-${next++}`,
@@ -47,3 +50,18 @@ export const settled = (skills: readonly Skill[] = ['meaning', 'production', 'li
   }));
 
 export const SEEDS = Array.from({ length: 40 }, (_, index) => index + 1);
+
+/** One observation at `recordedAt`, for ladder histories. */
+export const observation = (
+  recordedAt: number,
+  outcome: 'correct' | 'incorrect' | 'unanswered' = 'correct',
+  options: { skill?: Skill; assisted?: boolean } = {},
+): SkillEvidence => ({
+  id: `evidence-${next++}`,
+  skill: options.skill ?? 'meaning',
+  recordedAt,
+  evaluation: { outcome },
+  assisted: options.assisted ?? false,
+  confusions: [],
+  mistakes: null,
+});

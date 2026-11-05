@@ -1,4 +1,5 @@
 import type { CharacterContent, WordContent } from '../content/revision';
+import type { ProductionKind } from '../production/exercises';
 import type {
   CardIntent,
   CardReason,
@@ -14,7 +15,7 @@ import type {
 export interface PlannedCardInput {
   itemId: ItemId;
   intent: CardIntent;
-  /** `new-practice` and `teach-again` keep a word on automatically graded formats. */
+  /** `new-practice` and `teach-again` keep a word on the supported rungs of the ladder. */
   reason: CardReason;
 }
 
@@ -38,7 +39,10 @@ export interface ExerciseContext {
   familiar?: (contentId: string) => boolean;
   /** Whether speech synthesis can speak right now. The caller checks it; this module never does. */
   speechAvailable: boolean;
-  /** The item's evidence from non-voided events, in any order. It decides which skill practice trains. */
+  /**
+   * The item's evidence from non-voided events, in any order. It sets the practice rung and
+   * decides which skill practice trains.
+   */
   recentEvidence: readonly SkillEvidence[];
   /** A seeded generator returning numbers in [0, 1). Every random choice here goes through it. */
   random: () => number;
@@ -46,7 +50,8 @@ export interface ExerciseContext {
 
 /** The two writing stages that are answered. Watching the strokes is the teaching exposure. */
 export type WritingPrompt = 'write-memory' | 'write-trace';
-export type ExercisePrompt = LegacyPrompt | WritingPrompt;
+/** Every format a card can take: the legacy prompts, the writing stages and the typed answers. */
+export type ExercisePrompt = LegacyPrompt | WritingPrompt | ProductionKind;
 
 export type SkipReason =
   /** An audio cue while speech synthesis is unavailable. */

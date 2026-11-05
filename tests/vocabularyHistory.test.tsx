@@ -2,12 +2,10 @@ import { fireEvent, screen, waitFor } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from '../src/App';
 import { vocabulary } from './fixtures/levelWords';
-import { progressStore } from '../src/stores/progressStore';
 import { renderWithStore } from './fixtures/learningStore';
 
 beforeEach(() => {
   localStorage.clear();
-  progressStore.clear();
   localStorage.setItem('hsk-installed-levels', '[1]');
 });
 

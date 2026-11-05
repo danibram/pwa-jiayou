@@ -10,9 +10,11 @@ import {
   type LegacyPrompt,
   type RevealedAnswer,
   type Skill,
+  type SkillEvidence,
   type SpeechAudio,
 } from '../types';
 import { glossHead } from '../../../utils/glossDisplay';
+import { buildProductionExercise, PRODUCTION_ROLES, type ProductionKind } from '../production/exercises';
 import { spokenMeaning } from '../../../utils/meaning';
 import { hasHomograph, hasHomophone, isFunctionWord, spokenReading } from './ambiguity';
 import { askGloss, displayGloss } from './glosses';
@@ -35,13 +37,51 @@ import type {
 export type RubricId = 'self-assessment' | 'multiple-choice' | 'writing-from-memory' | 'writing-trace';
 const rubric = (id: RubricId): Exercise['rubric'] => ({ id, revision: evaluatorVersion });
 
-/** Formats that give the target among options. A word with no correct answer yet stays on them. */
-const CHECKED: readonly LegacyPrompt[] = ['pick', 'recognize', 'hear'];
-const PRACTICE: readonly LegacyPrompt[] = ['pick', 'recognize', 'hear', 'reverse', 'listen'];
-/** Right after teaching, the answer is checked, not self-graded, as the old `withPrompts` did. */
-const CHECKED_REASONS: ReadonlySet<CardReason> = new Set(['new-practice', 'teach-again']);
-/** Correct observations before free-recall formats join practice, as the old `reps >= 3`. */
-const SETTLED_AFTER = 3;
+/** Right after teaching, practice stays on the supported rungs, as the old `withPrompts` did. */
+const TEACHING_REASONS: ReadonlySet<CardReason> = new Set(['new-practice', 'teach-again']);
+
+/** The formats practice can take: every legacy prompt but the rating task, and the typed answers. */
+export type PracticePrompt = Exclude<LegacyPrompt, 'meaning'> | ProductionKind;
+
+/**
+ * The practice ladder for a word, from most supported to least. Each rung takes away an aid:
+ * 0. `recognize`: the characters are shown and the meaning is among options.
+ * 1. `pick` and `hear`: the word is among options, from its gloss or its sound.
+ * 2. `reverse` and `listen`: free recall of the word, revealed and self-assessed.
+ * 3. Typed answers: the learner writes the reading, the characters or the meaning, and the
+ *    controller grades it.
+ */
+export const PRACTICE_LADDER: readonly (readonly PracticePrompt[])[] = [
+  ['recognize'],
+  ['pick', 'hear'],
+  ['reverse', 'listen'],
+  ['pinyin-from-characters', 'pinyin-from-gloss', 'characters-from-audio', 'gloss-from-audio'],
+];
+const TOP_RUNG = PRACTICE_LADDER.length - 1;
+/** The rungs that check the answer among options. Teaching cards never climb above them. */
+const SUPPORTED_TOP = 1;
+
+const isProductionKind = (prompt: ExercisePrompt): prompt is ProductionKind => Object.prototype.hasOwnProperty.call(PRODUCTION_ROLES, prompt);
+const skillOf = (prompt: PracticePrompt): Skill =>
+  isProductionKind(prompt) ? PRODUCTION_ROLES[prompt].skill : EXERCISE_ROLES[prompt].skill;
+
+/**
+ * The rung a practice card starts from, read from the item's evidence and nothing stored apart.
+ * The evidence is replayed in the order it was recorded, starting at rung 0: an autonomous correct
+ * answer climbs one rung, a correct answer after a hint that gave it away stays, and any other
+ * outcome steps one rung down. So a failure moves the next practice back one rung, and the word
+ * climbs again as it is answered. Right after teaching (`new-practice`, `teach-again`) the rung is
+ * capped at the supported formats.
+ */
+export const practiceRung = (card: Pick<PlannedCardInput, 'reason'>, evidence: readonly SkillEvidence[]): number => {
+  const ordered = [...evidence].sort((a, b) => a.recordedAt - b.recordedAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  let rung = 0;
+  for (const observation of ordered) {
+    if (observation.evaluation.outcome !== 'correct') rung = Math.max(0, rung - 1);
+    else if (!observation.assisted) rung = Math.min(TOP_RUNG, rung + 1);
+  }
+  return TEACHING_REASONS.has(card.reason) ? Math.min(rung, SUPPORTED_TOP) : rung;
+};
 
 type Built = { exercise: Exercise } | { skip: SkipReason };
 
@@ -162,20 +202,29 @@ const buildWordExercise = (prompt: LegacyPrompt, word: WordEntry, itemId: ItemId
 };
 
 /**
- * Practice formats in the order to try them. Checked formats only while the word has no correct
- * answer yet, or just after teaching; all five once it has `SETTLED_AFTER` correct ones. The skill
- * observed longest ago goes first, so practice moves between meaning, production and listening;
- * the generator breaks ties.
+ * Practice formats in the order to try them: the card's rung, then each rung below it, then the
+ * supported rungs above it when the card starts lower. Within a rung the skill observed longest ago
+ * goes first, so practice moves between meaning, production, tones and listening; a skill never
+ * observed counts as the oldest, and the generator breaks ties. A format that cannot be built
+ * gives way to the next one, so a card never takes away more aids than its rung allows.
  */
-const practiceOrder = (card: PlannedCardInput, context: ExerciseContext): LegacyPrompt[] => {
-  const correct = context.recentEvidence.filter((evidence) => evidence.evaluation.outcome === 'correct').length;
-  const checked = CHECKED_REASONS.has(card.reason) || correct < SETTLED_AFTER;
+const practiceOrder = (card: PlannedCardInput, context: ExerciseContext): PracticePrompt[] => {
+  const rung = practiceRung(card, context.recentEvidence);
   const lastSeen = new Map<Skill, number>();
   for (const evidence of context.recentEvidence) {
     lastSeen.set(evidence.skill, Math.max(lastSeen.get(evidence.skill) ?? -Infinity, evidence.recordedAt));
   }
-  const seenAt = (prompt: LegacyPrompt) => lastSeen.get(EXERCISE_ROLES[prompt].skill) ?? -Infinity;
-  return shuffleWith(checked ? CHECKED : PRACTICE, context.random).sort((a, b) => seenAt(a) - seenAt(b));
+  const seenAt = (prompt: PracticePrompt) => lastSeen.get(skillOf(prompt)) ?? -Infinity;
+  const rungs: number[] = [];
+  for (let below = rung; below >= 0; below--) rungs.push(below);
+  for (let above = rung + 1; above <= SUPPORTED_TOP; above++) rungs.push(above);
+  return rungs.flatMap((index) => shuffleWith(PRACTICE_LADDER[index], context.random).sort((a, b) => seenAt(a) - seenAt(b)));
+};
+
+const buildPractice = (prompt: ExercisePrompt, word: WordEntry, itemId: ItemId, context: ExerciseContext): Built => {
+  if (!isProductionKind(prompt)) return buildWordExercise(prompt as LegacyPrompt, word, itemId, context);
+  const built = buildProductionExercise(prompt, word, context);
+  return 'exercise' in built ? { exercise: built.exercise } : { skip: built.skip };
 };
 
 const selectWord = (card: PlannedCardInput, word: WordEntry, context: ExerciseContext): ExerciseSelection => {
@@ -183,12 +232,12 @@ const selectWord = (card: PlannedCardInput, word: WordEntry, context: ExerciseCo
   if (card.intent === 'teach') {
     return { kind: 'exposure', itemId: card.itemId, content, card: exposureCard(card.itemId, { kind: 'word', word }, 'teaching', context) };
   }
-  const order: LegacyPrompt[] = card.intent === 'practice' ? practiceOrder(card, context) : [];
+  const order: PracticePrompt[] = card.intent === 'practice' ? practiceOrder(card, context) : [];
   const skipped: { prompt: ExercisePrompt; reason: SkipReason }[] = [];
   // The meaning card ends every chain: free recall from the characters, with the reading when the
   // characters have two, is never ambiguous.
   for (const prompt of [...order, 'meaning' as const]) {
-    const built = buildWordExercise(prompt, word, card.itemId, context);
+    const built = buildPractice(prompt, word, card.itemId, context);
     if ('exercise' in built) {
       return { kind: 'exercise', itemId: card.itemId, content, exercise: built.exercise, evaluatorVersion, prompt, skipped };
     }
@@ -231,9 +280,10 @@ const selectCharacter = (card: PlannedCardInput, character: CharacterContent, co
  *
  * - Words. `teach` is an exposure. `scheduled` and `already-known-check` are the rating task: the
  *   characters, free recall and self-assessment, asking a particle's or classifier's function (P7).
- *   `practice` tries reverse, listen, pick, hear and recognize in `practiceOrder` and skips any that
- *   would be ambiguous, need speech that is not available, or lack distractors; the meaning card
- *   closes the chain, and `skipped` lists what was passed over and why.
+ *   `practice` climbs `PRACTICE_LADDER` from the item's evidence (`practiceRung`) and tries the
+ *   formats in `practiceOrder`. It skips any that would be ambiguous, need speech that is not
+ *   available, lack distractors or ask a function word from its gloss; the meaning card closes the
+ *   chain, and `skipped` lists what was passed over and why. Typed answers are always practice.
  * - Characters. `teach` is an exposure, where the strokes are watched. `practice` is tracing.
  *   `scheduled` and `already-known-check` are drawing from memory; the evaluator writes the latter
  *   as practice, because only the meaning task takes an already-known rating.

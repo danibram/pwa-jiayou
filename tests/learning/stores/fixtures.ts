@@ -2,7 +2,8 @@ import { IDBFactory } from 'fake-indexeddb';
 import hsk1 from '../../../src/data/vocabulary/hsk1.json';
 import type { ItemContent, WordEntry } from '../../../src/domain/learning/exercises';
 import type { PoolItem } from '../../../src/domain/learning/sessions';
-import type { ItemId, Timestamp } from '../../../src/domain/learning/types';
+import { isTypedAnswerExercise } from '../../../src/domain/learning/production';
+import type { Exercise, ItemId, Timestamp } from '../../../src/domain/learning/types';
 import { LearningStorageError, type ChannelLike, type LearningRepository } from '../../../src/persistence/learning';
 import { createLearningSession, type LearningSession, type LearningSessionOptions } from '../../../src/stores/learningSessionStore';
 import { createLearningStore, type LearningStore, type LearningStoreOptions } from '../../../src/stores/learningStore';
@@ -158,15 +159,26 @@ export const wrongOption = (session: LearningSession): string => {
   return option.id;
 };
 
+/** The text that answers a typed card right: the reading, the characters or the first sense. */
+export const rightText = (exercise: Exercise): string => {
+  if (!exercise.answer) throw new Error('No answer on the exercise');
+  if (exercise.rubric.id === 'typed-pinyin') return exercise.answer.pinyin;
+  if (exercise.rubric.id === 'typed-characters') return exercise.answer.characters;
+  return exercise.accepted?.[0]?.glosses[0] ?? exercise.answer.meaning;
+};
+
 /**
  * Answers the card on screen and waits for the write. Exposures continue; multiple choice picks
- * the right option (or a wrong one, then "No lo sé"); self-assessed cards reveal and rate.
+ * the right option (or a wrong one, then "No lo sé"); typed cards get the right text or "No lo sé";
+ * self-assessed cards reveal and rate.
  */
 export const answerCard = async (session: LearningSession, outcome: 'right' | 'wrong' = 'right'): Promise<void> => {
   const selection = session.view.selection;
   if (!selection) throw new Error(`Nothing on screen in state ${session.view.state}`);
   if (selection.kind === 'exposure') session.actions.continue();
-  else if (selection.exercise.grading === 'automatic') {
+  else if (isTypedAnswerExercise(selection.exercise)) {
+    session.actions.answer({ answer: outcome === 'right' ? rightText(selection.exercise) : null });
+  } else if (selection.exercise.grading === 'automatic') {
     if (outcome === 'right') session.actions.answer({ optionId: rightOption(session) });
     else session.actions.answer({ answer: null, optionId: null });
   } else {

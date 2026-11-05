@@ -20,13 +20,12 @@ import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
-import { progressStore as charProgress } from '../stores/progressStore';
 import { charactersOfExtraTopicWords, extraVocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
 import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } from '../data/topics';
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { wordItemId } from '../stores/learningStore';
+import { characterItemId, wordItemId } from '../stores/learningStore';
 import { useLearningStore } from '../components/LearningStoreContext';
 import { studyStatusOf } from '../utils/progressSummary';
 
@@ -90,9 +89,11 @@ const Vocabulario: Component<Props> = (props) => {
   });
   const installedByChar = createMemo(() => new Map(characterStore.state.characters.map((row) => [row.character, row])));
   const charInstalled = (char: string) => installedByChar().has(char);
+  /** Writing status from the learning log. Undefined for a character outside HSK or never taught. */
   const charStatus = (char: string): StudyStatus | undefined => {
-    if (!charInstalled(char) || charProgress.isNew(char)) return undefined;
-    return charProgress.isMastered(char) ? 'mastered' : 'learning';
+    if (!charInstalled(char)) return undefined;
+    const status = store.status(characterItemId(char));
+    return status === 'new' ? undefined : studyStatusOf(status);
   };
   onCleanup(stopSpeech);
   /** The checked lists. Buscar, Temas, the word page and its sections draw only from these. */

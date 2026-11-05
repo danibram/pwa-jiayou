@@ -14,7 +14,7 @@ Retirar una palabra marca su fila del snapshot con `retired: true`. La fila sigu
 
 La revisión del editor identifica el snapshot completo. `scripts/content-publish.mjs` calcula su SHA-256 y `baseRevision` evita promover un borrador basado en otro snapshot. Esto no cambia. HSK 1 y Extra se incluyen en la app. Los paquetes de HSK 2 a 6 se instalan por separado, según `src/data/vocabulary.ts`. La ausencia de un paquete no demuestra que su contenido se haya retirado. El estado `retired` del registro sí lo demuestra.
 
-Los caracteres no tienen un campo de ID. `progressStore` guarda el progreso de trazos con el propio carácter como clave. Las listas de caracteres son `src/data/hsk1.json` y `public/packs/hsk2.json` a `hsk6.json`, y `characterStore` añade a cada fila la glosa y el ejemplo de `src/data/glosses/*.json` cuando la fila no los trae. Los trazos que corrigen el dibujo se cargan de forma asíncrona desde `public/strokes`, desde `public/packs/hskN/strokes` o desde `hanzi-writer-data@2.0.1` en jsDelivr.
+Los caracteres no tienen un campo de ID. Su progreso de trazos vive en el registro de eventos, en el elemento `character-writing:char-<hex>`. Las listas de caracteres son `src/data/hsk1.json` y `public/packs/hsk2.json` a `hsk6.json`, y `characterStore` añade a cada fila la glosa y el ejemplo de `src/data/glosses/*.json` cuando la fila no los trae. Los trazos que corrigen el dibujo se cargan de forma asíncrona desde `public/strokes`, desde `public/packs/hskN/strokes` o desde `hanzi-writer-data@2.0.1` en jsDelivr.
 
 ## Contrato de identidad
 
@@ -66,6 +66,20 @@ Un cambio en `withToneSandhi` o en las glosas cambia revisiones sin editar el co
 
 La revisión sigue siendo provisional en dos puntos. No cubre la geometría de los trazos, que decide si un dibujo es correcto. El registro guarda los hashes de las revisiones antiguas, pero no su contenido, así que un dispositivo solo puede reconstruir la revisión del contenido que tiene instalado. El registro permite distinguir una revisión antigua de un ID desconocido, pero la app todavía no lo lee. Calcula la revisión en el dispositivo, y el test comprueba que ese valor coincide con el publicado.
 
+## Caracteres en Trazos
+
+`learningStore` resuelve `character-writing:char-<hex>` con la fila del catálogo que tiene `characterStore`, ya combinada con su glosa. Es la misma entrada que muestra Trazos y la que usa el registro publicado, así que la revisión `c1` del intento coincide con la publicada. El conjunto de Trazos son los caracteres de los niveles marcados, en el orden del catálogo, y cada uno lleva los temas que lo listan para las sesiones de un tema.
+
+Un carácter fuera de HSK no tiene fila. `characterOrWordStub` le construye una glosa con la primera palabra estudiada que lo usa, y esa glosa cambia cuando cambian las listas del alumno. Por eso no recibe referencia `c1` ni entra en ninguna sesión. Trazos muestra su orden de trazos y no guarda nada. Lo mismo pasa con un carácter de HSK que no está en los niveles marcados o cuyo paquete no está descargado.
+
+`c1` no incluye la versión de los datos de trazos. Hay tres motivos:
+
+- `c1` describe lo que la pregunta muestra, el significado y la lectura, y se calcula de forma síncrona desde la fila. La geometría de los trazos se carga después desde `public/strokes`, los paquetes o jsDelivr.
+- La versión es la misma para todos los caracteres. Cambiarla en `c1` cambiaría a la vez las 2650 revisiones publicadas e invalidaría todos los intentos abiertos de escritura, sin decir nada sobre un carácter concreto.
+- Lo que cambian los datos de trazos y `hanzi-writer` es cómo se corrige un dibujo, no qué se pregunta. Esa es la función de la rúbrica.
+
+Por eso la rúbrica de los ejercicios de escritura debe citar la versión de `hanzi-writer` y de `hanzi-writer-data` que corrigió el dibujo, igual que las respuestas escritas citan su política. `package.json` debe fijar las dos versiones exactas, porque `scripts/build-media-packs.mjs` copia los trazos desde `node_modules` y `remoteStrokeUrl` en `src/utils/levelPacks.ts` pide `hanzi-writer-data@2.0.1` a jsDelivr. Actualizar cualquiera de los dos paquetes es una decisión explícita que cambia esa revisión de la rúbrica.
+
 ## Casos del catálogo para diseñar preguntas
 
 Los fixtures de `tests/learning/fixtures/contentCases.ts` recogen estos casos para las pruebas posteriores. Sus variantes de entrada no declaran una política de aceptación.
@@ -92,6 +106,6 @@ La fase 2C hizo los cambios de registro, test y publicación que describen las s
 
 1. Fase 2C, fuera de los archivos del paquete. El editor no tiene todavía un botón para retirar una palabra ni la marca como retirada en sus listas. `setWordRetired` existe en el store, pero `Editor.tsx` y `editor/components/` no lo usan.
 2. Publicar el contenido de las revisiones antiguas, no solo su hash, si hace falta mostrar o reevaluar un intento antiguo. Decidir también si la app debe leer la revisión del registro o del paquete en lugar de calcularla.
-3. Fases 2A y 3. Guardar `contentId`, `contentRevision` y `evaluatorVersion` en cada intento con las funciones de `revision.ts`. Distinguir una revisión o un paquete ausente de una retirada. Decidir antes de conectar Trazos si la revisión `c1` debe incluir la versión de los datos de trazos, por ejemplo `hanzi-writer-data@2.0.1`, o un hash de sus archivos. Los caracteres fuera de HSK que muestra `characterOrWordStub` no tienen fila propia, y su glosa depende de las palabras que el alumno estudia. No deben recibir una referencia `c1` hasta que exista una regla para ellos. El progreso de trazos usa hoy el carácter como clave y deberá pasar a `char-<hex>`. No hay usuarios que migrar.
+3. Fases 2A y 3. Guardar `contentId`, `contentRevision` y `evaluatorVersion` en cada intento con las funciones de `revision.ts`. Distinguir una revisión o un paquete ausente de una retirada. La fase 5C resolvió las dos preguntas de Trazos que seguían abiertas. Se describen en el apartado siguiente.
 4. Fases 3 y 5. Probar preguntas con los pares de la tabla y la política de normalización elegida. Verificar que el contexto o el conjunto de respuestas aceptadas resuelva cada ambigüedad antes de contar una respuesta como incorrecta.
 5. Una división o fusión de entradas sigue siendo una decisión editorial. El código impide reutilizar un ID, pero no puede saber si una corrección de hanzi convierte la entrada en otra palabra.

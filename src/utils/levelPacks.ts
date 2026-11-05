@@ -23,7 +23,7 @@ const mainlandClips = new Set(cmnClips);
 type DownloadState = { state: 'idle' | 'downloading' | 'ready' | 'error'; done: number; total: number };
 const [downloadState, setDownloadState] = createSignal<DownloadState>({ state: 'idle', done: 0, total: 0 });
 export { downloadState };
-const USED_KEYS = [KEYS.characterDeck, KEYS.progress];
+const USED_KEYS = [KEYS.characterDeck];
 const VOICES = ['f', 'm', 'c'] as const;
 /** Parallel media requests. Thousands at once stall a phone on a slow connection. */
 const PARALLEL = 6;

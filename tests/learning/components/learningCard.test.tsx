@@ -2,9 +2,10 @@ import { createSignal } from 'solid-js';
 import { fireEvent, render, screen, within } from '@solidjs/testing-library';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import LearningCard from '../../../src/components/learning/LearningCard';
+import { askedGloss as askedGlossOf } from '../../../src/components/learning/present';
 import type { LearningSessionView } from '../../../src/components/learning/types';
 import { speakWord } from '../../../src/utils/speech';
-import { de, meaningSelection, ni, optionAnswer, practiceSelection, sessionActions, teachSelection, view } from './fixtures';
+import { de, meaningSelection, ni, optionAnswer, practiceSelection, sessionActions, teachSelection, typedAnswer, view } from './fixtures';
 
 vi.mock('../../../src/utils/speech', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../../src/utils/speech')>()),
@@ -238,14 +239,142 @@ describe('multiple choice', () => {
   });
 });
 
+describe('typed answers', () => {
+  const pinyinCard = () => practiceSelection('pinyin-from-characters');
+  const field = () => screen.getByRole('textbox');
+  const answeredView = (selection: ReturnType<typeof practiceSelection>, text: string | null, outcome: 'correct' | 'incorrect') =>
+    view({
+      selection,
+      state: 'feedback',
+      actions: [typedAnswer(selection.exercise, text)],
+      feedback: { outcome, rating: null, recorded: 'practice' },
+    });
+
+  it('asks the reading of the characters and submits the typed text', () => {
+    const selection = pinyinCard();
+    const { actions } = mount(view({ selection }));
+    expect(screen.getByRole('img', { name: '你好' })).toBeTruthy();
+    expect(screen.getByText('Escribe el pinyin con sus tonos')).toBeTruthy();
+    // The reading exercises are silent until answered: hearing the word gives the tones away.
+    expect(speakWord).not.toHaveBeenCalled();
+    expect(listenButtons()).toHaveLength(0);
+    expect(screen.getByRole('button', { name: 'Comprobar' })).toBeDisabled();
+    fireEvent.input(field(), { target: { value: 'ni3 hao3' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Comprobar' }));
+    expect(actions.answer).toHaveBeenCalledWith({ answer: 'ni3 hao3' });
+  });
+
+  it('adds a tone digit at the caret and previews the marks', () => {
+    mount(view({ selection: pinyinCard() }));
+    const input = field() as HTMLInputElement;
+    fireEvent.input(input, { target: { value: 'ni hao' } });
+    input.setSelectionRange(2, 2);
+    fireEvent.click(screen.getByRole('button', { name: 'Tono 3' }));
+    expect(input.value).toBe('ni3 hao');
+    expect(screen.getByText('nǐ hao')).toBeTruthy();
+  });
+
+  it('reports No lo sé as an answer without text', () => {
+    const { actions } = mount(view({ selection: pinyinCard() }));
+    fireEvent.click(screen.getByRole('button', { name: 'No lo sé' }));
+    expect(actions.answer).toHaveBeenCalledWith({ answer: null });
+  });
+
+  it('keeps the text and shows the format message the controller sends back', () => {
+    const selection = pinyinCard();
+    const { setView, current } = mount(view({ selection }));
+    fireEvent.input(field(), { target: { value: 'ni8 hao3' } });
+    setView({ ...current(), inputError: 'No hay tono 8. Usa del 1 al 4, y 5 o 0 para el tono neutro.' });
+    expect(screen.getByRole('alert').textContent).toBe('No hay tono 8. Usa del 1 al 4, y 5 o 0 para el tono neutro.');
+    expect((field() as HTMLInputElement).value).toBe('ni8 hao3');
+    expect(field()).toHaveAttribute('aria-invalid', 'true');
+    expect(field()).toBeEnabled();
+  });
+
+  it('tells tone errors apart from syllable errors and plays the word once answered', () => {
+    const selection = pinyinCard();
+    const { unmount } = mount(answeredView(selection, 'ni2 hao4', 'incorrect'));
+    const diagnosis = screen.getByLabelText('Qué ha fallado');
+    expect(diagnosis.textContent).toContain('Las sílabas están bien. Fallan los tonos.');
+    expect(diagnosis.textContent).toContain('En hǎo escribiste tono 4 y lleva tono 3.');
+    // 你 before a third tone may be said with the second: that tone is right.
+    expect(diagnosis.textContent).not.toContain('En nǐ');
+    expect(screen.getByText('«ní hào»')).toBeTruthy();
+    expect(speakWord).toHaveBeenCalledOnce();
+    expect(vi.mocked(speakWord).mock.calls[0].slice(0, 2)).toEqual(['nǐ hǎo', '你好']);
+    expect(screen.getByRole('button', { name: /Escuchar/ })).toBeTruthy();
+    unmount();
+
+    mount(answeredView(selection, 'ni3 hoa3', 'incorrect'));
+    const syllables = screen.getByLabelText('Qué ha fallado');
+    expect(syllables.textContent).toContain('Hay sílabas que no coinciden.');
+    expect(syllables.textContent).toContain('En la sílaba 2 escribiste «hoa» y es hǎo.');
+  });
+
+  it('says nothing went wrong on a correct reading', () => {
+    mount(answeredView(pinyinCard(), 'nǐ hǎo', 'correct'));
+    expect(screen.queryByLabelText('Qué ha fallado')).toBeNull();
+    expect(screen.getByRole('status').textContent).toContain('Bien');
+    expect(screen.getByRole('status').textContent).toContain('Esta práctica no cambia cuándo vuelve.');
+  });
+
+  it('asks the reading from the Spanish without showing the characters', () => {
+    const selection = practiceSelection('pinyin-from-gloss');
+    mount(view({ selection }));
+    expect(screen.getByText('Significado → pinyin')).toBeTruthy();
+    expect(screen.queryByRole('img', { name: '你好' })).toBeNull();
+    expect(screen.getByText(askedGlossOf(selection.exercise.prompt))).toBeTruthy();
+  });
+
+  it('plays the word on an audio card and diagnoses wrong characters', () => {
+    const selection = practiceSelection('characters-from-audio');
+    const { actions, unmount } = mount(view({ selection }));
+    expect(speakWord).toHaveBeenCalledOnce();
+    vi.mocked(speakWord).mock.calls[0][2]!();
+    expect(actions.audioFailed).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('group', { name: 'Añadir el tono' })).toBeNull();
+    unmount();
+
+    mount(answeredView(selection, '你们', 'incorrect'));
+    expect(screen.getByLabelText('Qué ha fallado').textContent).toContain('Falla el carácter 2.');
+  });
+
+  it('lists the meanings that count after a wrong gloss', () => {
+    const selection = practiceSelection('gloss-from-audio');
+    mount(answeredView(selection, 'adiós', 'incorrect'));
+    const diagnosis = screen.getByLabelText('Qué ha fallado');
+    expect(diagnosis.textContent).toContain('Ese significado no está entre los de esta palabra.');
+    expect(diagnosis.textContent).toContain('«hola»');
+  });
+
+  it('turns an audio typed card into a skippable card when speech is unavailable', () => {
+    const { actions } = mount(view({ selection: practiceSelection('characters-from-audio'), speechAvailable: false }));
+    expect(screen.queryByRole('textbox')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Saltar tarjeta' }));
+    expect(actions.audioFailed).toHaveBeenCalledOnce();
+  });
+});
+
 describe('accessibility', () => {
   it('names every button on each card kind', () => {
-    const selections = [teachSelection(), meaningSelection(), practiceSelection('reverse'), practiceSelection('listen'), practiceSelection('pick'), practiceSelection('hear'), practiceSelection('recognize')];
+    const selections = [
+      teachSelection(),
+      meaningSelection(),
+      practiceSelection('reverse'),
+      practiceSelection('listen'),
+      practiceSelection('pick'),
+      practiceSelection('hear'),
+      practiceSelection('recognize'),
+      practiceSelection('pinyin-from-characters'),
+      practiceSelection('gloss-from-audio'),
+    ];
     for (const selection of selections) {
       const { unmount } = mount(view({ selection }));
       for (const button of screen.getAllByRole('button')) {
         expect(button.getAttribute('aria-label') || button.textContent?.trim(), selection.kind).toBeTruthy();
-        expect(button).toHaveAttribute('type', 'button');
+        // Only Comprobar submits, and only the typed card's own form.
+        if (button.textContent === 'Comprobar') expect(button).toHaveAttribute('type', 'submit');
+        else expect(button).toHaveAttribute('type', 'button');
       }
       unmount();
     }

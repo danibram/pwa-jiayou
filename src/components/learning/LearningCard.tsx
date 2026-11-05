@@ -1,9 +1,11 @@
 import { Component, createMemo, JSX, Match, onCleanup, Show, Switch } from 'solid-js';
 import type { ExerciseSelection } from '../../domain/learning/exercises';
 import type { Exercise, Rating } from '../../domain/learning/types';
+import { isTypedAnswerExercise } from '../../domain/learning/production';
 import ChoiceCard from './ChoiceCard';
 import RecallCard from './RecallCard';
 import TeachCard from './TeachCard';
+import TypedAnswerCard from './TypedAnswerCard';
 import { FeedbackNote } from './parts';
 import { RATING_KEY } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
@@ -97,6 +99,9 @@ const LearningCard: Component<LearningCardProps> = (props) => {
         )}</Match>
         <Match when={exercise() && unplayable(exercise()!.exercise, props.view)}>
           <InvalidCard view={props.view} actions={props.actions} message="Este dispositivo no puede reproducir el audio de esta tarjeta." audioCue />
+        </Match>
+        <Match when={exercise() && isTypedAnswerExercise(exercise()!.exercise)}>
+          <TypedAnswerCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} details={props.details} />
         </Match>
         <Match when={exercise()?.exercise.format === 'free-recall' && exercise()!.exercise.grading === 'self-assessment'}>
           <RecallCard exercise={exercise()!.exercise} view={props.view} actions={props.actions} allowEasy={props.allowEasy ?? false} details={props.details} />

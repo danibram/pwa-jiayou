@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { contentReferenceForCharacter, contentReferenceForWord } from '../../../src/domain/learning/content/revision';
 import { evaluateAttempt, evaluatorVersion } from '../../../src/domain/learning/evaluation';
 import { ratingTaskOf } from '../../../src/domain/learning/evaluation/rules';
+import { gradeTypedAnswer, isTypedAnswerExercise, PRODUCTION_ROLES } from '../../../src/domain/learning/production';
 import {
   buildOptions,
   displayGloss,
+  PRACTICE_LADDER,
+  practiceRung,
   isFunctionWord,
   selectExercise,
   seededRandom,
@@ -15,7 +18,7 @@ import {
 } from '../../../src/domain/learning/exercises';
 import type { AttemptAction, Exercise, ItemId } from '../../../src/domain/learning/types';
 import { ambiguityCases } from '../fixtures/contentCases';
-import { SEEDS, card, context, hsk1Characters, settled, vocabulary, word, wordItem } from './fixtures';
+import { SEEDS, card, context, hsk1Characters, observation, settled, vocabulary, word, wordItem } from './fixtures';
 
 const exerciseOf = (selection: ExerciseSelection): Exercise => {
   if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
@@ -127,11 +130,12 @@ describe('speech availability', () => {
 
   it('records the skipped audio format when it would have come first', () => {
     const ni = word('word-4f60-597d-ni3-hao3');
-    // Meaning and production were seen recently, so listening comes first.
-    const recentEvidence = settled(['meaning', 'production', 'meaning']);
+    // Rung 2. Meaning and production were seen, listening was not, so listen comes first.
+    const recentEvidence = settled(['meaning', 'production']);
     const selection = selectExercise(card(wordItem(ni), 'practice'), { kind: 'word', word: ni }, context({ speechAvailable: false, recentEvidence }));
     if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
-    expect(selection.skipped[0]).toEqual({ prompt: expect.stringMatching(/^(hear|listen)$/), reason: 'speech-unavailable' });
+    expect(selection.skipped[0]).toEqual({ prompt: 'listen', reason: 'speech-unavailable' });
+    expect(selection.prompt).toBe('reverse');
     expect(selection.exercise.cue).not.toBe('audio');
   });
 
@@ -191,7 +195,8 @@ describe('ambiguity catalog', () => {
           const selection = selectExercise(
             card(wordItem(target), 'practice'),
             { kind: 'word', word: target },
-            context({ recentEvidence: settled(['meaning', 'production', 'meaning']), familiar: (id) => partners.has(id) }, seed),
+            // Rung 1, with production seen and listening not, so hear comes first.
+            context({ recentEvidence: settled(['production']), familiar: (id) => partners.has(id) }, seed),
           );
           if (selection.kind !== 'exercise' || selection.prompt !== 'hear') continue;
           heard++;
@@ -207,7 +212,8 @@ describe('ambiguity catalog', () => {
       const entry = word(id);
       let skippedListen = false;
       for (const seed of SEEDS) {
-        const selection = selectExercise(card(wordItem(entry), 'practice'), { kind: 'word', word: entry }, context({ recentEvidence: settled(['meaning', 'production', 'meaning']) }, seed));
+        // Rung 2, with listening never seen, so listen comes first.
+        const selection = selectExercise(card(wordItem(entry), 'practice'), { kind: 'word', word: entry }, context({ recentEvidence: settled(['meaning', 'production']) }, seed));
         if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
         expect(selection.prompt, id).not.toBe('listen');
         if (selection.skipped.some((skip) => skip.prompt === 'listen' && skip.reason === 'homophone')) skippedListen = true;
@@ -321,24 +327,24 @@ describe('practice formats', () => {
   });
 
   it('trains the skill observed longest ago', () => {
-    // Listening and meaning were seen recently; production was not.
-    const recentEvidence = settled(['listening', 'meaning', 'listening']);
+    // Rung 2. Listening and meaning were seen recently; production was not.
+    const recentEvidence = settled(['listening', 'meaning']);
     for (const seed of SEEDS) {
       const exercise = exerciseOf(selectExercise(card(wordItem(ni), 'practice', 'seen'), { kind: 'word', word: ni }, context({ recentEvidence }, seed)));
       expect(exercise.skill).toBe('production');
     }
   });
 
-  it('reaches free-recall formats once the word is settled', () => {
+  it('reaches self-assessed free recall on rung 2', () => {
     const prompts = new Set(
       SEEDS.map((seed) => {
-        // Production is the skill seen longest ago, so reverse and pick share the first place.
-        const recentEvidence = settled(['production', 'meaning', 'listening']);
+        // Production and listening were seen at the same time, so the seed picks between them.
+        const recentEvidence = [observation(1_000, 'correct', { skill: 'production' }), observation(1_000, 'correct', { skill: 'listening' })];
         const selection = selectExercise(card(wordItem(ni), 'practice', 'seen'), { kind: 'word', word: ni }, context({ recentEvidence }, seed));
         return selection.kind === 'exercise' ? selection.prompt : 'exposure';
       }),
     );
-    expect(prompts).toEqual(new Set(['reverse', 'pick']));
+    expect(prompts).toEqual(new Set(['reverse', 'listen']));
   });
 
   it('teaches with an exposure card', () => {
@@ -348,6 +354,154 @@ describe('practice formats', () => {
       content: contentReferenceForWord(ni),
       card: { reason: 'teaching', answer: { characters: '你好', pinyin: 'nǐ hǎo', meaning: 'Hola' }, audio: { source: 'speech-synthesis' } },
     });
+  });
+});
+
+describe('practice ladder', () => {
+  const ni = word('word-4f60-597d-ni3-hao3');
+  const de = word('word-7684-de5');
+  const practise = (entry: WordEntry, recentEvidence: ReturnType<typeof settled>, seed: number, overrides: Parameters<typeof context>[0] = {}, reason: Parameters<typeof card>[2] = 'seen') =>
+    selectExercise(card(wordItem(entry), 'practice', reason), { kind: 'word', word: entry }, context({ recentEvidence, ...overrides }, seed));
+  const promptOf = (selection: ExerciseSelection) => {
+    if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
+    return selection.prompt;
+  };
+
+  it('climbs one rung per autonomous correct answer, up to typed answers', () => {
+    expect(practiceRung(card(wordItem(ni), 'practice'), [])).toBe(0);
+    expect(practiceRung(card(wordItem(ni), 'practice'), settled(['meaning']))).toBe(1);
+    expect(practiceRung(card(wordItem(ni), 'practice'), settled(['meaning', 'production']))).toBe(2);
+    expect(practiceRung(card(wordItem(ni), 'practice'), settled())).toBe(3);
+    expect(practiceRung(card(wordItem(ni), 'practice'), settled(['meaning', 'meaning', 'meaning', 'meaning', 'meaning']))).toBe(3);
+  });
+
+  it('steps one rung down after a failure and climbs again after a success', () => {
+    const climbed = [observation(1), observation(2), observation(3), observation(4)];
+    expect(practiceRung(card(wordItem(ni), 'practice'), [...climbed, observation(5, 'incorrect')])).toBe(2);
+    expect(practiceRung(card(wordItem(ni), 'practice'), [...climbed, observation(5, 'unanswered')])).toBe(2);
+    expect(practiceRung(card(wordItem(ni), 'practice'), [...climbed, observation(5, 'incorrect'), observation(6)])).toBe(3);
+    // The order recorded counts, not the order given.
+    expect(practiceRung(card(wordItem(ni), 'practice'), [observation(9), observation(1, 'incorrect')])).toBe(1);
+    expect(practiceRung(card(wordItem(ni), 'practice'), [observation(1), observation(9, 'incorrect')])).toBe(0);
+  });
+
+  it('does not climb on an answer a hint gave away', () => {
+    expect(practiceRung(card(wordItem(ni), 'practice'), [observation(1), observation(2, 'correct', { assisted: true })])).toBe(1);
+  });
+
+  it('keeps cards right after teaching on the supported rungs', () => {
+    for (const reason of ['new-practice', 'teach-again'] as const) {
+      expect(practiceRung(card(wordItem(ni), 'practice', reason), settled())).toBe(1);
+      expect(practiceRung(card(wordItem(ni), 'practice', reason), [])).toBe(0);
+    }
+  });
+
+  it('chooses a format from the rung the evidence reaches', () => {
+    const histories = [[], settled(['meaning']), settled(['meaning', 'production']), settled()];
+    histories.forEach((history, rung) => {
+      for (const seed of SEEDS) {
+        expect(PRACTICE_LADDER[rung], `rung ${rung} seed ${seed}`).toContain(promptOf(practise(ni, history, seed)));
+      }
+    });
+  });
+
+  it('shows only supported formats right after teaching, whatever the history', () => {
+    for (const seed of SEEDS) {
+      for (const reason of ['new-practice', 'teach-again'] as const) {
+        const prompt = promptOf(practise(ni, settled(), seed, {}, reason));
+        expect([...PRACTICE_LADDER[0], ...PRACTICE_LADDER[1]]).toContain(prompt);
+      }
+    }
+  });
+
+  it('moves the next practice back one rung after a failure', () => {
+    const history = [...settled(), observation(9_000, 'incorrect')];
+    for (const seed of SEEDS) expect(PRACTICE_LADDER[2]).toContain(promptOf(practise(ni, history, seed)));
+  });
+
+  it('starts with recognition and tries the other option formats before the meaning card', () => {
+    const selection = practise(ni, [], 1, {}, 'new-practice');
+    expect(promptOf(selection)).toBe('recognize');
+    const tiny = [ni, word('word-7231-ai4')];
+    const fallback = practise(ni, [], 1, { vocabulary: tiny }, 'new-practice');
+    if (fallback.kind !== 'exercise') throw new Error('Expected an exercise');
+    expect(fallback.skipped[0]).toEqual({ prompt: 'recognize', reason: 'too-few-distractors' });
+    expect(fallback.prompt).toBe('meaning');
+  });
+
+  it('reaches every typed kind on rung 3, each trained skill first in turn', () => {
+    const seen = new Set<string>();
+    const histories = [
+      settled(['meaning', 'production', 'listening']),
+      settled(['tones', 'meaning', 'listening']),
+      settled(['tones', 'production', 'meaning']),
+    ];
+    for (const history of histories) for (const seed of SEEDS) seen.add(promptOf(practise(ni, history, seed)));
+    expect(seen).toEqual(new Set(PRACTICE_LADDER[3]));
+  });
+
+  it('builds typed exercises as the production module does, graded and never rated', () => {
+    for (const history of [settled(['meaning', 'production', 'listening']), settled(['tones', 'meaning', 'listening'])]) {
+      for (const seed of SEEDS.slice(0, 10)) {
+        const selection = practise(ni, history, seed);
+        if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
+        const exercise = selection.exercise;
+        const kind = selection.prompt as keyof typeof PRODUCTION_ROLES;
+        const { role, ...shape } = PRODUCTION_ROLES[kind];
+        expect(role).toBe('practice');
+        expect(exercise).toMatchObject(shape);
+        expect(isTypedAnswerExercise(exercise)).toBe(true);
+        expect(exercise.accepted?.map((entry) => entry.id)).toContain(ni.id);
+        expect(ratingTaskOf(wordItem(ni), exercise)).toBeNull();
+        const text = exercise.rubric.id === 'typed-pinyin' ? 'ni3 hao3' : exercise.rubric.id === 'typed-characters' ? '你好' : 'hola';
+        const grade = gradeTypedAnswer(exercise, text)!;
+        expect(grade.evaluation).toEqual({ outcome: 'correct' });
+        const result = evaluateAttempt(
+          { id: `typed-${seed}`, itemId: wordItem(ni), actions: [{ type: 'answer', at: 2_000, answer: text, selectedOptionId: null, evaluation: grade.evaluation }] },
+          exercise,
+          { sessionMode: 'today', scheduledEligible: true, alreadyKnownCheck: false },
+        );
+        expect(result).toMatchObject({ kind: 'practice', reason: 'exercise', evaluation: { outcome: 'correct' } });
+      }
+    }
+  });
+
+  it('never builds a typed audio kind without speech, and records why', () => {
+    // Listening was never seen, so the audio kinds come first among equals.
+    const history = settled(['meaning', 'production', 'tones']);
+    let skippedAudio = false;
+    for (const seed of SEEDS) {
+      const selection = practise(ni, history, seed, { speechAvailable: false });
+      if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
+      expect(selection.exercise.cue).not.toBe('audio');
+      expect(selection.exercise.audio).toBeNull();
+      for (const skip of selection.skipped) {
+        if (skip.prompt === 'characters-from-audio' || skip.prompt === 'gloss-from-audio') {
+          expect(skip.reason).toBe('speech-unavailable');
+          skippedAudio = true;
+        }
+      }
+    }
+    expect(skippedAudio).toBe(true);
+  });
+
+  it('never asks a function word from its gloss, or for its gloss, as a typed answer (P7)', () => {
+    let skipped = 0;
+    for (const history of [settled(['meaning', 'tones', 'listening']), settled(['meaning', 'tones', 'production'])]) {
+      for (const seed of SEEDS) {
+        const selection = practise(de, history, seed);
+        if (selection.kind !== 'exercise') throw new Error('Expected an exercise');
+        expect(['pinyin-from-gloss', 'gloss-from-audio']).not.toContain(selection.prompt);
+        expect(selection.exercise.cue).not.toBe('gloss');
+        skipped += selection.skipped.filter((skip) => skip.reason === 'function-word').length;
+      }
+    }
+    expect(skipped).toBeGreaterThan(0);
+  });
+
+  it('gives the same typed exercise for the same seed', () => {
+    const run = (seed: number) => practise(ni, settled(), seed);
+    expect(run(11)).toEqual(run(11));
   });
 });
 

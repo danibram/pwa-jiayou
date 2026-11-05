@@ -1,6 +1,7 @@
 import { createStore } from 'solid-js/store';
 import { evaluateAttempt, evaluatorVersion as currentEvaluatorVersion, type EvaluationResult } from '../domain/learning/evaluation';
 import { exposureCard, seededRandom, selectExercise, type ExerciseContext, type ExercisePrompt, type ExerciseSelection } from '../domain/learning/exercises';
+import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, type ProductionKind, type TypedGrade } from '../domain/learning/production';
 import { addLocalDays, effectiveItemEvents, pendingToday } from '../domain/learning/scheduler';
 import {
   buildSession,
@@ -62,6 +63,11 @@ export interface LearningSessionView {
   total: number;
   speechAvailable: boolean;
   error: { message: string; retryable: boolean } | null;
+  /**
+   * Why the last typed answer was not taken: text the policy cannot read, such as "ni8" or pinyin
+   * in a characters field. Nothing was recorded and the card stays open. Cleared by the next action.
+   */
+  inputError: string | null;
   /** A confirmed answer `undoLast` would void: its feedback is shown, or the next card is untouched. */
   canUndo: boolean;
 }
@@ -75,7 +81,12 @@ export interface LearningSessionView {
  *   (`{ optionId: null }`), or when only the correct option is left. The first pick decides the
  *   evaluation.
  * - `answer` on a self-assessed card (meaning, reverse, listen): only "No lo sé" (`answer: null` or
- *   empty) is accepted, and it ends the attempt as `unanswered`. Typed answers wait for phase 5B.
+ *   empty) is accepted, and it ends the attempt as `unanswered`.
+ * - `answer` on a typed card (`isTypedAnswerExercise`): `answer: null` is "No lo sé" and ends the
+ *   attempt as `unanswered`; blank text is ignored. Other text is graded with `gradeTypedAnswer`
+ *   before anything is saved. Text the policy cannot read sets `inputError`, records nothing and
+ *   keeps the card open; anything else is recorded with that evaluation and ends the attempt, so
+ *   the stored action and the event agree with the evaluator's own regrading.
  * - `reveal` shows the answer; `selfAssess` ends a self-assessed card with the learner's rating.
  * - `hint` records a hint; the exercise builder says whether it reveals the answer.
  * - `drawing` ends a writing card with the stroke checker's mistakes.
@@ -185,12 +196,20 @@ const describeError = (error: unknown): { message: string; retryable: boolean } 
   return { message: 'Algo ha fallado en la sesión.', retryable: false };
 };
 
-/** The legacy prompt an exercise was built from: role fields are unique per prompt. */
+/** The prompt an exercise was built from: role fields are unique per prompt, and per kind for typed answers. */
 const promptOf = (exercise: Exercise): ExercisePrompt => {
   if (exercise.format === 'writing') return exercise.stage === 'memory' ? 'write-memory' : 'write-trace';
+  if (isTypedAnswerExercise(exercise)) {
+    const kind = (Object.keys(PRODUCTION_ROLES) as ProductionKind[]).find((candidate) => {
+      const role = PRODUCTION_ROLES[candidate];
+      const typedGloss = exercise.rubric.id === 'typed-gloss';
+      return role.skill === exercise.skill && role.cue === exercise.cue && (candidate === 'gloss-from-audio') === typedGloss;
+    });
+    if (kind) return kind;
+  }
   const match = (Object.keys(EXERCISE_ROLES) as LegacyPrompt[]).find((prompt) => {
     const role = EXERCISE_ROLES[prompt];
-    return role.skill === exercise.skill && role.format === exercise.format && role.cue === exercise.cue;
+    return role.skill === exercise.skill && role.format === exercise.format && role.cue === exercise.cue && role.grading === exercise.grading;
   });
   return match ?? 'meaning';
 };
@@ -220,6 +239,21 @@ const cleanHint = (hint: Hint): Hint => ({
   ...(typeof hint.value === 'string' ? { value: hint.value } : {}),
 });
 
+/** What to say when typed text cannot be read. The learner fixes it and nothing is saved. */
+const inputErrorMessage = (grade: TypedGrade): string => {
+  if (grade.kind === 'characters') return 'Escribe la palabra en caracteres chinos, sin letras ni signos.';
+  if (grade.kind === 'pinyin') {
+    const [first] = grade.diagnosis.formatErrors;
+    if (first?.kind === 'unknown-tone-number') return `No hay tono ${first.character}. Usa del 1 al 4, y 5 o 0 para el tono neutro.`;
+    if (first?.kind === 'misplaced-digit') return 'Pon el número del tono justo después de su sílaba, como en ni3 hao3.';
+    if (first?.kind === 'unexpected-character') {
+      return `«${first.character}» no se usa en pinyin. Escribe letras y tonos, como ni3 hao3 o nǐ hǎo.`;
+    }
+    return 'Revisa las marcas de tono. Escribe letras y tonos, como ni3 hao3 o nǐ hǎo.';
+  }
+  return 'Escribe el significado con palabras.';
+};
+
 const feedbackOutcome = (result: EvaluationResult): LearningSessionFeedback['outcome'] => {
   if (result.kind === 'invalid-attempt') return 'invalid';
   const outcome = result.evaluation.outcome;
@@ -247,6 +281,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     total: 0,
     speechAvailable: false,
     error: null,
+    inputError: null,
     canUndo: false,
   });
 
@@ -346,6 +381,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
       total: session?.queue.length ?? 0,
       speechAvailable: rt.speechAvailable(),
       error: null,
+      inputError: null,
     });
     if (state !== 'feedback') setView('feedback', null);
   };
@@ -532,7 +568,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     session = withAttempt(session, attempt);
     // A new action on this card means the previous answer is no longer the one to undo.
     undo = null;
-    setView({ actions: plain([...attempt.actions]), revealed: attempt.actions.some((other) => other.type === 'reveal') });
+    setView({ actions: plain([...attempt.actions]), revealed: attempt.actions.some((other) => other.type === 'reveal'), inputError: null });
     if (end) submit();
     else draft();
   };
@@ -560,6 +596,35 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
         if (wrongBefore.has(optionId)) return;
         const exhausted = !right && wrongBefore.size + 1 >= shown.options.length - 1;
         record({ type: 'answer', at, answer: option.text, selectedOptionId: optionId, evaluation: { outcome: right ? 'correct' : 'incorrect' } }, right || exhausted);
+        return;
+      }
+      if (isTypedAnswerExercise(shown)) {
+        if (input.answer === null || input.answer === undefined) {
+          record({ type: 'answer', at, answer: null, selectedOptionId: null, evaluation: { outcome: 'unanswered' } }, true);
+          return;
+        }
+        if (text === null) return;
+        // Only separators ("'-") parse as zero syllables, which the policy would grade as a miss.
+        const parsed = shown.rubric.id === 'typed-pinyin' ? parsePinyinInput(text) : null;
+        if (parsed?.kind === 'tokens' && parsed.tokens.length === 0) {
+          setView('inputError', 'Escribe el pinyin con letras y tonos, como ni3 hao3 o nǐ hǎo.');
+          return;
+        }
+        let grade: TypedGrade | null;
+        try {
+          grade = gradeTypedAnswer(shown, text);
+        } catch (error) {
+          // A catalog reading the policy cannot read is a content error, not the learner's.
+          fail(error, null);
+          return;
+        }
+        if (!grade) return;
+        // Text with nothing to grade ("...") is not "No lo sé": the learner fixes it like a format error.
+        if (grade.evaluation.outcome === 'invalid' || grade.evaluation.outcome === 'unanswered') {
+          setView('inputError', inputErrorMessage(grade));
+          return;
+        }
+        record({ type: 'answer', at, answer: text, selectedOptionId: null, evaluation: grade.evaluation }, true);
         return;
       }
       if (shown.grading === 'self-assessment' && text === null) {

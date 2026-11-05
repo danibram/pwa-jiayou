@@ -3,8 +3,6 @@
  * learners' devices; renaming one loses what is saved under it.
  */
 export const KEYS = {
-  /** Character progress, daily counts and the character activity calendar (v4 format). */
-  progress: 'hsk-flashcards-stats',
   myWords: 'jiayou-my-words',
   studyLists: 'jiayou-study-lists',
   /** Selected character levels and the place in Explorar. Not progress, despite the name. */

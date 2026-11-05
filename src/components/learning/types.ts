@@ -21,6 +21,8 @@ export interface LearningSessionView {
   /** A confirmed answer in this session that undoLast would void. False while saving. */
   canUndo: boolean;
   error: { message: string; retryable: boolean } | null;
+  /** Why the last typed answer was not taken. Nothing was saved and the field stays open. */
+  inputError: string | null;
 }
 
 /** What the screen reports. The controller evaluates, rates and saves; the components never do. */

@@ -1,12 +1,13 @@
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import LearningBackup, { type LearningBackupProps } from '../../../src/components/learning/backup/LearningBackup';
-import { createBackup, serializeCombinedBackup } from '../../../src/domain/learning/backup';
+import { createBackup } from '../../../src/domain/learning/backup';
 
 const record = { right: 2, wrong: 1, reps: 1, lapses: 1, interval: 3, ease: 2.36, due: 4, strokeRuns: 1, strokeBest: 0, lastSeen: 1, clean: 1, lastReview: 1, updatedAt: 1, deviceId: 'device-a' };
 const daily = { day: '2026-01-02', reviewed: 3, introduced: 1, streak: 2 };
 
-const combinedFile = serializeCombinedBackup({
+/** The phase 4 file: a learning log next to a v4 character half, which import ignores. */
+const combinedFile = JSON.stringify({
   learning: createBackup({ deviceId: 'device-a', exportedAt: 5, events: [], configs: [] }),
   legacyCharacters: { version: 4, chars: { 好: record, 人: record }, daily, activity: {} },
 });
@@ -95,7 +96,6 @@ describe('learning backup UI', () => {
     const status = await screen.findByRole('status');
     expect(status).toHaveTextContent('Esta copia no es válida. Tu progreso no ha cambiado.');
     expect(status).toHaveTextContent('El campo extra no forma parte del formato');
-    expect(status).toHaveTextContent('Falta el campo legacyCharacters');
     expect(screen.queryByRole('button', { name: 'Combinar con mi progreso' })).toBeNull();
     expect(props.mergeBackup).not.toHaveBeenCalled();
     expect(props.replaceBackup).not.toHaveBeenCalled();

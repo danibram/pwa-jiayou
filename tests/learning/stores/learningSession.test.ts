@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { PRACTICE_LADDER } from '../../../src/domain/learning/exercises';
 import { createSchedulerRegistry, rebuildItem } from '../../../src/domain/learning/scheduler';
 import type { LearningEvent } from '../../../src/domain/learning/types';
 import type { LearningStore } from '../../../src/stores/learningStore';
@@ -357,7 +358,7 @@ describe('learning session controller', () => {
     expect(session.view.position).toBe(position + 1);
   });
 
-  it('presents all six legacy prompts through the selector', async () => {
+  it('presents all six legacy prompts and the typed answers through the selector', async () => {
     const e = fresh();
     const { store } = await teachDay(e);
     const seen = new Set<string>();
@@ -369,7 +370,12 @@ describe('learning session controller', () => {
     e.clock.advance(DAY);
     const rating = await e.session(store, { mode: 'today' });
     for (const prompt of await finish(rating)) seen.add(prompt);
-    expect([...seen].sort()).toEqual(['hear', 'listen', 'meaning', 'pick', 'recognize', 'reverse']);
+    const legacy = ['hear', 'listen', 'meaning', 'pick', 'recognize', 'reverse'];
+    expect([...seen].filter((prompt) => legacy.includes(prompt)).sort()).toEqual(legacy);
+    // Words that keep answering right climb the ladder to typed answers.
+    const typed = [...seen].filter((prompt) => !legacy.includes(prompt));
+    expect(typed.length).toBeGreaterThan(0);
+    for (const prompt of typed) expect(PRACTICE_LADDER[3]).toContain(prompt);
     await expectCacheMatchesLog(store);
   });
 });

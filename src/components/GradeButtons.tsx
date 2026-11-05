@@ -1,6 +1,8 @@
 import { Component, For, Show } from 'solid-js';
-import type { Grade } from '../stores/progressStore';
 import Icon from './Icon';
+
+/** How an answer went: Otra vez, Difícil or Bien. */
+export type Grade = 'again' | 'hard' | 'good';
 
 /** One grading vocabulary for words and characters. */
 export const GRADE_LABEL: Record<Grade, string> = {

@@ -32,6 +32,8 @@ export type PinyinFormatError =
   | { kind: 'unknown-tone-number'; character: string; at: number }
   /** A tone mark or diaeresis with no letter to sit on, or on a letter that cannot take it. */
   | { kind: 'misplaced-mark'; at: number }
+  /** Only separators: nothing that could be a syllable. */
+  | { kind: 'no-syllables' }
   /** Two tone marks stacked on one letter. */
   | { kind: 'stacked-marks'; at: number };
 
@@ -100,6 +102,7 @@ export const parsePinyinInput = (input: string): ParsedPinyin => {
     }
   }
   close(null);
+  if (errors.length === 0 && tokens.length === 0) errors.push({ kind: 'no-syllables' });
   if (errors.length > 0) return { kind: 'format-error', errors };
   return { kind: 'tokens', tokens };
 };

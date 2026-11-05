@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor, within } from '@solidjs/testing-library';
 import type { JSX } from 'solid-js';
 import { LearningStoreContext } from '../../../src/components/LearningStoreContext';
 import type { LearningStore } from '../../../src/stores/learningStore';
+import { rightText } from '../stores/fixtures';
 
 /** Renders `children` over the given store, as the app does over its own. */
 export const withStore = (store: LearningStore, children: () => JSX.Element) => () => (
@@ -22,15 +23,22 @@ const rightOptionText = async (store: LearningStore): Promise<string> => {
 
 /**
  * Answers whatever card is on screen through the UI, the way a learner would: continues a lesson
- * or a feedback, picks the right option, or reveals and rates Bien. Waits for the save.
+ * or a feedback, picks the right option, types the right answer, or reveals and rates Bien. Waits
+ * for the save.
  */
 export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'wrong' = 'right'): Promise<void> => {
   const before = document.body.textContent;
   // Decide and click in the same tick, so a save or an auto-advance cannot move the card in between.
   let next: 'choice' | 'recall' | null = null;
+  let typed = false;
   await waitFor(() => {
     const go = enabled('Continuar');
     if (go) return void fireEvent.click(go);
+    if (screen.queryByRole('textbox') && enabled('No lo sé')) {
+      if (outcome === 'wrong') return void fireEvent.click(enabled('No lo sé')!);
+      typed = true;
+      return;
+    }
     if (screen.queryByRole('group', { name: /^Elige/ }) && enabled('No lo sé')) {
       if (outcome === 'wrong') return void fireEvent.click(enabled('No lo sé')!);
       next = 'choice';
@@ -44,7 +52,13 @@ export const answerOnScreen = async (store: LearningStore, outcome: 'right' | 'w
     }
     throw new Error('No card ready');
   });
-  if (next === 'choice') {
+  if (typed) {
+    const session = await store.activeSession();
+    const exercise = session?.queue[session.position]?.exercise;
+    if (!exercise) throw new Error('No typed card stored at the current position');
+    fireEvent.input(screen.getByRole('textbox'), { target: { value: rightText(exercise) } });
+    fireEvent.click(screen.getByRole('button', { name: 'Comprobar' }));
+  } else if (next === 'choice') {
     const text = await rightOptionText(store);
     await waitFor(() => {
       const option = within(screen.getByRole('group', { name: /^Elige/ })).getByRole('button', { name: text });

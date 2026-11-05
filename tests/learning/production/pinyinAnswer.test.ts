@@ -161,6 +161,7 @@ describe('format errors', () => {
   it('does not need the expected answer to find format errors', () => {
     expect(parsePinyinInput('ni3, hao3').kind).toBe('format-error');
     expect(parsePinyinInput('ni3 hao3').kind).toBe('tokens');
+    expect(parsePinyinInput("'-")).toEqual({ kind: 'format-error', errors: [{ kind: 'no-syllables' }] });
   });
 
   it('treats empty input as unanswered', () => {

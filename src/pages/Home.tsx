@@ -8,8 +8,7 @@ import LevelChips from '../components/LevelChips';
 import { studyStatusOf, summarizeLearning } from '../utils/progressSummary';
 import { readHomeSnapshot, rememberHomeSnapshot } from '../utils/homeSnapshot';
 import { agree, countNoun, type NounKind } from '../utils/countNoun';
-import { progressStore } from '../stores/progressStore';
-import { activityStreak } from '../domain/progress/queue';
+import { activityStreak } from '../utils/activityStreak';
 import ActivityCalendar from '../components/ActivityCalendar';
 import Pinyin from '../components/Pinyin';
 import type { HomeTarget } from '../screen';
@@ -20,7 +19,7 @@ import { useLearningStore } from '../components/LearningStoreContext';
 import { prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
 import type { HskLevel } from '../types';
-import { ALL_ID, mergeActivity, MORE_ID, practiceIdOf, WEAK_ID } from '../utils/wordSessions';
+import { ALL_ID, MORE_ID, practiceIdOf, WEAK_ID } from '../utils/wordSessions';
 
 interface HomeProps {
   onNavigate: (target: HomeTarget) => void;
@@ -96,17 +95,17 @@ const Home: Component<HomeProps> = (props) => {
   /** The chips show the HSK lists. */
   const wordLevels = vocabularyStore.getLists().flatMap((list) => list.hskLevel ?? []);
   const levelOn = (lvl: HskLevel) => vocabularyStore.isSelected(hskListId(lvl));
-  /** Words and characters share one calendar: word days come from the learning log. */
-  const activity = createMemo(() => mergeActivity(progressStore.activity(), store.activityByDay()));
+  /** Words and characters share one calendar, read from the learning log. */
+  const activity = createMemo(() => store.activityByDay());
   const streak = () => activityStreak(activity(), new Date(store.now()));
   const wordSummary = createMemo(() => summarizeLearning(itemIds(), store));
   const wordScope = () => [...vocabularyStore.state.selectedLists].sort().join(',');
   const previousWords = readHomeSnapshot('vocabulary', untrack(wordScope));
   rememberHomeSnapshot('vocabulary', untrack(wordScope), untrack(wordSummary));
-  /** The stored session still has cards: Home offers to continue it. */
+  /** The stored word session still has cards: Home offers to continue it. Trazos resumes its own. */
   const [paused] = createResource(() => store.ready(), async () => {
     const session = await store.activeSession();
-    return session ? practiceIdOf(session) : null;
+    return session && session.mode !== 'strokes' ? practiceIdOf(session) : null;
   });
   const pausedWord = () => (paused.state === 'ready' ? paused() : null);
   const wordClosed = () => !pausedWord() && wordPending() === 0;
@@ -171,6 +170,18 @@ const Home: Component<HomeProps> = (props) => {
     return `Repasar ${due} y aprender ${fresh}`;
   };
 
+  /** The Trazos row says what a strokes session would do now, from the same plan the session builds. */
+  const strokesPlan = createMemo(() => store.previewPlan('strokes'));
+  const strokesBody = () => {
+    const plan = strokesPlan();
+    if (!plan) return 'Escribe caracteres';
+    const due = plan.counts.scheduled;
+    const fresh = plan.counts.newItems;
+    if (due > 0) return `${due} por repasar`;
+    if (fresh > 0) return `${fresh} ${fresh === 1 ? 'carácter nuevo' : 'caracteres nuevos'}`;
+    return 'Al día';
+  };
+
   const wordModes = [
     {
       glyph: '搜',
@@ -189,6 +200,14 @@ const Home: Component<HomeProps> = (props) => {
       title: 'Repasar todo',
       body: 'Las palabras elegidas',
       go: () => props.onNavigate({ page: 'vocabulary-review', resume: false, practiceId: ALL_ID }),
+    },
+    {
+      glyph: '写',
+      title: 'Trazos',
+      get body() {
+        return strokesBody();
+      },
+      go: () => props.onNavigate({ page: 'trazos', focus: { kind: 'level' } }),
     },
     {
       glyph: '设',

@@ -38,6 +38,7 @@ Se tomaron tras la revisión de la fase 0 y sustituyen el comportamiento actual 
 6. Tras "Otra vez", la palabra vuelve cuatro tarjetas después como práctica. FSRS recibe la siguiente nota cuando vence el paso de reaprendizaje, en esa sesión si sigue abierta o en la siguiente. El resumen no la muestra pendiente hasta que vence.
 7. Para partículas y clasificadores, la tarjeta de significado pregunta su función y la respuesta es la glosa editorial, con autoevaluación. La fase 5 añade frases con hueco cuando exista contexto editorial.
 8. En escritura de memoria, cero errores es Bien. Uno o dos errores es Difícil con recuerdo correcto. Tres o más errores, o una pista, es Otra vez. El intento guarda el número de errores.
+9. La práctica de una palabra retira ayudas por peldaños. El peldaño 0 es reconocer el significado entre opciones. El 1 es elegir la palabra entre opciones desde la glosa o el audio. El 2 es recordarla sin opciones y autoevaluarse. El 3 es escribir el pinyin, los caracteres o el significado, y la app lo corrige. El peldaño sale de la evidencia del elemento y no se guarda. Cada acierto autónomo sube un peldaño, un acierto tras una pista que da la respuesta lo mantiene y cualquier otro resultado lo baja. Justo después de enseñar, la práctica no pasa del peldaño 1. Si un formato no se puede construir, se prueban los peldaños inferiores, después los de opciones y por último la tarjeta de significado. Las respuestas escritas son siempre práctica y nunca dan nota FSRS.
 
 ## Fase 0. Contratos y prueba técnica
 
@@ -111,6 +112,8 @@ Depende de la fase 4.
 | 5A | `src/domain/learning/introduction/` y componentes asignados | Enseñar, retirar ayudas y comprobar "Ya la sé" sin inventar respuestas anteriores |
 | 5B | Evaluadores y componentes asignados de producción y escucha | Definir y versionar la política de pinyin (números, marcas, `ü`/`v`, tono neutro, sandhi), aceptar equivalencias y utilizar contexto editorial |
 | 5C | Trazos y adaptador de escritura | Registrar pistas explícitas y automáticas, separar ejecución de recuerdo y retirar la planificación antigua de caracteres |
+
+En Trazos, ver el orden de los trazos es la exposición de enseñanza, calcar es práctica y solo escribir de memoria da nota. La acción `drawing` guarda los errores que contó `hanzi-writer`. "Pista" y "Contorno" se guardan como pistas que revelan la respuesta, y también el trazo que el lienzo muestra por sí solo tras varios fallos. Al escribir de memoria el lienzo espera al tercer fallo en un trazo para mostrarlo, así que dos errores en el mismo trazo siguen dando Difícil. La copia de seguridad solo lleva el registro de eventos. Una copia v4 o combinada se sigue leyendo, pero su progreso antiguo no se importa y un aviso lo dice.
 
 Cada resultado identifica qué habilidad comprueba. La escritura no modifica el estado de una palabra. El contenido sin una respuesta evaluable queda como práctica o autoevaluación. No se añade evaluación automática de pronunciación en esta fase.
 

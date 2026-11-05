@@ -3,10 +3,8 @@ import { renderWithStore } from './fixtures/learningStore';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from '../src/App';
 import { vocabulary } from './fixtures/levelWords';
-import { progressStore } from '../src/stores/progressStore';
 
 beforeEach(() => {
-  progressStore.clear();
   localStorage.setItem('hsk-installed-levels', '[1]');
 });
 

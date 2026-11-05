@@ -1,8 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { deviceLocalDayRule } from '../src/domain/learning/scheduler';
-import { activityStreak, progressStore } from '../src/stores/progressStore';
+import { activityStreak } from '../src/utils/activityStreak';
 import { nextReviewsLabel, summarizeLearning, type ProgressSummary } from '../src/utils/progressSummary';
-import { mergeActivity } from '../src/utils/wordSessions';
 import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from './learning/stores/fixtures';
 
 let env: Env | undefined;
@@ -27,14 +26,6 @@ describe('the streak', () => {
     expect(activityStreak({ [day(0)]: 5, [day(-2)]: 5 }, now)).toBe(1);
   });
 
-  it('is one on day one after a word session and a character session', () => {
-    progressStore.clear();
-    progressStore.introduce('一', { free: true });
-    progressStore.grade('二', 'good', { free: true });
-    const today = new Date().toLocaleDateString('sv-SE');
-    expect(activityStreak(mergeActivity(progressStore.activity(), { [today]: 20 }))).toBe(1);
-    progressStore.clear();
-  });
 });
 
 describe('Home counts from the learning log', () => {

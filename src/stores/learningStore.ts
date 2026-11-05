@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
-import { topicById } from '../data/topics';
+import { topicById, topics } from '../data/topics';
 import { allWords, findWord } from '../data/vocabulary';
-import { contentReferenceForCharacter, contentReferenceForWord } from '../domain/learning/content/revision';
+import { characterContentId, contentReferenceForCharacter, contentReferenceForWord } from '../domain/learning/content/revision';
 import type { ItemContent, WordEntry } from '../domain/learning/exercises';
 import {
   compareReplayOrder,
@@ -59,6 +59,7 @@ import { storage } from '../persistence/keyValue';
 import { learningSettings } from '../persistence/learningSettings';
 import { canSpeak } from '../utils/speech';
 import { orderForLearning } from '../utils/wordOrder';
+import type { HSKCharacter } from '../types';
 import { characterStore } from './characterStore';
 import { vocabularyStore } from './vocabularyStore';
 
@@ -131,6 +132,9 @@ export interface LearningRuntime {
 
 export const wordItemId = (wordId: string): ItemId => `word-meaning:${wordId}`;
 
+/** `character-writing:char-<hex>`, the item a character's writing schedule lives on. */
+export const characterItemId = (char: string): ItemId => `character-writing:${characterContentId(char)}` as ItemId;
+
 export const contentReferenceOf = (content: ItemContent): ContentReference =>
   content.kind === 'word' ? contentReferenceForWord(content.word) : contentReferenceForCharacter(content.character);
 
@@ -140,11 +144,42 @@ const randomId = (): string =>
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 
 const WORD_PREFIX = 'word-meaning:';
+const CHARACTER_PREFIX = 'character-writing:char-';
 
+/** The character an item id names, or null when the id is not a character's. */
+export const characterOf = (itemId: ItemId): string | null => {
+  if (!itemId.startsWith(CHARACTER_PREFIX)) return null;
+  const code = Number.parseInt(itemId.slice(CHARACTER_PREFIX.length), 16);
+  return Number.isInteger(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : null;
+};
+
+/** The installed catalog rows by character, rebuilt when a level is installed or removed. */
+const characterRows = (() => {
+  let built: { revision: number; count: number; rows: Map<string, HSKCharacter> } | null = null;
+  return (): Map<string, HSKCharacter> => {
+    const list = characterStore.state.characters;
+    if (!built || built.revision !== characterStore.listRevision || built.count !== list.length) {
+      built = { revision: characterStore.listRevision, count: list.length, rows: new Map(list.map((row) => [row.character, row])) };
+    }
+    return built.rows;
+  };
+})();
+
+/**
+ * A character resolves only to its catalog row, which `characterStore` already merged with its gloss
+ * sidecar, so the content and its c1 revision are the ones Trazos shows and the published registry
+ * holds. A character outside HSK has no row: the stub `characterOrWordStub` builds takes its gloss
+ * from whichever studied word uses it, so it has no stable c1 and stays out of every session.
+ */
 const defaultResolve = (itemId: ItemId): ItemContent | null => {
-  if (!itemId.startsWith(WORD_PREFIX)) return null;
-  const word = findWord(itemId.slice(WORD_PREFIX.length));
-  return word ? { kind: 'word', word } : null;
+  if (itemId.startsWith(WORD_PREFIX)) {
+    const word = findWord(itemId.slice(WORD_PREFIX.length));
+    return word ? { kind: 'word', word } : null;
+  }
+  const char = characterOf(itemId);
+  if (char === null) return null;
+  const row = characterRows().get(char);
+  return row ? { kind: 'character', character: row } : null;
 };
 
 /** A word's topic tags plus the theme of each subtopic, so a theme scope reaches its subtopics' words. */
@@ -155,12 +190,36 @@ const withThemes = (topicIds: readonly string[]): string[] => [
   })),
 ];
 
+/** The topics that list a character, with their themes, as Trazos picks a topic's characters. */
+const topicsByCharacter = (() => {
+  let index: Map<string, string[]> | null = null;
+  return (char: string): string[] => {
+    if (!index) {
+      const built = new Map<string, string[]>();
+      for (const topic of topics) {
+        for (const listed of topic.characters) built.set(listed, [...(built.get(listed) ?? []), topic.id]);
+      }
+      index = new Map([...built].map(([key, ids]) => [key, withThemes(ids)]));
+    }
+    return index.get(char) ?? [];
+  };
+})();
+
+/**
+ * Words of the selected lists, in learning order, then the characters of the selected levels in
+ * catalog order. Trazos plans only the characters, every other mode only the words.
+ */
 const defaultPool = (resolve: (itemId: ItemId) => ItemContent | null) => (): PoolItem[] => {
   const words = orderForLearning(vocabularyStore.getSelectedWords(), characterStore.state.characters.map((row) => row.character));
-  return words.map((word) => {
+  const wordItems = words.map((word) => {
     const itemId = wordItemId(word.id);
     return { itemId, available: resolve(itemId) !== null, topicIds: withThemes(word.topicIds) };
   });
+  const characterItems = characterStore.getCharactersByLevel().map((row) => {
+    const itemId = characterItemId(row.character);
+    return { itemId, available: resolve(itemId) !== null, topicIds: topicsByCharacter(row.character) };
+  });
+  return [...wordItems, ...characterItems];
 };
 
 const groupByItem = (events: readonly LearningEvent[]): Map<ItemId, LearningEvent[]> => {
@@ -480,6 +539,11 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
         .filter((event): event is HistoryEntry['event'] => event.type !== 'attempt-voided')
         .sort(compareReplayOrder)
         .map((event) => ({ event, voided: voided.has(event.id) }));
+    },
+
+    /** Whether the active pool holds the item with its content available, so a session can plan it. */
+    inPool(itemId: ItemId): boolean {
+      return pool().some((item) => item.itemId === itemId && item.available);
     },
 
     /** The item's current content, or null when its pack is not installed. */

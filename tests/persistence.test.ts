@@ -5,7 +5,6 @@ import { storage } from '../src/persistence/keyValue';
 describe('storage keys', () => {
   it('keep the names already saved on devices', () => {
     expect(KEYS).toEqual({
-      progress: 'hsk-flashcards-stats',
       myWords: 'jiayou-my-words',
       studyLists: 'jiayou-study-lists',
       characterDeck: 'hsk-flashcards-progress',
