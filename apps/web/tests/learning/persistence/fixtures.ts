@@ -1,6 +1,6 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { evaluatorVersion } from '../../../src/domain/learning/evaluation';
-import type { Scheduler } from '../../../src/domain/learning/scheduler';
+import { evaluatorVersion } from '@jiayou/learning/evaluation';
+import type { Scheduler } from '@jiayou/learning/scheduler';
 import type {
   ConfigId,
   ItemId,
@@ -9,7 +9,7 @@ import type {
   SchedulerState,
   SessionState,
   Timestamp,
-} from '../../../src/domain/learning/types';
+} from '@jiayou/learning/types';
 import {
   createLearningRepository,
   type ChannelLike,
@@ -19,8 +19,8 @@ import {
   type LocksLike,
   type PendingEvent,
 } from '../../../src/persistence/learning';
-import { answer, correct, hint, incorrect, meaningCard, rate, recognizeCard, reveal } from '../evaluation/fixtures';
-import { at, utcRule, WORD } from '../scheduler/fixtures';
+import { answer, correct, hint, incorrect, meaningCard, rate, recognizeCard, reveal } from '@jiayou/learning/testing/evaluation';
+import { at, utcRule, WORD } from '@jiayou/learning/testing/scheduler';
 
 export { at, utcRule, WORD };
 export const OTHER_WORD: ItemId = 'word-meaning:word-8c22-8c22-xie4-xie5';

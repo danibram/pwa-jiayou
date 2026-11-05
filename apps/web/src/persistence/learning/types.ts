@@ -1,4 +1,4 @@
-import type { LocalDayRule, Scheduler } from '../../domain/learning/scheduler';
+import type { LocalDayRule, Scheduler } from '@jiayou/learning/scheduler';
 import type {
   ConfigId,
   ItemId,
@@ -10,7 +10,7 @@ import type {
   SessionState,
   StoredSchedulerConfig,
   Timestamp,
-} from '../../domain/learning/types';
+} from '@jiayou/learning/types';
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 

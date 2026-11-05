@@ -3,8 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ProgressBackup, { applyUserBackup, exportUserBackup } from '../src/components/ProgressBackup';
 import { characterStore } from '../src/stores/characterStore';
 import { createLearningSession } from '../src/stores/learningSessionStore';
-import { characterItemId, type LearningStore } from '../src/stores/learningStore';
-import type { SessionMode } from '../src/domain/learning/types';
+import { type LearningStore } from '../src/stores/learningStore';
+import { characterItemId } from '@jiayou/learning/items';
+import type { SessionMode } from '@jiayou/learning/types';
 import { renderWithStore, testLearningStore } from './fixtures/learningStore';
 
 vi.mock('../src/components/StrokeCanvas', () => ({ default: () => null }));

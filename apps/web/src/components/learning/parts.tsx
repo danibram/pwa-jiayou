@@ -3,7 +3,7 @@ import Icon from '../Icon';
 import Pinyin from '../Pinyin';
 import RiceGrid from '../RiceGrid';
 import SpeakButton from '../SpeakButton';
-import type { Hint, Rating, RevealedAnswer, SpeechAudio } from '../../domain/learning/types';
+import type { Hint, Rating, RevealedAnswer, SpeechAudio } from '@jiayou/learning/types';
 import type { LearningSessionView } from './types';
 import { RATING_CAPTION, RATING_KEY, RATING_LABEL, feedbackLabel, feedbackTone, scheduleNote } from './present';
 

@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
-import { selectExercise, type ExerciseSelection, type ExercisePrompt } from '../../../src/domain/learning/exercises';
-import { gradeTypedAnswer } from '../../../src/domain/learning/production';
-import type { AttemptAction, Evaluation, Exercise, Skill } from '../../../src/domain/learning/types';
+import { selectExercise, type ExerciseSelection, type ExercisePrompt } from '@jiayou/learning/exercises';
+import { gradeTypedAnswer } from '@jiayou/learning/production';
+import type { AttemptAction, Evaluation, Exercise, Skill } from '@jiayou/learning/types';
 import type { LearningSessionActions, LearningSessionView } from '../../../src/components/learning/types';
 import { SEEDS, card, context, settled, word, wordItem } from '../exercises/fixtures';
 

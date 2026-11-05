@@ -1,7 +1,7 @@
-import { parseBackupValue, type BackupError, type LearningLog } from '../../domain/learning/backup';
-import { validateAttemptEvent } from '../../domain/learning/evaluation';
-import { canonicalJson } from '../../domain/learning/scheduler';
-import type { LearningBackup, LearningEvent, VoidableEventType } from '../../domain/learning/types';
+import { parseBackupValue, type BackupError, type LearningLog } from '@jiayou/learning/backup';
+import { validateAttemptEvent } from '@jiayou/learning/evaluation';
+import { canonicalJson } from '@jiayou/learning/scheduler';
+import type { LearningBackup, LearningEvent, VoidableEventType } from '@jiayou/learning/types';
 import { rejected } from './errors';
 
 const VOIDABLE: ReadonlySet<string> = new Set<VoidableEventType>(['practice', 'scheduled-review', 'invalid-attempt']);

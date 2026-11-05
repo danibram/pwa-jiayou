@@ -1,44 +1,45 @@
 import { createSignal } from 'solid-js';
 import { topicById, topics } from '../data/topics';
 import { allWords, findWord } from '../data/vocabulary';
-import { characterContentId, contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
-import type { ItemContent, WordEntry } from '../domain/learning/exercises';
+import { contentReferenceForCharacter, contentReferenceForWord } from '@jiayou/content';
+import { characterItemId, characterOf, itemKind, wordIdOf, wordItemId } from '@jiayou/learning/items';
+import type { ItemContent, WordEntry } from '@jiayou/learning/exercises';
 import {
   compareReplayOrder,
   createScheduler,
   DEFAULT_SCHEDULER_CONFIG,
   deviceLocalDayRule,
   effectiveItemEvents,
-  isMastered,
-  isWeak,
   pendingToday as isPendingToday,
   tomorrowLoad as countTomorrowLoad,
   pendingTomorrow as countPendingTomorrow,
   tomorrowLoadFull as isTomorrowLoadFull,
   type LocalDayRule,
   type Scheduler,
-} from '../domain/learning/scheduler';
+  voidedEventIds,
+} from '@jiayou/learning/scheduler';
+import { activityByDay, itemStatus, type ItemStatus } from '@jiayou/learning/progress';
 import {
   buildSession,
   DEFAULT_SESSION_SETTINGS,
-  itemKind,
   type ItemKind,
   type PoolItem,
   type SessionPlan,
   type SessionScope,
   type SessionSettings,
-} from '../domain/learning/sessions';
+} from '@jiayou/learning/sessions';
 import type {
   ContentReference,
   ItemId,
   LearningBackup as LearningBackupFile,
   LearningEvent,
+  LocalDay,
   SchedulerConfig,
   SchedulerState,
   SessionMode,
   SessionState,
   Timestamp,
-} from '../domain/learning/types';
+} from '@jiayou/learning/types';
 import {
   createLearningRepository,
   isLearningStorageError,
@@ -64,16 +65,7 @@ import type { HSKCharacter } from '../types';
 import { characterStore } from './characterStore';
 import { vocabularyStore } from './vocabularyStore';
 
-/**
- * How a screen shows an item:
- * - `new`: never taught;
- * - `learning`: taught and waiting for its first rating, or in a learning or relearning step;
- * - `review`: graduated, below the mastered stability;
- * - `weak`: a scheduled Again in the last 30 local days not yet followed by two passes (`isWeak`);
- * - `mastered`: FSRS stability of 21 days or more.
- * Weak wins over every other status, then mastered, review, learning and new.
- */
-export type ItemStatus = 'new' | 'learning' | 'review' | 'weak' | 'mastered';
+export type { ItemStatus } from '@jiayou/learning/progress';
 
 /** One entry of an item's history, as the word sheet lists it. Voids are folded into `voided`. */
 export interface HistoryEntry {
@@ -136,11 +128,6 @@ export interface LearningRuntime {
   loadSession(mode: SessionMode): Promise<SessionState | null>;
 }
 
-export const wordItemId = (wordId: string): ItemId => `word-meaning:${wordId}`;
-
-/** `character-writing:char-<hex>`, the item a character's writing schedule lives on. */
-export const characterItemId = (char: string): ItemId => `character-writing:${characterContentId(char)}` as ItemId;
-
 export const contentReferenceOf = (content: ItemContent): ContentReference =>
   content.kind === 'word' ? contentReferenceForWord(content.word) : contentReferenceForCharacter(content.character);
 
@@ -148,16 +135,6 @@ const randomId = (): string =>
   typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
     ? crypto.randomUUID()
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
-
-const WORD_PREFIX = 'word-meaning:';
-const CHARACTER_PREFIX = 'character-writing:char-';
-
-/** The character an item id names, or null when the id is not a character's. */
-export const characterOf = (itemId: ItemId): string | null => {
-  if (!itemId.startsWith(CHARACTER_PREFIX)) return null;
-  const code = Number.parseInt(itemId.slice(CHARACTER_PREFIX.length), 16);
-  return Number.isInteger(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : null;
-};
 
 /** The installed catalog rows by character, rebuilt when a level is installed or removed. */
 const characterRows = (() => {
@@ -178,8 +155,9 @@ const characterRows = (() => {
  * from whichever studied word uses it, so it has no stable c1 and stays out of every session.
  */
 const defaultResolve = (itemId: ItemId): ItemContent | null => {
-  if (itemId.startsWith(WORD_PREFIX)) {
-    const word = findWord(itemId.slice(WORD_PREFIX.length));
+  const wordId = wordIdOf(itemId);
+  if (wordId !== null) {
+    const word = findWord(wordId);
     return word ? { kind: 'word', word } : null;
   }
   const char = characterOf(itemId);
@@ -424,17 +402,7 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
 
   const status = (itemId: ItemId): ItemStatus => {
     version();
-    const state = states.get(itemId);
-    const itemEvents = byItem.get(itemId) ?? [];
-    const today = dayRule.localDay(clock());
-    if (state && state.state !== 'new') {
-      if (isWeak(itemEvents, itemId, today)) return 'weak';
-      if (isMastered(state)) return 'mastered';
-      return state.state === 'review' ? 'review' : 'learning';
-    }
-    if (state?.eligibleFrom) return 'learning';
-    const taught = effectiveItemEvents(itemEvents, itemId).some((event) => event.type === 'exposure' && event.card.reason === 'teaching');
-    return taught ? 'learning' : 'new';
+    return itemStatus(itemId, states.get(itemId), byItem.get(itemId) ?? [], dayRule.localDay(clock()));
   };
 
   const statesOf = (items: readonly PoolItem[]) =>
@@ -533,13 +501,7 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
     /** Exposures and attempts per local day, voided ones left out, for the activity calendar. */
     activityByDay(): Record<string, number> {
       version();
-      const voided = new Set(events.flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
-      const days: Record<string, number> = {};
-      for (const event of events) {
-        if (event.type === 'attempt-voided' || voided.has(event.id)) continue;
-        days[event.localDay] = (days[event.localDay] ?? 0) + 1;
-      }
-      return days;
+      return activityByDay(events);
     },
 
     /** The stored active session of `mode`, or null. */
@@ -565,6 +527,16 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
       return clock();
     },
 
+    /** The local day by the store's clock and day rule, the day every count and budget uses. */
+    today(): LocalDay {
+      return dayRule.localDay(clock());
+    },
+
+    /** The store's day rule. */
+    dayRule(): LocalDayRule {
+      return dayRule;
+    },
+
     /** Calls `callback` after another tab's write lands in this store. Returns the unsubscribe. */
     onExternalChange(callback: (change: LearningChange) => void): () => void {
       listeners.add(callback);
@@ -577,7 +549,7 @@ export const createLearningStore = (options: LearningStoreOptions = {}) => {
     history(itemId: ItemId): HistoryEntry[] {
       version();
       const own = byItem.get(itemId) ?? [];
-      const voided = new Set(own.flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
+      const voided = voidedEventIds(own);
       return own
         .filter((event): event is HistoryEntry['event'] => event.type !== 'attempt-voided')
         .sort(compareReplayOrder)

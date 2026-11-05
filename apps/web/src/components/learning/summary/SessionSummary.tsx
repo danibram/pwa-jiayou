@@ -3,7 +3,7 @@ import Pinyin from '../../Pinyin';
 import { RATING_LABEL } from '../present';
 import { createDialogFocus } from '../../../utils/dialog';
 import { pronoun } from '../../../utils/countNoun';
-import type { Rating } from '../../../domain/learning/types';
+import type { Rating } from '@jiayou/learning/types';
 
 // Prop types mirror `LearningSessionSummary` in the session store without importing it, so the
 // coordinator can pass `summary().recorded` and each item's `results` as they are.

@@ -7,8 +7,8 @@ import hsk5 from '../../../src/data/vocabulary/hsk5.json';
 import hsk6 from '../../../src/data/vocabulary/hsk6.json';
 import extra from '../../../src/data/vocabulary/extra.json';
 import { parseCharacterList } from '../../../src/stores/characterStore';
-import { seededRandom, type ExerciseContext, type PlannedCardInput, type WordEntry } from '../../../src/domain/learning/exercises';
-import type { CardIntent, CardReason, ItemId, Skill, SkillEvidence } from '../../../src/domain/learning/types';
+import { seededRandom, type ExerciseContext, type PlannedCardInput, type WordEntry } from '@jiayou/learning/exercises';
+import type { CardIntent, CardReason, ItemId, Skill, SkillEvidence } from '@jiayou/learning/types';
 
 /** Every catalog word, as the published rows carry them. */
 export const vocabulary: WordEntry[] = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra as WordEntry[]].flat();

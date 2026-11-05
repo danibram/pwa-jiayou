@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { STROKE_RUBRIC_REVISION } from '../../../src/domain/learning/exercises';
+import { STROKE_RUBRIC_REVISION } from '@jiayou/learning/exercises';
 
 // Vitest runs from apps/web, as tests/setup.ts assumes. npm workspaces install packages at the repository root.
 const read = (path: string): unknown => JSON.parse(readFileSync(`${process.cwd()}/${path}`, 'utf8'));

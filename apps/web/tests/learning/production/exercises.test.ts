@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { evaluateAttempt } from '../../../src/domain/learning/evaluation';
+import { evaluateAttempt } from '@jiayou/learning/evaluation';
 import {
   PINYIN_POLICY_VERSION,
   TYPED_ANSWER_POLICY_VERSION,
@@ -10,9 +10,9 @@ import {
   regradeTypedAnswers,
   type ProductionExercise,
   type ProductionKind,
-} from '../../../src/domain/learning/production';
-import type { AttemptAction, Evaluation, ItemId } from '../../../src/domain/learning/types';
-import type { WordEntry } from '../../../src/domain/learning/exercises';
+} from '@jiayou/learning/production';
+import type { AttemptAction, Evaluation, ItemId } from '@jiayou/learning/types';
+import type { WordEntry } from '@jiayou/learning/exercises';
 import { context, vocabulary, word } from '../exercises/fixtures';
 
 const KINDS: readonly ProductionKind[] = ['pinyin-from-characters', 'pinyin-from-gloss', 'characters-from-audio', 'gloss-from-audio'];

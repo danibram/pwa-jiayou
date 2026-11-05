@@ -5,16 +5,17 @@ import RiceGrid from '../components/RiceGrid';
 import ThemeToggle from '../components/ThemeToggle';
 import HomeProgress from '../components/HomeProgress';
 import LevelChips from '../components/LevelChips';
-import { studyStatusOf, summarizeLearning } from '../utils/progressSummary';
+import { summarizeLearning } from '../utils/progressSummary';
+import { activityStreak, studyStatusOf } from '@jiayou/learning/progress';
+import { liveEvents } from '@jiayou/learning/scheduler';
 import { readHomeSnapshot, rememberHomeSnapshot } from '../utils/homeSnapshot';
 import { agree, countNoun, type NounKind } from '../utils/countNoun';
-import { activityStreak } from '../utils/activityStreak';
 import ActivityCalendar from '../components/ActivityCalendar';
 import Pinyin from '../components/Pinyin';
 import type { HomeTarget } from '../screen';
 import { levelWords, wordCount } from '../data/vocabulary';
 import { vocabularyStore } from '../stores/vocabularyStore';
-import { wordItemId } from '../stores/learningStore';
+import { wordItemId } from '@jiayou/learning/items';
 import { useLearningStore } from '../components/LearningStoreContext';
 import { downloadState, prepareListMedia } from '../utils/levelPacks';
 import { hskListId } from '../data/lists';
@@ -97,7 +98,7 @@ const Home: Component<HomeProps> = (props) => {
   const levelOn = (lvl: HskLevel) => vocabularyStore.isSelected(hskListId(lvl));
   /** Words and characters share one calendar, read from the learning log. */
   const activity = createMemo(() => store.activityByDay());
-  const streak = () => activityStreak(activity(), new Date(store.now()));
+  const streak = () => activityStreak(activity(), store.today());
   const wordSummary = createMemo(() => summarizeLearning(itemIds(), store));
   const wordScope = () => [...vocabularyStore.state.selectedLists].sort().join(',');
   const previousWords = readHomeSnapshot('vocabulary', untrack(wordScope));
@@ -137,9 +138,8 @@ const Home: Component<HomeProps> = (props) => {
 
   /** Words answered or taught today, and how many of them were new, from the log, so the line only grows. */
   const wordToday = () => {
-    const day = new Date(store.now()).toLocaleDateString('sv-SE');
-    const voided = new Set(store.events().flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
-    const studied = new Set(store.events().filter((event) => event.type !== 'attempt-voided' && event.localDay === day && !voided.has(event.id)).map((event) => event.itemId));
+    const day = store.today();
+    const studied = new Set(liveEvents(store.events()).filter((event) => event.localDay === day).map((event) => event.itemId));
     return {
       studied: itemIds().filter((id) => studied.has(id)).length,
       fresh: today()?.counts.taughtToday ?? 0,
@@ -148,14 +148,12 @@ const Home: Component<HomeProps> = (props) => {
   };
 
   const wordLevelLabel = () => vocabularyStore.listLabel();
-  /** About eight seconds a card: a review is one card, a new word three (lesson, pick, recognition). */
-  /** About eight seconds a card; a new word is two cards, the lesson and its practice. */
   /**
    * About 12 seconds a card: a lesson or a self-assessed recall takes longer than a pick, and the plan
    * leaves out the cards a miss adds back. Simulated runs of Hoy ended 10 to 20% above the plan.
    */
   const sessionMinutes = () => Math.max(1, Math.round((wordPending() * 12) / 60));
-  const practisedToday = () => (activity()[new Date(store.now()).toLocaleDateString('sv-SE')] ?? 0) > 0;
+  const practisedToday = () => (activity()[store.today()] ?? 0) > 0;
 
   const wordTodayLine = () => {
     const due = dueN();

@@ -17,7 +17,7 @@
     "test": "npm run test -w @jiayou/web",
     "editor": "npm run dev -w @jiayou/editor",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "check": "npm run check -w @jiayou/web && npm test -w @jiayou/editor && npm test -w @jiayou/chinese -w @jiayou/content && npm run typecheck",
+    "check": "npm run check -w @jiayou/web && npm test -w @jiayou/editor && npm test -w @jiayou/chinese -w @jiayou/content -w @jiayou/learning && npm run typecheck",
     "strokes": "node scripts/copy-strokes.mjs",
     "search-index": "node scripts/build-search-index.mjs",
     "fetch-hsk": "node scripts/fetch-hsk-from-hanzidb.mjs",
@@ -30,6 +30,6 @@
   "devDependencies": {
     "@jiayou/content": "*",
     "@jiayou/chinese": "*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.3"
   }
 }

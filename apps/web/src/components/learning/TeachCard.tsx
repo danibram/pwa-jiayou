@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, JSX, on, onCleanup, Show } from 'solid-js';
-import { STUDY_RULES, type ExposureCard } from '../../domain/learning/types';
+import { STUDY_RULES, type ExposureCard } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import { AnswerPanel, HanziBlock } from './parts';
 import type { LearningSessionActions, LearningSessionView } from './types';
