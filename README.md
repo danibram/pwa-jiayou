@@ -73,7 +73,7 @@ Character glosses are curated in Spanish for HSK 1 to 3. HSK 4 to 6 come from Ha
 
 ## Getting started
 
-You need Node.js 18 or newer and npm.
+You need Node.js 24 or newer and npm. `.nvmrc` selects Node.js 24, which CI also uses.
 
 ```bash
 git clone https://github.com/danibram/pwa-jiayou.git
