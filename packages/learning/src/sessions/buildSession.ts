@@ -10,11 +10,9 @@ import type {
   SessionInput,
   SessionPlan,
 } from './types.ts';
+import { itemKind } from '../items.ts';
 
 const GROUP = 3;
-
-export const itemKind = (itemId: ItemId): ItemKind =>
-  itemId.startsWith('word-meaning:') ? 'word-meaning' : 'character-writing';
 
 /** What the policy knows about one item in scope. */
 interface Candidate {

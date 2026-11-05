@@ -4,7 +4,8 @@ import Home from '../src/pages/Home';
 import Trazos from '../src/pages/Trazos';
 import Vocabulario from '../src/pages/Vocabulario';
 import { characterStore } from '../src/stores/characterStore';
-import { characterItemId, type LearningStore } from '../src/stores/learningStore';
+import { type LearningStore } from '../src/stores/learningStore';
+import { characterItemId } from '@jiayou/learning/items';
 import { renderWithStore, testLearningStore } from './fixtures/learningStore';
 
 // The canvas is replaced by buttons that report what hanzi-writer would: a finished drawing with its

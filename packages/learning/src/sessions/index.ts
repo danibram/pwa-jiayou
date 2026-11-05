@@ -13,7 +13,17 @@ export type {
   SessionScope,
   SessionSettings,
 } from './types.ts';
-export { buildSession, itemKind } from './buildSession.ts';
+export { buildSession } from './buildSession.ts';
 export { markAlreadyKnown, requeueAfterAgain } from './requeue.ts';
 export { DEFAULT_SESSION_SETTINGS } from './settings.ts';
 export { seededShuffle } from './shuffle.ts';
+export { alreadyKnownClaimsOn, canClaimKnown, isClaimable } from './alreadyKnown.ts';
+export {
+  answerOutcome,
+  EMPTY_SESSION_SUMMARY,
+  summarizeSession,
+  type AnswerOutcome,
+  type RecordedKind,
+  type SessionItemResult,
+  type SessionSummary,
+} from './summary.ts';

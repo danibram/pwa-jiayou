@@ -8,6 +8,7 @@ import {
   type ValidEvaluation,
 } from '../types.ts';
 import type { Confusion, EvaluableExercise } from './types.ts';
+import { itemKind } from '../items.ts';
 
 /**
  * The task that may rate an item. A word rates only from recalling its meaning from the characters
@@ -21,7 +22,7 @@ export type RatingTask = 'meaning' | 'writing';
 
 export const ratingTaskOf = (itemId: ItemId, exercise: EvaluableExercise): RatingTask | null => {
   if (
-    itemId.startsWith('word-meaning:') &&
+    itemKind(itemId) === 'word-meaning' &&
     exercise.skill === 'meaning' &&
     exercise.format === 'free-recall' &&
     exercise.grading === 'self-assessment' &&

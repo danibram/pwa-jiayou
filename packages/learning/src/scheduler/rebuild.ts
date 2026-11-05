@@ -87,6 +87,16 @@ const uniqueById = (events: readonly LearningEvent[]): LearningEvent[] => {
   return [...byId.values()];
 };
 
+/** The ids of the attempt events a void cancels. */
+export const voidedEventIds = (events: readonly LearningEvent[]): Set<string> =>
+  new Set(events.flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
+
+/** The events that still count, in their given order: the voids and the attempts they cancel left out. */
+export const liveEvents = (events: readonly LearningEvent[]): LearningEvent[] => {
+  const voided = voidedEventIds(events);
+  return events.filter((event) => event.type !== 'attempt-voided' && !(VOIDABLE.has(event.type) && voided.has(event.id)));
+};
+
 /**
  * The item's events that still count, in replay order: duplicates collapsed, voided attempts and the
  * voids themselves removed. Throws `CorruptLogError` on a duplicate attempt anywhere in `events`.
@@ -94,11 +104,7 @@ const uniqueById = (events: readonly LearningEvent[]): LearningEvent[] => {
 export const effectiveItemEvents = (events: readonly LearningEvent[], itemId: ItemId): LearningEvent[] => {
   const unique = uniqueById(events);
   assertNoDuplicateAttempts(unique);
-  const own = unique.filter((event) => event.itemId === itemId);
-  const voided = new Set(own.flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
-  return own
-    .filter((event) => event.type !== 'attempt-voided' && !(VOIDABLE.has(event.type) && voided.has(event.id)))
-    .sort(compareReplayOrder);
+  return liveEvents(unique.filter((event) => event.itemId === itemId)).sort(compareReplayOrder);
 };
 
 /**

@@ -29,6 +29,7 @@ import type {
   SkipReason,
   WordEntry,
 } from './types.ts';
+import { wordItemId } from '../items.ts';
 
 /**
  * Names the rule set that grades an exercise. Its revision is the evaluator version, because the
@@ -95,7 +96,6 @@ type Built = { exercise: Exercise } | { skip: SkipReason };
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
-const wordItemId = (word: WordEntry): string => `word-meaning:${word.id}`;
 const characterItemId = (character: CharacterContent): string =>
   `character-writing:${characterContentId(character.character)}`;
 
@@ -295,7 +295,7 @@ const selectCharacter = (card: PlannedCardInput, character: CharacterContent, co
  */
 export const selectExercise = (card: PlannedCardInput, content: ItemContent, context: ExerciseContext): ExerciseSelection => {
   if (content.kind === 'word') {
-    if (wordItemId(content.word) !== card.itemId) throw new Error(`Content ${content.word.id} is not ${card.itemId}`);
+    if (wordItemId(content.word.id) !== card.itemId) throw new Error(`Content ${content.word.id} is not ${card.itemId}`);
     return selectWord(card, content.word, context);
   }
   if (characterItemId(content.character) !== card.itemId) {

@@ -6,7 +6,8 @@ import type { PoolItem } from '@jiayou/learning/sessions';
 import type { ItemId } from '@jiayou/learning/types';
 import { characterStore } from '../../../src/stores/characterStore';
 import { vocabularyStore } from '../../../src/stores/vocabularyStore';
-import { characterItemId, characterOf, type LearningStore } from '../../../src/stores/learningStore';
+import { type LearningStore } from '../../../src/stores/learningStore';
+import { characterItemId, characterOf } from '@jiayou/learning/items';
 import { DAY, environment, itemOf, POOL_WORDS, type Env } from '../stores/fixtures';
 import { answerOnScreen, withStore } from './harness';
 

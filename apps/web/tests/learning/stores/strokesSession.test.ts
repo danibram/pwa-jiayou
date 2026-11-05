@@ -7,7 +7,8 @@ import type { PoolItem } from '@jiayou/learning/sessions';
 import type { AttemptAction, Hint, ItemId, LearningEvent } from '@jiayou/learning/types';
 import { characterStore } from '../../../src/stores/characterStore';
 import type { LearningSession } from '../../../src/stores/learningSessionStore';
-import { characterItemId, characterOf, contentReferenceOf, createLearningStore, type LearningStore } from '../../../src/stores/learningStore';
+import { contentReferenceOf, createLearningStore, type LearningStore } from '../../../src/stores/learningStore';
+import { characterItemId, characterOf } from '@jiayou/learning/items';
 import { DAY, environment, itemOf, POOL_WORDS, type Env } from './fixtures';
 
 let env: Env;

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { deviceLocalDayRule } from '@jiayou/learning/scheduler';
-import { activityStreak } from '../src/utils/activityStreak';
+import { activityStreak } from '@jiayou/learning/progress';
 import { nextReviewsLabel, summarizeLearning, type ProgressSummary } from '../src/utils/progressSummary';
 import { DAY, environment, finish, itemOf, POOL_WORDS, type Env } from './learning/stores/fixtures';
 
@@ -14,7 +14,7 @@ const day = (offset: number) => {
 };
 
 describe('the streak', () => {
-  const now = new Date(2026, 10, 2, 18);
+  const now = '2026-11-02';
 
   it('counts calendar days, not sessions', () => {
     expect(activityStreak({ [day(0)]: 40 }, now)).toBe(1);
@@ -54,8 +54,7 @@ describe('when the next reviews come', () => {
     expect(nextReviewsLabel({ ...base, laterToday: 3, tomorrow: 5 })).toBe('Más tarde hoy: 3 repasos');
     expect(nextReviewsLabel({ ...base, tomorrow: 1 })).toBe('Mañana: 1 repaso');
     const now = new Date(2026, 10, 2, 9).getTime();
-    const thursday = new Date(2026, 10, 5, 9).getTime();
-    expect(nextReviewsLabel({ ...base, nextDay: { date: thursday, count: 4 } }, now)).toBe('El jueves: 4 repasos');
+    expect(nextReviewsLabel({ ...base, nextDay: { day: '2026-11-05', count: 4 } }, now)).toBe('El jueves: 4 repasos');
     expect(nextReviewsLabel(base)).toBe('');
   });
 });

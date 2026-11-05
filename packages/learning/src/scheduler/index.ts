@@ -19,6 +19,8 @@ export {
   createSchedulerRegistry,
   CorruptLogError,
   effectiveItemEvents,
+  liveEvents,
+  voidedEventIds,
   eligibleFromEvents,
   passesPractice,
   rebuildItem,

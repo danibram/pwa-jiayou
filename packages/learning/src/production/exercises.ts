@@ -2,9 +2,10 @@ import { fold, isFunctionWord, senseKeys, soundsSame, spokenReading } from '../e
 import { askGloss, displayGloss } from '../exercises/glosses.ts';
 import { token } from '../exercises/random.ts';
 import type { ExerciseContext, SkipReason, WordEntry } from '../exercises/types.ts';
-import type { Exercise, ExerciseRole, ItemId, RevealedAnswer, SpeechAudio } from '../types.ts';
+import type { Exercise, ExerciseRole, RevealedAnswer, SpeechAudio } from '../types.ts';
 import { PINYIN_POLICY_VERSION } from './pinyinInput.ts';
 import { TYPED_ANSWER_POLICY_VERSION, type AcceptedAnswer } from './typedAnswer.ts';
+import { wordItemId } from '../items.ts';
 
 /**
  * The exercises typed answers make possible. All are practice. None is the meaning task, so the
@@ -175,7 +176,7 @@ export const buildProductionExercise = (
       break;
   }
 
-  const itemId: ItemId = `word-meaning:${word.id}`;
+  const itemId = wordItemId(word.id);
   const accepted = acceptedFor(word, { rubricId, cue: role.cue, context: exerciseContext }, context.vocabulary).map(toAccepted);
   return {
     exercise: {

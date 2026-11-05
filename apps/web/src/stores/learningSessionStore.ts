@@ -5,21 +5,29 @@ import { exposureCard, seededRandom, selectExercise, type ExerciseContext, type 
 import { gradeTypedAnswer, isTypedAnswerExercise, parsePinyinInput, PRODUCTION_ROLES, TYPED_RUBRICS, type ProductionKind, type TypedGrade } from '@jiayou/learning/production';
 import { addLocalDays, effectiveItemEvents, passesPractice, pendingToday } from '@jiayou/learning/scheduler';
 import {
+  alreadyKnownClaimsOn,
+  answerOutcome,
   buildSession,
-  itemKind,
+  canClaimKnown,
+  EMPTY_SESSION_SUMMARY,
+  isClaimable,
   markAlreadyKnown,
   requeueAfterAgain,
   seededShuffle,
+  summarizeSession,
+  type AnswerOutcome,
   type PlannedCard,
+  type RecordedKind,
+  type SessionItemResult,
   type SessionPlan,
   type SessionScope,
+  type SessionSummary,
 } from '@jiayou/learning/sessions';
 import {
   EXERCISE_ROLES,
   STUDY_RULES,
   WRITING_FROM_MEMORY,
   type AttemptAction,
-  type ContentReference,
   type Exercise,
   type Hint,
   type InvalidEvaluation,
@@ -31,7 +39,6 @@ import {
   type SessionAttempt,
   type SessionMode,
   type SessionState,
-  type Timestamp,
 } from '@jiayou/learning/types';
 import {
   isLearningStorageError,
@@ -42,17 +49,18 @@ import {
   type PendingEvent,
 } from '../persistence/learning';
 import { contentReferenceOf, learningStore, type LearningRuntime, type LearningStore } from './learningStore';
+import { wordItemId } from '@jiayou/learning/items';
 
 // --- The UI seam. Components build against these types; keep them stable. ---
 
 export type LearningSessionState = 'loading' | 'presenting' | 'feedback' | 'saving' | 'paused' | 'finished' | 'error';
 
 /** What the last answer wrote. `exposure` is never shown as feedback: exposures move straight on. */
-export type RecordedKind = 'scheduled-review' | 'practice' | 'invalid-attempt' | 'exposure';
+export type { RecordedKind };
 
 export interface LearningSessionFeedback {
   /** The first-attempt outcome. "No lo sé" (`unanswered`) shows as `incorrect`. */
-  outcome: 'correct' | 'partial' | 'incorrect' | 'invalid';
+  outcome: AnswerOutcome;
   /** The FSRS rating written, only for a scheduled review. */
   rating: Rating | null;
   recorded: RecordedKind;
@@ -131,24 +139,8 @@ export interface LearningSessionActions {
   audioFailed(): void;
 }
 
-export interface LearningSessionItemResult {
-  itemId: ItemId;
-  content: ContentReference;
-  /** Answers in the order given; voided ones are left out. */
-  results: readonly { recorded: Exclude<RecordedKind, 'exposure'>; outcome: LearningSessionFeedback['outcome']; rating: Rating | null }[];
-  /** The item's next due time after the session, or null while it has no rating. */
-  dueAt: Timestamp | null;
-}
-
-export interface LearningSessionSummary {
-  /** Events this session wrote that still count, by type. */
-  recorded: Record<RecordedKind, number>;
-  /** "Ya la sé" claims among the session's exposures. */
-  alreadyKnown: number;
-  items: readonly LearningSessionItemResult[];
-  /** Items of the session with a due time, soonest first. */
-  nextReviews: readonly { itemId: ItemId; dueAt: Timestamp }[];
-}
+export type LearningSessionItemResult = SessionItemResult;
+export type LearningSessionSummary = SessionSummary;
 
 /** The card behind the current position, for controls the view does not cover. */
 export interface LearningSessionCard {
@@ -288,11 +280,8 @@ const inputErrorMessage = (grade: TypedGrade): string => {
   return 'Escribe el significado con palabras.';
 };
 
-const feedbackOutcome = (result: EvaluationResult): LearningSessionFeedback['outcome'] => {
-  if (result.kind === 'invalid-attempt') return 'invalid';
-  const outcome = result.evaluation.outcome;
-  return outcome === 'unanswered' ? 'incorrect' : outcome;
-};
+const feedbackOutcome = (result: EvaluationResult): LearningSessionFeedback['outcome'] =>
+  result.kind === 'invalid-attempt' ? 'invalid' : answerOutcome(result.evaluation);
 
 /** Again, a miss, or a failed "Ya la sé" check brings the item back later in the session. */
 const failed = (result: ValidResult, entry: QueueEntry): boolean => {
@@ -359,7 +348,7 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
   const context = (itemId: ItemId): ExerciseContext => ({
     vocabulary: rt.vocabulary(),
     familiar: (contentId) => {
-      const id = `word-meaning:${contentId}` as ItemId;
+      const id = wordItemId(contentId);
       const state = rt.states().get(id);
       return (state !== undefined && state.state !== 'new') || rt.itemEvents(id).some((event) => event.type === 'exposure');
     },
@@ -412,18 +401,9 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     return out;
   };
 
-  /** "Ya la sé" claims written today, each an `already-known` exposure. Exposures are never voided. */
-  const claimsToday = (): number => {
-    const today = rt.dayRule.localDay(rt.clock());
-    return rt.events().filter((event) => event.type === 'exposure' && event.card.reason === 'already-known' && event.localDay === today).length;
-  };
-
-  /** Only the first teaching of a word, never a reteach or a character. */
-  const claimable = (entry: QueueEntry | null): entry is QueueEntry =>
-    !!entry && entry.intent === 'teach' && entry.reason === 'new' && itemKind(entry.itemId) === 'word-meaning';
-
-  /** A claimable card while today's claims stay under the daily cap. */
-  const claimAvailable = (entry: QueueEntry | null): boolean => claimable(entry) && claimsToday() < STUDY_RULES.alreadyKnownPerDay;
+  const claimsToday = (): number => alreadyKnownClaimsOn(rt.events(), rt.dayRule.localDay(rt.clock()));
+  const claimable = (entry: QueueEntry | null): entry is QueueEntry => !!entry && isClaimable(entry);
+  const claimAvailable = (entry: QueueEntry | null): boolean => !!entry && canClaimKnown(entry, claimsToday());
 
   const show = (state: LearningSessionState, index: number) => {
     shownToken += 1;
@@ -1021,39 +1001,8 @@ export const createLearningSession = (options: LearningSessionOptions): Learning
     }, adoptOnStale(before, entry.itemId));
   };
 
-  const summary = (): LearningSessionSummary => {
-    const recorded: Record<RecordedKind, number> = { 'scheduled-review': 0, practice: 0, 'invalid-attempt': 0, exposure: 0 };
-    if (!session) return { recorded, alreadyKnown: 0, items: [], nextReviews: [] };
-    const id = session.id;
-    const own = rt.events().filter((event) => event.sessionId === id);
-    const voided = new Set(rt.events().flatMap((event) => (event.type === 'attempt-voided' ? [event.targetEventId] : [])));
-    let alreadyKnown = 0;
-    const items = new Map<ItemId, { content: ContentReference; results: LearningSessionItemResult['results'][number][] }>();
-    for (const event of [...own].sort((a, b) => a.sequence - b.sequence)) {
-      if (event.type === 'attempt-voided' || voided.has(event.id)) continue;
-      recorded[event.type] += 1;
-      const entry = items.get(event.itemId) ?? { content: event.content, results: [] };
-      items.set(event.itemId, entry);
-      if (event.type === 'exposure') {
-        if (event.card.reason === 'already-known') alreadyKnown += 1;
-        continue;
-      }
-      entry.results.push({
-        recorded: event.type,
-        outcome: event.evaluation.outcome === 'invalid' ? 'invalid' : event.evaluation.outcome === 'unanswered' ? 'incorrect' : event.evaluation.outcome,
-        rating: event.type === 'scheduled-review' ? event.rating : null,
-      });
-    }
-    const dueOf = (itemId: ItemId): Timestamp | null => {
-      const state = rt.states().get(itemId);
-      return state && state.state !== 'new' ? state.dueAt : null;
-    };
-    const list = [...items].map(([itemId, value]) => ({ itemId, content: value.content, results: value.results, dueAt: dueOf(itemId) }));
-    const nextReviews = list
-      .flatMap((item) => (item.dueAt === null ? [] : [{ itemId: item.itemId, dueAt: item.dueAt }]))
-      .sort((a, b) => a.dueAt - b.dueAt);
-    return { recorded, alreadyKnown, items: list, nextReviews };
-  };
+  const summary = (): LearningSessionSummary =>
+    session ? summarizeSession(rt.events(), session.id, rt.states()) : EMPTY_SESSION_SUMMARY;
 
   const idle = async (): Promise<void> => {
     let seen: Promise<unknown>;

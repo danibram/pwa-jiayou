@@ -1,5 +1,5 @@
 import type { LocalDayRule } from '../scheduler/index.ts';
-import type { ItemId, LearningEvent, LearningItem, LocalDay, SchedulerState, SessionMode, Timestamp } from '../types.ts';
+import type { ItemId, LearningEvent, LocalDay, SchedulerState, SessionMode, Timestamp } from '../types.ts';
 
 export type { CardIntent, CardReason } from '../types.ts';
 import type { CardIntent, CardReason } from '../types.ts';
@@ -10,7 +10,9 @@ export interface PlannedCard {
   reason: CardReason;
 }
 
-export type ItemKind = LearningItem['kind'];
+import type { ItemKind } from '../items.ts';
+
+export type { ItemKind };
 
 /** An item of the active pool. The caller resolves content; the policy never imports `src/data`. */
 export interface PoolItem {
