@@ -2,7 +2,7 @@ import { Component, createEffect, For, JSX, on, Show } from 'solid-js';
 import type { Exercise } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import Pinyin from '../Pinyin';
-import { AnswerPanel, AudioButton, CardScroll, ContinueButton, createArmed, createHold, FeedbackNote, HanziBlock, HintButton, TakenHints } from './parts';
+import { AnswerPanel, AudioButton, CardScroll, ContinueButton, FeedbackNote, HanziBlock, HintButton, TakenHints } from './parts';
 import { askedGloss, correctOptionId, offeredHint, takenHints, wrongOptionIds } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -23,7 +23,9 @@ const EYEBROW = { characters: 'Palabra → significado', gloss: 'Significado →
  */
 const ChoiceCard: Component<ChoiceCardProps> = (props) => {
   const open = () => props.view.state === 'presenting';
-  const answered = () => props.view.state === 'feedback' || (props.view.state !== 'presenting' && !!props.view.feedback);
+  /** A right first pick: the options stay, the right one green, until the controller moves on. */
+  const flashing = () => props.view.state === 'feedback' && props.view.after === 'flash';
+  const answered = () => !flashing() && (props.view.state === 'feedback' || (props.view.state !== 'presenting' && !!props.view.feedback));
   const showAnswer = () => props.view.revealed || answered();
   const wrong = () => wrongOptionIds(props.view.actions);
   const found = () => correctOptionId(props.view.actions);
@@ -32,10 +34,7 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
   const meaningTiles = () => cue() === 'characters';
   const hint = () => offeredHint(props.exercise);
   const taken = () => takenHints(props.view.actions);
-  /** Right on the first tap with no hint: the answer goes by on its own unless the learner holds it. */
-  const knew = () => props.view.feedback?.outcome === 'correct' && wrong().length === 0 && taken().length === 0;
-  const { held, hold } = createHold(answered);
-  const armed = createArmed();
+  const key = props.view.cardKey;
   const unknown = () => props.view.actions.some((action) => action.type === 'answer' && action.selectedOptionId === null);
   const optionText = (id: string) => props.exercise.options.find((option) => option.id === id)?.text ?? '';
 
@@ -73,9 +72,9 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
 
   return (
     <>
-      <CardScroll answered={answered()} showDetails={showAnswer()} details={props.details} onHold={hold}>
+      <CardScroll showDetails={showAnswer()} details={props.details}>
         {/* Once answered, the result leads: what happened comes before the word. */}
-        <Show when={answered() && props.view.feedback} fallback={<p class="eyebrow mb-3">{EYEBROW[cue()]}</p>}>{(feedback) => (
+        <Show when={answered() && props.view.feedback} fallback={<p class="eyebrow mb-3">{props.view.claimedCheck ? 'Compruébalo' : EYEBROW[cue()]}</p>}>{(feedback) => (
           <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} mixUp={mixUp()} unknown={unknown()} />
         )}</Show>
 
@@ -126,7 +125,7 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
                   'min-h-12 justify-between gap-3 px-4 text-left [@media(max-height:700px)]:px-3': meaningTiles(),
                   'min-h-[4.5rem] flex-col justify-center': !meaningTiles(),
                   'border-seal/60 bg-seal-soft': tileState(option.id).wrong,
-                  'border-jade/60 bg-jade/10': tileState(option.id).right,
+                  'border-jade bg-jade/20 text-jade': tileState(option.id).right,
                 }}
                 disabled={!open() || tileState(option.id).wrong}
                 aria-label={tileState(option.id).wrong ? `${option.text}, incorrecta` : option.text}
@@ -148,13 +147,13 @@ const ChoiceCard: Component<ChoiceCardProps> = (props) => {
       </CardScroll>
 
       <Show when={!answered()} fallback={
-        <ContinueButton auto={knew()} held={held()} disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue()} />
+        <ContinueButton disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue(key)} />
       }>
         <button
           type="button"
           class="btn-quiet h-14 w-full"
           disabled={!open()}
-          onClick={() => { if (armed()) props.actions.answer({ answer: null, optionId: null }); }}
+          onClick={() => props.actions.answer({ answer: null, optionId: null })}
         >No lo sé</button>
       </Show>
     </>

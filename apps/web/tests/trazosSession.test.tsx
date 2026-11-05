@@ -10,10 +10,9 @@ import { renderWithStore, testLearningStore } from './fixtures/learningStore';
 
 // The canvas is replaced by buttons that report what hanzi-writer would: a finished drawing with its
 // mistakes, and the stroke it shows by itself after repeated misses.
-const restarts = vi.hoisted(() => ({ count: 0 }));
 vi.mock('../src/components/StrokeCanvas', () => ({
   default: (props: { char: string; mode: string; onComplete?: (mistakes: number) => void; onAutoHint?: (stroke: number) => void; api?: (api: object) => void }) => (
-    <div ref={() => props.api?.({ play: () => {}, hint: () => {}, showAnswer: () => {}, restartQuiz: () => { restarts.count += 1; } })} data-testid="canvas" data-mode={props.mode}>
+    <div ref={() => props.api?.({ play: () => {}, hint: () => {}, showAnswer: () => {}, restartQuiz: () => {} })} data-testid="canvas" data-mode={props.mode}>
       {props.char}
       <button type="button" onClick={() => props.onAutoHint?.(1)}>auto-hint</button>
       <button type="button" onClick={() => props.onComplete?.(1)}>draw-1</button>
@@ -125,11 +124,11 @@ describe('Trazos on the learning log', { timeout: 20_000 }, () => {
     await runSession(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'draw-1' }));
       expect(await screen.findByText('Calcado')).toBeTruthy();
-      const before = restarts.count;
+      const first = screen.getByTestId('canvas');
       fireEvent.click(screen.getByRole('button', { name: 'Deshacer la última respuesta' }));
       await waitFor(() => expect(screen.queryByText('Calcado')).toBeNull());
-      // Saving the void comes first; the quiz restarts when the card is presented again.
-      await waitFor(() => expect(restarts.count).toBe(before + 1));
+      // Saving the void comes first; the card then comes back with a fresh canvas.
+      await waitFor(() => expect(screen.getByTestId('canvas')).not.toBe(first));
       fireEvent.click(screen.getByRole('button', { name: 'draw-0' }));
       expect(await screen.findByText('Sin errores')).toBeTruthy();
     });

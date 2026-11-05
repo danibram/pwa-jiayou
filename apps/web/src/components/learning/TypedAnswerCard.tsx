@@ -1,7 +1,7 @@
 import { Component, createEffect, createSignal, For, JSX, on, Show } from 'solid-js';
 import type { Exercise, SpeechAudio } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
-import { AnswerPanel, AudioButton, CardScroll, ContinueButton, createArmed, createHold, FeedbackNote, HanziBlock } from './parts';
+import { AnswerPanel, AudioButton, CardScroll, ContinueButton, FeedbackNote, HanziBlock } from './parts';
 import { askedGloss, pinyinPreview, typedField, typedReport, type TypedField } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -52,9 +52,9 @@ const TypedAnswerCard: Component<TypedAnswerCardProps> = (props) => {
   const kind = () => typedField(props.exercise);
   const report = () => typedReport(props.exercise, props.view.actions);
   const preview = () => (kind() === 'pinyin' && /\d/.test(text()) ? pinyinPreview(text()) : null);
-  const knew = () => props.view.feedback?.outcome === 'correct';
-  const { held, hold } = createHold(answered);
-  const armed = createArmed();
+  const key = props.view.cardKey;
+  /** A right first answer shows for a moment, without the word's sheet, then the controller moves on. */
+  const flashing = () => props.view.state === 'feedback' && props.view.after === 'flash';
   const unknown = () => props.view.actions.some((action) => action.type === 'answer' && action.answer === null);
   const formId = () => `typed-${props.exercise.id}`;
   /** The reading exercises carry no audio, since it gives the tones away. Once answered, the word is heard. */
@@ -95,7 +95,7 @@ const TypedAnswerCard: Component<TypedAnswerCardProps> = (props) => {
 
   return (
     <>
-      <CardScroll answered={answered()} showDetails={answered()} details={props.details} onHold={hold}>
+      <CardScroll showDetails={answered() && !flashing()} details={props.details}>
         <Show when={answered() && props.view.feedback} fallback={<p class="eyebrow mb-3">{EYEBROW[cue()]}</p>}>{(feedback) => (
           <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} unknown={unknown()} />
         )}</Show>
@@ -182,15 +182,15 @@ const TypedAnswerCard: Component<TypedAnswerCardProps> = (props) => {
 
       </CardScroll>
 
-      <Show when={!answered()} fallback={
-        <ContinueButton auto={knew()} held={held()} disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue()} />
+      <Show when={!answered() || flashing()} fallback={
+        <ContinueButton disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue(key)} />
       }>
         <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
             class="btn-quiet h-14 w-full"
             disabled={!open()}
-            onClick={() => { if (armed()) props.actions.answer({ answer: null }); }}
+            onClick={() => props.actions.answer({ answer: null })}
           >No lo sé</button>
           <button type="submit" form={formId()} class="btn-ink h-14 w-full" disabled={!open() || text().trim() === ''}>Comprobar</button>
         </div>

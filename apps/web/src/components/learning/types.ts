@@ -27,6 +27,14 @@ export interface LearningSessionView {
   canClaimKnown: boolean;
   /** A new word's first teaching, shown in full because today's "Ya la sé" claims are used up. */
   claimsUsedUp: boolean;
+  /** New for every card put on screen. Cards remount on it and pass it back with what they report. */
+  cardKey: string;
+  /** A teaching card's step: `ask` before "Enséñamela", `open` after it or when it never asks. */
+  lesson: { mode: 'ask' | 'open'; again: boolean } | null;
+  /** The check right after "Ya la sé": the meaning among options. */
+  claimedCheck: boolean;
+  /** On a result: `flash` shows the right answer a moment and moves on by itself, `wait` waits for Continuar. */
+  after: 'wait' | 'flash';
 }
 
 /** What the screen reports. The controller evaluates, rates and saves; the components never do. */
@@ -36,8 +44,9 @@ export interface LearningSessionActions {
   hint(hint: Hint): void;
   selfAssess(rating: Rating): void;
   drawing(input: { mistakes: number }): void;
-  knowIt(): void;
-  continue(): void;
+  knowIt(cardKey?: string): void;
+  openLesson(cardKey?: string): void;
+  continue(cardKey?: string): void;
   undoLast(): void;
   pause(): void;
   resume(): void;

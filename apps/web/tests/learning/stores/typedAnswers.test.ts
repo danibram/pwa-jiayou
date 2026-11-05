@@ -93,7 +93,8 @@ describe('typed answers in the session controller', () => {
     expect(session.view.inputError).toBeNull();
     await session.idle();
 
-    expect(session.view.feedback).toEqual({ outcome: 'correct', rating: null, recorded: 'practice' });
+    // A right answer does not stop: the next card is already on screen.
+    expect(session.view.feedback).toBeNull();
     const event = attemptEvents(store).at(-1)!;
     expect(event.type).toBe('practice');
     if (event.type !== 'practice') return;

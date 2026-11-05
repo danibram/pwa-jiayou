@@ -203,11 +203,31 @@ describe('learning session controller', () => {
     session.actions.selfAssess('good');
     await session.idle();
     expect(session.view.state).toBe('error');
+    const at = session.view.position;
     session.actions.retry();
     await session.idle();
-    expect(session.view.state).toBe('feedback');
-    expect(session.view.feedback).toEqual({ outcome: 'correct', rating: 'good', recorded: 'scheduled-review' });
-    expect((await log(failing)).filter((event) => event.type === 'scheduled-review')).toHaveLength(1);
+    // Bien has no result step: the retried write moves straight to the next card.
+    expect(session.view.state).toBe('presenting');
+    expect(session.view.position).toBe(at + 1);
+    expect(session.view.feedback).toBeNull();
+    expect((await log(failing)).filter((event) => event.type === 'scheduled-review')).toMatchObject([{ rating: 'good' }]);
+  });
+
+  it('takes no rating until the answer is revealed', async () => {
+    const e = fresh();
+    const { store } = await teachDay(e);
+    e.clock.advance(DAY);
+    const session = await e.session(store, { mode: 'today' });
+    expect(session.view.revealed).toBe(false);
+    const before = store.events().length;
+    session.actions.selfAssess('good');
+    await session.idle();
+    expect(store.events()).toHaveLength(before);
+    expect(session.view.state).toBe('presenting');
+    session.actions.reveal();
+    session.actions.selfAssess('good');
+    await session.idle();
+    expect(store.events().at(-1)).toMatchObject({ type: 'scheduled-review', evaluatorVersion: 'learning-evaluator@4' });
   });
 
   it('undoes one specific answer, rebuilds the item and asks the card again', async () => {
@@ -245,7 +265,7 @@ describe('learning session controller', () => {
     ]);
 
     await answerCard(session);
-    expect(session.view.feedback).toMatchObject({ rating: 'good' });
+    expect(store.history(itemId).at(-1)?.event).toMatchObject({ type: 'scheduled-review', rating: 'good' });
     expect(store.status(itemId)).toBe('review');
     expect(session.summary().recorded['scheduled-review']).toBe(2);
     await expectCacheMatchesLog(store);
@@ -272,12 +292,13 @@ describe('learning session controller', () => {
     const total = session.view.total;
     session.actions.knowIt();
     await session.idle();
-    expect(session.view.selection).toMatchObject({ kind: 'exercise', itemId, prompt: 'meaning' });
+    expect(session.view.selection).toMatchObject({ kind: 'exercise', itemId, prompt: 'recognize' });
     expect(session.card()).toMatchObject({ intent: 'already-known-check' });
     // The practice planned after teaching leaves the session.
     expect(session.view.total).toBe(total - 1);
     await answerCard(session);
-    expect(session.view.feedback).toEqual({ outcome: 'correct', rating: 'good', recorded: 'scheduled-review' });
+    expect(session.view.state).toBe('presenting');
+    expect(session.view.feedback).toBeNull();
     const events = store.history(itemId).map((entry) => entry.event);
     expect(events[0]).toMatchObject({ type: 'exposure', card: { reason: 'already-known' } });
     expect(events[1]).toMatchObject({ type: 'scheduled-review', basis: 'already-known', rating: 'good' });
@@ -396,19 +417,20 @@ describe('learning session controller', () => {
     expect((await log(store)).filter((event) => event.type === 'invalid-attempt')).toHaveLength(1);
   });
 
-  it('stays on the feedback after a correct pick until the learner continues', async () => {
+  it('moves on by itself after a correct first pick, and stops after a miss', async () => {
     const e = fresh();
     const store = e.store();
     const session = await e.session(store, { mode: 'today' });
     await advanceTo(session, isMultipleChoice);
     const position = session.view.position;
     await answerCard(session);
-    expect(session.view.state).toBe('feedback');
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    expect(session.view.state).toBe('feedback');
-    session.actions.continue();
     expect(session.view.state).toBe('presenting');
     expect(session.view.position).toBe(position + 1);
+    await advanceTo(session, isMultipleChoice);
+    await answerCard(session, 'wrong');
+    expect(session.view.state).toBe('feedback');
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(session.view.state).toBe('feedback');
   });
 
   it('presents all six legacy prompts and the typed answers through the selector', async () => {

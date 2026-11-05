@@ -14,7 +14,7 @@ const event = (answer: string, recorded: 'correct' | 'incorrect', claimed: 'corr
   evidence: [], type: 'practice', evaluation: { outcome: claimed },
 });
 it('validates typed events by regrading', () => {
-  expect(evaluatorVersion).toBe('learning-evaluator@3');
+  expect(evaluatorVersion).toBe('learning-evaluator@4');
   expect(validateAttemptEvent(event('ni3 hao3', 'correct', 'correct'))).toEqual([]);
   expect(validateAttemptEvent(event('ni hao', 'correct', 'correct')).map((e) => e.code)).toEqual(['evaluation-mismatch']);
   expect(validateAttemptEvent({ ...event('ni3 hao3', 'correct', 'correct'), evaluatorVersion: 'learning-evaluator@1' } as LearningEvent)).toEqual([]);

@@ -1,7 +1,7 @@
 import { regradeTypedAnswers } from '../production/grade.ts';
 import { SESSION_MODE_RATES, type LearningEvent, type ValidEvaluation } from '../types.ts';
-import { alreadyKnownHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules.ts';
-import { REVEAL_BEFORE_SELF_ASSESSMENT, SUPPORTED_EVALUATOR_VERSIONS } from './version.ts';
+import { alreadyKnownHolds, claimCheckOf, claimHolds, deriveRating, findInvalid, firstOutcome, ratingTaskOf, readAttempt } from './rules.ts';
+import { RECOGNITION_CLAIM_CHECK, REVEAL_BEFORE_SELF_ASSESSMENT, SUPPORTED_EVALUATOR_VERSIONS } from './version.ts';
 
 export type AttemptEventErrorCode =
   /** Written under rules this validator does not know, so it cannot check them. */
@@ -100,6 +100,14 @@ export const validateAttemptEvent = (event: LearningEvent): AttemptEventError[] 
     fail('rating-without-correct-recall', `Rating ${event.rating} needs a correct evaluation`);
   }
   if (!SESSION_MODE_RATES[event.sessionMode]) fail('mode-does-not-rate', `Mode ${event.sessionMode} never rates`);
+
+  // A "Ya la sé" check among options rates no task of its own: the claim either holds or it does not.
+  if (event.basis === 'already-known' && RECOGNITION_CLAIM_CHECK.includes(event.evaluatorVersion) && claimCheckOf(event.itemId, event.exercise) === 'recognition') {
+    if (event.rating !== 'good' || claimHolds('recognition', reading) !== true) {
+      fail('already-known-not-good', 'An already-known review among options needs a right first pick with no hint');
+    }
+    return errors;
+  }
 
   const task = ratingTaskOf(event.itemId, event.exercise);
   if (!task) {

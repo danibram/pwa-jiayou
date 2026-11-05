@@ -261,7 +261,6 @@ const VocabularyReview: Component<Props> = (props) => {
             view={session.view}
             actions={session.actions}
             onCharacter={openChar}
-            claimedCheck={session.card()?.intent === 'already-known-check'}
             details={<Show when={currentEntry()}>{(entry) => <WordDetails entry={entry()} onCharacter={openChar} onWord={openWord} />}</Show>}
           />
         </LearningSessionShell>

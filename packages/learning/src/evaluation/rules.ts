@@ -182,3 +182,35 @@ const writingRating = (reading: AttemptReading): Rating | null => {
 
 /** "Ya la sé" writes Good on a clean correct recall. Hard is not a claim to already know the word. */
 export const alreadyKnownHolds = (rating: Rating | null): boolean => rating === 'good' || rating === 'easy';
+
+/**
+ * How an exercise can check a "Ya la sé" claim: `meaning` is the rating task, free recall rated by
+ * the learner; `recognition` is the meaning among options, graded by the app. Null for any other.
+ */
+export type ClaimCheck = 'meaning' | 'recognition';
+
+export const claimCheckOf = (itemId: ItemId, exercise: EvaluableExercise): ClaimCheck | null => {
+  if (ratingTaskOf(itemId, exercise) === 'meaning') return 'meaning';
+  if (
+    itemKind(itemId) === 'word-meaning' &&
+    exercise.skill === 'meaning' &&
+    exercise.format === 'multiple-choice' &&
+    exercise.grading === 'automatic' &&
+    exercise.cue === 'characters'
+  ) return 'recognition';
+  return null;
+};
+
+/**
+ * Whether the actions hold the claim. Recall: a clean Good or Easy. Recognition: the first pick is
+ * right and no hint came before it. Null when the actions decide nothing yet.
+ */
+export const claimHolds = (check: ClaimCheck, reading: AttemptReading): boolean | null => {
+  if (check === 'meaning') {
+    const rating = meaningRating(reading);
+    return rating === null ? null : alreadyKnownHolds(rating);
+  }
+  const answer = reading.firstAnswer;
+  if (!answer) return null;
+  return answer.evaluation.outcome === 'correct' && !reading.anyHint;
+};

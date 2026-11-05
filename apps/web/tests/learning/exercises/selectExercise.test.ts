@@ -62,11 +62,12 @@ describe('scheduled and already-known cards on words', () => {
     expect(result).toMatchObject({ kind: 'scheduled-review', basis: 'due', rating: 'good' });
   });
 
-  it('builds the same card for an already-known check, which rates as already-known', () => {
+  it('asks an already-known check among options, and a right first pick rates as already-known', () => {
     const exercise = exerciseOf(selectExercise(card(wordItem(ni), 'already-known-check', 'claimed-known'), { kind: 'word', word: ni }, context()));
-    expect(exercise).toMatchObject({ skill: 'meaning', format: 'free-recall', cue: 'characters', grading: 'self-assessment' });
+    expect(exercise).toMatchObject({ skill: 'meaning', format: 'multiple-choice', cue: 'characters', grading: 'automatic' });
+    const right = exercise.options.find((option) => option.contentId === ni.id)!;
     const result = evaluateAttempt(
-      { id: 'a2', itemId: wordItem(ni), actions: selfRated },
+      { id: 'a2', itemId: wordItem(ni), actions: [{ type: 'answer', at: 1, answer: right.text, selectedOptionId: right.id, evaluation: { outcome: 'correct' } }] },
       exercise,
       { sessionMode: 'today', scheduledEligible: false, alreadyKnownCheck: true },
     );

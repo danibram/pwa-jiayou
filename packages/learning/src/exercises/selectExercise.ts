@@ -235,7 +235,10 @@ const selectWord = (card: PlannedCardInput, word: WordEntry, context: ExerciseCo
   if (card.intent === 'teach') {
     return { kind: 'exposure', itemId: card.itemId, content, card: exposureCard(card.itemId, { kind: 'word', word }, 'teaching', context) };
   }
-  const order: PracticePrompt[] = card.intent === 'practice' ? practiceOrder(card, context) : [];
+  // A "Ya la sé" check asks the meaning among options: one tap, graded by the app. It falls back
+  // to the meaning card when the options cannot be built.
+  const order: PracticePrompt[] =
+    card.intent === 'practice' ? practiceOrder(card, context) : card.intent === 'already-known-check' ? ['recognize'] : [];
   const skipped: { prompt: ExercisePrompt; reason: SkipReason }[] = [];
   // The meaning card ends every chain: free recall from the characters, with the reading when the
   // characters have two, is never ambiguous.
@@ -281,8 +284,9 @@ const selectCharacter = (card: PlannedCardInput, character: CharacterContent, co
 /**
  * Turns a planned card into the exercise or exposure it shows.
  *
- * - Words. `teach` is an exposure. `scheduled` and `already-known-check` are the rating task: the
- *   characters, free recall and self-assessment, asking a particle's or classifier's function (P7).
+ * - Words. `teach` is an exposure. `scheduled` is the rating task: the characters, free recall and
+ *   self-assessment, asking a particle's or classifier's function (P7). `already-known-check` is the
+ *   meaning among options (`recognize`), or the rating task when there are too few distractors.
  *   `practice` climbs `PRACTICE_LADDER` from the item's evidence (`practiceRung`) and tries the
  *   formats in `practiceOrder`. It skips any that would be ambiguous, need speech that is not
  *   available, lack distractors or ask a function word from its gloss; the meaning card closes the
