@@ -10,7 +10,7 @@ import {
   WORD_RELATION_LABELS,
   type WordRelationKind,
 } from '@jiayou/content';
-import { exampleFor, useEditor } from '../lib/store';
+import { examplesFor, useEditor } from '../lib/store';
 import { WORD_POS, WORD_POS_LABELS, leadSense, sensesText } from '@jiayou/content';
 import { Field, Hanzi, Pinyin } from './text';
 
@@ -202,10 +202,18 @@ const WordForm: Component<{ word: VocabularyEntry }> = (props) => {
       </fieldset>
 
       <fieldset class="word-example">
-        <legend>Frase de ejemplo</legend>
-        <Field label="Frase en chino" value={exampleFor(props.word)?.chinese ?? ''} multiline lang="zh-Hans" onInput={(value) => editor.updateWordExample('chinese', value)} />
-        <Field label="Traducción de la frase" value={exampleFor(props.word)?.spanish ?? ''} multiline onInput={(value) => editor.updateWordExample('spanish', value)} />
-        <Show when={exampleFor(props.word)}><button type="button" class="btn btn-ghost" onClick={editor.removeWordExample}>Quitar frase</button></Show>
+        <legend>Frases de ejemplo</legend>
+        <ol class="example-list">
+          <For each={examplesFor(props.word)}>{(example, index) => (
+            <li>
+              <Field label="Frase en chino" value={example.chinese} multiline lang="zh-Hans" onInput={(value) => editor.updateWordExample(index(), 'chinese', value)} />
+              <Field label="Pinyin de la frase" value={example.pinyin ?? ''} lang="zh-Latn-pinyin" onInput={(value) => editor.updateWordExample(index(), 'pinyin', value)} />
+              <Field label="Traducción de la frase" value={example.spanish} multiline onInput={(value) => editor.updateWordExample(index(), 'spanish', value)} />
+              <button type="button" class="btn btn-ghost" onClick={() => editor.removeWordExample(index())}>Quitar frase</button>
+            </li>
+          )}</For>
+        </ol>
+        <button type="button" class="btn btn-ghost" onClick={editor.addWordExample}>Añadir frase</button>
       </fieldset>
 
       <div class="field">

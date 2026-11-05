@@ -1,6 +1,6 @@
 import { Component, For, Show, createMemo, createResource, createSignal } from 'solid-js';
 import { sensesText } from '@jiayou/content';
-import { exampleFor, message, useEditor, type Change } from '../lib/store';
+import { examplesFor, message, useEditor, type Change } from '../lib/store';
 import { formatWordRelations } from '@jiayou/content';
 import { EntryList } from './EntryList';
 import { Hanzi, LevelTag } from './text';
@@ -42,9 +42,9 @@ const ReviewSection: Component = () => {
     const word = editor.snapshot().vocabulary.find((word) => word.id === change.id);
     if (!word) return [];
     const fields: { name: string; value: string }[] = [];
-    const example = exampleFor(word);
-    if (example && !change.fields.some((field) => ['Frase en chino', 'Traducción de la frase'].includes(field.name))) {
-      fields.push({ name: 'Frase de ejemplo', value: `${example.chinese}\n${example.spanish}` });
+    const examples = examplesFor(word);
+    if (examples.length && !change.fields.some((field) => field.name === 'Frases')) {
+      fields.push({ name: 'Frases', value: examples.map((example) => `${example.chinese}\n${example.spanish}`).join('\n\n') });
     }
     if (!change.fields.some((field) => field.name === 'Relaciones')) {
       const words = new Map(editor.snapshot().vocabulary.map((word) => [word.id, word.simplified]));

@@ -6,6 +6,7 @@ import {
   type HskLevel,
   type VocabularyEntry,
   type VocabularyExample,
+  wordExamples,
 } from '@jiayou/content';
 // Only HSK 1 ships inside the app. HSK 2 to 6 arrive with their level's pack (packs/hskN/words.json)
 // when the learner activates the list, through installLevelWords.
@@ -17,6 +18,10 @@ export type { CatalogEntry, VocabularyEntry, VocabularyExample, WordPos, WordRel
 
 export const vocabularyExample = (simplified: string, proposed?: VocabularyExample | null): VocabularyExample | undefined =>
   proposed === undefined ? (examples as Record<string, VocabularyExample>)[simplified] : proposed ?? undefined;
+
+/** Every sentence a word shows: its list, or the single legacy sentence, or the sidecar one. */
+export const vocabularyExamples = (word: Pick<VocabularyEntry, 'simplified' | 'examples' | 'example'>): VocabularyExample[] =>
+  wordExamples(word, (examples as Record<string, VocabularyExample>)[word.simplified]);
 
 export const vocabularyLevels: HskLevel[] = [1, 2, 3, 4, 5, 6];
 

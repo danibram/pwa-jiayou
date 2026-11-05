@@ -2,7 +2,7 @@ import type { HSKCharacter } from './contracts.ts';
 import { isWordRelationKind } from './relations.ts';
 import { isWordPos } from './senses.ts';
 import type { Topic } from './topic.ts';
-import type { VocabularyEntry } from './vocabulary.ts';
+import { isVocabularyExample, type VocabularyEntry } from './vocabulary.ts';
 
 /**
  * A retired word keeps its row, so its id stays taken and its history readable, but publication leaves
@@ -76,6 +76,7 @@ export function validateSnapshot(value: unknown, base?: ContentSnapshot, publish
     const row = word as unknown as SnapshotWord;
     if (row.retired !== undefined && row.retired !== true) fail(`Estado de retirada inválido en ${row.simplified}.`);
     if (row.example !== undefined && row.example !== null && (!object(row.example) || !text(row.example.chinese) || !text(row.example.spanish))) fail(`Frase incompleta en ${row.simplified}.`);
+    if (row.examples !== undefined && (!Array.isArray(row.examples) || !row.examples.every(isVocabularyExample))) fail(`Frase incompleta en ${row.simplified}.`);
     // Published bases before senses carry a single meaning string; a draft always has senses.
     if (Array.isArray(row.senses)) {
       if (!row.senses.length) fail(`${row.simplified} necesita al menos un significado.`);

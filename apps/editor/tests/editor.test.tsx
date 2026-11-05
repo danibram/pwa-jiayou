@@ -86,8 +86,8 @@ describe('content editor', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Revisar' }));
     expect(screen.getByRole('columnheader', { name: 'Publicado' })).toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Propuesta' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '这个好。' })).toBeInTheDocument();
-    expect(screen.getByRole('cell', { name: '你的中文很好。' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '这个好。 · Este es bueno.' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '你的中文很好。 · Tu chino es muy bueno.' })).toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Sinónimos: 佳' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
     expect(screen.getByRole('region', { name: 'Contenido que se conserva' })).toHaveTextContent('Este es bueno.');
@@ -101,20 +101,23 @@ describe('content editor', () => {
     expect(screen.getByText(/Frases de referencia/)).toBeInTheDocument();
     expect(screen.getByText(/Esta entrada conserva/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Editar ficha' }));
-    expect(screen.getByLabelText('Frase en chino')).toHaveValue('');
+    // A word without sentences starts with none; "Añadir frase" opens the first one.
+    expect(screen.queryByLabelText('Frase en chino')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Añadir frase' }));
     fireEvent.input(screen.getByLabelText('Frase en chino'), { target: { value: '这个办法很好。' } });
     fireEvent.input(screen.getByLabelText('Traducción de la frase'), { target: { value: 'Este método es muy bueno.' } });
     fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
     const saved = JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!);
     expect(saved.references).toEqual(references);
-    expect(saved.snapshot.vocabulary[0].example).toEqual({ chinese: '这个办法很好。', spanish: 'Este método es muy bueno.' });
+    expect(saved.snapshot.vocabulary[0].examples).toEqual([{ chinese: '这个办法很好。', spanish: 'Este método es muy bueno.' }]);
+    expect(saved.snapshot.vocabulary[0].example).toBeUndefined();
     expect(JSON.stringify(saved.snapshot)).not.toContain('Hola.');
     fireEvent.click(screen.getByRole('button', { name: 'Revisar' }));
-    expect(screen.getByRole('cell', { name: 'Este método es muy bueno.' })).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: '这个办法很好。 · Este método es muy bueno.' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Editar ficha' }));
     fireEvent.click(screen.getByRole('button', { name: 'Quitar frase' }));
     fireEvent.click(screen.getByRole('button', { name: 'Guardar borrador' }));
-    expect(JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!).snapshot.vocabulary[0].example).toBeNull();
+    expect(JSON.parse(localStorage.getItem('jiayou-content-draft-v1')!).snapshot.vocabulary[0].examples).toEqual([]);
   });
 
   it('saves edits without changing the word ID and restores the draft', async () => {
