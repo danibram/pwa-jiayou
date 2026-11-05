@@ -54,7 +54,7 @@ const LearningSessionShell: Component<LearningSessionShellProps> = (props) => {
   );
 
   return (
-    <div class="flex min-h-0 flex-1 flex-col pb-5 pt-1 animate-rise [animation-delay:60ms]">
+    <div class="flex min-h-0 flex-1 flex-col pt-1 animate-rise [animation-delay:60ms]">
       <Switch>
         <Match when={props.view.state === 'loading'}>
           <div class="m-auto text-center" role="status">
@@ -94,9 +94,10 @@ const LearningSessionShell: Component<LearningSessionShellProps> = (props) => {
             ><Icon name="undo" size={18} /></button>
           </div>
           {props.children}
-          <div class="min-h-6 text-center">
+          {/* Takes no height, so the actions sit on the screen's bottom padding; the note shows in it. */}
+          <div class="relative h-0 text-center">
             <Show when={props.view.state === 'saving'}>
-              <p role="status" class="text-sm text-ink-soft">Guardando…</p>
+              <p role="status" class="absolute inset-x-0 top-0.5 text-xs leading-4 text-ink-soft">Guardando…</p>
             </Show>
           </div>
           <StorageError view={props.view} actions={props.actions} />
