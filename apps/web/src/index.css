@@ -367,3 +367,13 @@
     .home-action { grid-area: action; margin: 0; padding: 0; align-self: end; }
     .home-about { grid-area: about; margin: 0; justify-self: end; }
   }
+
+/* The auto-continue line under a known answer: it drains from right to left, then the card moves on. */
+@keyframes drain {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}

@@ -6,7 +6,28 @@ import { parseSenses, type WordSense } from './senses.ts';
 export interface VocabularyExample {
   chinese: string;
   spanish: string;
+  /** The sentence's reading, words separated by spaces. Older sentences have none. */
+  pinyin?: string;
 }
+
+/** A sentence with its Chinese and Spanish filled in; pinyin, when present, is text too. */
+export const isVocabularyExample = (value: unknown): value is VocabularyExample => {
+  if (!value || typeof value !== 'object') return false;
+  const row = value as Record<string, unknown>;
+  return typeof row.chinese === 'string' && !!row.chinese.trim() && typeof row.spanish === 'string' && !!row.spanish.trim() &&
+    (row.pinyin === undefined || (typeof row.pinyin === 'string' && !!row.pinyin.trim()));
+};
+
+/**
+ * The sentences a word shows, in order. `examples` is the list since content version 4 and wins
+ * when present, even empty; otherwise the single legacy `example`, or the sidecar sentence `legacy`.
+ */
+export const wordExamples = (word: Pick<VocabularyEntry, 'examples' | 'example'>, legacy?: VocabularyExample): VocabularyExample[] => {
+  if (word.examples) return word.examples;
+  if (word.example === null) return [];
+  const one = word.example ?? legacy;
+  return one ? [one] : [];
+};
 
 export interface VocabularyEntry {
   id: string;
@@ -24,6 +45,8 @@ export interface VocabularyEntry {
   relations?: WordRelation[];
   /** Null removes a legacy example; undefined keeps the example from the sidecar. */
   example?: VocabularyExample | null;
+  /** Sentences that use the word, each with its translation. Read through `wordExamples`. */
+  examples?: VocabularyExample[];
 }
 
 /** A word from the HSK lists that ship with the app. */
@@ -78,6 +101,9 @@ export const parseVocabularyEntry = (raw: unknown, allowExtra = false): CatalogE
     typeof (row.example as VocabularyExample).spanish !== 'string' || !(row.example as VocabularyExample).spanish.trim())) {
     throw new Error(`Frase inválida: ${row.simplified}`);
   }
+  if (row.examples !== undefined && (!Array.isArray(row.examples) || !row.examples.every(isVocabularyExample))) {
+    throw new Error(`Frases inválidas: ${row.simplified}`);
+  }
   if (row.relations !== undefined) {
     if (!Array.isArray(row.relations)) throw new Error(`Relaciones inválidas: ${row.simplified}`);
     relations = [];
@@ -108,6 +134,7 @@ export const parseVocabularyEntry = (raw: unknown, allowExtra = false): CatalogE
     sourceId: row.sourceId,
     ...(relations ? { relations } : {}),
     ...(row.example !== undefined ? { example: row.example as VocabularyExample | null } : {}),
+    ...(row.examples !== undefined ? { examples: row.examples as VocabularyExample[] } : {}),
   };
 };
 

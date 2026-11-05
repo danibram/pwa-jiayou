@@ -12,6 +12,11 @@
       {
         "pos": "verbo",
         "text": "querer"
+      },
+      {
+        "pos": "verbo",
+        "text": "gustar",
+        "note": "seguido de un verbo: 爱吃, 爱看"
       }
     ],
     "level": 1,
@@ -24,7 +29,19 @@
       "personas",
       "familia"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我爱我的家。",
+        "pinyin": "Wǒ ài wǒ de jiā.",
+        "spanish": "Quiero mucho a mi familia."
+      },
+      {
+        "chinese": "我爱吃中国菜。",
+        "pinyin": "Wǒ ài chī Zhōngguó cài.",
+        "spanish": "Me encanta la comida china."
+      }
+    ]
   },
   {
     "id": "word-516b-ba",
@@ -44,7 +61,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我家有八口人。",
+        "pinyin": "Wǒ jiā yǒu bā kǒu rén.",
+        "spanish": "En mi casa somos ocho."
+      },
+      {
+        "chinese": "我八点吃早饭。",
+        "pinyin": "Wǒ bā diǎn chī zǎofàn.",
+        "spanish": "Desayuno a las ocho."
+      }
+    ]
   },
   {
     "id": "word-7238-7238-ba4-ba5",
@@ -66,7 +95,19 @@
       "familia",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "爸爸在公司工作。",
+        "pinyin": "Bàba zài gōngsī gōngzuò.",
+        "spanish": "Mi padre trabaja en una oficina."
+      },
+      {
+        "chinese": "爸爸喜欢喝茶。",
+        "pinyin": "Bàba xǐhuan hē chá.",
+        "spanish": "A mi padre le gusta tomar té."
+      }
+    ]
   },
   {
     "id": "word-676f-5b50-bei-zi5",
@@ -92,7 +133,19 @@
       "comida",
       "cocina"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个杯子是我的。",
+        "pinyin": "Zhège bēizi shì wǒ de.",
+        "spanish": "Esta taza es mía."
+      },
+      {
+        "chinese": "请给我两个杯子。",
+        "pinyin": "Qǐng gěi wǒ liǎng ge bēizi.",
+        "spanish": "Por favor, tráeme dos tazas."
+      }
+    ]
   },
   {
     "id": "word-5317-4eac-bei3-jing",
@@ -114,7 +167,19 @@
       "lugares",
       "direcciones"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我想去北京。",
+        "pinyin": "Wǒ xiǎng qù Běijīng.",
+        "spanish": "Quiero ir a Pekín."
+      },
+      {
+        "chinese": "北京的人很多。",
+        "pinyin": "Běijīng de rén hěn duō.",
+        "spanish": "En Pekín hay mucha gente."
+      }
+    ]
   },
   {
     "id": "word-672c-ben3",
@@ -136,7 +201,19 @@
       "compras",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这本书很好看。",
+        "pinyin": "Zhè běn shū hěn hǎokàn.",
+        "spanish": "Este libro es muy bonito."
+      },
+      {
+        "chinese": "桌子上有一本书。",
+        "pinyin": "Zhuōzi shang yǒu yì běn shū.",
+        "spanish": "Hay un libro sobre la mesa."
+      }
+    ]
   },
   {
     "id": "word-4e0d-bu4",
@@ -156,7 +233,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我不喝咖啡。",
+        "pinyin": "Wǒ bù hē kāfēi.",
+        "spanish": "No tomo café."
+      },
+      {
+        "chinese": "今天天气不冷。",
+        "pinyin": "Jīntiān tiānqì bù lěng.",
+        "spanish": "Hoy no hace frío."
+      }
+    ]
   },
   {
     "id": "word-4e0d-5ba2-6c14-bu4-ke4-qi5",
@@ -180,7 +269,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "“谢谢你！”“不客气。”",
+        "pinyin": "“Xièxie nǐ!” “Bú kèqi.”",
+        "spanish": "«¡Gracias!» «De nada.»"
+      },
+      {
+        "chinese": "老师说“谢谢”，我说“不客气”。",
+        "pinyin": "Lǎoshī shuō “xièxie”, wǒ shuō “bú kèqi”.",
+        "spanish": "El profesor dice «gracias» y yo digo «de nada»."
+      }
+    ]
   },
   {
     "id": "word-83dc-cai4",
@@ -205,7 +306,19 @@
       "comida",
       "alimentos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个菜很好吃。",
+        "pinyin": "Zhège cài hěn hǎochī.",
+        "spanish": "Este plato está muy rico."
+      },
+      {
+        "chinese": "今天的菜是什么？",
+        "pinyin": "Jīntiān de cài shì shénme?",
+        "spanish": "¿Qué platos hay hoy?"
+      }
+    ]
   },
   {
     "id": "word-8336-cha2",
@@ -226,7 +339,19 @@
       "comida",
       "bebidas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "妈妈请我们喝茶。",
+        "pinyin": "Māma qǐng wǒmen hē chá.",
+        "spanish": "Mamá nos invita a tomar un té."
+      },
+      {
+        "chinese": "你喝茶还是喝水？",
+        "pinyin": "Nǐ hē chá háishi hē shuǐ?",
+        "spanish": "¿Bebes té o agua?"
+      }
+    ]
   },
   {
     "id": "word-5403-chi",
@@ -248,7 +373,19 @@
       "comida",
       "alimentos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们一起吃晚饭。",
+        "pinyin": "Wǒmen yìqǐ chī wǎnfàn.",
+        "spanish": "Cenamos juntos."
+      },
+      {
+        "chinese": "你想吃什么？",
+        "pinyin": "Nǐ xiǎng chī shénme?",
+        "spanish": "¿Qué quieres comer?"
+      }
+    ]
   },
   {
     "id": "word-51fa-79df-8f66-chu-zu-che",
@@ -271,7 +408,19 @@
       "transporte",
       "vehiculos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我坐出租车去机场。",
+        "pinyin": "Wǒ zuò chūzūchē qù jīchǎng.",
+        "spanish": "Voy al aeropuerto en taxi."
+      },
+      {
+        "chinese": "请问，出租车在哪里？",
+        "pinyin": "Qǐngwèn, chūzūchē zài nǎli?",
+        "spanish": "Perdone, ¿dónde hay taxis?"
+      }
+    ]
   },
   {
     "id": "word-6253-7535-8bdd-da3-dian4-hua4",
@@ -293,7 +442,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我晚上给妈妈打电话。",
+        "pinyin": "Wǒ wǎnshang gěi māma dǎdiànhuà.",
+        "spanish": "Por la noche llamo a mi madre."
+      },
+      {
+        "chinese": "他正在打电话。",
+        "pinyin": "Tā zhèngzài dǎdiànhuà.",
+        "spanish": "Está hablando por teléfono."
+      }
+    ]
   },
   {
     "id": "word-5927-da4",
@@ -311,7 +472,19 @@
       "大"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我家的房间很大。",
+        "pinyin": "Wǒ jiā de fángjiān hěn dà.",
+        "spanish": "La habitación de mi casa es muy grande."
+      },
+      {
+        "chinese": "这个西瓜大吗？",
+        "pinyin": "Zhège xīguā dà ma?",
+        "spanish": "¿Esta sandía es grande?"
+      }
+    ]
   },
   {
     "id": "word-7684-de5",
@@ -335,7 +508,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这是我的书。",
+        "pinyin": "Zhè shì wǒ de shū.",
+        "spanish": "Este es mi libro."
+      },
+      {
+        "chinese": "我喜欢漂亮的衣服。",
+        "pinyin": "Wǒ xǐhuan piàoliang de yīfu.",
+        "spanish": "Me gusta la ropa bonita."
+      }
+    ]
   },
   {
     "id": "word-70b9-dian3",
@@ -360,7 +545,19 @@
       "tiempo",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "现在几点了？",
+        "pinyin": "Xiànzài jǐ diǎn le?",
+        "spanish": "¿Qué hora es ahora?"
+      },
+      {
+        "chinese": "黑板上有一个红点。",
+        "pinyin": "Hēibǎn shang yǒu yí ge hóng diǎn.",
+        "spanish": "Hay un punto rojo en la pizarra."
+      }
+    ]
   },
   {
     "id": "word-7535-8111-dian4-nao3",
@@ -385,7 +582,19 @@
     "topicIds": [
       "casa"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我用电脑看电影。",
+        "pinyin": "Wǒ yòng diànnǎo kàn diànyǐng.",
+        "spanish": "Veo películas en el ordenador."
+      },
+      {
+        "chinese": "你的电脑在哪里？",
+        "pinyin": "Nǐ de diànnǎo zài nǎli?",
+        "spanish": "¿Dónde está tu ordenador?"
+      }
+    ]
   },
   {
     "id": "word-7535-89c6-dian4-shi4",
@@ -406,7 +615,19 @@
     "topicIds": [
       "casa"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "晚上我看电视。",
+        "pinyin": "Wǎnshang wǒ kàn diànshì.",
+        "spanish": "Por la noche veo la tele."
+      },
+      {
+        "chinese": "我们开电视吧。",
+        "pinyin": "Wǒmen kāi diànshì ba.",
+        "spanish": "Encendamos la tele, ¿vale?"
+      }
+    ]
   },
   {
     "id": "word-7535-5f71-dian4-ying3",
@@ -425,7 +646,19 @@
       "影"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们今天去看电影。",
+        "pinyin": "Wǒmen jīntiān qù kàn diànyǐng.",
+        "spanish": "Hoy vamos a ver una película."
+      },
+      {
+        "chinese": "你喜欢什么电影？",
+        "pinyin": "Nǐ xǐhuan shénme diànyǐng?",
+        "spanish": "¿Qué tipo de películas te gustan?"
+      }
+    ]
   },
   {
     "id": "word-4e1c-897f-dong-xi5",
@@ -448,7 +681,19 @@
       "西"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的东西在桌子上。",
+        "pinyin": "Wǒ de dōngxi zài zhuōzi shang.",
+        "spanish": "Mis cosas están sobre la mesa."
+      },
+      {
+        "chinese": "这些东西很贵。",
+        "pinyin": "Zhèxiē dōngxi hěn guì.",
+        "spanish": "Estas cosas son muy caras."
+      }
+    ]
   },
   {
     "id": "word-90fd-dou",
@@ -472,7 +717,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天我们都很累。",
+        "pinyin": "Jīntiān wǒmen dōu hěn lèi.",
+        "spanish": "Hoy estamos todos muy cansados."
+      },
+      {
+        "chinese": "你们都去吗？",
+        "pinyin": "Nǐmen dōu qù ma?",
+        "spanish": "¿Vais todos?"
+      }
+    ]
   },
   {
     "id": "word-8bfb-du2",
@@ -493,7 +750,19 @@
       "verbos",
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天读书。",
+        "pinyin": "Wǒ měi tiān dú shū.",
+        "spanish": "Todos los días leo libros."
+      },
+      {
+        "chinese": "请你读这个字。",
+        "pinyin": "Qǐng nǐ dú zhège zì.",
+        "spanish": "Por favor, lee este carácter."
+      }
+    ]
   },
   {
     "id": "word-5bf9-4e0d-8d77-dui4-bu5-qi3",
@@ -521,7 +790,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "对不起，我来晚了。",
+        "pinyin": "Duìbuqǐ, wǒ lái wǎn le.",
+        "spanish": "Lo siento, llegué tarde."
+      },
+      {
+        "chinese": "对不起，我没听懂。",
+        "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
+        "spanish": "Perdone, no lo he entendido."
+      }
+    ]
   },
   {
     "id": "word-591a-duo",
@@ -544,7 +825,19 @@
       "多"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这里的人很多。",
+        "pinyin": "Zhèli de rén hěn duō.",
+        "spanish": "Aquí hay mucha gente."
+      },
+      {
+        "chinese": "你多吃一点。",
+        "pinyin": "Nǐ duō chī yìdiǎn.",
+        "spanish": "Come un poco más."
+      }
+    ]
   },
   {
     "id": "word-591a-5c11-duo-shao5",
@@ -570,7 +863,19 @@
       "preguntas",
       "compras"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个多少钱？",
+        "pinyin": "Zhège duōshao qián?",
+        "spanish": "¿Cuánto cuesta esto?"
+      },
+      {
+        "chinese": "你家有多少人？",
+        "pinyin": "Nǐ jiā yǒu duōshao rén?",
+        "spanish": "¿Cuántas personas hay en tu familia?"
+      }
+    ]
   },
   {
     "id": "word-513f-5b50-er2-zi5",
@@ -592,7 +897,19 @@
       "familia",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我儿子五岁。",
+        "pinyin": "Wǒ érzi wǔ suì.",
+        "spanish": "Mi hijo tiene cinco años."
+      },
+      {
+        "chinese": "他的儿子住在北京。",
+        "pinyin": "Tā de érzi zhù zài Běijīng.",
+        "spanish": "Su hijo vive en Pekín."
+      }
+    ]
   },
   {
     "id": "word-4e8c-er4",
@@ -612,7 +929,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我今年二十岁。",
+        "pinyin": "Wǒ jīnnián èrshí suì.",
+        "spanish": "Tengo veinte años."
+      },
+      {
+        "chinese": "这是第二课。",
+        "pinyin": "Zhè shì dì èr kè.",
+        "spanish": "Esta es la segunda lección."
+      }
+    ]
   },
   {
     "id": "word-996d-9986-fan4-guan3",
@@ -635,7 +964,19 @@
       "lugares",
       "restaurante"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们去饭馆吃饭吧。",
+        "pinyin": "Wǒmen qù fànguǎn chī fàn ba.",
+        "spanish": "Vamos al restaurante a comer, ¿vale?"
+      },
+      {
+        "chinese": "这家饭馆的菜很好吃。",
+        "pinyin": "Zhè jiā fànguǎn de cài hěn hǎochī.",
+        "spanish": "Este restaurante tiene muy buena comida."
+      }
+    ]
   },
   {
     "id": "word-98de-673a-fei-ji",
@@ -657,7 +998,18 @@
       "transporte",
       "vehiculos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我坐飞机去北京。",
+        "spanish": "Voy a Pekín en avión."
+      },
+      {
+        "chinese": "飞机比火车快。",
+        "pinyin": "Fēijī bǐ huǒchē kuài.",
+        "spanish": "El avión es más rápido que el tren."
+      }
+    ]
   },
   {
     "id": "word-5206-949f-fen-zhong",
@@ -678,7 +1030,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "等我五分钟。",
+        "pinyin": "Děng wǒ wǔ fēnzhōng.",
+        "spanish": "Espérame cinco minutos."
+      },
+      {
+        "chinese": "还有十分钟，火车就来了。",
+        "pinyin": "Hái yǒu shí fēnzhōng, huǒchē jiù lái le.",
+        "spanish": "Faltan diez minutos, el tren ya llega."
+      }
+    ]
   },
   {
     "id": "word-9ad8-5174-gao-xing4",
@@ -704,7 +1068,23 @@
       "sentimientos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天我很高兴。",
+        "spanish": "Hoy estoy muy contento."
+      },
+      {
+        "chinese": "见到你我很高兴。",
+        "pinyin": "Jiàndào nǐ, wǒ hěn gāoxìng.",
+        "spanish": "Me alegro mucho de verte."
+      },
+      {
+        "chinese": "妈妈听了很高兴。",
+        "pinyin": "Māma tīng le hěn gāoxìng.",
+        "spanish": "Mamá se puso muy contenta al oírlo."
+      }
+    ]
   },
   {
     "id": "word-4e2a-ge4",
@@ -726,7 +1106,19 @@
       "gramatica",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我有两个姐姐。",
+        "pinyin": "Wǒ yǒu liǎng gè jiějie.",
+        "spanish": "Tengo dos hermanas mayores."
+      },
+      {
+        "chinese": "我一个人在家。",
+        "pinyin": "Wǒ yí gè rén zài jiā.",
+        "spanish": "Estoy solo en casa."
+      }
+    ]
   },
   {
     "id": "word-5de5-4f5c-gong-zuo4",
@@ -752,7 +1144,19 @@
       "verbos",
       "trabajos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我在医院工作。",
+        "pinyin": "Wǒ zài yīyuàn gōngzuò.",
+        "spanish": "Trabajo en un hospital."
+      },
+      {
+        "chinese": "今天我的工作很多。",
+        "pinyin": "Jīntiān wǒ de gōngzuò hěn duō.",
+        "spanish": "Hoy tengo mucho trabajo."
+      }
+    ]
   },
   {
     "id": "word-72d7-gou3",
@@ -772,7 +1176,19 @@
     "topicIds": [
       "animales"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我家有一只狗。",
+        "pinyin": "Wǒ jiā yǒu yì zhī gǒu.",
+        "spanish": "En mi casa tenemos un perro."
+      },
+      {
+        "chinese": "我的狗很可爱。",
+        "pinyin": "Wǒ de gǒu hěn kěài.",
+        "spanish": "Mi perro es muy mono."
+      }
+    ]
   },
   {
     "id": "word-6c49-8bed-han4-yu3",
@@ -794,7 +1210,19 @@
     "topicIds": [
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的汉语很好。",
+        "pinyin": "Wǒ de hànyǔ hěn hǎo.",
+        "spanish": "Mi chino es muy bueno."
+      },
+      {
+        "chinese": "你会说汉语吗？",
+        "pinyin": "Nǐ huì shuō hànyǔ ma?",
+        "spanish": "¿Hablas chino?"
+      }
+    ]
   },
   {
     "id": "word-597d-hao3",
@@ -809,6 +1237,11 @@
       {
         "pos": "adjetivo",
         "text": "bien"
+      },
+      {
+        "pos": "interjección",
+        "text": "vale",
+        "note": "para aceptar o cerrar algo"
       }
     ],
     "level": 1,
@@ -819,7 +1252,19 @@
       "sentimientos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你今天好吗？",
+        "pinyin": "Nǐ jīntiān hǎo ma?",
+        "spanish": "¿Qué tal estás hoy?"
+      },
+      {
+        "chinese": "这个主意很好。",
+        "pinyin": "Zhège zhǔyi hěn hǎo.",
+        "spanish": "Es una buena idea."
+      }
+    ]
   },
   {
     "id": "word-559d-he",
@@ -841,7 +1286,23 @@
       "comida",
       "bebidas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我想喝水。",
+        "spanish": "Quiero beber agua."
+      },
+      {
+        "chinese": "我每天喝牛奶。",
+        "pinyin": "Wǒ měi tiān hē niúnǎi.",
+        "spanish": "Tomo leche todos los días."
+      },
+      {
+        "chinese": "你喝点什么？",
+        "pinyin": "Nǐ hē diǎn shénme?",
+        "spanish": "¿Qué te apetece beber?"
+      }
+    ]
   },
   {
     "id": "word-548c-he2",
@@ -865,7 +1326,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我和妹妹一起去。",
+        "pinyin": "Wǒ hé mèimei yìqǐ qù.",
+        "spanish": "Voy con mi hermana pequeña."
+      },
+      {
+        "chinese": "爸爸和妈妈在家。",
+        "pinyin": "Bàba hé māma zài jiā.",
+        "spanish": "Mi padre y mi madre están en casa."
+      }
+    ]
   },
   {
     "id": "word-5f88-hen3",
@@ -885,7 +1358,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天天气很好。",
+        "pinyin": "Jīntiān tiānqì hěn hǎo.",
+        "spanish": "Hoy hace muy buen tiempo."
+      },
+      {
+        "chinese": "我很忙，没有时间。",
+        "pinyin": "Wǒ hěn máng, méiyǒu shíjiān.",
+        "spanish": "Estoy muy liado, no tengo tiempo."
+      }
+    ]
   },
   {
     "id": "word-540e-9762-hou4-mian5",
@@ -911,7 +1396,19 @@
       "direcciones",
       "transporte"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的书包在后面。",
+        "pinyin": "Wǒ de shūbāo zài hòumian.",
+        "spanish": "Mi mochila está detrás."
+      },
+      {
+        "chinese": "请坐在我后面。",
+        "pinyin": "Qǐng zuò zài wǒ hòumian.",
+        "spanish": "Siéntate detrás de mí."
+      }
+    ]
   },
   {
     "id": "word-56de-hui2",
@@ -936,7 +1433,19 @@
       "verbos",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我下午回家。",
+        "pinyin": "Wǒ xiàwǔ huí jiā.",
+        "spanish": "Vuelvo a casa por la tarde."
+      },
+      {
+        "chinese": "我去过两回北京。",
+        "pinyin": "Wǒ qùguo liǎng huí Běijīng.",
+        "spanish": "He estado en Pekín dos veces."
+      }
+    ]
   },
   {
     "id": "word-4f1a-hui4",
@@ -960,7 +1469,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我会做中国菜。",
+        "pinyin": "Wǒ huì zuò Zhōngguó cài.",
+        "spanish": "Sé cocinar comida china."
+      },
+      {
+        "chinese": "明天会下雨吗？",
+        "pinyin": "Míngtiān huì xià yǔ ma?",
+        "spanish": "¿Mañana va a llover?"
+      }
+    ]
   },
   {
     "id": "word-706b-8f66-7ad9-huo3-che-zhan4",
@@ -984,7 +1505,19 @@
       "lugares",
       "vehiculos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "火车站在哪儿？",
+        "pinyin": "Huǒchēzhàn zài nǎr?",
+        "spanish": "¿Dónde está la estación de tren?"
+      },
+      {
+        "chinese": "他明天去火车站接朋友。",
+        "pinyin": "Tā míngtiān qù huǒchēzhàn jiē péngyou.",
+        "spanish": "Mañana va a la estación a recoger a un amigo."
+      }
+    ]
   },
   {
     "id": "word-51e0-ji3",
@@ -1008,7 +1541,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你家有几口人？",
+        "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+        "spanish": "¿Cuántas personas sois en tu casa?"
+      },
+      {
+        "chinese": "我只有几个朋友。",
+        "pinyin": "Wǒ zhǐ yǒu jǐ ge péngyou.",
+        "spanish": "Solo tengo unos pocos amigos."
+      }
+    ]
   },
   {
     "id": "word-5bb6-jia",
@@ -1035,7 +1580,19 @@
       "personas",
       "vivienda"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我家在北京。",
+        "pinyin": "Wǒ jiā zài Běijīng.",
+        "spanish": "Mi casa está en Pekín."
+      },
+      {
+        "chinese": "我的家人都很好。",
+        "pinyin": "Wǒ de jiārén dōu hěn hǎo.",
+        "spanish": "Mi familia está muy bien."
+      }
+    ]
   },
   {
     "id": "word-53eb-jiao4",
@@ -1059,7 +1616,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你叫什么名字？",
+        "pinyin": "Nǐ jiào shénme míngzi?",
+        "spanish": "¿Cómo te llamas?"
+      },
+      {
+        "chinese": "妈妈叫我回家吃饭。",
+        "pinyin": "Māma jiào wǒ huí jiā chī fàn.",
+        "spanish": "Mamá me ha dicho que vuelva a casa a comer."
+      }
+    ]
   },
   {
     "id": "word-4eca-5929-jin-tian",
@@ -1080,7 +1649,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天我去看朋友。",
+        "pinyin": "Jīntiān wǒ qù kàn péngyou.",
+        "spanish": "Hoy voy a ver a un amigo."
+      },
+      {
+        "chinese": "今天是几号？",
+        "pinyin": "Jīntiān shì jǐ hào?",
+        "spanish": "¿Qué día es hoy?"
+      }
+    ]
   },
   {
     "id": "word-4e5d-jiu3",
@@ -1100,7 +1681,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我晚上九点睡觉。",
+        "pinyin": "Wǒ wǎnshang jiǔ diǎn shuìjiào.",
+        "spanish": "Me acuesto a las nueve de la noche."
+      },
+      {
+        "chinese": "我九月去北京。",
+        "pinyin": "Wǒ jiǔyuè qù Běijīng.",
+        "spanish": "Voy a Pekín en septiembre."
+      }
+    ]
   },
   {
     "id": "word-5f00-kai",
@@ -1129,7 +1722,19 @@
       "verbos",
       "transporte"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "请你开一下门。",
+        "pinyin": "Qǐng nǐ kāi yíxià mén.",
+        "spanish": "Por favor, abre la puerta."
+      },
+      {
+        "chinese": "我开车去上班。",
+        "pinyin": "Wǒ kāichē qù shàngbān.",
+        "spanish": "Voy al trabajo en coche."
+      }
+    ]
   },
   {
     "id": "word-770b-kan4",
@@ -1157,7 +1762,23 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我在看书呢。",
+        "spanish": "Estoy leyendo un libro."
+      },
+      {
+        "chinese": "你看什么书？",
+        "pinyin": "Nǐ kàn shénme shū?",
+        "spanish": "¿Qué libro estás leyendo?"
+      },
+      {
+        "chinese": "我们看看这个。",
+        "pinyin": "Wǒmen kànkan zhège.",
+        "spanish": "Vamos a mirar esto."
+      }
+    ]
   },
   {
     "id": "word-770b-89c1-kan4-jian4",
@@ -1178,7 +1799,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我看见你了！",
+        "pinyin": "Wǒ kànjiàn nǐ le!",
+        "spanish": "¡Te he visto!"
+      },
+      {
+        "chinese": "你看见我的书了吗？",
+        "pinyin": "Nǐ kànjiàn wǒ de shū le ma?",
+        "spanish": "¿Has visto mi libro?"
+      }
+    ]
   },
   {
     "id": "word-5757-kuai4",
@@ -1205,7 +1838,19 @@
       "compras",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个杯子十块钱。",
+        "pinyin": "Zhège bēizi shí kuài qián.",
+        "spanish": "Esta taza cuesta diez yuanes."
+      },
+      {
+        "chinese": "我想吃一块蛋糕。",
+        "pinyin": "Wǒ xiǎng chī yí kuài dàngāo.",
+        "spanish": "Quiero comer un trozo de tarta."
+      }
+    ]
   },
   {
     "id": "word-6765-lai2",
@@ -1225,7 +1870,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你明天来我家吃饭吗？",
+        "pinyin": "Nǐ míngtiān lái wǒ jiā chī fàn ma?",
+        "spanish": "¿Vienes mañana a mi casa a comer?"
+      },
+      {
+        "chinese": "我的朋友来了。",
+        "pinyin": "Wǒ de péngyou lái le.",
+        "spanish": "Ha llegado mi amigo."
+      }
+    ]
   },
   {
     "id": "word-8001-5e08-lao3-shi",
@@ -1252,7 +1909,19 @@
       "trabajos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的老师很好。",
+        "pinyin": "Wǒ de lǎoshī hěn hǎo.",
+        "spanish": "Mi profesor es muy bueno."
+      },
+      {
+        "chinese": "老师在教室里吗？",
+        "pinyin": "Lǎoshī zài jiàoshì li ma?",
+        "spanish": "¿Está el profesor en el aula?"
+      }
+    ]
   },
   {
     "id": "word-4e86-le5",
@@ -1276,7 +1945,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我买了一本书。",
+        "pinyin": "Wǒ mǎi le yì běn shū.",
+        "spanish": "He comprado un libro."
+      },
+      {
+        "chinese": "我已经吃饱了。",
+        "pinyin": "Wǒ yǐjing chībǎo le.",
+        "spanish": "Ya he comido bastante."
+      }
+    ]
   },
   {
     "id": "word-51b7-leng3",
@@ -1297,7 +1978,19 @@
       "tiempo",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "外面很冷，多穿点。",
+        "pinyin": "Wàimian hěn lěng, duō chuān diǎn.",
+        "spanish": "Fuera hace frío, abrígate más."
+      },
+      {
+        "chinese": "这杯茶太冷了。",
+        "pinyin": "Zhè bēi chá tài lěng le.",
+        "spanish": "Este té está demasiado frío."
+      }
+    ]
   },
   {
     "id": "word-91cc-li3",
@@ -1317,7 +2010,19 @@
     "topicIds": [
       "direcciones"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的书在包里。",
+        "pinyin": "Wǒ de shū zài bāo lǐ.",
+        "spanish": "El libro está en el bolso."
+      },
+      {
+        "chinese": "房间里很干净。",
+        "pinyin": "Fángjiān lǐ hěn gānjìng.",
+        "spanish": "La habitación está muy limpia."
+      }
+    ]
   },
   {
     "id": "word-96f6-ling2",
@@ -1337,7 +2042,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "考试得了零分。",
+        "pinyin": "Kǎoshì dé le língfēn.",
+        "spanish": "Saqué un cero en el examen."
+      },
+      {
+        "chinese": "这个包一百零五块。",
+        "pinyin": "Zhège bāo yì bǎi líng wǔ kuài.",
+        "spanish": "Esta bolsa cuesta ciento cinco yuanes."
+      }
+    ]
   },
   {
     "id": "word-516d-liu4",
@@ -1357,7 +2074,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天是六月六号。",
+        "pinyin": "Jīntiān shì liùyuè liù hào.",
+        "spanish": "Hoy es seis de junio."
+      },
+      {
+        "chinese": "我六点吃晚饭。",
+        "pinyin": "Wǒ liù diǎn chī wǎnfàn.",
+        "spanish": "Ceno a las seis."
+      }
+    ]
   },
   {
     "id": "word-5988-5988-ma-ma5",
@@ -1379,7 +2108,23 @@
       "familia",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "妈妈不在家。",
+        "spanish": "Mamá no está en casa."
+      },
+      {
+        "chinese": "妈妈做的菜很好吃。",
+        "pinyin": "Māma zuò de cài hěn hǎochī.",
+        "spanish": "La comida que hace mamá está buenísima."
+      },
+      {
+        "chinese": "妈妈是老师。",
+        "pinyin": "Māma shì lǎoshī.",
+        "spanish": "Mi madre es profesora."
+      }
+    ]
   },
   {
     "id": "word-5417-ma5",
@@ -1401,7 +2146,19 @@
       "preguntas",
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你是中国人吗？",
+        "pinyin": "Nǐ shì Zhōngguórén ma?",
+        "spanish": "¿Eres chino?"
+      },
+      {
+        "chinese": "你喜欢喝茶吗？",
+        "pinyin": "Nǐ xǐhuan hē chá ma?",
+        "spanish": "¿Te gusta tomar té?"
+      }
+    ]
   },
   {
     "id": "word-4e70-mai3",
@@ -1423,7 +2180,19 @@
       "compras",
       "tiendas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我想买一个杯子。",
+        "pinyin": "Wǒ xiǎng mǎi yí ge bēizi.",
+        "spanish": "Quiero comprar una taza."
+      },
+      {
+        "chinese": "你在哪儿买东西？",
+        "pinyin": "Nǐ zài nǎr mǎi dōngxi?",
+        "spanish": "¿Dónde haces la compra?"
+      }
+    ]
   },
   {
     "id": "word-732b-mao",
@@ -1443,7 +2212,19 @@
     "topicIds": [
       "animales"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "小猫很可爱。",
+        "pinyin": "Xiǎo māo hěn kěài.",
+        "spanish": "El gatito es muy mono."
+      },
+      {
+        "chinese": "猫在桌子下面。",
+        "pinyin": "Māo zài zhuōzi xiàmian.",
+        "spanish": "El gato está debajo de la mesa."
+      }
+    ]
   },
   {
     "id": "word-6ca1-mei2",
@@ -1464,7 +2245,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我昨天没有出门。",
+        "pinyin": "Wǒ zuótiān méiyǒu chūmén.",
+        "spanish": "Ayer no salí de casa."
+      },
+      {
+        "chinese": "他今天没在家。",
+        "pinyin": "Tā jīntiān méi zài jiā.",
+        "spanish": "Él no está en casa."
+      }
+    ]
   },
   {
     "id": "word-6ca1-5173-7cfb-mei2-guan-xi5",
@@ -1492,7 +2285,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "没关系，我等你。",
+        "pinyin": "Méiguānxi, wǒ děng nǐ.",
+        "spanish": "No pasa nada, te espero."
+      },
+      {
+        "chinese": "书坏了，没关系。",
+        "pinyin": "Shū huài le, méiguānxi.",
+        "spanish": "Se ha roto el libro, da igual."
+      }
+    ]
   },
   {
     "id": "word-7c73-996d-mi3-fan4",
@@ -1515,7 +2320,19 @@
       "comida",
       "alimentos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天吃米饭。",
+        "pinyin": "Wǒ měi tiān chī mǐfàn.",
+        "spanish": "Como arroz todos los días."
+      },
+      {
+        "chinese": "这碗米饭很香。",
+        "pinyin": "Zhè wǎn mǐfàn hěn xiāng.",
+        "spanish": "Este arroz huele muy bien."
+      }
+    ]
   },
   {
     "id": "word-540d-5b57-ming2-zi5",
@@ -1534,7 +2351,19 @@
       "字"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你的名字是什么？",
+        "pinyin": "Nǐ de míngzi shì shénme?",
+        "spanish": "¿Cuál es tu nombre?"
+      },
+      {
+        "chinese": "这个名字很好听。",
+        "pinyin": "Zhège míngzi hěn hǎotīng.",
+        "spanish": "Este nombre suena muy bien."
+      }
+    ]
   },
   {
     "id": "word-660e-5929-ming2-tian",
@@ -1555,7 +2384,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们明天见面吧。",
+        "pinyin": "Wǒmen míngtiān jiànmiàn ba.",
+        "spanish": "Quedamos mañana, ¿vale?"
+      },
+      {
+        "chinese": "明天你有空吗？",
+        "pinyin": "Míngtiān nǐ yǒu kòng ma?",
+        "spanish": "¿Mañana tienes tiempo libre?"
+      }
+    ]
   },
   {
     "id": "word-54ea-na3",
@@ -1579,7 +2420,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你是哪国人？",
+        "pinyin": "Nǐ shì nǎ guó rén?",
+        "spanish": "¿De qué país eres?"
+      },
+      {
+        "chinese": "哪个杯子是你的？",
+        "pinyin": "Nǎ ge bēizi shì nǐ de?",
+        "spanish": "¿Qué taza es la tuya?"
+      }
+    ]
   },
   {
     "id": "word-90a3-na4",
@@ -1607,7 +2460,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "那个人是谁？",
+        "pinyin": "Nà ge rén shì shéi?",
+        "spanish": "¿Quién es ese señor?"
+      },
+      {
+        "chinese": "那我们走吧。",
+        "pinyin": "Nà wǒmen zǒu ba.",
+        "spanish": "Entonces, vámonos."
+      }
+    ]
   },
   {
     "id": "word-5462-ne5",
@@ -1619,6 +2484,11 @@
         "pos": "partícula",
         "text": "¿y tú?",
         "note": "partícula interrogativa"
+      },
+      {
+        "pos": "partícula",
+        "text": "estar + gerundio",
+        "note": "acción en curso, al final de la frase: 他在看书呢"
       }
     ],
     "level": 1,
@@ -1629,7 +2499,19 @@
       "preguntas",
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的电脑呢？",
+        "pinyin": "Wǒ de diànnǎo ne?",
+        "spanish": "¿Y mi ordenador?"
+      },
+      {
+        "chinese": "我很好，你呢？",
+        "pinyin": "Wǒ hěn hǎo, nǐ ne?",
+        "spanish": "Yo estoy bien, ¿y tú?"
+      }
+    ]
   },
   {
     "id": "word-80fd-neng2",
@@ -1653,7 +2535,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你能帮我吗？",
+        "pinyin": "Nǐ néng bāng wǒ ma?",
+        "spanish": "¿Me puedes ayudar?"
+      },
+      {
+        "chinese": "今天我不能来。",
+        "pinyin": "Jīntiān wǒ bù néng lái.",
+        "spanish": "No puedo venir hoy."
+      }
+    ]
   },
   {
     "id": "word-4f60-ni3",
@@ -1673,7 +2567,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你今天忙吗？",
+        "pinyin": "Nǐ jīntiān máng ma?",
+        "spanish": "¿Estás ocupado hoy?"
+      },
+      {
+        "chinese": "你的朋友很多。",
+        "pinyin": "Nǐ de péngyou hěn duō.",
+        "spanish": "Tienes muchos amigos."
+      }
+    ]
   },
   {
     "id": "word-5e74-nian2",
@@ -1693,7 +2599,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "祝你新年快乐！",
+        "pinyin": "Zhù nǐ xīnnián kuàilè!",
+        "spanish": "¡Feliz año nuevo!"
+      },
+      {
+        "chinese": "我去年去了北京。",
+        "pinyin": "Wǒ qùnián qù le Běijīng.",
+        "spanish": "El año pasado fui a Pekín."
+      }
+    ]
   },
   {
     "id": "word-5973-513f-nv3-er2",
@@ -1715,7 +2633,19 @@
       "familia",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我女儿九岁。",
+        "pinyin": "Wǒ nǚér jiǔ suì.",
+        "spanish": "Mi hija tiene nueve años."
+      },
+      {
+        "chinese": "她的女儿很漂亮。",
+        "pinyin": "Tā de nǚér hěn piàoliang.",
+        "spanish": "Su hija es muy guapa."
+      }
+    ]
   },
   {
     "id": "word-670b-53cb-peng2-you5",
@@ -1742,7 +2672,19 @@
       "personas",
       "amigos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "他是我的好朋友。",
+        "pinyin": "Tā shì wǒ de hǎo péngyou.",
+        "spanish": "Es mi buen amigo."
+      },
+      {
+        "chinese": "我的朋友是中国人。",
+        "pinyin": "Wǒ de péngyou shì Zhōngguórén.",
+        "spanish": "Mi amigo es chino."
+      }
+    ]
   },
   {
     "id": "word-6f02-4eae-piao4-liang5",
@@ -1765,7 +2707,19 @@
       "亮"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个女孩很漂亮。",
+        "pinyin": "Zhège nǚhái hěn piàoliang.",
+        "spanish": "Esta chica es muy guapa."
+      },
+      {
+        "chinese": "公园里有很多漂亮的花。",
+        "pinyin": "Gōngyuán li yǒu hěn duō piàoliang de huā.",
+        "spanish": "En el parque hay muchas flores bonitas."
+      }
+    ]
   },
   {
     "id": "word-82f9-679c-ping2-guo3",
@@ -1787,7 +2741,19 @@
       "comida",
       "alimentos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天吃一个苹果。",
+        "pinyin": "Wǒ měi tiān chī yí gè píngguǒ.",
+        "spanish": "Me como una manzana todos los días."
+      },
+      {
+        "chinese": "这个苹果很甜。",
+        "pinyin": "Zhège píngguǒ hěn tián.",
+        "spanish": "Esta manzana está muy dulce."
+      }
+    ]
   },
   {
     "id": "word-4e03-qi",
@@ -1807,7 +2773,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我家有七口人。",
+        "pinyin": "Wǒ jiā yǒu qī kǒu rén.",
+        "spanish": "En mi casa somos siete."
+      },
+      {
+        "chinese": "今天七月七号。",
+        "pinyin": "Jīntiān qī yuè qī hào.",
+        "spanish": "Hoy es el siete de julio."
+      }
+    ]
   },
   {
     "id": "word-524d-9762-qian2-mian5",
@@ -1829,7 +2807,19 @@
       "direcciones",
       "transporte"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "商店在学校前面。",
+        "pinyin": "Shāngdiàn zài xuéxiào qiánmian.",
+        "spanish": "La tienda está delante del colegio."
+      },
+      {
+        "chinese": "我们坐在前面吧。",
+        "pinyin": "Wǒmen zuò zài qiánmian ba.",
+        "spanish": "Sentémonos delante, ¿vale?"
+      }
+    ]
   },
   {
     "id": "word-94b1-qian2",
@@ -1850,7 +2840,19 @@
       "compras",
       "dinero"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的钱在哪儿？",
+        "pinyin": "Wǒ de qián zài nǎr?",
+        "spanish": "¿Dónde está mi dinero?"
+      },
+      {
+        "chinese": "这个多少钱？",
+        "pinyin": "Zhège duōshao qián?",
+        "spanish": "¿Cuánto cuesta esto?"
+      }
+    ]
   },
   {
     "id": "word-8bf7-qing3",
@@ -1876,7 +2878,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "请进，欢迎你来我家。",
+        "pinyin": "Qǐng jìn, huānyíng nǐ lái wǒ jiā.",
+        "spanish": "Pasa, que estás en tu casa."
+      },
+      {
+        "chinese": "请你帮我一下，好吗？",
+        "pinyin": "Qǐng nǐ bāng wǒ yíxià, hǎo ma?",
+        "spanish": "¿Me echas una mano un momento, por favor?"
+      }
+    ]
   },
   {
     "id": "word-53bb-qu4",
@@ -1896,7 +2910,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我明天去学校。",
+        "pinyin": "Wǒ míngtiān qù xuéxiào.",
+        "spanish": "Mañana voy al colegio."
+      },
+      {
+        "chinese": "周末你想去哪儿？",
+        "pinyin": "Zhōumò nǐ xiǎng qù nǎr?",
+        "spanish": "¿Adónde te apetece ir el fin de semana?"
+      }
+    ]
   },
   {
     "id": "word-70ed-re4",
@@ -1911,6 +2937,11 @@
       {
         "pos": "sustantivo",
         "text": "calor"
+      },
+      {
+        "pos": "adjetivo",
+        "text": "hace calor",
+        "note": "del tiempo: 今天很热"
       }
     ],
     "level": 1,
@@ -1921,7 +2952,19 @@
       "tiempo",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天天气很热。",
+        "pinyin": "Jīntiān tiānqì hěn rè.",
+        "spanish": "Hoy hace mucho calor."
+      },
+      {
+        "chinese": "这个菜很热，小心！",
+        "pinyin": "Zhège cài hěn rè, xiǎoxīn!",
+        "spanish": "¡Cuidado, el plato está muy caliente!"
+      }
+    ]
   },
   {
     "id": "word-4eba-ren2",
@@ -1946,7 +2989,19 @@
       "personas",
       "gente"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个地方人很多。",
+        "pinyin": "Zhège dìfang rén hěn duō.",
+        "spanish": "Hay mucha gente en este sitio."
+      },
+      {
+        "chinese": "中国人喜欢喝茶。",
+        "pinyin": "Zhōngguó rén xǐhuan hē chá.",
+        "spanish": "A los chinos les gusta el té."
+      }
+    ]
   },
   {
     "id": "word-8ba4-8bc6-ren4-shi5",
@@ -1969,7 +3024,19 @@
       "amigos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我认识他的老师。",
+        "pinyin": "Wǒ rènshi tā de lǎoshī.",
+        "spanish": "Conozco a su profesor."
+      },
+      {
+        "chinese": "很高兴认识你。",
+        "pinyin": "Hěn gāoxìng rènshi nǐ.",
+        "spanish": "Encantado de conocerte."
+      }
+    ]
   },
   {
     "id": "word-65e5-ri4",
@@ -1993,7 +3060,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天是我的生日。",
+        "pinyin": "Jīntiān shì wǒ de shēngrì.",
+        "spanish": "Hoy es mi cumpleaños."
+      },
+      {
+        "chinese": "星期日我们去公园。",
+        "pinyin": "Xīngqīrì wǒmen qù gōngyuán.",
+        "spanish": "El domingo vamos al parque."
+      }
+    ]
   },
   {
     "id": "word-4e09-san",
@@ -2013,7 +3092,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我有三个哥哥。",
+        "pinyin": "Wǒ yǒu sān ge gēge.",
+        "spanish": "Tengo tres hermanos mayores."
+      },
+      {
+        "chinese": "我们三点开会。",
+        "pinyin": "Wǒmen sān diǎn kāihuì.",
+        "spanish": "Nos reunimos a las tres."
+      }
+    ]
   },
   {
     "id": "word-5546-5e97-shang-dian4",
@@ -2036,7 +3127,19 @@
       "compras",
       "tiendas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "附近有一家商店。",
+        "pinyin": "Fùjìn yǒu yì jiā shāngdiàn.",
+        "spanish": "Hay una tienda cerca."
+      },
+      {
+        "chinese": "我去商店买水果。",
+        "pinyin": "Wǒ qù shāngdiàn mǎi shuǐguǒ.",
+        "spanish": "Voy a la tienda a comprar fruta."
+      }
+    ]
   },
   {
     "id": "word-4e0a-shang4",
@@ -2069,7 +3172,19 @@
       "direcciones",
       "transporte"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们上楼吧。",
+        "pinyin": "Wǒmen shàng lóu ba.",
+        "spanish": "Subamos, ¿vale?"
+      },
+      {
+        "chinese": "上个星期我去医院。",
+        "pinyin": "Shàng ge xīngqī wǒ qù yīyuàn.",
+        "spanish": "La semana pasada fui al hospital."
+      }
+    ]
   },
   {
     "id": "word-4e0a-5348-shang4-wu3",
@@ -2090,7 +3205,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们上午十点上课。",
+        "pinyin": "Wǒmen shàngwǔ shí diǎn shàngkè.",
+        "spanish": "Tenemos clase a las diez de la mañana."
+      },
+      {
+        "chinese": "上午我在家做饭。",
+        "pinyin": "Shàngwǔ wǒ zài jiā zuò fàn.",
+        "spanish": "Por la mañana cocino en casa."
+      }
+    ]
   },
   {
     "id": "word-5c11-shao3",
@@ -2116,7 +3243,19 @@
       "少"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "他的钱很少。",
+        "pinyin": "Tā de qián hěn shǎo.",
+        "spanish": "Tiene muy poco dinero."
+      },
+      {
+        "chinese": "你应该少吃糖。",
+        "pinyin": "Nǐ yīnggāi shǎo chī táng.",
+        "spanish": "Deberías comer menos azúcar."
+      }
+    ]
   },
   {
     "id": "word-4ec0-4e48-shen2-me5",
@@ -2137,7 +3276,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你在做什么？",
+        "pinyin": "Nǐ zài zuò shénme?",
+        "spanish": "¿Qué estás haciendo?"
+      },
+      {
+        "chinese": "这是什么书？",
+        "pinyin": "Zhè shì shénme shū?",
+        "spanish": "¿Qué libro es este?"
+      }
+    ]
   },
   {
     "id": "word-5341-shi2",
@@ -2157,7 +3308,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我十点睡觉。",
+        "pinyin": "Wǒ shí diǎn shuìjiào.",
+        "spanish": "Me acuesto a las diez."
+      },
+      {
+        "chinese": "我们十二点吃饭。",
+        "pinyin": "Wǒmen shí'èr diǎn chī fàn.",
+        "spanish": "Comemos a las doce."
+      }
+    ]
   },
   {
     "id": "word-65f6-5019-shi2-hou5",
@@ -2182,7 +3345,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我吃饭的时候喜欢看书。",
+        "pinyin": "Wǒ chī fàn de shíhou xǐhuan kàn shū.",
+        "spanish": "Cuando como, me gusta leer."
+      },
+      {
+        "chinese": "我小时候住在中国。",
+        "pinyin": "Wǒ xiǎoshíhou zhù zài Zhōngguó.",
+        "spanish": "Cuando era pequeño vivía en China."
+      }
+    ]
   },
   {
     "id": "word-662f-shi4",
@@ -2206,7 +3381,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "他是我的老师。",
+        "pinyin": "Tā shì wǒ de lǎoshī.",
+        "spanish": "Él es mi profesor."
+      },
+      {
+        "chinese": "是的，我明白了。",
+        "pinyin": "Shì de, wǒ míngbai le.",
+        "spanish": "Sí, lo he entendido."
+      }
+    ]
   },
   {
     "id": "word-4e66-shu",
@@ -2226,7 +3413,19 @@
     "topicIds": [
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的书在桌子上。",
+        "pinyin": "Wǒ de shū zài zhuōzi shang.",
+        "spanish": "Mi libro está encima de la mesa."
+      },
+      {
+        "chinese": "我每天读书。",
+        "pinyin": "Wǒ měi tiān dú shū.",
+        "spanish": "Leo todos los días."
+      }
+    ]
   },
   {
     "id": "word-8c01-shei2",
@@ -2246,7 +3445,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这是谁的书？",
+        "pinyin": "Zhè shì shéi de shū?",
+        "spanish": "¿De quién es este libro?"
+      },
+      {
+        "chinese": "明天谁去学校？",
+        "pinyin": "Míngtiān shéi qù xuéxiào?",
+        "spanish": "¿Quién va al colegio mañana?"
+      }
+    ]
   },
   {
     "id": "word-6c34-shui3",
@@ -2267,7 +3478,19 @@
       "comida",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "请给我一杯水。",
+        "pinyin": "Qǐng gěi wǒ yì bēi shuǐ.",
+        "spanish": "Un vaso de agua, por favor."
+      },
+      {
+        "chinese": "这里的水很干净。",
+        "pinyin": "Zhèlǐ de shuǐ hěn gānjìng.",
+        "spanish": "El agua de aquí está muy limpia."
+      }
+    ]
   },
   {
     "id": "word-6c34-679c-shui3-guo3",
@@ -2289,7 +3512,19 @@
       "comida",
       "alimentos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天吃水果。",
+        "pinyin": "Wǒ měi tiān chī shuǐguǒ.",
+        "spanish": "Como fruta todos los días."
+      },
+      {
+        "chinese": "超市的水果很便宜。",
+        "pinyin": "Chāoshì de shuǐguǒ hěn piányi.",
+        "spanish": "La fruta del supermercado es muy barata."
+      }
+    ]
   },
   {
     "id": "word-7761-89c9-shui4-jiao4",
@@ -2312,7 +3547,19 @@
       "rutina",
       "casa"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天晚上十一点睡觉。",
+        "pinyin": "Wǒ měi tiān wǎnshang shíyī diǎn shuìjiào.",
+        "spanish": "Me acuesto todas las noches a las once."
+      },
+      {
+        "chinese": "你太累了，快去睡觉吧。",
+        "pinyin": "Nǐ tài lèi le, kuài qù shuìjiào ba.",
+        "spanish": "Estás muy cansado, vete a dormir."
+      }
+    ]
   },
   {
     "id": "word-8bf4-8bdd-shuo-hua4",
@@ -2333,7 +3580,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "别在教室里说话。",
+        "pinyin": "Bié zài jiàoshì lǐ shuōhuà.",
+        "spanish": "No hables en clase."
+      },
+      {
+        "chinese": "他说话很慢。",
+        "pinyin": "Tā shuōhuà hěn màn.",
+        "spanish": "Él habla muy despacio."
+      }
+    ]
   },
   {
     "id": "word-56db-si4",
@@ -2353,7 +3612,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的房间里有四把椅子。",
+        "pinyin": "Wǒ de fángjiān lǐ yǒu sì bǎ yǐzi.",
+        "spanish": "En mi habitación hay cuatro sillas."
+      },
+      {
+        "chinese": "现在四点十分。",
+        "pinyin": "Xiànzài sì diǎn shí fēn.",
+        "spanish": "Son las cuatro y diez."
+      }
+    ]
   },
   {
     "id": "word-5c81-sui4",
@@ -2374,7 +3645,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我今年二十岁。",
+        "pinyin": "Wǒ jīnnián èrshí suì.",
+        "spanish": "Tengo veinte años."
+      },
+      {
+        "chinese": "我弟弟五岁。",
+        "pinyin": "Wǒ dìdi wǔ suì.",
+        "spanish": "Mi hermano pequeño tiene cinco años."
+      }
+    ]
   },
   {
     "id": "word-4ed6-ta",
@@ -2394,7 +3677,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "他是我的同学。",
+        "pinyin": "Tā shì wǒ de tóngxué.",
+        "spanish": "Es mi compañero de clase."
+      },
+      {
+        "chinese": "他在医院工作。",
+        "pinyin": "Tā zài yīyuàn gōngzuò.",
+        "spanish": "Trabaja en el hospital."
+      }
+    ]
   },
   {
     "id": "word-5979-ta",
@@ -2414,7 +3709,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "她是我妈妈。",
+        "pinyin": "Tā shì wǒ māma.",
+        "spanish": "Ella es mi madre."
+      },
+      {
+        "chinese": "她的衣服很漂亮。",
+        "pinyin": "Tā de yīfu hěn piàoliang.",
+        "spanish": "Su ropa es muy bonita."
+      }
+    ]
   },
   {
     "id": "word-592a-tai4",
@@ -2438,7 +3745,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这件衣服太贵了。",
+        "pinyin": "Zhè jiàn yīfu tài guì le.",
+        "spanish": "Esta ropa es demasiado cara."
+      },
+      {
+        "chinese": "太好了，他明天来。",
+        "pinyin": "Tài hǎo le, tā míngtiān lái.",
+        "spanish": "¡Qué bien, mañana viene!"
+      }
+    ]
   },
   {
     "id": "word-5929-6c14-tian-qi4",
@@ -2461,7 +3780,19 @@
       "tiempo",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天的天气很好。",
+        "pinyin": "Jīntiān de tiānqì hěn hǎo.",
+        "spanish": "Hoy hace buen tiempo."
+      },
+      {
+        "chinese": "天气冷了，多穿衣服。",
+        "pinyin": "Tiānqì lěng le, duō chuān yīfu.",
+        "spanish": "Hace frío, abrígate más."
+      }
+    ]
   },
   {
     "id": "word-542c-ting",
@@ -2485,7 +3816,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我喜欢听音乐。",
+        "pinyin": "Wǒ xǐhuan tīng yīnyuè.",
+        "spanish": "Me gusta escuchar música."
+      },
+      {
+        "chinese": "老师，请你再说一次，我没听清楚。",
+        "pinyin": "Lǎoshī, qǐng nǐ zài shuō yí cì, wǒ méi tīng qīngchu.",
+        "spanish": "Profe, ¿puede repetirlo? No lo he oído bien."
+      }
+    ]
   },
   {
     "id": "word-540c-5b66-tong2-xue2",
@@ -2508,7 +3851,19 @@
       "personas",
       "amigos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我和同学一起学习。",
+        "pinyin": "Wǒ hé tóngxué yìqǐ xuéxí.",
+        "spanish": "Estudio con mis compañeros de clase."
+      },
+      {
+        "chinese": "那个同学很高。",
+        "pinyin": "Nà ge tóngxué hěn gāo.",
+        "spanish": "Ese compañero de clase es muy alto."
+      }
+    ]
   },
   {
     "id": "word-5582-wei4",
@@ -2534,7 +3889,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "喂，请问你是谁？",
+        "pinyin": "Wèi, qǐngwèn nǐ shì shéi?",
+        "spanish": "¿Diga? ¿Quién es?"
+      },
+      {
+        "chinese": "喂，你在哪儿？",
+        "pinyin": "Wèi, nǐ zài nǎr?",
+        "spanish": "¡Oye! ¿Dónde estás?"
+      }
+    ]
   },
   {
     "id": "word-6211-wo3",
@@ -2554,7 +3921,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我今天很累。",
+        "pinyin": "Wǒ jīntiān hěn lèi.",
+        "spanish": "Hoy estoy muy cansado."
+      },
+      {
+        "chinese": "我很喜欢这本书。",
+        "pinyin": "Wǒ hěn xǐhuan zhè běn shū.",
+        "spanish": "Me encanta este libro."
+      }
+    ]
   },
   {
     "id": "word-6211-4eec-wo3-men5",
@@ -2575,7 +3954,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们是朋友。",
+        "pinyin": "Wǒmen shì péngyou.",
+        "spanish": "Somos amigos."
+      },
+      {
+        "chinese": "我们去吃饭吧。",
+        "pinyin": "Wǒmen qù chī fàn ba.",
+        "spanish": "Vamos a comer, ¿vale?"
+      }
+    ]
   },
   {
     "id": "word-4e94-wu3",
@@ -2595,7 +3986,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天五点起床。",
+        "pinyin": "Wǒ měi tiān wǔ diǎn qǐchuáng.",
+        "spanish": "Me levanto a las cinco todos los días."
+      },
+      {
+        "chinese": "这张桌子五百块。",
+        "pinyin": "Zhè zhāng zhuōzi wǔ bǎi kuài.",
+        "spanish": "Esta mesa cuesta quinientos yuanes."
+      }
+    ]
   },
   {
     "id": "word-559c-6b22-xi3-huan5",
@@ -2621,7 +4024,19 @@
       "sentimientos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我喜欢看书。",
+        "pinyin": "Wǒ xǐhuan kàn shū.",
+        "spanish": "Me gusta leer."
+      },
+      {
+        "chinese": "你喜欢什么颜色？",
+        "pinyin": "Nǐ xǐhuan shénme yánsè?",
+        "spanish": "¿Qué color te gusta?"
+      }
+    ]
   },
   {
     "id": "word-4e0b-xia4",
@@ -2640,6 +4055,11 @@
       {
         "pos": "adjetivo",
         "text": "siguiente"
+      },
+      {
+        "pos": "verbo",
+        "text": "caer",
+        "note": "lluvia o nieve: 下雨, 下雪"
       }
     ],
     "level": 1,
@@ -2649,7 +4069,19 @@
     "topicIds": [
       "direcciones"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "椅子下面有一只猫。",
+        "pinyin": "Yǐzi xiàmian yǒu yì zhī māo.",
+        "spanish": "Hay un gato debajo de la silla."
+      },
+      {
+        "chinese": "下个星期我们去中国。",
+        "pinyin": "Xià ge xīngqī wǒmen qù Zhōngguó.",
+        "spanish": "La semana que viene vamos a China."
+      }
+    ]
   },
   {
     "id": "word-4e0b-5348-xia4-wu3",
@@ -2670,7 +4102,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我下午三点上班。",
+        "pinyin": "Wǒ xiàwǔ sān diǎn shàngbān.",
+        "spanish": "Entro a trabajar a las tres de la tarde."
+      },
+      {
+        "chinese": "下午我们去看电影。",
+        "pinyin": "Xiàwǔ wǒmen qù kàn diànyǐng.",
+        "spanish": "Por la tarde vamos a ver una película."
+      }
+    ]
   },
   {
     "id": "word-4e0b-96e8-xia4-yu3",
@@ -2692,7 +4136,19 @@
       "tiempo",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "明天会下雨。",
+        "pinyin": "Míngtiān huì xiàyǔ.",
+        "spanish": "Mañana va a llover."
+      },
+      {
+        "chinese": "下雨了，我们别去了。",
+        "pinyin": "Xiàyǔ le, wǒmen bié qù le.",
+        "spanish": "Está lloviendo, mejor no vayamos."
+      }
+    ]
   },
   {
     "id": "word-5148-751f-xian-sheng5",
@@ -2718,7 +4174,19 @@
       "trabajos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "先生，这是您的书吗？",
+        "pinyin": "Xiānsheng, zhè shì nín de shū ma?",
+        "spanish": "Señor, ¿este libro es suyo?"
+      },
+      {
+        "chinese": "我先生是医生。",
+        "pinyin": "Wǒ xiānsheng shì yīshēng.",
+        "spanish": "Mi marido es médico."
+      }
+    ]
   },
   {
     "id": "word-73b0-5728-xian4-zai4",
@@ -2739,7 +4207,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "现在几点了？",
+        "pinyin": "Xiànzài jǐ diǎn le?",
+        "spanish": "¿Qué hora es?"
+      },
+      {
+        "chinese": "我现在很忙。",
+        "pinyin": "Wǒ xiànzài hěn máng.",
+        "spanish": "Ahora estoy muy ocupado."
+      }
+    ]
   },
   {
     "id": "word-60f3-xiang3",
@@ -2763,7 +4243,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我想去中国旅游。",
+        "pinyin": "Wǒ xiǎng qù Zhōngguó lǚyóu.",
+        "spanish": "Quiero viajar a China."
+      },
+      {
+        "chinese": "你想喝什么？",
+        "pinyin": "Nǐ xiǎng hē shénme?",
+        "spanish": "¿Qué quieres beber?"
+      }
+    ]
   },
   {
     "id": "word-5c0f-xiao3",
@@ -2781,7 +4273,19 @@
       "小"
     ],
     "topicIds": [],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的房间很小。",
+        "pinyin": "Wǒ de fángjiān hěn xiǎo.",
+        "spanish": "Mi habitación es muy pequeña."
+      },
+      {
+        "chinese": "树上有一只小鸟。",
+        "pinyin": "Shù shang yǒu yì zhī xiǎo niǎo.",
+        "spanish": "Hay un pajarito en el árbol."
+      }
+    ]
   },
   {
     "id": "word-5c0f-59d0-xiao3-jie5",
@@ -2802,7 +4306,19 @@
     "topicIds": [
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "小姐，请问去车站怎么走？",
+        "pinyin": "Xiǎojie, qǐngwèn qù chēzhàn zěnme zǒu?",
+        "spanish": "Perdone, ¿cómo se va a la estación?"
+      },
+      {
+        "chinese": "那位小姐很漂亮。",
+        "pinyin": "Nà wèi xiǎojie hěn piàoliang.",
+        "spanish": "Esa señorita es muy guapa."
+      }
+    ]
   },
   {
     "id": "word-4e9b-xie",
@@ -2827,7 +4343,19 @@
       "gramatica",
       "clasificadores"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我买了一些水果。",
+        "pinyin": "Wǒ mǎi le yìxiē shuǐguǒ.",
+        "spanish": "He comprado algo de fruta."
+      },
+      {
+        "chinese": "这些书是谁的？",
+        "pinyin": "Zhèxiē shū shì shéi de?",
+        "spanish": "¿De quién son estos libros?"
+      }
+    ]
   },
   {
     "id": "word-5199-xie3",
@@ -2848,7 +4376,19 @@
       "verbos",
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我每天写字。",
+        "pinyin": "Wǒ měi tiān xiě zì.",
+        "spanish": "Practico la escritura todos los días."
+      },
+      {
+        "chinese": "请你把名字写在这里。",
+        "pinyin": "Qǐng nǐ bǎ míngzi xiě zài zhèlǐ.",
+        "spanish": "Por favor, escribe tu nombre aquí."
+      }
+    ]
   },
   {
     "id": "word-8c22-8c22-xie4-xie5",
@@ -2871,7 +4411,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "谢谢你的帮助。",
+        "pinyin": "Xièxie nǐ de bāngzhù.",
+        "spanish": "Gracias por tu ayuda."
+      },
+      {
+        "chinese": "谢谢你请我吃饭。",
+        "pinyin": "Xièxie nǐ qǐng wǒ chī fàn.",
+        "spanish": "Gracias por invitarme a comer."
+      }
+    ]
   },
   {
     "id": "word-661f-671f-xing-qi",
@@ -2892,7 +4444,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "今天星期三。",
+        "pinyin": "Jīntiān xīngqī sān.",
+        "spanish": "Hoy es miércoles."
+      },
+      {
+        "chinese": "我每个星期去游泳。",
+        "pinyin": "Wǒ měi ge xīngqī qù yóuyǒng.",
+        "spanish": "Voy a nadar todas las semanas."
+      }
+    ]
   },
   {
     "id": "word-5b66-751f-xue2-sheng5",
@@ -2914,7 +4478,19 @@
       "escuela",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们班有三十个学生。",
+        "pinyin": "Wǒmen bān yǒu sānshí ge xuésheng.",
+        "spanish": "En mi clase hay treinta alumnos."
+      },
+      {
+        "chinese": "这个学生很聪明。",
+        "pinyin": "Zhège xuésheng hěn cōngmíng.",
+        "spanish": "Este alumno es muy listo."
+      }
+    ]
   },
   {
     "id": "word-5b66-4e60-xue2-xi2",
@@ -2940,7 +4516,19 @@
       "verbos",
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我在学校学习汉语。",
+        "pinyin": "Wǒ zài xuéxiào xuéxí Hànyǔ.",
+        "spanish": "Estudio chino en el colegio."
+      },
+      {
+        "chinese": "每天晚上我学习一个小时。",
+        "pinyin": "Měi tiān wǎnshang wǒ xuéxí yí ge xiǎoshí.",
+        "spanish": "Estudio una hora cada noche."
+      }
+    ]
   },
   {
     "id": "word-5b66-6821-xue2-xiao4",
@@ -2962,7 +4550,19 @@
       "escuela",
       "lugares"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "学校离我家很近。",
+        "pinyin": "Xuéxiào lí wǒ jiā hěn jìn.",
+        "spanish": "El colegio está muy cerca de mi casa."
+      },
+      {
+        "chinese": "周末学校没有人。",
+        "pinyin": "Zhōumò xuéxiào méiyǒu rén.",
+        "spanish": "Los fines de semana no hay nadie en el colegio."
+      }
+    ]
   },
   {
     "id": "word-4e00-yi",
@@ -2982,7 +4582,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我是第一名。",
+        "pinyin": "Wǒ shì dì yī míng.",
+        "spanish": "Quedé el primero de la clase."
+      },
+      {
+        "chinese": "一月一号是新年。",
+        "pinyin": "Yī yuè yī hào shì xīnnián.",
+        "spanish": "El uno de enero es Año Nuevo."
+      }
+    ]
   },
   {
     "id": "word-8863-670d-yi-fu5",
@@ -3004,7 +4616,19 @@
       "ropa",
       "casa"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的衣服在床上。",
+        "pinyin": "Wǒ de yīfu zài chuáng shang.",
+        "spanish": "Mi ropa está en la cama."
+      },
+      {
+        "chinese": "他穿的衣服很新。",
+        "pinyin": "Tā chuān de yīfu hěn xīn.",
+        "spanish": "La ropa que lleva está muy nueva."
+      }
+    ]
   },
   {
     "id": "word-533b-751f-yi-sheng",
@@ -3030,7 +4654,19 @@
       "cuerpo",
       "trabajos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我妈妈是医生。",
+        "pinyin": "Wǒ māma shì yīshēng.",
+        "spanish": "Mi madre es médica."
+      },
+      {
+        "chinese": "医生，我头疼。",
+        "pinyin": "Yīshēng, wǒ tóu téng.",
+        "spanish": "Doctor, me duele la cabeza."
+      }
+    ]
   },
   {
     "id": "word-533b-9662-yi-yuan4",
@@ -3052,7 +4688,19 @@
       "cuerpo",
       "lugares"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "医院在火车站旁边。",
+        "pinyin": "Yīyuàn zài huǒchēzhàn pángbiān.",
+        "spanish": "El hospital está al lado de la estación de tren."
+      },
+      {
+        "chinese": "他昨天去医院了。",
+        "pinyin": "Tā zuótiān qù yīyuàn le.",
+        "spanish": "Ayer fue al hospital."
+      }
+    ]
   },
   {
     "id": "word-6905-5b50-yi3-zi5",
@@ -3074,7 +4722,19 @@
       "casa",
       "muebles"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "请你坐这把椅子。",
+        "pinyin": "Qǐng nǐ zuò zhè bǎ yǐzi.",
+        "spanish": "Siéntate en esta silla."
+      },
+      {
+        "chinese": "这把椅子很舒服。",
+        "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
+        "spanish": "Esta silla es muy cómoda."
+      }
+    ]
   },
   {
     "id": "word-6709-you3",
@@ -3098,7 +4758,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我有一个妹妹。",
+        "pinyin": "Wǒ yǒu yí ge mèimei.",
+        "spanish": "Tengo una hermana pequeña."
+      },
+      {
+        "chinese": "冰箱里有水果吗？",
+        "pinyin": "Bīngxiāng lǐ yǒu shuǐguǒ ma?",
+        "spanish": "¿Hay fruta en la nevera?"
+      }
+    ]
   },
   {
     "id": "word-6708-yue4",
@@ -3123,7 +4795,19 @@
       "tiempo",
       "naturaleza"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的生日是五月。",
+        "pinyin": "Wǒ de shēngrì shì wǔ yuè.",
+        "spanish": "Mi cumpleaños es en mayo."
+      },
+      {
+        "chinese": "这个月我很忙。",
+        "pinyin": "Zhège yuè wǒ hěn máng.",
+        "spanish": "Este mes estoy muy ocupado."
+      }
+    ]
   },
   {
     "id": "word-518d-89c1-zai4-jian4",
@@ -3149,7 +4833,19 @@
       "saludos",
       "personas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "好，明天再见！",
+        "pinyin": "Hǎo, míngtiān zàijiàn!",
+        "spanish": "Vale, hasta mañana."
+      },
+      {
+        "chinese": "你先走吧，我们下次再见。",
+        "pinyin": "Nǐ xiān zǒu ba, wǒmen xià cì zàijiàn.",
+        "spanish": "Vete tú primero, nos vemos la próxima vez."
+      }
+    ]
   },
   {
     "id": "word-5728-zai4",
@@ -3164,6 +4860,11 @@
       {
         "pos": "preposición",
         "text": "en"
+      },
+      {
+        "pos": "adverbio",
+        "text": "estar + gerundio",
+        "note": "acción en curso: 我在吃饭"
       }
     ],
     "level": 1,
@@ -3173,7 +4874,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "他现在在家吗？",
+        "pinyin": "Tā xiànzài zài jiā ma?",
+        "spanish": "¿Está en casa ahora?"
+      },
+      {
+        "chinese": "妈妈在厨房做饭。",
+        "pinyin": "Māma zài chúfáng zuò fàn.",
+        "spanish": "Mamá está en la cocina cocinando."
+      }
+    ]
   },
   {
     "id": "word-600e-4e48-zen3-me5",
@@ -3194,7 +4907,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个字怎么写？",
+        "pinyin": "Zhège zì zěnme xiě?",
+        "spanish": "¿Cómo se escribe este carácter?"
+      },
+      {
+        "chinese": "你今天怎么了？",
+        "pinyin": "Nǐ jīntiān zěnme le?",
+        "spanish": "¿Qué te pasa hoy?"
+      }
+    ]
   },
   {
     "id": "word-600e-4e48-6837-zen3-me5-yang4",
@@ -3216,7 +4941,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "明天天气怎么样？",
+        "pinyin": "Míngtiān tiānqì zěnmeyàng?",
+        "spanish": "¿Qué tiempo hará mañana?"
+      },
+      {
+        "chinese": "这个菜怎么样？",
+        "pinyin": "Zhège cài zěnmeyàng?",
+        "spanish": "¿Qué tal está este plato?"
+      }
+    ]
   },
   {
     "id": "word-8fd9-zhe4",
@@ -3240,7 +4977,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这是我的书。",
+        "pinyin": "Zhè shì wǒ de shū.",
+        "spanish": "Este es mi libro."
+      },
+      {
+        "chinese": "这里很安静。",
+        "pinyin": "Zhèlǐ hěn ānjìng.",
+        "spanish": "Aquí se está muy tranquilo."
+      }
+    ]
   },
   {
     "id": "word-4e2d-56fd-zhong-guo2",
@@ -3261,7 +5010,19 @@
     "topicIds": [
       "lugares"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我是中国人。",
+        "pinyin": "Wǒ shì Zhōngguó rén.",
+        "spanish": "Soy chino."
+      },
+      {
+        "chinese": "中国的冬天很冷。",
+        "pinyin": "Zhōngguó de dōngtiān hěn lěng.",
+        "spanish": "En China el invierno es muy frío."
+      }
+    ]
   },
   {
     "id": "word-4e2d-5348-zhong-wu3",
@@ -3282,7 +5043,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "中午我们一起吃饭。",
+        "pinyin": "Zhōngwǔ wǒmen yìqǐ chī fàn.",
+        "spanish": "A mediodía comemos juntos."
+      },
+      {
+        "chinese": "中午很热，我不想出去。",
+        "pinyin": "Zhōngwǔ hěn rè, wǒ bù xiǎng chūqu.",
+        "spanish": "A mediodía hace mucho calor y no me apetece salir."
+      }
+    ]
   },
   {
     "id": "word-4f4f-zhu4",
@@ -3308,7 +5081,19 @@
       "vivienda",
       "casa"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我住在北京。",
+        "pinyin": "Wǒ zhù zài Běijīng.",
+        "spanish": "Vivo en Pekín."
+      },
+      {
+        "chinese": "这个房间住三个人。",
+        "pinyin": "Zhège fángjiān zhù sān ge rén.",
+        "spanish": "En esta habitación viven tres personas."
+      }
+    ]
   },
   {
     "id": "word-684c-5b50-zhuo-zi5",
@@ -3330,7 +5115,19 @@
       "casa",
       "muebles"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "桌子上有一本书。",
+        "pinyin": "Zhuōzi shang yǒu yì běn shū.",
+        "spanish": "Encima de la mesa hay un libro."
+      },
+      {
+        "chinese": "我们在桌子旁边吃饭。",
+        "pinyin": "Wǒmen zài zhuōzi pángbiān chī fàn.",
+        "spanish": "Comemos junto a la mesa."
+      }
+    ]
   },
   {
     "id": "word-5b57-zi4",
@@ -3354,7 +5151,19 @@
     "topicIds": [
       "escuela"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我的汉字写得很好。",
+        "pinyin": "Wǒ de Hànzì xiě de hěn hǎo.",
+        "spanish": "Escribo muy bien los caracteres chinos."
+      },
+      {
+        "chinese": "这个字是什么意思？",
+        "pinyin": "Zhège zì shì shénme yìsi?",
+        "spanish": "¿Qué significa este carácter?"
+      }
+    ]
   },
   {
     "id": "word-6628-5929-zuo2-tian",
@@ -3375,7 +5184,19 @@
     "topicIds": [
       "tiempo"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "昨天我去了商店。",
+        "pinyin": "Zuótiān wǒ qù le shāngdiàn.",
+        "spanish": "Ayer fui a la tienda."
+      },
+      {
+        "chinese": "昨天我们学习了很久。",
+        "pinyin": "Zuótiān wǒmen xuéxí le hěn jiǔ.",
+        "spanish": "Ayer estudiamos durante mucho tiempo."
+      }
+    ]
   },
   {
     "id": "word-5750-zuo4",
@@ -3404,7 +5225,19 @@
       "casa",
       "vehiculos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "我们坐飞机去北京。",
+        "pinyin": "Wǒmen zuò fēijī qù Běijīng.",
+        "spanish": "Vamos a Pekín en avión."
+      },
+      {
+        "chinese": "请坐，别客气。",
+        "pinyin": "Qǐng zuò, bié kèqi.",
+        "spanish": "Siéntate, no te cortes."
+      }
+    ]
   },
   {
     "id": "word-505a-zuo4",
@@ -3415,6 +5248,16 @@
       {
         "pos": "verbo",
         "text": "hacer"
+      },
+      {
+        "pos": "verbo",
+        "text": "preparar",
+        "note": "comida: 做饭"
+      },
+      {
+        "pos": "verbo",
+        "text": "dedicarse a",
+        "note": "trabajo: 你做什么工作？"
       }
     ],
     "level": 1,
@@ -3424,7 +5267,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "你会做饭吗？",
+        "pinyin": "Nǐ huì zuò fàn ma?",
+        "spanish": "¿Sabes cocinar?"
+      },
+      {
+        "chinese": "他每天做作业。",
+        "pinyin": "Tā měi tiān zuò zuòyè.",
+        "spanish": "Él hace los deberes todos los días."
+      }
+    ]
   },
   {
     "id": "word-4f60-597d-ni3-hao3",
@@ -3446,7 +5301,19 @@
       "你",
       "好"
     ],
-    "sourceId": "curated-extra"
+    "sourceId": "curated-extra",
+    "examples": [
+      {
+        "chinese": "你好，我是新同学。",
+        "pinyin": "Nǐhǎo, wǒ shì xīn tóngxué.",
+        "spanish": "Hola, soy el nuevo de clase."
+      },
+      {
+        "chinese": "你好，你爸爸妈妈好吗？",
+        "pinyin": "Nǐhǎo, nǐ bàba māma hǎo ma?",
+        "spanish": "Hola, ¿cómo están tus padres?"
+      }
+    ]
   },
   {
     "id": "word-53f7-hao4",
@@ -3470,7 +5337,19 @@
     "topicIds": [
       "numeros"
     ],
-    "sourceId": "hsk-2-0"
+    "sourceId": "hsk-2-0",
+    "examples": [
+      {
+        "chinese": "这个房间是几号？",
+        "pinyin": "Zhège fángjiān shì jǐ hào?",
+        "spanish": "¿Qué número tiene esta habitación?"
+      },
+      {
+        "chinese": "今天二十号。",
+        "pinyin": "Jīntiān èrshí hào.",
+        "spanish": "Hoy es día veinte."
+      }
+    ]
   },
   {
     "id": "word-996d-5e97-fan4-dian4",
@@ -3497,7 +5376,19 @@
       "lugares",
       "restaurante"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "这家饭店的菜很好吃。",
+        "pinyin": "Zhè jiā fàndiàn de cài hěn hǎochī.",
+        "spanish": "La comida de este restaurante está muy rica."
+      },
+      {
+        "chinese": "我们在饭店吃饭吧。",
+        "pinyin": "Wǒmen zài fàndiàn chī fàn ba.",
+        "spanish": "Vamos a comer al restaurante, ¿vale?"
+      }
+    ]
   },
   {
     "id": "word-6ca1-6709-mei2-you3",
@@ -3512,6 +5403,11 @@
       {
         "pos": "verbo",
         "text": "no haber"
+      },
+      {
+        "pos": "verbo",
+        "text": "no tan… como",
+        "note": "en comparaciones: 我没有他高"
       }
     ],
     "level": 1,
@@ -3522,7 +5418,19 @@
     "topicIds": [
       "gramatica"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "教室里没有人。",
+        "pinyin": "Jiàoshì lǐ méiyǒu rén.",
+        "spanish": "No hay nadie en la clase."
+      },
+      {
+        "chinese": "我没有时间。",
+        "pinyin": "Wǒ méiyǒu shíjiān.",
+        "spanish": "No tengo tiempo."
+      }
+    ]
   },
   {
     "id": "word-54ea-513f-nar3",
@@ -3543,7 +5451,19 @@
     "topicIds": [
       "preguntas"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "你住在哪儿？",
+        "pinyin": "Nǐ zhù zài nǎr?",
+        "spanish": "¿Dónde vives?"
+      },
+      {
+        "chinese": "我不知道手机放在哪儿了。",
+        "pinyin": "Wǒ bù zhīdào shǒujī fàng zài nǎr le.",
+        "spanish": "No sé dónde he dejado el móvil."
+      }
+    ]
   },
   {
     "id": "word-90a3-513f-nar4",
@@ -3564,7 +5484,19 @@
     "topicIds": [
       "direcciones"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "我们在那儿等你。",
+        "pinyin": "Wǒmen zài nàr děng nǐ.",
+        "spanish": "Te esperamos allí."
+      },
+      {
+        "chinese": "那儿的咖啡很好喝。",
+        "pinyin": "Nàr de kāfēi hěn hǎohē.",
+        "spanish": "El café de allí está buenísimo."
+      }
+    ]
   },
   {
     "id": "word-8bf4-shuo",
@@ -3584,7 +5516,19 @@
     "topicIds": [
       "verbos"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "他说明天会下雨。",
+        "pinyin": "Tā shuō míngtiān huì xiàyǔ.",
+        "spanish": "Dice que mañana va a llover."
+      },
+      {
+        "chinese": "请你慢一点儿说。",
+        "pinyin": "Qǐng nǐ màn yīdiǎnr shuō.",
+        "spanish": "Habla un poco más despacio, por favor."
+      }
+    ]
   },
   {
     "id": "word-4e00-70b9-513f-yi-dianr3",
@@ -3607,6 +5551,18 @@
       "numeros",
       "clasificadores"
     ],
-    "sourceId": "asia-idiomas"
+    "sourceId": "asia-idiomas",
+    "examples": [
+      {
+        "chinese": "我想喝一点儿水。",
+        "pinyin": "Wǒ xiǎng hē yīdiǎnr shuǐ.",
+        "spanish": "Quiero beber un poco de agua."
+      },
+      {
+        "chinese": "能便宜一点儿吗？",
+        "pinyin": "Néng piányi yīdiǎnr ma?",
+        "spanish": "¿Me lo puede dejar un poco más barato?"
+      }
+    ]
   }
 ]

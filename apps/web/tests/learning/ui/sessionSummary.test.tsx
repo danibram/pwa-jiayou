@@ -17,7 +17,6 @@ const items: SummaryItemResult[] = [
 ];
 
 const props = (overrides: Partial<SessionSummaryProps> = {}): SessionSummaryProps => ({
-  open: true,
   recorded: { 'scheduled-review': 2, practice: 2, exposure: 1, 'invalid-attempt': 1 },
   items,
   dueTomorrow: 3,
@@ -29,62 +28,71 @@ const props = (overrides: Partial<SessionSummaryProps> = {}): SessionSummaryProp
 });
 
 describe('session summary', () => {
-  it('separates answers that changed the schedule from practice', () => {
+  it('says what was done, then lists the words to look at again first', () => {
     render(() => <SessionSummary {...props()} />);
 
-    expect(screen.getByText('2 respuestas cambiaron tu calendario y 2 fueron práctica.')).toBeTruthy();
+    expect(screen.getByText('Has visto 1 palabra nueva y has repasado 2.')).toBeTruthy();
     expect(screen.getByTestId('summary-scheduled')).toHaveTextContent('2 repasos cambiaron tu calendario');
-    expect(screen.getByTestId('summary-practice')).toHaveTextContent('Práctica, sin cambiar fechas2 respuestas');
-    expect(screen.getByTestId('summary-invalid')).toHaveTextContent('1');
+    expect(screen.getByTestId('summary-practice')).toHaveTextContent('La práctica no cambia cuándo vuelven tus repasos.');
+    expect(screen.getByTestId('summary-invalid')).toHaveTextContent('1 respuesta no contó');
 
-    const rated = screen.getByRole('region', { name: 'Repasos con nota' });
-    expect(within(rated).getByText('你好').closest('li')).toHaveTextContent('Bien');
-    expect(within(rated).getByText('谢谢').closest('li')).toHaveTextContent('Otra vezPráctica: acierto');
+    // One chip per word: a miss counts, whatever else happened.
+    const review = screen.getByRole('region', { name: 'Para repasar' });
+    expect(within(review).getByText('谢谢').closest('li')).toHaveTextContent('1 fallo');
+    expect(within(review).getByText('再见').closest('li')).toHaveTextContent('1 fallo');
 
-    const practice = screen.getByRole('region', { name: 'Solo práctica' });
-    expect(within(practice).getByText('再见').closest('li')).toHaveTextContent('Práctica: fallo');
-    expect(within(practice).getByText('朋友').closest('li')).toHaveTextContent('No contó');
-    expect(within(practice).queryByText('Bien')).toBeNull();
+    const good = screen.getByRole('region', { name: 'Bien' });
+    expect(within(good).getByText('你好').closest('li')).toHaveTextContent('Bien');
+    expect(within(good).getByText('朋友').closest('li')).toHaveTextContent('No contó');
 
-    expect(within(screen.getByRole('region', { name: 'Solo lección' })).getByText('老师')).toBeTruthy();
+    expect(within(screen.getByRole('region', { name: 'Vistas por primera vez' })).getByText('老师')).toBeTruthy();
   });
 
-  it('never shows a grade for a practice-only session', () => {
-    const practiceOnly = items.filter((item) => item.itemId === 'word-c');
+  it('shows no rating bar for a practice-only session', () => {
+    const practiceOnly = [{ itemId: 'word-f', label: '谢谢', results: [{ recorded: 'practice' as const, outcome: 'correct' as const, rating: null }] }];
     render(() => <SessionSummary {...props({ items: practiceOnly, recorded: { 'scheduled-review': 0, practice: 1, exposure: 0, 'invalid-attempt': 0 } })} />);
-    expect(screen.getByText('Ninguna respuesta cambió tu calendario y 1 fue práctica.')).toBeTruthy();
+    expect(screen.getByText('Has practicado 1 palabra.')).toBeTruthy();
     expect(screen.queryByTestId('summary-scheduled')).toBeNull();
-    expect(screen.queryByRole('region', { name: 'Repasos con nota' })).toBeNull();
+    expect(screen.getByText('谢谢').closest('li')).toHaveTextContent('Bien');
+    expect(screen.getByText('谢谢').closest('li')).not.toHaveTextContent('fallo');
   });
 
-  it('shows the next reviews and new words against the budget', () => {
-    render(() => <SessionSummary {...props()} />);
-    expect(screen.getByText('Mañana').parentElement).toHaveTextContent('3 repasos');
-    expect(screen.getByText('Próximo repaso').parentElement).toHaveTextContent('mañana');
-    expect(screen.getByText('Nuevas enseñadas hoy').parentElement).toHaveTextContent('7 de 20');
+  it('shows tomorrow and new words against the budget, and a review due later today', () => {
+    const { unmount } = render(() => <SessionSummary {...props()} />);
+    expect(screen.getByTestId('summary-tomorrow')).toHaveTextContent('3 repasos');
+    expect(screen.getByTestId('summary-new')).toHaveTextContent('7 de 20');
+    // Tomorrow's first review is already in the count.
+    expect(screen.queryByTestId('summary-next')).toBeNull();
+    unmount();
+    render(() => <SessionSummary {...props({ nextDueAt: new Date(2026, 10, 5, 18, 30).getTime() })} />);
+    expect(screen.getByTestId('summary-next')).toHaveTextContent('Próximo repaso hoy a las 18:30');
   });
 
   it('counts "Ya la sé" claims apart from lessons', () => {
     render(() => <SessionSummary {...props({ alreadyKnown: 2, recorded: { 'scheduled-review': 2, practice: 0, exposure: 3, 'invalid-attempt': 0 } })} />);
-    expect(screen.getByText('Lecciones vistas').parentElement).toHaveTextContent('1');
-    expect(screen.getByTestId('summary-already-known')).toHaveTextContent('Ya la sabías2 palabras');
+    expect(screen.getByText('Has visto 1 palabra nueva y has repasado 2.')).toBeTruthy();
+    expect(screen.getByTestId('summary-already-known')).toHaveTextContent('Ya sabías 2 palabras');
   });
 
   it('reads a lesson-only session as words for tomorrow', () => {
     const taught = items.filter((item) => item.results.length === 0);
     render(() => <SessionSummary {...props({ items: taught, nextDueAt: null, recorded: { 'scheduled-review': 0, practice: 0, exposure: 1, 'invalid-attempt': 0 } })} />);
     expect(screen.getByText('Has visto 1 palabra nueva. Mañana te la pregunto.')).toBeTruthy();
-    expect(screen.queryByText('Próximo repaso')).toBeNull();
+    expect(screen.queryByTestId('summary-next')).toBeNull();
   });
 
-  it('closes from its button and renders nothing while closed', () => {
+  it('leaves from its button', () => {
     const onClose = vi.fn();
-    const { unmount } = render(() => <SessionSummary {...props({ onClose })} />);
+    render(() => <SessionSummary {...props({ onClose })} />);
     fireEvent.click(screen.getByRole('button', { name: 'Volver al inicio' }));
     expect(onClose).toHaveBeenCalledTimes(1);
-    unmount();
-    render(() => <SessionSummary {...props({ open: false })} />);
-    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('opens a word of the session from its row', () => {
+    const onOpenItem = vi.fn();
+    render(() => <SessionSummary {...props({ onOpenItem })} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Ver 你好' }));
+    expect(onOpenItem).toHaveBeenCalledWith('word-a');
   });
 
   it('phrases the next due time by calendar day', () => {

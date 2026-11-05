@@ -71,7 +71,7 @@ export const askedGloss = (prompt: string): string => /«([^»]+)»/.exec(prompt
 const OUTCOME_LABEL = {
   correct: 'Bien',
   partial: 'Casi',
-  incorrect: 'No acertaste',
+  incorrect: 'No has acertado',
   invalid: 'No cuenta',
 } as const;
 

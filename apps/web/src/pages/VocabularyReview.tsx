@@ -1,7 +1,18 @@
-import { Component, createMemo, For, onCleanup, Show } from 'solid-js';
+import { Component, createMemo, createSignal, For, onCleanup, Show } from 'solid-js';
 import TopBar from '../components/TopBar';
 import Pinyin from '../components/Pinyin';
 import RiceGrid from '../components/RiceGrid';
+import CharacterDetailSheet from '../components/CharacterDetailSheet';
+import WordExample from '../components/WordExample';
+import WordPeekSheet from '../components/WordPeekSheet';
+import WordRef from '../components/WordRef';
+import WordRelations from '../components/WordRelations';
+import WordSenses from '../components/WordSenses';
+import type { StudyStatus } from '../components/TopicProgress';
+import { characterStore } from '../stores/characterStore';
+import { characterOrWordStub } from '../utils/wordCharacter';
+import { characterItemId } from '@jiayou/learning/items';
+import { studyStatusOf } from '@jiayou/learning/progress';
 import { LearningCard, LearningSessionShell } from '../components/learning';
 import SessionSummary, { type SummaryItemResult } from '../components/learning/summary/SessionSummary';
 import { useLearningStore } from '../components/LearningStoreContext';
@@ -41,54 +52,65 @@ const relatedWord = (entry: VocabularyEntry) =>
     other.level <= Math.max(levelRank(entry), 2) &&
     other.characters.some((char) => entry.characters.includes(char)));
 
-/** What the page adds under an answer: the traditional form, a word that shares a character, and the stroke tiles. */
-const WordDetails: Component<{ entry: VocabularyEntry; onStrokes: (char: string) => void }> = (props) => {
+/** What the page adds under an answer: every other use, a sentence, the characters, close words and a word sharing a character. Everything opens in place. */
+const WordDetails: Component<{ entry: VocabularyEntry; onCharacter: (char: string) => void; onWord: (id: string) => void }> = (props) => {
   const related = () => relatedWord(props.entry);
   const example = () => (!related() && props.entry.characters.length === 1 ? characterExample(props.entry.simplified) : undefined);
   const count = () => props.entry.characters.length;
   return (
-    <>
+    <div class="mx-auto w-full max-w-[34rem] pt-2 text-left" data-testid="word-details">
       <Show when={props.entry.traditional !== props.entry.simplified}>
-        <p class="mt-2 text-sm text-ink-soft">Tradicional: <span lang="zh-TW" class="font-hanzi">{props.entry.traditional}</span></p>
+        <p class="mb-3 text-center text-xs text-ink-faint">Tradicional <span lang="zh-TW" class="font-hanzi text-base text-ink-soft">{props.entry.traditional}</span></p>
       </Show>
-      <Show when={related()}>{(other) => (
-        <div class="mt-3 w-full max-w-[19rem] rounded-xl bg-paper/60 px-4 py-2 text-left">
-          <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">También en</p>
-          <p class="mt-1 flex flex-wrap items-baseline gap-x-2 text-ink">
-            <span class="font-hanzi text-[1.5rem] leading-none" lang="zh-CN">{other().simplified}</span>
-            <Pinyin word text={other().pinyin} class="text-base font-medium whitespace-nowrap" />
-          </p>
-          <p class="mt-0.5 text-sm text-ink-soft">{leadSense(other().senses)}</p>
+      {/* The whole meaning first: every use by part of speech, with how it is used. */}
+      <WordSenses word={props.entry} compact heading="Significado" class="border-t border-line pt-4" />
+      <WordExample word={props.entry} onCharacter={props.onCharacter} class="mt-4 border-t border-line pt-4" />
+      <section class="mt-4 border-t border-line pt-4" aria-label="Caracteres">
+        <h3 class="eyebrow">{count() > 1 ? 'Sus caracteres' : 'El carácter'}</h3>
+        <div class="mt-2 grid gap-2" style={{ 'grid-template-columns': `repeat(${Math.min(count(), 4)}, minmax(0, 1fr))` }}>
+          <For each={props.entry.characters}>{(char, index) => {
+            const gloss = () => characterGloss(char);
+            const repeated = () => props.entry.characters.filter((part) => part === char).length > 1;
+            return (
+              <button
+                type="button"
+                class="tile flex min-h-24 min-w-0 flex-col items-center justify-center gap-1 px-2 py-3 transition-transform active:scale-[0.97]"
+                onClick={() => props.onCharacter(char)}
+                aria-label={`Ver el carácter ${char}${gloss() ? `, ${gloss()}` : ''}${repeated() ? `, posición ${index() + 1} de ${count()}` : ''}`}
+              >
+                <span class="block font-hanzi text-[2.75rem] leading-none" lang="zh-CN">{char}</span>
+                <Show when={gloss()}><span class="block max-w-full truncate text-sm text-ink-soft">{gloss()}</span></Show>
+              </button>
+            );
+          }}</For>
         </div>
+      </section>
+      <WordRelations word={props.entry} onOpenWord={props.onWord} />
+      <Show when={related()}>{(other) => (
+        <section class="mt-4 border-t border-line pt-4" aria-label="Aparece en">
+          <h3 class="eyebrow">Aparece en</h3>
+          <div class="mt-2">
+            <WordRef row hanzi={other().simplified} pinyin={other().pinyin} gloss={leadSense(other().senses)} focus={props.entry.simplified} onOpen={() => props.onWord(other().id)} />
+          </div>
+        </section>
       )}</Show>
       {/* A one-character word with no other word to show it in (的, 了) gets its curated example. */}
       <Show when={example()}>{(shown) => (
-        <div class="mt-3 w-full max-w-[19rem] rounded-xl bg-paper/60 px-4 py-2 text-left">
-          <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">Ejemplo</p>
+        <section class="mt-4 border-t border-line pt-4" aria-label="Ejemplo">
+          <h3 class="eyebrow">Ejemplo</h3>
           <p class="mt-1 flex flex-wrap items-baseline gap-x-2 text-ink">
             <span class="font-hanzi text-[1.5rem] leading-none" lang="zh-CN">{shown().word}</span>
             <Pinyin word text={shown().pinyin} class="text-base font-medium whitespace-nowrap" />
           </p>
           <p class="mt-0.5 text-sm text-ink-soft">{shown().es}</p>
-        </div>
+        </section>
       )}</Show>
-      <p class="mt-3 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-soft">{count() > 1 ? 'Cómo se escribe · toca un carácter' : 'Cómo se escribe'}</p>
-      <div class="mt-1.5 flex flex-wrap justify-center gap-2">
-        <For each={props.entry.characters}>{(char, index) => {
-          const gloss = () => (count() > 1 ? characterGloss(char) : undefined);
-          const repeated = () => props.entry.characters.filter((part) => part === char).length > 1;
-          return (
-            <button type="button" class="tile min-h-11 min-w-11 max-w-[8rem] px-3 py-1" onClick={() => props.onStrokes(char)} aria-label={`Practicar trazos de ${char}${gloss() ? `, ${gloss()}` : ''}${repeated() ? `, posición ${index() + 1} de ${count()}` : ''}`}>
-              <span class="block font-hanzi text-xl" lang="zh-CN">{char}</span>
-              <Show when={gloss()}><span class="block truncate font-sans text-xs text-ink-soft">{gloss()}</span></Show>
-              <Show when={repeated()}><span class="block font-sans text-xs text-ink-soft">{index() + 1} de {count()}</span></Show>
-            </button>
-          );
-        }}</For>
-      </div>
-    </>
+    </div>
   );
 };
+
+/** What is open over the session: a character or a word, one at a time. */
+type Peek = { kind: 'char'; char: string } | { kind: 'word'; id: string };
 
 /**
  * A word session: Hoy, Más palabras, a topic, Flojos, Repasar todo or one word. The learning session
@@ -100,15 +122,33 @@ const VocabularyReview: Component<Props> = (props) => {
   const target = sessionTarget(props.practiceId);
   const session = createLearningSession({ mode: target.mode, scope: target.scope, store, resume: props.resume });
   onCleanup(stopSpeech);
+  /** Sheets opened one from another, so the back arrow returns to the one before. */
+  const [stack, setStack] = createSignal<Peek[]>([]);
+  const peek = () => stack().at(-1);
+  const push = (next: Peek) => setStack((open) => [...open, next].slice(-8));
+  const setPeek = (next: Peek | undefined) => setStack(next ? [next] : []);
+  const back = () => (stack().length > 1 ? () => setStack((open) => open.slice(0, -1)) : undefined);
+  const openChar = (char: string) => push({ kind: 'char', char });
+  const openWord = (id: string) => push({ kind: 'word', id });
+  /** A word opened from the summary says how it went in the session. */
+  const [peekNotes, setPeekNotes] = createSignal<Record<string, string>>({});
+  const peekWord = (id: string) => vocabularyStore.findSelectedWord(id) ?? findWord(id);
+  const charInstalled = (char: string) => characterStore.state.characters.some((row) => row.character === char);
+  const charStatus = (char: string): StudyStatus | undefined => {
+    if (!charInstalled(char)) return undefined;
+    const status = store.status(characterItemId(char));
+    return status === 'new' ? undefined : studyStatusOf(status);
+  };
+
+  const onCard = () => ['presenting', 'feedback', 'saving', 'error'].includes(session.view.state) && !!session.view.selection;
 
   const currentEntry = createMemo(() => {
     const selection = session.view.selection;
     return selection ? entryOf(selection.itemId) : undefined;
   });
   const note = () => {
-    if (target.mode === 'topic') return target.heading;
-    const card = session.card();
-    return card?.intent === 'teach' ? 'Palabra nueva' : undefined;
+    // The card's own eyebrow says "Palabra nueva"; the progress line only names a topic.
+    return target.mode === 'topic' ? target.heading : undefined;
   };
 
   const exitLabel = () => (target.wordId ? 'Volver a la palabra' : target.topicIds ? 'Volver al tema' : 'Volver al inicio');
@@ -162,7 +202,7 @@ const VocabularyReview: Component<Props> = (props) => {
   const summaryItems = (): SummaryItemResult[] =>
     session.summary().items.map((item) => {
       const entry = entryOf(item.itemId);
-      return { itemId: item.itemId, label: entry?.simplified ?? item.content.contentId, pinyin: entry?.pinyin, results: item.results };
+      return { itemId: item.itemId, label: entry?.simplified ?? item.content.contentId, pinyin: entry?.pinyin, gloss: entry ? leadSense(entry.senses) : undefined, taught: item.taught, results: item.results };
     });
   const newWords = () => {
     const budget = newPerDay();
@@ -172,7 +212,10 @@ const VocabularyReview: Component<Props> = (props) => {
   return (
     <div class="screen">
       <div class="animate-rise">
-        <TopBar title={target.heading} onBack={props.onBack} backLabel="Volver" />
+        {/* On a card the back arrow lives in the progress row; the title bar comes back around it. */}
+        <Show when={!onCard()}>
+          <TopBar title={target.heading} onBack={props.onBack} backLabel="Volver" />
+        </Show>
       </div>
       <Show when={!empty()} fallback={
         <div class="m-auto max-w-[18rem] text-center animate-rise [animation-delay:60ms]">
@@ -191,9 +234,9 @@ const VocabularyReview: Component<Props> = (props) => {
           view={session.view}
           actions={session.actions}
           note={note()}
+          onBack={props.onBack}
           finished={
             <SessionSummary
-              open
               recorded={session.summary().recorded}
               items={summaryItems()}
               alreadyKnown={session.summary().alreadyKnown}
@@ -203,16 +246,52 @@ const VocabularyReview: Component<Props> = (props) => {
               now={store.now()}
               onClose={() => props.onBack()}
               exitLabel={exitLabel()}
+              onOpenItem={(itemId) => {
+                const wordId = wordIdOf(itemId as ItemId);
+                if (wordId === null) return;
+                const item = session.summary().items.find((candidate) => candidate.itemId === itemId);
+                const missed = item?.results.filter((answer) => answer.recorded !== 'invalid-attempt' && (answer.outcome === 'incorrect' || answer.rating === 'again')).length ?? 0;
+                setPeekNotes({ [wordId]: missed > 0 ? `En esta sesión: ${missed} ${missed === 1 ? 'fallo' : 'fallos'}` : 'En esta sesión: bien' });
+                setPeek({ kind: 'word', id: wordId });
+              }}
             />
           }
         >
           <LearningCard
             view={session.view}
             actions={session.actions}
-            details={<Show when={currentEntry()}>{(entry) => <WordDetails entry={entry()} onStrokes={props.onStrokes} />}</Show>}
+            onCharacter={openChar}
+            claimedCheck={session.card()?.intent === 'already-known-check'}
+            details={<Show when={currentEntry()}>{(entry) => <WordDetails entry={entry()} onCharacter={openChar} onWord={openWord} />}</Show>}
           />
         </LearningSessionShell>
       </Show>
+      <Show when={peek()} keyed>{(open) => (
+        <Show when={open.kind === 'char' ? characterOrWordStub((open as { char: string }).char, characterStore.state.characters) : undefined} fallback={
+          <Show when={open.kind === 'word' ? peekWord((open as { id: string }).id) : undefined}>{(word) => (
+            <WordPeekSheet word={word()} note={stack().length === 1 ? peekNotes()[word().id] : undefined} onCharacter={openChar} onBack={back()} onClose={() => setPeek(undefined)}>
+              <WordDetails entry={word()} onCharacter={openChar} onWord={openWord} />
+            </WordPeekSheet>
+          )}</Show>
+        }>{(record) => (
+          <CharacterDetailSheet
+            character={record()}
+            installed={charInstalled(record().character)}
+            currentWordId={currentEntry()?.id}
+            quietStrokes
+            status={charStatus(record().character)}
+            onOpenCharacter={openChar}
+            onOpenWord={openWord}
+            onBack={back()}
+            onStrokes={() => {
+              const char = record().character;
+              setPeek(undefined);
+              props.onStrokes(char);
+            }}
+            onClose={() => setPeek(undefined)}
+          />
+        )}</Show>
+      )}</Show>
     </div>
   );
 };

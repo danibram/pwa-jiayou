@@ -13,6 +13,11 @@ interface LearningSessionShellProps {
   children: JSX.Element;
   /** What a finished session shows. The summary package fills it. */
   finished?: JSX.Element;
+  /**
+   * Leaves the session from the progress row, an arrow with no text, so the card gets the room a
+   * title bar would take. Everything answered stays saved. The page then shows no top bar on cards.
+   */
+  onBack?: () => void;
 }
 
 /** The write failed. A retryable error offers to try again; the answer stays on screen meanwhile. */
@@ -38,6 +43,15 @@ const LearningSessionShell: Component<LearningSessionShellProps> = (props) => {
   const onCard = () => ['presenting', 'feedback', 'saving', 'error'].includes(props.view.state) && !!props.view.selection;
   const canUndo = () => props.view.canUndo && props.view.state !== 'saving';
   const left = () => Math.max(0, props.view.total - props.view.position);
+  const pause = () => (
+    <button
+      type="button"
+      class="btn-ghost h-11 w-11 shrink-0"
+      aria-label="Pausar la sesión"
+      disabled={props.view.state === 'saving'}
+      onClick={() => props.actions.pause()}
+    ><Icon name="pause" size={18} /></button>
+  );
 
   return (
     <div class="flex min-h-0 flex-1 flex-col pb-5 pt-1 animate-rise [animation-delay:60ms]">
@@ -60,24 +74,24 @@ const LearningSessionShell: Component<LearningSessionShellProps> = (props) => {
           <div class="m-auto w-full max-w-[18rem]"><StorageError view={props.view} actions={props.actions} /></div>
         </Match>
         <Match when={onCard()}>
-          <div class="flex items-center gap-2">
-            <button
-              type="button"
-              class="btn-ghost h-11 w-11 shrink-0"
-              aria-label="Pausar la sesión"
-              disabled={props.view.state === 'saving'}
-              onClick={() => props.actions.pause()}
-            ><Icon name="pause" size={18} /></button>
-            <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1">
+            <Show when={props.onBack}>
+              <button type="button" class="btn-ghost -ml-2 h-11 w-11 shrink-0" aria-label="Volver" onClick={() => props.onBack?.()}>
+                <Icon name="back" size={20} />
+              </button>
+            </Show>
+            <Show when={!props.onBack}>{pause()}</Show>
+            <div class="min-w-0 flex-1 px-1">
               <SessionProgress done={props.view.position} left={left()} note={props.note} />
             </div>
+            <Show when={props.onBack}>{pause()}</Show>
             <button
               type="button"
-              class="btn-ghost h-11 w-11 shrink-0"
+              class="btn-ghost -mr-2 h-11 w-11 shrink-0"
               aria-label="Deshacer la última respuesta"
               disabled={!canUndo()}
               onClick={() => props.actions.undoLast()}
-            ><Icon name="replay" size={18} /></button>
+            ><Icon name="undo" size={18} /></button>
           </div>
           {props.children}
           <div class="min-h-6 text-center">

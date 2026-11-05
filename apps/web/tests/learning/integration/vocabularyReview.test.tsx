@@ -30,8 +30,8 @@ const open = (store: LearningStore, props: { practiceId?: string; resume?: boole
 const left = () => screen.getByText(/^Quedan \d+$|^Queda 1$/).textContent;
 
 const finishOnScreen = async (store: LearningStore) => {
-  for (let guard = 0; guard < 80 && !screen.queryByRole('dialog'); guard++) await answerOnScreen(store);
-  return screen.getByRole('dialog');
+  for (let guard = 0; guard < 80 && !screen.queryByTestId('session-summary'); guard++) await answerOnScreen(store);
+  return screen.getByTestId('session-summary');
 };
 
 describe('the word review page over the learning store', () => {
@@ -79,14 +79,17 @@ describe('the word review page over the learning store', () => {
     // Hoy opens on a new word with only its characters: "Ya la sé" must not follow the answer.
     expect(await screen.findByText('Palabra nueva', { selector: '.eyebrow' })).toBeTruthy();
     expect(screen.getByRole('img', { name: POOL_WORDS[0].simplified })).toBeTruthy();
-    expect(screen.queryByText('Cómo se escribe · toca un carácter')).toBeNull();
+    expect(screen.queryByTestId('word-details')).toBeNull();
     expect(screen.getByRole('button', { name: 'Ya la sé' })).toBeTruthy();
     // Enséñamela opens the lesson: the reading, the meaning and the page's own details.
     fireEvent.click(screen.getByRole('button', { name: 'Enséñamela' }));
-    expect(screen.getByText('Cómo se escribe · toca un carácter')).toBeTruthy();
+    expect(screen.getByTestId('word-details')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Ya la sé' })).toBeNull();
-    fireEvent.click(screen.getAllByRole('button', { name: /^Practicar trazos de/ })[0]);
-    expect(onStrokes).toHaveBeenCalledWith([...POOL_WORDS[0].simplified][0]);
+    // A character opens over the card; its strokes are one more tap, and the session waits meanwhile.
+    const firstChar = [...POOL_WORDS[0].simplified][0];
+    fireEvent.click(screen.getAllByRole('button', { name: new RegExp(`^Ver el carácter ${firstChar}`) })[0]);
+    fireEvent.click(await screen.findByRole('button', { name: 'Ver trazos y escribirlo' }));
+    expect(onStrokes).toHaveBeenCalledWith(firstChar);
     // Leaving never discards: there is no such choice.
     expect(screen.queryByText('Descartar y salir')).toBeNull();
 
@@ -105,8 +108,8 @@ describe('the word review page over the learning store', () => {
     expect(document.body.textContent).toBe(card);
 
     const summary = await finishOnScreen(second);
-    expect(summary).toHaveTextContent('Ninguna respuesta cambió tu calendario y 10 fueron práctica.');
-    expect(summary).toHaveTextContent('Práctica, sin cambiar fechas');
+    expect(summary).toHaveTextContent('Has visto 10 palabras nuevas.');
+    expect(summary).not.toHaveTextContent('La práctica no cambia');
     // The ten words taught today get their first rating tomorrow.
     expect(summary).toHaveTextContent('Mañana10 repasos');
     expect(second.newLeftToday()).toBe(0);

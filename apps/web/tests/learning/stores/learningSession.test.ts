@@ -396,17 +396,17 @@ describe('learning session controller', () => {
     expect((await log(store)).filter((event) => event.type === 'invalid-attempt')).toHaveLength(1);
   });
 
-  it('moves on by itself after a correct pick, and never after a self-assessment', async () => {
+  it('stays on the feedback after a correct pick until the learner continues', async () => {
     const e = fresh();
     const store = e.store();
-    const timers: (() => void)[] = [];
-    const session = await e.session(store, { mode: 'today', autoAdvance: { setTimer: (run) => timers.push(run) } });
+    const session = await e.session(store, { mode: 'today' });
     await advanceTo(session, isMultipleChoice);
     const position = session.view.position;
     await answerCard(session);
     expect(session.view.state).toBe('feedback');
-    expect(timers).toHaveLength(1);
-    timers.shift()!();
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    expect(session.view.state).toBe('feedback');
+    session.actions.continue();
     expect(session.view.state).toBe('presenting');
     expect(session.view.position).toBe(position + 1);
   });

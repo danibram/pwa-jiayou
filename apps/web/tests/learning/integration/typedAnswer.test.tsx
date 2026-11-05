@@ -66,7 +66,7 @@ describe('typing pinyin in a word session', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Continuar' })).toBeEnabled());
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.getByText('«bá ba»')).toBeTruthy();
-    expect(screen.getByRole('status').textContent).toContain('Esta práctica no cambia cuándo vuelve.');
+    expect(screen.getByRole('status').textContent).toContain('No has acertado');
 
     const event = store.events().filter((candidate) => candidate.itemId === item).at(-1)!;
     expect(event.type).toBe('practice');
@@ -87,7 +87,7 @@ describe('typing pinyin in a word session', () => {
     }
 
     // A miss brings the word back later in the session; the rest is answered right through the UI.
-    for (let guard = 0; guard < 10 && !screen.queryByRole('dialog'); guard++) await answerOnScreen(store);
-    expect(screen.getByRole('dialog')).toBeTruthy();
+    for (let guard = 0; guard < 10 && !screen.queryByTestId('session-summary'); guard++) await answerOnScreen(store);
+    expect(screen.getByTestId('session-summary')).toBeTruthy();
   });
 });

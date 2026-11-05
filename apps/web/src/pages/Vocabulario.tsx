@@ -13,14 +13,16 @@ import { glossHead } from '@jiayou/chinese';
 import { mainMeaning } from '@jiayou/chinese';
 import CharacterDetailSheet from '../components/CharacterDetailSheet';
 import SoundAlike, { type SoundAlikeItem } from '../components/SoundAlike';
-import { familyByChar, linkedIds, markWord, wordSoundAlikes } from '../utils/wordDetail';
-import { groupSenses, leadSense, sensesText, WORD_POS_LABELS } from '@jiayou/content';
+import { familyByChar, linkedIds, wordSoundAlikes } from '../utils/wordDetail';
+import { leadSense, sensesText } from '@jiayou/content';
 import StatusSeal from '../components/StatusSeal';
 import WordRef from '../components/WordRef';
 import WordRelations from '../components/WordRelations';
+import WordSenses from '../components/WordSenses';
+import WordExample from '../components/WordExample';
 import { characterOrWordStub, type KnownCharacter } from '../utils/wordCharacter';
 import { characterStore } from '../stores/characterStore';
-import { charactersOfExtraTopicWords, extraVocabulary, vocabularyExample, type VocabularyEntry } from '../data/vocabulary';
+import { charactersOfExtraTopicWords, extraVocabulary, type VocabularyEntry } from '../data/vocabulary';
 import { listedThemes, subtopicsOf, topicById, topicScope, topicTags, topics } from '../data/topics';
 import { EXTRA_LIST, hskLevelsOf } from '../data/lists';
 import { stopSpeech } from '../utils/speech';
@@ -481,26 +483,7 @@ const Vocabulario: Component<Props> = (props) => {
               </Show>
             </div>
             {/* Every use, right under the card: the first one leads, as on the review cards. */}
-            <section class="mt-5 text-left" aria-label="Significados">
-              <h3 class="sr-only">Significados</h3>
-              <For each={groupSenses(word().senses)}>{(group, groupIndex) => (
-                <div class="mt-3 first:mt-0" role="group" aria-label={group.pos ? WORD_POS_LABELS[group.pos] : 'Usos'}>
-                  <Show when={group.pos}>{(pos) => <p class="eyebrow">{WORD_POS_LABELS[pos()]}</p>}</Show>
-                  <ol class="mt-1 space-y-1.5">
-                    <For each={group.senses}>{(sense, index) => (
-                      <li class={`flex gap-2.5 leading-snug text-ink ${groupIndex() === 0 && index() === 0 ? 'text-[1.25rem] font-medium' : 'text-[0.9375rem]'}`}>
-                        <span class="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-ink-faint" aria-hidden="true" />
-                        <span class="min-w-0">
-                          <span class="first-letter:uppercase inline-block">{sense.text}</span>
-                          {/* How it is used reads quieter than the use itself. */}
-                          <Show when={sense.note}>{(note) => <span class="text-sm font-normal text-ink-soft"> ({note()})</span>}</Show>
-                        </span>
-                      </li>
-                    )}</For>
-                  </ol>
-                </div>
-              )}</For>
-            </section>
+            <WordSenses word={word()} class="mt-5" />
             <div class="mt-5 text-center">
               <Show when={audioError()}><p role="status" class="mb-2 text-sm text-seal">No se pudo reproducir el audio. Comprueba la voz china del dispositivo.</p></Show>
               <div class="flex items-center gap-2">
@@ -517,34 +500,7 @@ const Vocabulario: Component<Props> = (props) => {
               </Show>
               <Show when={!isNew(word().id) && !isPending(word().id)}><p class="mt-2 text-xs text-ink-soft">Práctica libre, sin cambiar la fecha de repaso.</p></Show>
             </div>
-            <Show when={vocabularyExample(word().simplified, word().example)}>
-              {(example) => (
-                <section class="mt-6 border-t border-line pt-5 text-left" aria-label="En una frase">
-                  <h3 class="eyebrow">En una frase</h3>
-                  <figure class="mt-2 border-l-2 border-line pl-4">
-                    <p class="font-hanzi text-[1.375rem] leading-relaxed" lang="zh-CN">
-                      {/* Every character opens its drawer, so a learner can look up the rest of the sentence. */}
-                      <For each={markWord(example().chinese, word().simplified)}>{(part) => {
-                        // Buttons are inline-block, so the mark is drawn on each one: an underline would not reach them.
-                        const chars = (
-                          <For each={[...part.text]}>{(c) => (
-                            <Show when={/\p{Script=Han}/u.test(c)} fallback={c}>
-                              <button type="button" class="active:bg-ink/10" classList={{ 'border-b-2 border-ink/60': part.hit }} aria-label={`${c} en la frase`} onClick={() => setCharOpen(c)}>{c}</button>
-                            </Show>
-                          )}</For>
-                        );
-                        return (
-                          <Show when={part.hit} fallback={<span class="text-ink-soft">{chars}</span>}>
-                            <mark class="bg-transparent text-ink">{chars}</mark>
-                          </Show>
-                        );
-                      }}</For>
-                    </p>
-                    <figcaption class="mt-1 text-sm text-ink-soft">{example().spanish}</figcaption>
-                  </figure>
-                </section>
-              )}
-            </Show>
+            <WordExample word={word()} onCharacter={setCharOpen} class="mt-6 border-t border-line pt-5" />
             <WordRelations word={word()} onOpenWord={props.onSelect} />
             <SoundAlike
               wide

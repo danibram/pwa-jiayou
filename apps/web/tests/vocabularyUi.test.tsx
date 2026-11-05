@@ -66,20 +66,22 @@ describe('vocabulary screens', () => {
     expect(screen.getByRole('dialog')).toBeTruthy();
   });
 
-  it('shows a tappable sentence on a one-character word without repeating the character', () => {
+  it('shows tappable sentences on a one-character word without repeating the character', () => {
     const word = vocabulary.find((entry) => entry.simplified === '喝')!;
     render(() => <Vocabulario onBack={() => {}} onStrokes={() => {}} wordId={word.id} onSelect={() => {}} onPractice={() => {}} browse={{ query: '', topic: '', scroll: 0, choosingTopic: false }} onBrowse={() => {}} />);
-    const sentence = screen.getByRole('region', { name: 'En una frase' });
-    expect(sentence.textContent).toContain('我想喝水。');
+    // The sentence it had comes first; content v4 added two more, with their reading.
+    const sentence = screen.getByRole('region', { name: 'En frases' });
+    expect(sentence.querySelectorAll('figure').length).toBeGreaterThanOrEqual(2);
+    expect(sentence.querySelector('figure')?.textContent).toContain('我想喝水。');
     expect(sentence.querySelector('mark')?.textContent).toBe('喝');
     // The mark is drawn on the buttons themselves: an underline on <mark> does not reach inline-block children.
-    expect(within(sentence).getByRole('button', { name: '喝 en la frase' }).className).toContain('border-b-2');
+    expect(within(sentence).getAllByRole('button', { name: '喝 en la frase' })[0].className).toContain('border-b-2');
     expect(within(sentence).getByText('Quiero beber agua.')).toBeTruthy();
     // A one-character word is its own hero: the row below shows its radical and strokes instead of repeating it.
     expect(screen.queryByRole('button', { name: /^Ver el carácter 喝, [a-zà-ü]/ })).toBeNull();
     expect(screen.getByRole('button', { name: /^Ver el carácter 喝: radical 口 y trazos$/ })).toBeTruthy();
     // Any character of the sentence opens its drawer.
-    fireEvent.click(within(sentence).getByRole('button', { name: '水 en la frase' }));
+    fireEvent.click(within(sentence).getAllByRole('button', { name: '水 en la frase' })[0]);
     expect(screen.getByRole('dialog')).toBeTruthy();
   });
 

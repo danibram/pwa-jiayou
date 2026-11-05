@@ -1,10 +1,13 @@
-import { createSignal, JSX, onCleanup, onMount, ParentComponent } from 'solid-js';
+import { createSignal, JSX, onCleanup, onMount, ParentComponent, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { createDialogFocus } from '../utils/dialog';
+import Icon from './Icon';
 
 interface DrawerProps {
   /** Called once the panel has slid away. The caller unmounts the drawer then. */
   onClose: () => void;
+  /** Shows a back arrow that returns to the sheet this one was opened from. */
+  onBack?: () => void;
   /** Hands the caller a dismiss that slides the panel out first, for its own close buttons. */
   dismissRef?: (dismiss: () => void) => void;
   'aria-labelledby'?: string;
@@ -173,6 +176,17 @@ const Drawer: ParentComponent<DrawerProps> = (props) => {
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
           >
+            {/* A visible way out, one thumb away, besides the drag and the backdrop. */}
+            <div class="sticky top-0 z-10 -mb-11 flex h-11 justify-between">
+              <Show when={props.onBack} fallback={<span />}>
+                <button type="button" class="btn-ghost mt-2 h-11 w-11 rounded-full bg-surface/90" aria-label="Atrás" onClick={() => props.onBack?.()}>
+                  <Icon name="back" size={18} />
+                </button>
+              </Show>
+              <button type="button" class="btn-ghost mt-2 h-11 w-11 rounded-full bg-surface/90" aria-label="Cerrar" onClick={dismiss}>
+                <Icon name="close" size={18} />
+              </button>
+            </div>
             <div aria-hidden="true" class="mx-auto mt-2.5 h-1.5 w-12 shrink-0 rounded-full bg-ink-faint/40" />
             {props.children}
           </div>

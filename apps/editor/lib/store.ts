@@ -8,12 +8,15 @@ import type { ContentDraft, ContentSnapshot } from '@jiayou/content';
 import { validateDraft, validateSnapshot } from '@jiayou/content';
 import { wordId } from '@jiayou/chinese';
 import type { HskLevel } from '../../web/src/types';
-import { formatWordRelations, SYMMETRIC_RELATION_KINDS, type WordRelationKind } from '@jiayou/content';
+import { formatWordRelations, SYMMETRIC_RELATION_KINDS, wordExamples, type WordRelationKind } from '@jiayou/content';
 import legacyExamples from '../../web/src/data/vocabulary/examples.json';
 import type { VocabularyExample } from '../../web/src/data/vocabulary';
 
-export const exampleFor = (word: VocabularyEntry) => word.example === undefined
-  ? (legacyExamples as Record<string, VocabularyExample>)[word.simplified] : word.example;
+/** The sentences a word shows in the app: its list, else its single legacy sentence or the sidecar one. */
+export const examplesFor = (word: VocabularyEntry): VocabularyExample[] =>
+  wordExamples(word, (legacyExamples as Record<string, VocabularyExample>)[word.simplified]);
+
+const examplesText = (list: VocabularyExample[]) => list.map((example) => [example.chinese, example.pinyin, example.spanish].filter(Boolean).join(' · ')).join('\n');
 
 export const STORAGE_KEY = 'jiayou-content-draft-v1';
 export type Section = 'words' | 'characters' | 'topics' | 'review';
@@ -40,6 +43,12 @@ export function validateEditableDraft(value: unknown, base: ContentSnapshot, rev
     if (w.example) {
       if (typeof w.example.chinese !== 'string' || typeof w.example.spanish !== 'string') throw new Error('Frase inválida.');
       w.example.chinese ||= '字'; w.example.spanish ||= 'pendiente';
+    }
+    // A sentence still being typed is filled in for validation; an empty reading is left out.
+    for (const example of w.examples ?? []) {
+      if (typeof example.chinese !== 'string' || typeof example.spanish !== 'string') throw new Error('Frase inválida.');
+      example.chinese ||= '字'; example.spanish ||= 'pendiente';
+      if (!example.pinyin) delete example.pinyin;
     }
   }
   for (const c of candidate.snapshot.characters) {
@@ -94,11 +103,9 @@ export const diffSnapshots = (current: ContentSnapshot, original: ContentSnapsho
       fields.push({ name, before: before ? format(a) : '', after: format(b) });
     }
     if (before && !!before.retired !== !!word.retired) fields.push({ name: 'Retirada', before: before.retired ? 'sí' : 'no', after: word.retired ? 'sí' : 'no' });
-    const priorExample = before && exampleFor(before);
-    const nextExample = exampleFor(word);
-    for (const [key, name] of [['chinese', 'Frase en chino'], ['spanish', 'Traducción de la frase']] as const) {
-      if (!same(priorExample?.[key], nextExample?.[key])) fields.push({ name, before: priorExample?.[key] ?? '', after: nextExample?.[key] ?? '' });
-    }
+    const priorExamples = before ? examplesText(examplesFor(before)) : '';
+    const nextExamples = examplesText(examplesFor(word));
+    if (priorExamples !== nextExamples) fields.push({ name: 'Frases', before: priorExamples, after: nextExamples });
     if (fields.length) result.push({ kind: 'word', id: word.id, title: word.simplified || 'Palabra nueva', subtitle: `${word.pinyin} · ${sensesText(word.senses ?? [])}`, level: word.level, isNew: !before, fields });
   }
   const oldChars = new Map(original.characters.map((row) => [row.character, row]));
@@ -377,15 +384,17 @@ export function createEditorStore() {
     if (!item || to < 0 || to >= item.senses.length) return;
     [item.senses[index], item.senses[to]] = [item.senses[to], item.senses[index]];
   });
-  const updateWordExample = (field: keyof VocabularyExample, value: string) => edit((s) => {
+  /** Writes the word's sentences as a list; the single legacy field goes, so the list is all the app reads. */
+  const setWordExamples = (change: (list: VocabularyExample[]) => VocabularyExample[]) => edit((s) => {
     const item = s.vocabulary.find((word) => word.id === selected());
     if (!item) return;
-    item.example = { chinese: '', spanish: '', ...exampleFor(item), [field]: value };
+    item.examples = change(examplesFor(item).map((example) => ({ ...example })));
+    delete item.example;
   });
-  const removeWordExample = () => edit((s) => {
-    const item = s.vocabulary.find((word) => word.id === selected());
-    if (item) item.example = null;
-  });
+  const updateWordExample = (index: number, field: keyof VocabularyExample, value: string) =>
+    setWordExamples((list) => list.map((example, i) => (i === index ? { ...example, [field]: value } : example)));
+  const addWordExample = () => setWordExamples((list) => [...list, { chinese: '', spanish: '' }]);
+  const removeWordExample = (index: number) => setWordExamples((list) => list.filter((_, i) => i !== index));
   const setWordLevel = (id: string, level: HskLevel | undefined) => edit((s) => {
     const item = s.vocabulary.find((w) => w.id === id);
     if (!item) return;
@@ -534,7 +543,7 @@ export function createEditorStore() {
   });
 
   return {
-    base, snapshot, ready, revision, version, section, selected, setSelected, status, error, setError, storageBlocked, dirty, rawStored, server, promotion, references, updateWordExample, removeWordExample,
+    base, snapshot, ready, revision, version, section, selected, setSelected, status, error, setError, storageBlocked, dirty, rawStored, server, promotion, references, updateWordExample, addWordExample, removeWordExample,
     load, edit, draft, save, exportDraft, downloadStored, publication, importDraft, resetDraft, changes, changesDeferred, plan, promote, switchSection,
     word, character, topic, isNewTopic, isNewWord, updateWord, updateSense, addSense, removeSense, moveSense, setWordLevel, toggleWordTopic, setWordRelation, addWord, removeWord, setWordRetired, updateCharacter, updateExample,
     addTopic, updateTopic, setTopicCharacters, removeTopic, moveTopic, assignWords,

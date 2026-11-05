@@ -26,7 +26,7 @@ import { listOf, updateRegistry, type ContentRegistry } from '../../../scripts/c
 
 type RawWord = (typeof hsk1)[number] & { level?: number; retired?: true };
 /** Raw JSON readings, so the expected ids do not depend on runtime tone sandhi. */
-const rawWords: RawWord[] = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra as RawWord[]].flat();
+const rawWords = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra].flat() as unknown as RawWord[];
 const registry = publishedRegistry as unknown as ContentRegistry;
 const revise = { wordRevision, characterRevision, characterContentId };
 

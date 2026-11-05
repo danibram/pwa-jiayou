@@ -2,7 +2,7 @@ import { Component, createEffect, JSX, on, Show } from 'solid-js';
 import type { Exercise } from '@jiayou/learning/types';
 import { speakWord } from '../../utils/speech';
 import Pinyin from '../Pinyin';
-import { AnswerPanel, AudioButton, FeedbackNote, HanziBlock, HintButton, RatingButtons, TakenHints } from './parts';
+import { AnswerPanel, AudioButton, CardScroll, ContinueButton, createHold, FeedbackNote, HanziBlock, HintButton, RatingButtons, TakenHints } from './parts';
 import { askedGloss, offeredHint, takenHints } from './present';
 import type { LearningSessionActions, LearningSessionView } from './types';
 
@@ -12,6 +12,9 @@ interface RecallCardProps {
   actions: LearningSessionActions;
   allowEasy: boolean;
   details?: JSX.Element;
+  onCharacter?: (char: string) => void;
+  /** The check right after "Ya la sé": the answer is shown at once and Bien is chosen unless held. */
+  claimedCheck?: boolean;
 }
 
 const EYEBROW = { characters: null, gloss: 'Significado → palabra', audio: 'Escucha' } as const;
@@ -28,6 +31,21 @@ const RecallCard: Component<RecallCardProps> = (props) => {
   const taken = () => takenHints(props.view.actions);
   const hintTaken = () => taken().some((hint) => hint.kind === 'pinyin');
   const cue = () => props.exercise.cue;
+  /** Rated Bien or Fácil: the learner knew it, so the answer goes by on its own unless held. */
+  const knew = () => props.view.actions.some((action) => action.type === 'self-assessment' && (action.rating === 'good' || action.rating === 'easy'));
+  // A touch or scroll holds the countdown once the answer is on screen, rated or not.
+  const { held, hold } = createHold(showAnswer);
+
+  // "Ya la sé" already claimed it: the check opens on the answer, not on a question to reveal.
+  createEffect(on(() => props.exercise.id, () => {
+    if (props.claimedCheck && props.view.state === 'presenting' && !props.view.revealed) props.actions.reveal();
+  }));
+
+  // Knowing it needs no results screen: Bien or Fácil goes straight to the next card. Otra vez and
+  // Difícil stop on the answer and the word's sheet. The header's undo still takes it back.
+  createEffect(on(() => props.view.state, (state) => {
+    if (state === 'feedback' && knew()) props.actions.continue();
+  }));
 
   // The sound is the question on a listening card, so it plays as the card opens. If it cannot
   // play, the card cannot be answered and the controller closes it as invalid.
@@ -39,8 +57,10 @@ const RecallCard: Component<RecallCardProps> = (props) => {
 
   return (
     <>
-      <div class="sheet my-3 flex min-h-0 flex-1 flex-col items-center justify-start overflow-y-auto p-4 text-center [@media(min-height:600px)]:[justify-content:safe_center]">
-        <Show when={EYEBROW[cue()]}>{(label) => <p class="eyebrow mb-3">{label()}</p>}</Show>
+      <CardScroll answered={showAnswer()} showDetails={showAnswer()} details={props.details} onHold={hold}>
+        <Show when={answered() && props.view.feedback} fallback={
+          <Show when={EYEBROW[cue()]}>{(label) => <p class="eyebrow mb-3">{label()}</p>}</Show>
+        }>{(feedback) => <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} />}</Show>
 
         <Show when={cue() === 'gloss' && !showAnswer()}>
           <p class="text-[1.75rem] font-semibold leading-snug text-balance first-letter:uppercase">{askedGloss(props.exercise.prompt)}</p>
@@ -56,7 +76,7 @@ const RecallCard: Component<RecallCardProps> = (props) => {
           />
         </Show>
         <Show when={(cue() === 'characters' || showAnswer()) && props.exercise.answer}>{(answer) => (
-          <HanziBlock characters={answer().characters} />
+          <HanziBlock characters={answer().characters} compact={showAnswer()} onCharacter={showAnswer() ? props.onCharacter : undefined} />
         )}</Show>
         {/* The reading of a word written like another (还 hái, 还 huán) is part of the question. */}
         <Show when={cue() === 'characters' && !showAnswer() && props.exercise.context}>{(context) => (
@@ -72,21 +92,19 @@ const RecallCard: Component<RecallCardProps> = (props) => {
             </Show>
           </>
         }>{(answer) => (
-          <AnswerPanel answer={answer()} audio={props.exercise.audio} speechAvailable={props.view.speechAvailable} details={props.details} />
+          <AnswerPanel answer={answer()} audio={props.exercise.audio} speechAvailable={props.view.speechAvailable} />
         )}</Show>
 
-        <Show when={answered() && props.view.feedback}>{(feedback) => (
-          <FeedbackNote feedback={feedback()} audioCue={cue() === 'audio'} />
-        )}</Show>
-      </div>
+        {/* A word recalled with effort or missed opens its detail; one recalled easily folds it. */}
+      </CardScroll>
 
       <Show when={!answered()} fallback={
-        <button type="button" class="btn-ink h-14 w-full" disabled={props.view.state !== 'feedback'} onClick={() => props.actions.continue()}>Continuar</button>
+        <ContinueButton auto={knew()} held={held()} disabled={props.view.state !== 'feedback'} onContinue={() => props.actions.continue()} />
       }>
         <Show when={props.view.revealed} fallback={
           <button type="button" class="btn-ink h-14 w-full" disabled={!open()} onClick={() => props.actions.reveal()}>Mostrar respuesta</button>
         }>
-          <RatingButtons allowEasy={props.allowEasy} disabled={!open()} onRate={(rating) => props.actions.selfAssess(rating)} />
+          <RatingButtons allowEasy={props.allowEasy} disabled={!open()} autoGood={props.claimedCheck} held={held()} onRate={(rating) => props.actions.selfAssess(rating)} />
         </Show>
       </Show>
     </>

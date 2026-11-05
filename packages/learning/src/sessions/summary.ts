@@ -17,6 +17,8 @@ export interface SessionItemResult {
   results: readonly { recorded: Exclude<RecordedKind, 'exposure'>; outcome: AnswerOutcome; rating: Rating | null }[];
   /** The item's next due time after the session, or null while it has no rating. */
   dueAt: Timestamp | null;
+  /** The session taught it: a lesson, not a "Ya la sé" claim. A lesson shown twice still counts once. */
+  taught: boolean;
 }
 
 export interface SessionSummary {
@@ -46,14 +48,15 @@ export const summarizeSession = (
   const voided = voidedEventIds(events);
   const own = events.filter((event) => event.sessionId === sessionId).sort((a, b) => a.sequence - b.sequence);
   let alreadyKnown = 0;
-  const items = new Map<ItemId, { content: ContentReference; results: SessionItemResult['results'][number][] }>();
+  const items = new Map<ItemId, { content: ContentReference; results: SessionItemResult['results'][number][]; taught: boolean }>();
   for (const event of own) {
     if (event.type === 'attempt-voided' || voided.has(event.id)) continue;
     recorded[event.type] += 1;
-    const entry = items.get(event.itemId) ?? { content: event.content, results: [] };
+    const entry = items.get(event.itemId) ?? { content: event.content, results: [], taught: false };
     items.set(event.itemId, entry);
     if (event.type === 'exposure') {
       if (event.card.reason === 'already-known') alreadyKnown += 1;
+      else if (event.card.reason === 'teaching') entry.taught = true;
       continue;
     }
     entry.results.push({
@@ -66,7 +69,7 @@ export const summarizeSession = (
     const state = states.get(itemId);
     return state && state.state !== 'new' ? state.dueAt : null;
   };
-  const list = [...items].map(([itemId, value]) => ({ itemId, content: value.content, results: value.results, dueAt: dueOf(itemId) }));
+  const list = [...items].map(([itemId, value]) => ({ itemId, content: value.content, results: value.results, dueAt: dueOf(itemId), taught: value.taught }));
   const nextReviews = list
     .flatMap((item) => (item.dueAt === null ? [] : [{ itemId: item.itemId, dueAt: item.dueAt }]))
     .sort((a, b) => a.dueAt - b.dueAt);
