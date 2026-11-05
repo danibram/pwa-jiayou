@@ -3,7 +3,8 @@ import { regradeTypedAnswers } from '../production/grade.ts';
 import { SESSION_MODE_RATES } from '../types.ts';
 import {
   IncompleteAttemptError,
-  alreadyKnownHolds,
+  claimCheckOf,
+  claimHolds,
   deriveRating,
   findInvalid,
   firstOutcome,
@@ -20,6 +21,9 @@ import { evaluatorVersion } from './version.ts';
  * with no evidence. A mode that never rates, an exercise that is not the item's rating task, a failed "Ya la sé"
  * check or an item the scheduler does not find eligible make it `practice`; anything else is a
  * `scheduled-review` whose rating comes from the actions. Response times never count.
+ *
+ * A "Ya la sé" check (`alreadyKnownCheck`) is either the rating task or the meaning among options
+ * (`claimCheckOf`). When it holds (`claimHolds`) it writes an already-known Good.
  *
  * Typed answers on automatic free-recall exercises are graded again from their text with
  * `regradeTypedAnswers`; the evaluation the screen recorded does not count.
@@ -49,15 +53,13 @@ export const evaluateAttempt = (
   });
 
   if (!SESSION_MODE_RATES[context.sessionMode]) return practice('session-mode');
-  const task = ratingTaskOf(attempt.itemId, exercise);
-  if (!task) return practice('exercise');
-
-  const rating = deriveRating(task, reading);
-  if (!rating) throw new IncompleteAttemptError(attempt.id);
 
   if (context.alreadyKnownCheck) {
-    if (task !== 'meaning') return practice('exercise');
-    if (!alreadyKnownHolds(rating)) return practice('already-known-miss');
+    const check = claimCheckOf(attempt.itemId, exercise);
+    if (!check) return practice('exercise');
+    const holds = claimHolds(check, reading);
+    if (holds === null) throw new IncompleteAttemptError(attempt.id);
+    if (!holds) return practice('already-known-miss');
     return {
       kind: 'scheduled-review',
       basis: 'already-known',
@@ -67,6 +69,11 @@ export const evaluateAttempt = (
       evaluatorVersion,
     };
   }
+
+  const task = ratingTaskOf(attempt.itemId, exercise);
+  if (!task) return practice('exercise');
+  const rating = deriveRating(task, reading);
+  if (!rating) throw new IncompleteAttemptError(attempt.id);
   if (!context.scheduledEligible) return practice('not-eligible');
 
   if (rating === 'again') {

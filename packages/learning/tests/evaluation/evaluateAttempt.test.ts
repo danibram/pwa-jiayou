@@ -143,6 +143,23 @@ describe('"Ya la sé"', () => {
     });
   });
 
+  it('a right first pick among options holds the claim as Good', () => {
+    const result = evaluateAttempt(attempt([answer(correct, 'o1')]), recognizeCard, alreadyKnown);
+    expect(result).toMatchObject({ kind: 'scheduled-review', basis: 'already-known', rating: 'good' });
+  });
+
+  it('a wrong first pick or a hint before the pick is a missed claim', () => {
+    expect(evaluateAttempt(attempt([answer(incorrect, 'o2'), answer(correct, 'o1')]), recognizeCard, alreadyKnown))
+      .toMatchObject({ kind: 'practice', reason: 'already-known-miss' });
+    expect(evaluateAttempt(attempt([hint(false), answer(correct, 'o1')]), recognizeCard, alreadyKnown))
+      .toMatchObject({ kind: 'practice', reason: 'already-known-miss' });
+    expect(evaluateAttempt(attempt([answer({ outcome: 'unanswered' })]), recognizeCard, alreadyKnown).kind).toBe('practice');
+  });
+
+  it('options outside a claim check never rate', () => {
+    expect(evaluateAttempt(attempt([answer(correct, 'o1')]), recognizeCard, due)).toMatchObject({ kind: 'practice', reason: 'exercise' });
+  });
+
   it('never rates in Flojos', () => {
     const result = evaluateAttempt(attempt([rate('good')]), meaningCard, { ...alreadyKnown, sessionMode: 'weak' });
     expect(result.kind).toBe('practice');
