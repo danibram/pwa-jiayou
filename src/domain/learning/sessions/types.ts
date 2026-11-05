@@ -23,10 +23,8 @@ export interface PoolItem {
   likelyKnown?: boolean;
 }
 
-export type SessionScope =
-  | { kind: 'all' }
-  | { kind: 'topics'; topicIds: readonly string[] }
-  | { kind: 'item'; itemId: ItemId };
+export type { SessionScope } from '../types';
+import type { SessionScope } from '../types';
 
 export interface SessionSettings {
   /** Hard cap on items taught for the first time per local day, by kind. */

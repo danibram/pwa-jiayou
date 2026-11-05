@@ -82,6 +82,7 @@ export const sessionWithHint = (id = 'session-1'): SessionState => ({
   schemaVersion: 1,
   id,
   mode: 'today',
+  scope: { kind: 'all' },
   status: 'active',
   startedAt: at(1),
   queue: [{ itemId: WORD, intent: 'scheduled', reason: 'due-review', content, exercise: meaningCard, exposure: null, evaluatorVersion }],

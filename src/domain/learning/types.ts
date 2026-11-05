@@ -395,10 +395,18 @@ export interface SessionAttempt {
   status: 'in-progress' | 'submitted';
 }
 
+/** What a session was opened for: everything active, some topics, or one item. */
+export type SessionScope =
+  | { kind: 'all' }
+  | { kind: 'topics'; topicIds: readonly string[] }
+  | { kind: 'item'; itemId: ItemId };
+
 export interface SessionState {
   schemaVersion: 1;
   id: string;
   mode: SessionMode;
+  /** A stored topic or word session resumes only for the same scope. */
+  scope: SessionScope;
   status: 'active' | 'completed' | 'abandoned';
   startedAt: Timestamp;
   /** A teach card carries an exposure and no exercise; every other card carries an exercise. */
