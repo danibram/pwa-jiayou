@@ -21,7 +21,7 @@ import hsk6 from '../../../src/data/vocabulary/hsk6.json';
 import extra from '../../../src/data/vocabulary/extra.json';
 
 type RawWord = (typeof hsk1)[number];
-const rawWords: RawWord[] = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra as RawWord[]].flat();
+const rawWords = [hsk1, hsk2, hsk3, hsk4, hsk5, hsk6, extra].flat() as unknown as RawWord[];
 const rawById = new Map(rawWords.map((word) => [word.id, word]));
 const raw = (id: string) => {
   const word = rawById.get(id);
@@ -81,8 +81,8 @@ describe('word content revision', () => {
 
   it('ignores what only the word page shows: later senses\' part of speech and notes', () => {
     const base = wordRevision(ai);
-    expect(wordRevision({ ...ai, senses: [ai.senses[0], { ...ai.senses[1], pos: 'sustantivo' }] })).toBe(base);
-    expect(wordRevision({ ...ai, senses: [ai.senses[0], { ...ai.senses[1], note: 'a una persona' }] })).toBe(base);
+    expect(wordRevision({ ...ai, senses: [ai.senses[0], { ...ai.senses[1], pos: 'sustantivo' }, ...ai.senses.slice(2)] })).toBe(base);
+    expect(wordRevision({ ...ai, senses: [ai.senses[0], { ...ai.senses[1], note: 'a una persona' }, ...ai.senses.slice(2)] })).toBe(base);
   });
 
   it('gives 还 hái and 还 huán their own id and revision', () => {
@@ -183,7 +183,8 @@ describe('bundled catalog', () => {
       ...characters.map((character) => { const r = contentReferenceForCharacter(character); return `${r.contentId} ${r.contentRevision}`; }),
     ].sort();
     expect(lines).toHaveLength(7655);
-    expect(hash64(lines.join('\n'))).toBe('c95413c2deac68cc');
+    // Content v4 added uses to 21 HSK 1 to 3 words.
+    expect(hash64(lines.join('\n'))).toBe('a14947760567b5c2');
   });
 });
 
@@ -193,7 +194,7 @@ describe('hash64', () => {
     expect(hash64('')).toBe('488bdcb81aee8d83');
     expect(hash64('w1:a')).toBe('b1229300b0f849b4');
     expect(hash64('爱')).toBe('d2d3427b8fee74ef');
-    expect(wordRevision(raw('word-7231-ai4'))).toBe('w1:82a28d00bb3af711');
+    expect(wordRevision(raw('word-7231-ai4'))).toBe('w1:bc1da12841c1bd67');
   });
 
   it('separates strings that differ only in the high bits of their code units', () => {

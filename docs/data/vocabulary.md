@@ -18,7 +18,11 @@ The word 东西 uses `dōng xi` for "thing", 多少 uses `duō shao` for "how ma
 
 Word list JSON is bundled with the app. Stroke and syllable audio still come from the character packs (`apps/web/public/strokes`, `apps/web/public/audio`, `apps/web/public/packs/hskN/`).
 
-Authored sentences use the optional `VocabularyEntry.example` field. Draft references (example sentences shown while reviewing in the editor) are not published.
+Sentences live in `VocabularyEntry.examples`, a list of `{ chinese, pinyin?, spanish }`, read through `wordExamples` in `packages/content/src/vocabulary.ts`. When a word has the list, the app shows it even if it is empty; otherwise it falls back to the single legacy `example` field and then to the `examples.json` sidecar. The editor edits the list (add, edit, remove) and writes it instead of the legacy field. Sentences are not part of a word's revision, so editing them never resets anyone's progress. Draft references (example sentences shown while reviewing in the editor) are not published.
+
+Content version 4 gave every HSK 1 to 3 word (612) two sentences with pinyin and Spanish. Haiku agents wrote them from scratch, using the Asia Idiomas sentences only to see how each word is used, and restricted to characters that appear in HSK 1 to 3 words. A script checked each one: the word appears literally, every character is in that set, 4 to 20 characters, the pinyin has one syllable per character (erhua 儿 may share one) and contains the word's reading. Two Sonnet reviewers then read all 1,224 sentences and flagged 35 for unnatural Chinese, a word in the wrong sense (东 inside 东西, 还 read hái for huán) or a loose translation; the fixes passed the same checks. Words that already had a sentence keep it first.
+
+The same version compared the meanings against the Asia Idiomas PDFs. Only the HSK 1 PDF has parts of speech and sentences; the HSK 2 and HSK 3 PDFs are plain lists, and the HSK 3 one is a machine translation from English with errors. Of the 39 differences agents reported, 21 were applied by hand (for example 做 "preparar", 下 "caer" for rain and snow, 关 "apagar" instead of "relación", 生气 "enfadarse") and 18 were rejected as wrong, marginal or literary (没关系 "de nada", 云 "decir"). Words in the PDFs that the lists lack, such as 只 zhī as a classifier and 这儿, were not added.
 
 ## Where the Spanish comes from
 
