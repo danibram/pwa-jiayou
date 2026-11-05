@@ -21,11 +21,11 @@ export type SchedulerRegistry = ReadonlyMap<ConfigId, Scheduler>;
  */
 export class CorruptLogError extends Error {
   override name = 'CorruptLogError';
-  constructor(
-    readonly reason: 'duplicate-attempt' | 'conflicting-event' | 'unknown-config',
-    message: string,
-  ) {
+  readonly reason: 'duplicate-attempt' | 'conflicting-event' | 'unknown-config';
+
+  constructor(reason: CorruptLogError['reason'], message: string) {
     super(message);
+    this.reason = reason;
   }
 }
 
